@@ -1,0 +1,652 @@
+[
+  {
+    "deterministicExtractionId": "col_ecc0db7f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 2.518412,
+      "y": 13.035248
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.869m radialDev=0.087; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_73be96a7",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 2.703949,
+      "y": 13.036648
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_2bc53f37",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 2.820873,
+      "y": 10.664917
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.543m radialDev=0.087; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_efb2f89f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 2.820873,
+      "y": 20.388841
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.543m radialDev=0.087; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_cf35e7e0",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 6.037902,
+      "y": 12.898509
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.291m radialDev=0.120; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_3243769f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 7.095241,
+      "y": 13.88067
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_a4d7c0d7",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 7.095241,
+      "y": 14.872072
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_aaf827a7",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 7.095241,
+      "y": 15.864522
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_e504a807",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 8.499377,
+      "y": 13.88067
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_999a5e3f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 8.499377,
+      "y": 14.872072
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_261f9c1f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 8.499377,
+      "y": 15.864522
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_2e05633f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 10.072596,
+      "y": 11.433673
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_d8e9b807",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 11.311848,
+      "y": 10.258484
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_ea76fdf7",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 11.311848,
+      "y": 16.807614
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_cb9cffe0",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 12.923305,
+      "y": 11.762135
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.648m radialDev=0.118; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_a50adeb2",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 12.92339,
+      "y": 12.469231
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.115; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_319fcfb8",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 13.587711,
+      "y": 11.233329
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.118; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_360b811f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 14.295011,
+      "y": 11.233508
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.116; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_92852ecf",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 15.009479,
+      "y": 11.23328
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.648m radialDev=0.118; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_eb8050e6",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 15.716902,
+      "y": 11.233447
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.115; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_ea6985c5",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 16.393583,
+      "y": 11.77074
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.118; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_42b25d36",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 16.393612,
+      "y": 12.477702
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.116; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_e3526c45",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 16.538059,
+      "y": 2.720053
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_136abea7",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 16.538758,
+      "y": 2.531014
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.869m radialDev=0.087; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_6feefa2c",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 16.667586,
+      "y": 22.608992
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_845135df",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 16.668986,
+      "y": 22.794881
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.869m radialDev=0.087; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_3a1c58b5",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 19.922115,
+      "y": 12.477562
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.115; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_c9997ba1",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 19.922142,
+      "y": 11.7706
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.648m radialDev=0.118; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_b412e8d2",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 20.598907,
+      "y": 11.233401
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.118; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_93009570",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 21.306153,
+      "y": 11.23346
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.119; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_9ccecdf5",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 22.02071,
+      "y": 11.233367
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.648m radialDev=0.118; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_efaf705b",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 22.727784,
+      "y": 11.2333
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.116; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_57b50f68",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 23.39261,
+      "y": 12.469348
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.649m radialDev=0.116; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_3d654a72",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 23.392695,
+      "y": 11.762253
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.648m radialDev=0.118; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_068512e7",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 24.923663,
+      "y": 10.194421
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_0999b7af",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 25.006629,
+      "y": 16.749854
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_6877fe57",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 25.998031,
+      "y": 3.904693
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.544m radialDev=0.089; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_a3ded9a7",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 26.593503,
+      "y": 12.40617
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_4ef57eb7",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 27.833803,
+      "y": 13.88067
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_333586af",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 27.833803,
+      "y": 14.872072
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_675aa10f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 27.833803,
+      "y": 15.864522
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_bb3de91f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 29.238989,
+      "y": 12.888218
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_10efc537",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 29.238989,
+      "y": 13.88067
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_8ac31c9f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 29.238989,
+      "y": 14.872072
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_c927c147",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 29.238989,
+      "y": 15.864522
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.381m radialDev=0.090; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_7f587fef",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 32.671437,
+      "y": 13.041549
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_1b182b2f",
+    "footprintType": "CIRCULAR",
+    "centreProjectM": {
+      "x": 32.859074,
+      "y": 13.039449
+    },
+    "classification": "curved-column-deferred",
+    "reason": "circular-footprint diameter=0.869m radialDev=0.087; curved columns are deferred to a later phase"
+  },
+  {
+    "deterministicExtractionId": "col_c0c92fe8",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 36.493942,
+      "y": 4.674342
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 6 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_d4a15127",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 36.493942,
+      "y": 5.088441
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 6 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_90916ec7",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 37.06833,
+      "y": 3.905393
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_82d5d7d6",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 37.31618,
+      "y": 4.941604
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_100b3e82",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 37.728564,
+      "y": 3.905393
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_e403fbe4",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 37.977113,
+      "y": 4.941604
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_8a60bc7a",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 38.309683,
+      "y": 3.614134
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_82c01d24",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 38.438894,
+      "y": 2.819916
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 8 corners convexity=0.994 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_9fe201bd",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 38.603895,
+      "y": 3.40931
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 6 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_ba404f49",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 38.84599,
+      "y": 3.556722
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_9b8b841e",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 38.909704,
+      "y": 3.908894
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_0ee801b2",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 39.139873,
+      "y": 3.190271
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 7 corners convexity=0.994 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_571b85aa",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 39.161055,
+      "y": 3.570725
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_9606c26a",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 39.161055,
+      "y": 4.945105
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_7e0d125d",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 39.57974,
+      "y": 3.908894
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_cd148af6",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 39.92281,
+      "y": 4.812777
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 3 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_dcbd2513",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 39.928402,
+      "y": 4.957642
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 6 corners convexity=1.000 - retained for review"
+  },
+  {
+    "deterministicExtractionId": "col_e7ddca68",
+    "footprintType": "POLYGONAL",
+    "centreProjectM": {
+      "x": 39.94802,
+      "y": 3.366506
+    },
+    "classification": "polygonal-column-deferred",
+    "reason": "polygonal footprint 6 corners convexity=1.000 - retained for review"
+  }
+]

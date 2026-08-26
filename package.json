@@ -1,0 +1,42 @@
+{
+  "name": "editor",
+  "private": true,
+  "scripts": {
+    "build": "npx -y turbo@latest run build",
+    "dev": "npx -y turbo@latest run dev",
+    "lint": "npx -y @biomejs/biome lint",
+    "lint:fix": "npx -y @biomejs/biome lint --write",
+    "format": "npx -y @biomejs/biome format --write",
+    "format:check": "npx -y @biomejs/biome format",
+    "check": "npx -y @biomejs/biome check",
+    "check:fix": "npx -y @biomejs/biome check --write",
+    "check-types": "npx -y turbo@latest run check-types",
+    "kill": "lsof -ti:3002 | xargs kill -9 2>/dev/null || echo 'No processes found on port 3002'",
+    "release": "gh workflow run release.yml -f package=both -f bump=patch",
+    "release:viewer": "gh workflow run release.yml -f package=viewer -f bump=patch",
+    "release:core": "gh workflow run release.yml -f package=core -f bump=patch",
+    "release:minor": "gh workflow run release.yml -f package=both -f bump=minor",
+    "release:major": "gh workflow run release.yml -f package=both -f bump=major"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
+    "@napi-rs/canvas": "^1.0.2",
+    "@next/swc-win32-x64-msvc": "^16.2.1",
+    "dotenv-cli": "^11.0.0",
+    "enhanced-resolve": "^5.24.1",
+    "turbo": "^2.8.15",
+    "typescript": "5.9.3",
+    "ultracite": "^7.2.5"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@10.32.1",
+  "dependencies": {
+    "pdfjs-dist": "^6.1.200"
+  },
+  "optionalDependencies": {
+    "@next/swc-wasm-nodejs": "16.2.1",
+    "@next/swc-win32-x64-msvc": "16.2.1"
+  }
+}

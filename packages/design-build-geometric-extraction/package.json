@@ -1,0 +1,15 @@
+{
+  "name": "design-build-geometric-extraction",
+  "version": "0.4.0-cs4",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run typecheck && node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "mupdf": "1.28.0",
+    "design-build-extraction-contracts": "workspace:*",
+    "design-build-coordinate-frame": "workspace:*"
+  }
+}

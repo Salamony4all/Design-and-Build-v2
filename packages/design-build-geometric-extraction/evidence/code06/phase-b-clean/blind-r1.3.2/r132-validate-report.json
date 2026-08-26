@@ -1,0 +1,16 @@
+{
+  "generatedAt": "2026-07-30T01:53:47.821Z",
+  "validationStatus": "PASS",
+  "regionCount": 25,
+  "retainedCandidateCount": 373,
+  "retainedMultiRegionViolations": 0,
+  "unresolvedSourceReferences": [],
+  "missingCloseups": [],
+  "reviewCandidatesTotal": 11664,
+  "highEvidenceReviewCandidatesTotal": 1064,
+  "reviewCandidatesOverlappingRetainedRegions": 0,
+  "reviewCandidatesOutsideRetainedRegions": 11664,
+  "highEvidenceReviewCandidatesOutsideRetainedRegions": 1064,
+  "reviewOnlyRegionClusters": 1064,
+  "shuffleHash": "f52d45d289790ecf3d8fef832dce30eac84655ff0e4a8a6959645576447d1e44"
+}

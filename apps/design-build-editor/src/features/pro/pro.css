@@ -1,0 +1,550 @@
+/* Pascal PRO editor theme + Tailwind v4 utilities (SCOPED to .pascal-pro-root).
+   This stylesheet is imported only by ProEditorLazy, so it never affects the
+   STANDARD Design & Build experience. The official @pascal-app/editor@0.9.2
+   package renders with Tailwind utility classes and the oklch theme tokens
+   below; none of those exist in the host app, which is why the PRO shell was
+   previously unstyled. Generating them here, scoped to .pascal-pro-root,
+   restores the official look without leaking into STANDARD mode. */
+
+@import "tailwindcss";
+
+/* Only generate utilities for the classes actually used by the embedded
+   official Editor + Nodes packages. Use the resolved symlink paths (node_modules
+   is hoisted to the workspace root), so Tailwind actually scans their source.
+   The previous "../../node_modules/.pnpm/..." glob resolved to src/node_modules
+   and matched nothing, so Editor utilities like `flex-1` were never generated —
+   which is what collapsed the viewport into a narrow strip and left the WebP
+   assets un-sized. */
+@source "../../../node_modules/@pascal-app/editor/src";
+/* @pascal-app/nodes@0.1.1 is published as dist-only (no src/), so scan dist for
+   class strings. */
+@source "../../../node_modules/@pascal-app/nodes/dist";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Map Tailwind v4 color/spacing utilities to the official CSS variables. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+.pascal-pro-root {
+  --radius: 0.625rem;
+  --background: oklch(0.998 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(0.998 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(0.998 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.pascal-pro-root.dark,
+.pascal-pro-root .dark {
+  --background: oklch(0.205 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.235 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.235 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.5568 0 0);
+}
+
+@layer base {
+  .pascal-pro-root * {
+    border-color: var(--border);
+  }
+  .pascal-pro-root button,
+  .pascal-pro-root [role="button"],
+  .pascal-pro-root a {
+    cursor: pointer;
+  }
+}
+
+/* Loaders referenced by the official editor chrome */
+.pascal-loader-1 {
+  width: 45px;
+  aspect-ratio: 1;
+  --c: no-repeat linear-gradient(currentColor 0 0);
+  background: var(--c), var(--c), var(--c);
+  animation: pascal-l1-1 1s infinite, pascal-l1-2 1s infinite;
+}
+@keyframes pascal-l1-1 {
+  0%, 100% { background-size: 20% 100%; }
+  33%, 66% { background-size: 20% 20%; }
+}
+@keyframes pascal-l1-2 {
+  0%, 33% { background-position: 0 0, 50% 50%, 100% 100%; }
+  66%, 100% { background-position: 100% 0, 50% 50%, 0 100%; }
+}
+.pascal-loader-2 {
+  width: 45px;
+  aspect-ratio: 0.75;
+  --c: no-repeat linear-gradient(currentColor 0 0);
+  background: var(--c) 0% 50%, var(--c) 50% 50%, var(--c) 100% 50%;
+  background-size: 20% 50%;
+  animation: pascal-l2 1s infinite linear;
+}
+@keyframes pascal-l2 {
+  20% { background-position: 0% 0%, 50% 50%, 100% 50%; }
+  40% { background-position: 0% 100%, 50% 0%, 100% 50%; }
+  60% { background-position: 0% 50%, 50% 100%, 100% 0%; }
+  80% { background-position: 0% 50%, 50% 50%, 100% 100%; }
+}
+.pascal-loader-3 {
+  width: 45px;
+  aspect-ratio: 0.75;
+  --c: no-repeat linear-gradient(currentColor 0 0);
+  background: var(--c) 0% 100%, var(--c) 50% 100%, var(--c) 100% 100%;
+  background-size: 20% 65%;
+  animation: pascal-l3 1s infinite linear;
+}
+@keyframes pascal-l3 {
+  16.67% { background-position: 0% 0%, 50% 100%, 100% 100%; }
+  33.33% { background-position: 0% 0%, 50% 0%, 100% 100%; }
+  50% { background-position: 0% 0%, 50% 0%, 100% 0%; }
+  66.67% { background-position: 0% 100%, 50% 0%, 100% 0%; }
+  83.33% { background-position: 0% 100%, 50% 100%, 100% 0%; }
+}
+.pascal-loader-4 {
+  width: 45px;
+  aspect-ratio: 1;
+  --c: no-repeat linear-gradient(currentColor 0 0);
+  background: var(--c), var(--c), var(--c);
+  animation: pascal-l4-1 1s infinite, pascal-l4-2 1s infinite;
+}
+@keyframes pascal-l4-1 {
+  0%, 100% { background-size: 20% 100%; }
+  33%, 66% { background-size: 20% 40%; }
+}
+@keyframes pascal-l4-2 {
+  0%, 33% { background-position: 0 0, 50% 100%, 100% 100%; }
+  66%, 100% { background-position: 100% 0, 0 100%, 50% 100%; }
+}
+.pascal-loader-5 {
+  width: 45px;
+  aspect-ratio: 1;
+  --c: no-repeat linear-gradient(currentColor 0 0);
+  background: var(--c), var(--c), var(--c);
+  animation: pascal-l5-1 1s infinite, pascal-l5-2 1s infinite;
+}
+@keyframes pascal-l5-1 {
+  0%, 100% { background-size: 20% 100%; }
+  33%, 66% { background-size: 20% 40%; }
+}
+@keyframes pascal-l5-2 {
+  0%, 33% { background-position: 0 0, 50% 100%, 100% 0; }
+  66%, 100% { background-position: 0 100%, 50% 0%, 100% 100%; }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Layout guarantees for the official Editor shell (belt-and-suspenders so the
+   embedded PRO workspace fills the area below the Design & Build header even if
+   a Tailwind utility is ever missing). The Editor v1 root is
+   `dark flex h-full w-full gap-3` and its Viewer column is `relative flex-1
+   overflow-hidden`; these rules make the chain resolve to full size. */
+.pascal-pro-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.pascal-pro-root > .dark {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+}
+.pascal-pro-root [data-pascal-viewer-3d] {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PRO OVERLAY MODE — panels that slide over the permanently-mounted Standard
+   Viewer. The Viewer Canvas itself is never animated or re-created; only these
+   chrome layers transition in. Scoped to the overlay root so they cannot leak
+   into STANDARD mode.
+   ───────────────────────────────────────────────────────────────────────── */
+.pro-overlay {
+  --pro-panel-bg: var(--panel-solid, #ffffff);
+  --pro-panel-ink: var(--ink, #18202f);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  color: var(--pro-panel-ink);
+  background: transparent !important;
+}
+.pro-overlay__left,
+.pro-overlay__right,
+.pro-overlay__top-controls,
+.pro-overlay__top-toolbar {
+  position: absolute;
+  pointer-events: auto;
+}
+.pro-overlay__left {
+  top: 68px;
+  left: 16px;
+  bottom: 76px;
+  width: 310px;
+  transform: translateX(-110%);
+  opacity: 0;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease;
+  z-index: 24;
+}
+.pro-overlay__top-controls {
+  top: 68px;
+  left: 338px;
+  z-index: 24;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+.pro-overlay__top-toolbar {
+  top: 68px;
+  left: 50%;
+  transform: translate(-50%, -10px);
+  z-index: 24;
+  opacity: 0;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease;
+}
+.pro-overlay__right {
+  top: 68px;
+  right: 16px;
+  bottom: 76px;
+  width: 340px;
+  transform: translateX(110%);
+  opacity: 0;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease;
+  z-index: 24;
+}
+.pro-overlay.is-entered .pro-overlay__left,
+.pro-overlay.is-entered .pro-overlay__top-controls,
+.pro-overlay.is-entered .pro-overlay__top-toolbar,
+.pro-overlay.is-entered .pro-overlay__right {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+.pro-overlay.is-entered .pro-overlay__top-toolbar {
+  transform: translate(-50%, 0);
+}
+
+/* Shell wrapper for left panel */
+.pro-panel-shell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--pro-panel-bg);
+  border-radius: 14px;
+  box-shadow: 0 12px 36px rgba(20, 30, 55, 0.16), 0 2px 8px rgba(20, 30, 55, 0.06);
+  border: 1px solid rgba(228, 231, 238, 0.8);
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+}
+.pro-panel-header {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border, #e4e7ee);
+  background: rgba(248, 249, 252, 0.7);
+}
+.pro-panel-tabs {
+  display: flex;
+  gap: 4px;
+  background: rgba(230, 234, 242, 0.6);
+  padding: 3px;
+  border-radius: 8px;
+}
+.pro-tab-btn {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted-foreground, #64748b);
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+.pro-tab-btn:hover {
+  color: var(--foreground, #0f172a);
+}
+.pro-tab-btn.is-active {
+  background: #ffffff;
+  color: var(--primary, #0f172a);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.pro-panel-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Search bar */
+.pro-search-box {
+  position: relative;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border, #e4e7ee);
+}
+.pro-search-input {
+  width: 100%;
+  padding: 6px 26px 6px 8px;
+  font-size: 12px;
+  border: 1px solid var(--border, #e4e7ee);
+  border-radius: 6px;
+  background: rgba(248, 249, 252, 0.8);
+  outline: none;
+  transition: border-color 160ms ease;
+}
+.pro-search-input:focus {
+  border-color: #3b82f6;
+  background: #ffffff;
+}
+.pro-search-clear {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* Hierarchy Scroll & Categories */
+.pro-hierarchy-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.pro-hierarchy__scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px;
+}
+.pro-category-group {
+  margin-bottom: 4px;
+}
+.pro-category-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #64748b;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 140ms ease;
+}
+.pro-category-header:hover {
+  background: rgba(241, 245, 249, 0.9);
+  color: #0f172a;
+}
+.pro-category-arrow {
+  font-size: 8px;
+  width: 10px;
+}
+.pro-category-icon {
+  font-size: 13px;
+}
+.pro-category-title {
+  flex: 1;
+  text-align: left;
+}
+.pro-category-badge {
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.pro-category-list {
+  padding-left: 10px;
+  margin-top: 2px;
+}
+.pro-hierarchy__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #1e293b;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 120ms ease;
+  text-align: left;
+}
+.pro-hierarchy__row:hover {
+  background: #f1f5f9;
+}
+.pro-hierarchy__row.is-active {
+  background: #3b82f6;
+  color: #ffffff;
+  font-weight: 600;
+}
+.pro-hierarchy__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pro-hierarchy__meta {
+  font-size: 10px;
+  opacity: 0.75;
+  margin-left: 6px;
+}
+.pro-hierarchy__empty {
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Catalog wrapper */
+.pro-catalog-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+/* Inspector Shell */
+.pro-inspector-shell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--pro-panel-bg);
+  border-radius: 14px;
+  box-shadow: 0 12px 36px rgba(20, 30, 55, 0.16), 0 2px 8px rgba(20, 30, 55, 0.06);
+  border: 1px solid rgba(228, 231, 238, 0.8);
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+}
+.pro-inspector-shell > * {
+  height: 100%;
+  overflow-y: auto;
+}
+.pro-inspector-shell [class*="fixed"] {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  width: 100% !important;
+  max-height: 100% !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+.pro-inspector-shell label,
+.pro-inspector-shell span,
+.pro-inspector-shell p,
+.pro-inspector-shell h2,
+.pro-inspector-shell h3,
+.pro-inspector-shell input {
+  color: #1e293b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pro-overlay__left,
+  .pro-overlay__top-controls,
+  .pro-overlay__right,
+  .pro-overlay__bottom {
+    transition: none;
+  }
+}

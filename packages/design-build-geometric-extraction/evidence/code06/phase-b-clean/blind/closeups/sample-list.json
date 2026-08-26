@@ -1,0 +1,32 @@
+[
+  {
+    "type": "high-density-wall",
+    "candidateId": "c_v3-clean_fr21_34125ef4e2e8",
+    "wallId": "fr21",
+    "svgPath": "evidence/code06/phase-b-clean/blind/closeups/sample-high-density-wall.svg"
+  },
+  {
+    "type": "low-density-wall",
+    "candidateId": "c_v3-clean_fr3_cf39d81e6fb3",
+    "wallId": "fr3",
+    "svgPath": "evidence/code06/phase-b-clean/blind/closeups/sample-low-density-wall.svg"
+  },
+  {
+    "type": "singleton-cluster",
+    "candidateId": "c_v3-clean_fr66_20a28b27e49c",
+    "wallId": "fr66",
+    "svgPath": "evidence/code06/phase-b-clean/blind/closeups/sample-singleton-cluster.svg"
+  },
+  {
+    "type": "merged-cluster",
+    "candidateId": "c_v3-clean_fr69_c98fa4319269",
+    "wallId": "fr69",
+    "svgPath": "evidence/code06/phase-b-clean/blind/closeups/sample-merged-cluster.svg"
+  },
+  {
+    "type": "curve-conflict",
+    "candidateId": "c_v3-clean_fr8_3baca20b604a",
+    "wallId": "fr8",
+    "svgPath": "evidence/code06/phase-b-clean/blind/closeups/sample-curve-conflict.svg"
+  }
+]

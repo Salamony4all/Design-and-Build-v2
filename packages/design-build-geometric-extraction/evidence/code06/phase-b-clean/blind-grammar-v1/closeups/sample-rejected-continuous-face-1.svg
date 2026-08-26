@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="27.12000274658203 46.00000411987304 51.280006408691406 399.8800064086915" width="300" height="200">
+  <rect x="27.12000274658203" y="46.00000411987304" width="51.280006408691406" height="399.8800064086915" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <text x="47.12000274658203" y="61.00000411987304" font-size="7" font-family="monospace" fill="#222" font-weight="bold">Rejected Continuous Wall Face: c_v3-grammar-v1_fr0_72ef8b3033e7</text>
+  <text x="47.12000274658203" y="435.8800105285645" font-size="6" font-family="monospace" fill="#999">ID: c_v3-grammar-v1_fr0_72ef8b3033e7 | Wall: fr0</text>
+  <rect x="47.12000274658203" y="66.00000411987304" width="11.280006408691406" height="359.8800064086915" fill="none" stroke="#00cc00" stroke-width="2" stroke-dasharray="none"/>
+  <text x="51.12000274658203" y="78.00000411987304" font-size="6" font-family="monospace" fill="#00cc00">Verdict: ACCEPTED | Width: 348.6pt</text>
+</svg>

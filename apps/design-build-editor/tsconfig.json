@@ -1,0 +1,78 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "allowImportingTsExtensions": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "design-build-extraction-contracts": [
+        "../../packages/extraction-contracts/src/index.ts"
+      ],
+      "design-build-extraction-mupdf": [
+        "../../packages/extraction-mupdf/src/index.ts"
+      ],
+      "design-build-extraction-ai": [
+        "../../packages/extraction-ai/src/index.ts"
+      ],
+      "design-build-coordinate-frame": [
+        "../../packages/coordinate-frame/src/index.ts"
+      ],
+      "design-build-pascal-adapter": [
+        "../../packages/pascal-adapter/src/index.ts"
+      ],
+      "design-build-provider-registry": [
+        "../../packages/provider-registry/src/index.ts"
+      ],
+      "design-build-render-orchestrator": [
+        "../../packages/render-orchestrator/src/index.ts"
+      ],
+      "design-build-conversation-core": [
+        "../../packages/conversation-core/src/index.ts"
+      ],
+      "design-build-attachment-service": [
+        "../../packages/attachment-service/src/index.ts"
+      ],
+      "design-build-export-services": [
+        "../../packages/export-services/src/index.ts"
+      ],
+      "design-build-shared-ui": [
+        "../../packages/shared-ui/src/index.ts"
+      ],
+      "design-build-simplified-viewer-shell": [
+        "../../packages/simplified-viewer-shell/src/index.tsx"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

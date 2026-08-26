@@ -1,0 +1,1669 @@
+{
+  "$schema": "cs4-ffe-sector-fixture",
+  "sector": "workplace",
+  "units": "mm",
+  "unitsPerMeter": 1000,
+  "synthetic": true,
+  "prioritySpaces": [
+    "open-office",
+    "private-office",
+    "meeting-room",
+    "reception",
+    "pantry"
+  ],
+  "priorityProducts": [
+    "workstation",
+    "desk",
+    "task-chair",
+    "visitor-chair",
+    "meeting-table",
+    "sofa",
+    "lounge-chair",
+    "side-table",
+    "pedestal",
+    "filing-cabinet",
+    "storage-cabinet"
+  ],
+  "groups": [
+    {
+      "name": "workstation-cluster",
+      "hint": "workstation bench desk",
+      "space": "open-office",
+      "expected": {
+        "productType": "workstation",
+        "scope": "loose-ffe",
+        "category": "workstations"
+      },
+      "components": [
+        {
+          "id": "ws-01",
+          "bounds": [
+            1000,
+            1000,
+            2600,
+            1800
+          ],
+          "points": [
+            {
+              "x": 1000,
+              "y": 1000
+            },
+            {
+              "x": 2600,
+              "y": 1000
+            },
+            {
+              "x": 2600,
+              "y": 1800
+            },
+            {
+              "x": 1000,
+              "y": 1800
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "ws-01-p1"
+            ],
+            "rootIds": [
+              "ws-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "ws-02",
+          "bounds": [
+            2700,
+            1000,
+            4300,
+            1800
+          ],
+          "points": [
+            {
+              "x": 2700,
+              "y": 1000
+            },
+            {
+              "x": 4300,
+              "y": 1000
+            },
+            {
+              "x": 4300,
+              "y": 1800
+            },
+            {
+              "x": 2700,
+              "y": 1800
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "ws-02-p1"
+            ],
+            "rootIds": [
+              "ws-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "ws-03",
+          "bounds": [
+            4400,
+            1000,
+            6000,
+            1800
+          ],
+          "points": [
+            {
+              "x": 4400,
+              "y": 1000
+            },
+            {
+              "x": 6000,
+              "y": 1000
+            },
+            {
+              "x": 6000,
+              "y": 1800
+            },
+            {
+              "x": 4400,
+              "y": 1800
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "ws-03-p1"
+            ],
+            "rootIds": [
+              "ws-03"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "ws-r2-01",
+          "bounds": [
+            1000,
+            2200,
+            2600,
+            3000
+          ],
+          "points": [
+            {
+              "x": 1000,
+              "y": 2200
+            },
+            {
+              "x": 2600,
+              "y": 2200
+            },
+            {
+              "x": 2600,
+              "y": 3000
+            },
+            {
+              "x": 1000,
+              "y": 3000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "ws-r2-01-p1"
+            ],
+            "rootIds": [
+              "ws-r2-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "ws-r2-02",
+          "bounds": [
+            2700,
+            2200,
+            4300,
+            3000
+          ],
+          "points": [
+            {
+              "x": 2700,
+              "y": 2200
+            },
+            {
+              "x": 4300,
+              "y": 2200
+            },
+            {
+              "x": 4300,
+              "y": 3000
+            },
+            {
+              "x": 2700,
+              "y": 3000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "ws-r2-02-p1"
+            ],
+            "rootIds": [
+              "ws-r2-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "ws-r2-03",
+          "bounds": [
+            4400,
+            2200,
+            6000,
+            3000
+          ],
+          "points": [
+            {
+              "x": 4400,
+              "y": 2200
+            },
+            {
+              "x": 6000,
+              "y": 2200
+            },
+            {
+              "x": 6000,
+              "y": 3000
+            },
+            {
+              "x": 4400,
+              "y": 3000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "ws-r2-03-p1"
+            ],
+            "rootIds": [
+              "ws-r2-03"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "task-chairs",
+      "hint": "task chair",
+      "space": "open-office",
+      "expected": {
+        "productType": "task-chair",
+        "scope": "loose-ffe",
+        "category": "seating"
+      },
+      "components": [
+        {
+          "id": "tc-01",
+          "bounds": [
+            1450,
+            1850,
+            2070,
+            2470
+          ],
+          "points": [
+            {
+              "x": 1450,
+              "y": 1850
+            },
+            {
+              "x": 2070,
+              "y": 1850
+            },
+            {
+              "x": 2070,
+              "y": 2470
+            },
+            {
+              "x": 1450,
+              "y": 2470
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "tc-01-p1"
+            ],
+            "rootIds": [
+              "tc-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "tc-02",
+          "bounds": [
+            3150,
+            1850,
+            3770,
+            2470
+          ],
+          "points": [
+            {
+              "x": 3150,
+              "y": 1850
+            },
+            {
+              "x": 3770,
+              "y": 1850
+            },
+            {
+              "x": 3770,
+              "y": 2470
+            },
+            {
+              "x": 3150,
+              "y": 2470
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "tc-02-p1"
+            ],
+            "rootIds": [
+              "tc-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "tc-03",
+          "bounds": [
+            4850,
+            1850,
+            5470,
+            2470
+          ],
+          "points": [
+            {
+              "x": 4850,
+              "y": 1850
+            },
+            {
+              "x": 5470,
+              "y": 1850
+            },
+            {
+              "x": 5470,
+              "y": 2470
+            },
+            {
+              "x": 4850,
+              "y": 2470
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "tc-03-p1"
+            ],
+            "rootIds": [
+              "tc-03"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "tc-r2-01",
+          "bounds": [
+            1450,
+            3050,
+            2070,
+            3670
+          ],
+          "points": [
+            {
+              "x": 1450,
+              "y": 3050
+            },
+            {
+              "x": 2070,
+              "y": 3050
+            },
+            {
+              "x": 2070,
+              "y": 3670
+            },
+            {
+              "x": 1450,
+              "y": 3670
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "tc-r2-01-p1"
+            ],
+            "rootIds": [
+              "tc-r2-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "tc-r2-02",
+          "bounds": [
+            3150,
+            3050,
+            3770,
+            3670
+          ],
+          "points": [
+            {
+              "x": 3150,
+              "y": 3050
+            },
+            {
+              "x": 3770,
+              "y": 3050
+            },
+            {
+              "x": 3770,
+              "y": 3670
+            },
+            {
+              "x": 3150,
+              "y": 3670
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "tc-r2-02-p1"
+            ],
+            "rootIds": [
+              "tc-r2-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "tc-r2-03",
+          "bounds": [
+            4850,
+            3050,
+            5470,
+            3670
+          ],
+          "points": [
+            {
+              "x": 4850,
+              "y": 3050
+            },
+            {
+              "x": 5470,
+              "y": 3050
+            },
+            {
+              "x": 5470,
+              "y": 3670
+            },
+            {
+              "x": 4850,
+              "y": 3670
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "tc-r2-03-p1"
+            ],
+            "rootIds": [
+              "tc-r2-03"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "private-desks",
+      "hint": "desk",
+      "space": "private-office",
+      "expected": {
+        "productType": "desk",
+        "scope": "loose-ffe",
+        "category": "tables-work-surfaces"
+      },
+      "components": [
+        {
+          "id": "pd-01",
+          "bounds": [
+            8000,
+            1000,
+            9400,
+            1700
+          ],
+          "points": [
+            {
+              "x": 8000,
+              "y": 1000
+            },
+            {
+              "x": 9400,
+              "y": 1000
+            },
+            {
+              "x": 9400,
+              "y": 1700
+            },
+            {
+              "x": 8000,
+              "y": 1700
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "pd-01-p1"
+            ],
+            "rootIds": [
+              "pd-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "pd-02",
+          "bounds": [
+            12000,
+            1000,
+            13400,
+            1700
+          ],
+          "points": [
+            {
+              "x": 12000,
+              "y": 1000
+            },
+            {
+              "x": 13400,
+              "y": 1000
+            },
+            {
+              "x": 13400,
+              "y": 1700
+            },
+            {
+              "x": 12000,
+              "y": 1700
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "pd-02-p1"
+            ],
+            "rootIds": [
+              "pd-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "pd-03",
+          "bounds": [
+            16000,
+            1000,
+            17400,
+            1700
+          ],
+          "points": [
+            {
+              "x": 16000,
+              "y": 1000
+            },
+            {
+              "x": 17400,
+              "y": 1000
+            },
+            {
+              "x": 17400,
+              "y": 1700
+            },
+            {
+              "x": 16000,
+              "y": 1700
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "pd-03-p1"
+            ],
+            "rootIds": [
+              "pd-03"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "meeting-table",
+      "hint": "meeting table",
+      "space": "meeting-room",
+      "expected": {
+        "productType": "meeting-table",
+        "scope": "loose-ffe",
+        "category": "tables-work-surfaces"
+      },
+      "components": [
+        {
+          "id": "mt-01",
+          "bounds": [
+            8000,
+            5000,
+            11200,
+            6200
+          ],
+          "points": [
+            {
+              "x": 8000,
+              "y": 5000
+            },
+            {
+              "x": 11200,
+              "y": 5000
+            },
+            {
+              "x": 11200,
+              "y": 6200
+            },
+            {
+              "x": 8000,
+              "y": 6200
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "mt-01-p1"
+            ],
+            "rootIds": [
+              "mt-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "visitor-chairs",
+      "hint": "visitor chair",
+      "space": "meeting-room",
+      "expected": {
+        "productType": "visitor-chair",
+        "scope": "loose-ffe",
+        "category": "seating"
+      },
+      "components": [
+        {
+          "id": "vc-01",
+          "bounds": [
+            8100,
+            4300,
+            8640,
+            4840
+          ],
+          "points": [
+            {
+              "x": 8100,
+              "y": 4300
+            },
+            {
+              "x": 8640,
+              "y": 4300
+            },
+            {
+              "x": 8640,
+              "y": 4840
+            },
+            {
+              "x": 8100,
+              "y": 4840
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "vc-01-p1"
+            ],
+            "rootIds": [
+              "vc-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "vc-02",
+          "bounds": [
+            8900,
+            4300,
+            9440,
+            4840
+          ],
+          "points": [
+            {
+              "x": 8900,
+              "y": 4300
+            },
+            {
+              "x": 9440,
+              "y": 4300
+            },
+            {
+              "x": 9440,
+              "y": 4840
+            },
+            {
+              "x": 8900,
+              "y": 4840
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "vc-02-p1"
+            ],
+            "rootIds": [
+              "vc-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "vc-03",
+          "bounds": [
+            9700,
+            4300,
+            10240,
+            4840
+          ],
+          "points": [
+            {
+              "x": 9700,
+              "y": 4300
+            },
+            {
+              "x": 10240,
+              "y": 4300
+            },
+            {
+              "x": 10240,
+              "y": 4840
+            },
+            {
+              "x": 9700,
+              "y": 4840
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "vc-03-p1"
+            ],
+            "rootIds": [
+              "vc-03"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "vc-04",
+          "bounds": [
+            10500,
+            4300,
+            11040,
+            4840
+          ],
+          "points": [
+            {
+              "x": 10500,
+              "y": 4300
+            },
+            {
+              "x": 11040,
+              "y": 4300
+            },
+            {
+              "x": 11040,
+              "y": 4840
+            },
+            {
+              "x": 10500,
+              "y": 4840
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "vc-04-p1"
+            ],
+            "rootIds": [
+              "vc-04"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "vc-r2-01",
+          "bounds": [
+            8100,
+            6350,
+            8640,
+            6890
+          ],
+          "points": [
+            {
+              "x": 8100,
+              "y": 6350
+            },
+            {
+              "x": 8640,
+              "y": 6350
+            },
+            {
+              "x": 8640,
+              "y": 6890
+            },
+            {
+              "x": 8100,
+              "y": 6890
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "vc-r2-01-p1"
+            ],
+            "rootIds": [
+              "vc-r2-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "vc-r2-02",
+          "bounds": [
+            8900,
+            6350,
+            9440,
+            6890
+          ],
+          "points": [
+            {
+              "x": 8900,
+              "y": 6350
+            },
+            {
+              "x": 9440,
+              "y": 6350
+            },
+            {
+              "x": 9440,
+              "y": 6890
+            },
+            {
+              "x": 8900,
+              "y": 6890
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "vc-r2-02-p1"
+            ],
+            "rootIds": [
+              "vc-r2-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "vc-r2-03",
+          "bounds": [
+            9700,
+            6350,
+            10240,
+            6890
+          ],
+          "points": [
+            {
+              "x": 9700,
+              "y": 6350
+            },
+            {
+              "x": 10240,
+              "y": 6350
+            },
+            {
+              "x": 10240,
+              "y": 6890
+            },
+            {
+              "x": 9700,
+              "y": 6890
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "vc-r2-03-p1"
+            ],
+            "rootIds": [
+              "vc-r2-03"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "vc-r2-04",
+          "bounds": [
+            10500,
+            6350,
+            11040,
+            6890
+          ],
+          "points": [
+            {
+              "x": 10500,
+              "y": 6350
+            },
+            {
+              "x": 11040,
+              "y": 6350
+            },
+            {
+              "x": 11040,
+              "y": 6890
+            },
+            {
+              "x": 10500,
+              "y": 6890
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "vc-r2-04-p1"
+            ],
+            "rootIds": [
+              "vc-r2-04"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "reception-desk",
+      "hint": "reception desk",
+      "space": "reception",
+      "expected": {
+        "productType": "desk",
+        "scope": "loose-ffe",
+        "category": "tables-work-surfaces"
+      },
+      "components": [
+        {
+          "id": "rd-01",
+          "bounds": [
+            1000,
+            8000,
+            3800,
+            8900
+          ],
+          "points": [
+            {
+              "x": 1000,
+              "y": 8000
+            },
+            {
+              "x": 3800,
+              "y": 8000
+            },
+            {
+              "x": 3800,
+              "y": 8900
+            },
+            {
+              "x": 1000,
+              "y": 8900
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "rd-01-p1"
+            ],
+            "rootIds": [
+              "rd-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "reception-sofa",
+      "hint": "sofa lounge",
+      "space": "reception",
+      "expected": {
+        "productType": "sofa",
+        "scope": "loose-ffe",
+        "category": "seating"
+      },
+      "components": [
+        {
+          "id": "sf-01",
+          "bounds": [
+            5000,
+            8000,
+            7200,
+            8950
+          ],
+          "points": [
+            {
+              "x": 5000,
+              "y": 8000
+            },
+            {
+              "x": 7200,
+              "y": 8000
+            },
+            {
+              "x": 7200,
+              "y": 8950
+            },
+            {
+              "x": 5000,
+              "y": 8950
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "sf-01-p1"
+            ],
+            "rootIds": [
+              "sf-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "lounge-chairs",
+      "hint": "lounge chair armchair",
+      "space": "reception",
+      "expected": {
+        "productType": "lounge-chair",
+        "scope": "loose-ffe",
+        "category": "seating"
+      },
+      "components": [
+        {
+          "id": "lc-01",
+          "bounds": [
+            5000,
+            9300,
+            5900,
+            10200
+          ],
+          "points": [
+            {
+              "x": 5000,
+              "y": 9300
+            },
+            {
+              "x": 5900,
+              "y": 9300
+            },
+            {
+              "x": 5900,
+              "y": 10200
+            },
+            {
+              "x": 5000,
+              "y": 10200
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "lc-01-p1"
+            ],
+            "rootIds": [
+              "lc-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "lc-02",
+          "bounds": [
+            6200,
+            9300,
+            7100,
+            10200
+          ],
+          "points": [
+            {
+              "x": 6200,
+              "y": 9300
+            },
+            {
+              "x": 7100,
+              "y": 9300
+            },
+            {
+              "x": 7100,
+              "y": 10200
+            },
+            {
+              "x": 6200,
+              "y": 10200
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "lc-02-p1"
+            ],
+            "rootIds": [
+              "lc-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "lc-03",
+          "bounds": [
+            7400,
+            9300,
+            8300,
+            10200
+          ],
+          "points": [
+            {
+              "x": 7400,
+              "y": 9300
+            },
+            {
+              "x": 8300,
+              "y": 9300
+            },
+            {
+              "x": 8300,
+              "y": 10200
+            },
+            {
+              "x": 7400,
+              "y": 10200
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "lc-03-p1"
+            ],
+            "rootIds": [
+              "lc-03"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "pedestals",
+      "hint": "mobile pedestal",
+      "space": "open-office",
+      "expected": {
+        "productType": "pedestal",
+        "scope": "loose-ffe",
+        "category": "storage"
+      },
+      "components": [
+        {
+          "id": "pe-01",
+          "bounds": [
+            1000,
+            4300,
+            1420,
+            4900
+          ],
+          "points": [
+            {
+              "x": 1000,
+              "y": 4300
+            },
+            {
+              "x": 1420,
+              "y": 4300
+            },
+            {
+              "x": 1420,
+              "y": 4900
+            },
+            {
+              "x": 1000,
+              "y": 4900
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "pe-01-p1"
+            ],
+            "rootIds": [
+              "pe-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "pe-02",
+          "bounds": [
+            2300,
+            4300,
+            2720,
+            4900
+          ],
+          "points": [
+            {
+              "x": 2300,
+              "y": 4300
+            },
+            {
+              "x": 2720,
+              "y": 4300
+            },
+            {
+              "x": 2720,
+              "y": 4900
+            },
+            {
+              "x": 2300,
+              "y": 4900
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "pe-02-p1"
+            ],
+            "rootIds": [
+              "pe-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "pe-03",
+          "bounds": [
+            3600,
+            4300,
+            4020,
+            4900
+          ],
+          "points": [
+            {
+              "x": 3600,
+              "y": 4300
+            },
+            {
+              "x": 4020,
+              "y": 4300
+            },
+            {
+              "x": 4020,
+              "y": 4900
+            },
+            {
+              "x": 3600,
+              "y": 4900
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "pe-03-p1"
+            ],
+            "rootIds": [
+              "pe-03"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "pe-04",
+          "bounds": [
+            4900,
+            4300,
+            5320,
+            4900
+          ],
+          "points": [
+            {
+              "x": 4900,
+              "y": 4300
+            },
+            {
+              "x": 5320,
+              "y": 4300
+            },
+            {
+              "x": 5320,
+              "y": 4900
+            },
+            {
+              "x": 4900,
+              "y": 4900
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "pe-04-p1"
+            ],
+            "rootIds": [
+              "pe-04"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "pe-05",
+          "bounds": [
+            6200,
+            4300,
+            6620,
+            4900
+          ],
+          "points": [
+            {
+              "x": 6200,
+              "y": 4300
+            },
+            {
+              "x": 6620,
+              "y": 4300
+            },
+            {
+              "x": 6620,
+              "y": 4900
+            },
+            {
+              "x": 6200,
+              "y": 4900
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "pe-05-p1"
+            ],
+            "rootIds": [
+              "pe-05"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "pe-06",
+          "bounds": [
+            7500,
+            4300,
+            7920,
+            4900
+          ],
+          "points": [
+            {
+              "x": 7500,
+              "y": 4300
+            },
+            {
+              "x": 7920,
+              "y": 4300
+            },
+            {
+              "x": 7920,
+              "y": 4900
+            },
+            {
+              "x": 7500,
+              "y": 4900
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "pe-06-p1"
+            ],
+            "rootIds": [
+              "pe-06"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "filing-cabinets",
+      "hint": "filing cabinet",
+      "space": "open-office",
+      "expected": {
+        "productType": "filing-cabinet",
+        "scope": "loose-ffe",
+        "category": "storage"
+      },
+      "components": [
+        {
+          "id": "fc-01",
+          "bounds": [
+            1000,
+            5300,
+            1470,
+            5920
+          ],
+          "points": [
+            {
+              "x": 1000,
+              "y": 5300
+            },
+            {
+              "x": 1470,
+              "y": 5300
+            },
+            {
+              "x": 1470,
+              "y": 5920
+            },
+            {
+              "x": 1000,
+              "y": 5920
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "fc-01-p1"
+            ],
+            "rootIds": [
+              "fc-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "fc-02",
+          "bounds": [
+            1800,
+            5300,
+            2270,
+            5920
+          ],
+          "points": [
+            {
+              "x": 1800,
+              "y": 5300
+            },
+            {
+              "x": 2270,
+              "y": 5300
+            },
+            {
+              "x": 2270,
+              "y": 5920
+            },
+            {
+              "x": 1800,
+              "y": 5920
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "fc-02-p1"
+            ],
+            "rootIds": [
+              "fc-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "fc-03",
+          "bounds": [
+            2600,
+            5300,
+            3070,
+            5920
+          ],
+          "points": [
+            {
+              "x": 2600,
+              "y": 5300
+            },
+            {
+              "x": 3070,
+              "y": 5300
+            },
+            {
+              "x": 3070,
+              "y": 5920
+            },
+            {
+              "x": 2600,
+              "y": 5920
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "fc-03-p1"
+            ],
+            "rootIds": [
+              "fc-03"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    }
+  ]
+}

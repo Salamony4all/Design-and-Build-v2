@@ -1,0 +1,549 @@
+{
+  "generatedAt": "2026-07-30T02:02:31.709Z",
+  "regions": [
+    {
+      "regionId": "or_r1.3.1_1",
+      "physicalWallId": "fr0",
+      "constituentCandidateCount": 15,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 12,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 323.04,
+        "end": 379.8
+      },
+      "intervalIntersection": null,
+      "evidenceTypes": [
+        "gap",
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_2",
+      "physicalWallId": "fr0",
+      "constituentCandidateCount": 18,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 11,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 487.44,
+        "end": 544.2
+      },
+      "intervalIntersection": null,
+      "evidenceTypes": [
+        "gap",
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_3",
+      "physicalWallId": "fr14",
+      "constituentCandidateCount": 12,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 12,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 85.08,
+        "end": 90.72
+      },
+      "intervalIntersection": {
+        "start": 85.08,
+        "end": 90.72
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_4",
+      "physicalWallId": "fr18",
+      "constituentCandidateCount": 25,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 25,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 85.08,
+        "end": 90.72
+      },
+      "intervalIntersection": {
+        "start": 85.08,
+        "end": 90.72
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_5",
+      "physicalWallId": "fr20",
+      "constituentCandidateCount": 29,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 29,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 85.08,
+        "end": 90.72
+      },
+      "intervalIntersection": {
+        "start": 85.08,
+        "end": 90.72
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_6",
+      "physicalWallId": "fr21",
+      "constituentCandidateCount": 16,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 15,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 490.08,
+        "end": 544.2
+      },
+      "intervalIntersection": null,
+      "evidenceTypes": [
+        "gap",
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_7",
+      "physicalWallId": "fr35",
+      "constituentCandidateCount": 12,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 12,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": -5.64,
+        "end": 0
+      },
+      "intervalIntersection": {
+        "start": -5.64,
+        "end": 0
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_8",
+      "physicalWallId": "fr37",
+      "constituentCandidateCount": 25,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 25,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 96.36,
+        "end": 102.12
+      },
+      "intervalIntersection": {
+        "start": 96.36,
+        "end": 102.12
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_9",
+      "physicalWallId": "fr38",
+      "constituentCandidateCount": 29,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 29,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 96.36,
+        "end": 102.12
+      },
+      "intervalIntersection": {
+        "start": 96.36,
+        "end": 102.12
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_10",
+      "physicalWallId": "fr39",
+      "constituentCandidateCount": 25,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 25,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": -5.64,
+        "end": 0
+      },
+      "intervalIntersection": {
+        "start": -5.64,
+        "end": 0
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_11",
+      "physicalWallId": "fr41",
+      "constituentCandidateCount": 29,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 29,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": -5.64,
+        "end": 0
+      },
+      "intervalIntersection": {
+        "start": -5.64,
+        "end": 0
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_12",
+      "physicalWallId": "fr47",
+      "constituentCandidateCount": 13,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 13,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.28
+      },
+      "intervalIntersection": {
+        "start": 0,
+        "end": 26.88
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_13",
+      "physicalWallId": "fr49",
+      "constituentCandidateCount": 13,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 13,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.28
+      },
+      "intervalIntersection": {
+        "start": 0,
+        "end": 26.88
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_14",
+      "physicalWallId": "fr50",
+      "constituentCandidateCount": 5,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 5,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.28
+      },
+      "intervalIntersection": {
+        "start": 0,
+        "end": 113.28
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_15",
+      "physicalWallId": "fr51",
+      "constituentCandidateCount": 13,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 13,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.28
+      },
+      "intervalIntersection": {
+        "start": 0,
+        "end": 26.88
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_16",
+      "physicalWallId": "fr52",
+      "constituentCandidateCount": 13,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 13,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.28
+      },
+      "intervalIntersection": {
+        "start": 0,
+        "end": 26.88
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_17",
+      "physicalWallId": "fr55",
+      "constituentCandidateCount": 5,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 5,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.28
+      },
+      "intervalIntersection": {
+        "start": 0,
+        "end": 113.28
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_18",
+      "physicalWallId": "fr57",
+      "constituentCandidateCount": 13,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 13,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.4
+      },
+      "intervalIntersection": {
+        "start": 86.4,
+        "end": 113.4
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_19",
+      "physicalWallId": "fr59",
+      "constituentCandidateCount": 9,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 9,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.4
+      },
+      "intervalIntersection": {
+        "start": 86.4,
+        "end": 113.4
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_20",
+      "physicalWallId": "fr60",
+      "constituentCandidateCount": 3,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 3,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.4
+      },
+      "intervalIntersection": {
+        "start": 0,
+        "end": 113.4
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_21",
+      "physicalWallId": "fr61",
+      "constituentCandidateCount": 13,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 13,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.4
+      },
+      "intervalIntersection": {
+        "start": 86.4,
+        "end": 113.4
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_22",
+      "physicalWallId": "fr62",
+      "constituentCandidateCount": 13,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 13,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.4
+      },
+      "intervalIntersection": {
+        "start": 86.4,
+        "end": 113.4
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_23",
+      "physicalWallId": "fr63",
+      "constituentCandidateCount": 13,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 13,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.4
+      },
+      "intervalIntersection": {
+        "start": 86.4,
+        "end": 113.4
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_24",
+      "physicalWallId": "fr64",
+      "constituentCandidateCount": 9,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 9,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.4
+      },
+      "intervalIntersection": {
+        "start": 86.4,
+        "end": 113.4
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    },
+    {
+      "regionId": "or_r1.3.1_25",
+      "physicalWallId": "fr65",
+      "constituentCandidateCount": 3,
+      "disjointIntervalCount": 1,
+      "intervalGaps": [],
+      "frameBayCount": 0,
+      "jambPairCount": 3,
+      "connectedSourceComponents": 1,
+      "structuralClassification": "UNRESOLVED_STRUCTURE",
+      "intervalUnion": {
+        "start": 0,
+        "end": 113.4
+      },
+      "intervalIntersection": {
+        "start": 0,
+        "end": 113.4
+      },
+      "evidenceTypes": [
+        "jamb"
+      ]
+    }
+  ]
+}

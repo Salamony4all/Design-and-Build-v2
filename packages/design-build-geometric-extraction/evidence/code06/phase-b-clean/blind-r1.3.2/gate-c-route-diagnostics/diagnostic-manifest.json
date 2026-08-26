@@ -1,0 +1,50 @@
+{
+  "summary": {
+    "buildFailure": "Missing application-owned page route \"/_not-found\" caused Next build to fail while collecting page data for /_not-found. Resolved by adding src/app/_not-found/page.tsx. Current build exit code is 0.",
+    "firstApplicationOwnedFailingModule": "apps/design-build-editor/src/app/_not-found/page.tsx ( absent )"
+  },
+  "files": {
+    "apps/design-build-editor/src/app/window-review-r132/page.tsx": {
+      "bytes": 20460,
+      "mtime_utc": "2026-07-30T11:59:50.832005+00:00",
+      "sha256": "ac636016fa25e4915371c03a31af62dc10d78112db0724912f5aa2112528d10a",
+      "archived_to": "packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-r1.3.2/gate-c-route-diagnostics\\page.tsx"
+    },
+    "apps/design-build-editor/src/app/harness/window-hypothesis-review/page.tsx": {
+      "bytes": 2758,
+      "mtime_utc": "2026-07-30T11:23:39.082495+00:00",
+      "sha256": "f1aad94501d80930e03b98552cb12e080dc657718b14d84a82d362d7ba6a5e11",
+      "archived_to": "packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-r1.3.2/gate-c-route-diagnostics\\page.tsx"
+    },
+    "apps/design-build-editor/src/app/api/harness/window-hypothesis-review/route.ts": {
+      "bytes": 2494,
+      "mtime_utc": "2026-07-30T11:41:42.489082+00:00",
+      "sha256": "9ec9d419bbb21ce3b728eeb1b00a9845480152d97e870c4ee7b3d40eb03be869",
+      "archived_to": "packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-r1.3.2/gate-c-route-diagnostics\\route.ts"
+    },
+    "apps/design-build-editor/src/app/harness/page.tsx": {
+      "bytes": 9013,
+      "mtime_utc": "2026-07-27T04:24:48.926519+00:00",
+      "sha256": "c7f39e6490dc2185da8b8c5f2ec9be3e2d63d00ae63e5e1f37460a5a9ae00d5b",
+      "archived_to": "packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-r1.3.2/gate-c-route-diagnostics\\page.tsx"
+    },
+    "apps/design-build-editor/src/app/page.tsx": {
+      "bytes": 55573,
+      "mtime_utc": "2026-07-28T12:02:02.324867+00:00",
+      "sha256": "93468d9dd2b3d7732360ac8728f3b3e9e7066f3df400b85f71218560f5e1e306",
+      "archived_to": "packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-r1.3.2/gate-c-route-diagnostics\\page.tsx"
+    },
+    "apps/design-build-editor/src/app/layout.tsx": {
+      "bytes": 281,
+      "mtime_utc": "2026-07-27T09:06:48.837281+00:00",
+      "sha256": "da6f1299ff3d403fdb1dd08f352862f48d8fb0cdeed73dc9e8a353dbbe33839e",
+      "archived_to": "packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-r1.3.2/gate-c-route-diagnostics\\layout.tsx"
+    },
+    "apps/design-build-editor/src/app/_not-found/page.tsx": {
+      "bytes": 370,
+      "mtime_utc": "2026-07-30T11:52:01.375006+00:00",
+      "sha256": "40abcdb57d0dd80831a8d53608630e5358216b37921318f279c9b749b45f44fa",
+      "archived_to": "packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-r1.3.2/gate-c-route-diagnostics\\page.tsx"
+    }
+  }
+}

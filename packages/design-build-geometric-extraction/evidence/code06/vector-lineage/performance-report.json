@@ -1,0 +1,13 @@
+{
+  "lineageDisabledVectorCollectionMs": 3061,
+  "lineageDisabledTotalMs": 4503,
+  "lineageEnabledVectorCollectionMs": 8112,
+  "lineageEnabledTotalMs": 13131,
+  "slowdownRatio": 2.481,
+  "peakMemoryDisabledMb": "UNAVAILABLE",
+  "peakMemoryEnabledMb": "UNAVAILABLE",
+  "lineageSerializedBytes": 83558142,
+  "productionResponseBytesBefore": 166451,
+  "productionResponseBytesAfter": 166456,
+  "productionResponseSizeDelta": 5
+}

@@ -1,0 +1,14 @@
+{
+  "regionCount": 25,
+  "realSourceCrops": 25,
+  "locatorImages": 25,
+  "sourceOperationOverlays": 25,
+  "hostOverlays": 25,
+  "intervalOverlays": 25,
+  "candidateOverlays": 25,
+  "openingRegionOverlays": 25,
+  "missingFiles": [],
+  "invalidFiles": [],
+  "blankSourceCrops": [],
+  "registrationFailures": []
+}

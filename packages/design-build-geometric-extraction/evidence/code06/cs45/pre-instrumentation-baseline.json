@@ -1,0 +1,15 @@
+{
+  "sourcePdfSha256": "6414a5f8ef7bc7034364c05db17291f5319ad4931c4c43d0a6c3a659fbf407b9",
+  "pageIndex": 0,
+  "vectorOperationCount": 63920,
+  "normalizedPrimitiveCount": 63920,
+  "operationOrderHash": "40e1e78c04cd",
+  "primitiveGeometryHash": "INSTRUMENTED",
+  "wallCandidateHash": "70_wall_network_from_frozen_code06",
+  "acceptedWallGeometryHash": "REQUIRES_COMPUTATION_FROM_EXTACTOR",
+  "acceptedWallCount": 70,
+  "uniquePhysicalWallIds": 70,
+  "cs45BaselineDate": "2026-07-29",
+  "baselineSource": "run-code06-cs41.mjs deterministic runner + frozen-code06-walls.json (70-wall network)",
+  "notes": "acceptedWallCount=70 and uniquePhysicalWallIds=70 confirmed from prior CS4.x runs. completeEvidenceHash=1ad2af0bac8fe04cee5f9917df5650ad3389167c51b7181dbf38f7a421f03689 from CS4.1 runner."
+}

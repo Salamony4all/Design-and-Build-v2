@@ -1,0 +1,8 @@
+{
+  "generatedAt": "2026-08-03T07:03:15.873Z",
+  "acceptedCount": 29,
+  "reviewCount": 91,
+  "accRectangularCount": 29,
+  "note": "CODE-06 column extractor is geometry-only; the oracle is the deterministic extraction itself (one-to-one self-consistency). Pixel-level validation is the main-agent browser gate.",
+  "mismatches": []
+}

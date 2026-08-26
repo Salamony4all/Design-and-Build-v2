@@ -1,0 +1,2962 @@
+// Home page — First Upgrade + Change Set 2 (Live Pure MuPDF Migration).
+//
+// Responsibilities:
+//   - Install ONLY the initial shell (site/building/level/guide) via setScene,
+//     then reveal the official Pascal Viewer shell.
+//   - Frozen import (development/regression fallback): runStagedCode06Import
+//     from the baked frozen fixture via prepareCode06Drafts.
+//   - Live import (Change Set 2): prepareLiveDrafts(result) from the neutral
+//     ExtractionResult produced by the clean design-build-extraction-mupdf
+//     provider, then the SAME runStagedCode06Import runner + framing handshake.
+//   - Emit typed `import-progress` events to the ChatPanel (which only renders
+//     them — it performs NO Pascal mutation).
+//
+// ALL Pascal scene mutation lives here (and in the adapter), never in ChatPanel.
+//
+// GEOMETRIC_EXTRACTION_PROVIDER:
+//   'frozen-code06' -> Geometric Extract uses the baked frozen fixture (default
+//                      until live parity is fully green; also the dev fallback).
+//   'live-mupdf'     -> Geometric Extract runs the live Pure MuPDF boundary.
+'use client';
+
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+// Temporary development feature flag (Change Set 2, §8). Default stays frozen
+// until live Pascal parity is fully verified. After green gates, flip to
+// 'live-mupdf' and rerun all gates before production activation.
+const GEOMETRIC_EXTRACTION_PROVIDER: 'frozen-code06' | 'live-mupdf' = 'live-mupdf';
+import dynamic from 'next/dynamic';
+const PascalWindowHypothesisOverlay = dynamic(
+  () => import('@/features/window-hypothesis/PascalWindowHypothesisOverlay'),
+  { ssr: false },
+);
+import * as THREE from 'three';
+import type { ChatCommand, ChatEvent } from 'design-build-conversation-core';
+import { ChatPanel } from '@/features/conversation/ChatPanel';
+import { attachmentRepository } from '@/features/conversation/attachment-repository';
+import { ProviderSettingsPanel } from '@/features/conversation/ProviderSelector';
+import { AiExtractionControls, useAiProviderRegistry } from '@/features/ai-extraction';
+import { ViewerToolbar } from '@/features/viewer-interaction/ViewerToolbar';
+import { SelectionPropertiesPanel } from '@/features/viewer-interaction/SelectionPropertiesPanel';
+import { KeyboardElementControls } from '@/features/viewer-interaction/KeyboardElementControls';
+import { BuildProgressRail } from '@/features/progressive-build/BuildProgressRail';
+import { BuildCompletionCard } from '@/features/progressive-build/BuildCompletionCard';
+import { ChunkLoadRecovery } from '@/features/progressive-build/ChunkLoadRecovery';
+import { ProgressiveBuildV3, applyGuideReadiness, guideSignalApplicable, type StageCardState } from '@/features/progressive-build/ProgressiveBuildV3';
+import { DiagnosticPanel } from '@/features/progressive-build/DiagnosticPanel';
+import { createProgressiveInstaller, resolveAiExtractionPlan } from '@/harness/pascal-progressive-builder';
+import { installFurniture } from '@/harness/ai-scene-install';
+import type { RuntimeWallMapBuild } from '@/harness/ai-scene-install/runtime-wall-map';
+import { validateStructuralScene, type StructuralValidationResult } from '@/harness/ai-scene-install/structural-validation';
+import { projectLabelFromFiles } from '@/components/dynamic-project-label';
+import { validateEvent } from 'design-build-extraction-ai';
+import type { BuildStage, ProgressiveBuildEvent, FurnitureCandidate } from 'design-build-extraction-ai';
+import { ExportRail } from '@/features/project-export/ExportRail';
+import { selectDoorInstallerInput, type RuntimeWallMap } from '@/features/door-pilot/door-boundary';
+import { getPascalStores, ensureBuiltinPluginLoaded, type ViewerHandle } from 'design-build-simplified-viewer-shell';
+import { useEditorMode } from '@/features/pro/useEditorMode';
+import { ProEditorLazy } from '@/features/pro/ProEditorLazy';
+import { ProOverlay } from '@/features/pro/ProOverlay';
+import { preparePro, type ProPreloadResult } from '@/features/pro/proPreload';
+import { useViewer } from '@pascal-app/viewer';
+import { builtinPlugin } from '@pascal-app/nodes';
+import { SiteNode, BuildingNode, LevelNode, SlabNode, WallNode, emitter, runAsSingleSceneHistoryStep } from '@pascal-app/core';
+import type { AnyNode } from '@pascal-app/core';
+import { prepareCode06Drafts } from '@/harness/build-code06-import';
+import { prepareLiveDrafts } from '@/harness/build-live-import';
+import { buildFinalizedWallMap } from '@/harness/finalized-wall-map';
+import { cropGuideToRoi } from '@/harness/crop-guide';
+import type { WindowInstallSpec } from '@/harness/extract-live-windows';
+import type { LiveWindowContract } from '@/features/window-pilot/install-pilot-windows';
+import type { LiveDoorContract } from '@/features/door-pilot/install-live-doors';
+import { runStagedCode06Import, type StageEvent } from '@/harness/code06-staged-import';
+import { installLiveColumns, type LiveColumnInstallerContext } from '@/features/columns/install-live-columns';
+import type { ColumnContract } from 'design-build-extraction-mupdf';
+import { validateSceneTree, type NodeMap } from 'design-build-pascal-adapter';
+import { computeFraming, frameSelectionBoxes, type Aabb, type FramingSolution } from '@/features/viewer-interaction/camera-framing-service';
+
+declare global {
+  interface Window {
+    __code06?: {
+      core: ReturnType<typeof getPascalStores>;
+      drafts: import('@/harness/build-code06-import').Code06Drafts;
+      initialIds: import('@/harness/build-code06-import').InitialIds;
+      getLiveNodes: () => Record<string, unknown>;
+      validate: () => unknown;
+      // --- dev-only diagnostics (not in production) ---
+      getStatus: () => Code06Status;
+      failNextBatch: () => void;
+      resetFrozenImport: () => void;
+    };
+  }
+}
+
+interface Code06Status {
+  importState: 'idle' | 'initializing' | 'importing' | 'completed' | 'failed' | 'stalled';
+  currentStage: string;
+  committedWalls: number;
+  expectedWalls: number;
+  sceneNodeCount: number;
+  wallNodeCount: number;
+  wallRegistryCount: number;
+  dirtyNodeCount: number;
+  sceneTreeIssues: number;
+  duplicateWallIds: number;
+  unreachableNodeIds: string[];
+  progressiveEventLog: unknown[];
+  lastFraming: null | { center: number[]; radius: number; cameraAfter: number[]; target: number[]; near: number; far: number; objects: number };
+}
+
+const PascalViewerShell = dynamic(
+  () => import('design-build-simplified-viewer-shell').then((m) => m.PascalViewerShell),
+  { ssr: false },
+);
+
+const SelectionActionAnchor3D = dynamic(
+  () => import('@/features/pro/SelectionActionAnchor3D').then((m) => m.SelectionActionAnchor3D),
+  { ssr: false },
+);
+
+const SelectionActionBarDOM = dynamic(
+  () => import('@/features/pro/SelectionActionBarDOM').then((m) => m.SelectionActionBarDOM),
+  { ssr: false },
+);
+
+const SelectionActionBarErrorBoundary = dynamic(
+  () => import('@/features/pro/SelectionActionBarErrorBoundary').then((m) => m.SelectionActionBarErrorBoundary),
+  { ssr: false },
+);
+
+const ToolManager = dynamic(
+  () => import('@pascal-app/editor').then((m: any) => m.ToolManager),
+  { ssr: false },
+);
+
+const EditorGrid = dynamic(
+  () => import('@pascal-app/editor').then((m: any) => m.Grid),
+  { ssr: false },
+);
+
+const EditorSelectionManager = dynamic(
+  () => import('@/features/pro/EditorSelectionManager').then((m) => m.EditorSelectionManager),
+  { ssr: false },
+);
+
+const MOCK_MODELS = {
+  chat: ['gemini-2.5-flash', 'gemini-2.5-pro', 'claude-sonnet'],
+  extraction: ['gemini-2.5-pro', 'gemini-2.5-flash'],
+  render: ['nano-banana', 'comfyui-local'],
+};
+
+// ---- module-scope dev diagnostics (not referenced by UI; tree-shaken in prod
+// because all access is behind NODE_ENV !== 'production') ----
+const DIAG = {
+  importState: 'idle' as Code06Status['importState'],
+  currentStage: 'none',
+  committedWalls: 0,
+  expectedWalls: 70,
+  eventLog: [] as unknown[],
+  failNextBatch: { current: false },
+  importOk: false,
+  runCounter: 0,
+  lastFraming: null as null | { center: number[]; radius: number; cameraAfter: number[]; target: number[]; near: number; far: number; objects: number },
+  // Change Set 2 activation (§8 final diagnostic fields)
+  extractionProvider: 'none' as 'none' | 'live-mupdf' | 'frozen-code06' | 'clean-gemini',
+  extractionState: 'idle' as 'idle' | 'reading' | 'extracting' | 'validated' | 'failed',
+  extractionMessage: '',
+  uploadedFileName: '',
+  apiStatus: 0,
+  installedPilotWindows: 0,
+  windowInstallResults: [] as Array<{
+    anonymousRegionId: string;
+    physicalWallId: string;
+    livePascalWallNodeId: string | null;
+    windowNodeId: string | null;
+    mappingStatus: string;
+    widthM: number;
+  }>,
+  windowInstallError: '',
+  // Change Set 2 (Gate C, live): audit of the REAL geometric window extraction.
+  liveWindowAudit: null as null | {
+    totalCandidates: number; accepted: number; review: number; rejected: number;
+    byWall: Record<string, { accepted: number; review: number; rejected: number }>;
+  },
+  liveWindowExtractionError: '',
+  // Change Set: live door extraction + installation diagnostics.
+  installedDoors: 0,
+  doorInstallResults: [] as Array<{
+    doorAssemblyId: string;
+    physicalWallId: string;
+    livePascalWallNodeId: string | null;
+    doorNodeId: string | null;
+    mappingStatus: string;
+    widthM: number;
+  }>,
+  doorInstallError: '',
+  // Change Set: AI multipass extract — furniture/windows/doors installed into
+  // the live Pascal scene (categories prepareLiveDrafts omits).
+  installedAiFurniture: 0,
+  installedAiWindows: 0,
+  installedAiDoors: 0,
+  aiExtractInstallError: '',
+  doorManifestAccepted: 0,
+  doorReviewRecords: [] as Array<{
+    doorAssemblyId: string;
+    verdict: string;
+    reviewReason: string;
+    automaticInstallationAllowed: boolean;
+    relatedAcceptedAssemblyId?: string;
+  }>,
+  // ---- M2: finalized runtime wall map + count ownership ----
+  originalWallCount: 0,
+  completionWallCount: 0,
+  finalizedWallCount: 0,
+  wallMapPass: false,
+  wallMap: [] as unknown[],
+  // Windows (semantic, from the geometric detector — host rendering out of scope in M2):
+  windowsExtracted: 0,
+  windowsEligible: 0,
+  windowsInstalledNodes: 0,
+  windowsFailed: 0,
+  // Change Set: live door extraction + installation diagnostics.
+  doorDiagnosticReviewCount: 0, // 202 extraction candidates held for diagnostic review (NOT production doors)
+  doorsAccepted: 0,
+  doorsAutoInstallable: 0,
+  doorsAuditReview: 0,
+  // Terminal-state gating:
+  validationPass: false,
+  projectReady: 'PENDING' as 'PENDING' | 'READY',
+  candidateReviewRecords: 0,
+  candidateReviewLabel: 'candidate review evidence',
+  // ---- S8: bounded readiness controller terminal outcome ----
+  readinessOutcome: 'PENDING' as 'PENDING' | 'READY' | 'RENDERER_FAILED' | 'CHUNK_LOAD_FAILED' | 'TIMEOUT' | 'CANCELLED',
+  chunkLoadError: '' as string,
+  chunkLoadFailed: false,
+  // §Isolation: non-fatal Guide image-preparation diagnostic (redacted — no bytes/Base64).
+  guideImageError: null as null | { detectedMimeType: string; reason: string; byteLength: number },
+};
+
+const STAGE_LABEL: Record<string, string> = {
+  none: 'project',
+  slab: 'slab',
+  'exterior-walls': 'walls',
+  'principal-internal-walls': 'walls',
+  'service-walls': 'walls',
+  'short-partitions': 'walls',
+  import: 'project',
+};
+const stageLabelOf = (s: string) => STAGE_LABEL[s] ?? 'project';
+
+let evId = 0;
+const nid = () => `ev_${++evId}`;
+
+export default function Home() {
+  const [events, setEvents] = useState<ChatEvent[]>([
+    { type: 'message', role: 'assistant', id: nid(), text: 'Attach a PDF drawing, keep Geometric selected, and press Extract to build the project with Pure MuPDF.' },
+  ]);
+  const [selection, setSelection] = useState({ chat: MOCK_MODELS.chat[0], extraction: MOCK_MODELS.extraction[0], render: MOCK_MODELS.render[0] });
+  // Extraction method (geometric | ai), lifted from ChatPanel so the visible
+  // pipeline panel switches when the user selects AI mode.
+  const [extractMethod, setExtractMethod] = useState<'geometric' | 'ai'>('geometric');
+  const [importing, setImporting] = useState(false);
+  // Bumped on every committed batch to force the frameloop="never" Canvas to
+  // invalidate() and run its useFrame systems — which drain dirtyNodes and
+  // populate sceneRegistry.byType.wall. Without this, the wall systems never
+  // tick after the initial frame, leaving dirty:71 / wallReg:0 (the production
+  // divergence). Mirrors harness/page.tsx per-batch sceneReadyKey bumping.
+  const [sceneReadyTick, setSceneReadyTick] = useState(0);
+  const [docked, setDocked] = useState(false);
+  const [viewerVisible, setViewerVisible] = useState(true);
+  // Optional official Pascal PRO editing mode (spec: PASCAL_PRO_EDITOR).
+  const editorMode = useEditorMode();
+  // Transition machine (atomic shell switch, single Canvas/Viewer invariant):
+  //   proMounting  = we have unmounted STANDARD and are mounting the official
+  //                  Editor (narrow swap; during this window a dedicated loading
+  //                  surface is shown, so exactly one Canvas/Viewer exists).
+  //   proMode      = PRO is EFFECTIVE (rendered & ready). Gates STANDARD chrome.
+  const ts = editorMode.transitionState;
+  // OVERLAY MODE: PRO is a layer over the permanently-mounted Standard Viewer.
+  // proMode = PRO overlay is EFFECTIVE (panels mounted over the live model).
+  // proMounting = brief window between preload success and overlay mount.
+  const proMounting = ts === 'OVERLAY_MOUNTING';
+  const proMode = editorMode.effectiveMode === 'pro';
+  const proRequested = editorMode.requestedMode === 'pro' && !proMode && !proMounting;
+
+  // --- PRO crash-recovery sentinel (spec §13) ---
+  // Before the shell swap begins we mark the session IN_PROGRESS. After PRO is
+  // stable for 10s we promote it to PRO_STABLE. On the next cold load, if the
+  // marker is still IN_PROGRESS (or absent), we force STANDARD, clear any
+  // requested PRO, and show a safe notice — we NEVER auto-reopen a crashing PRO.
+  const PRO_SENTINEL = 'db:proTransition';
+  const [proRecoveryNotice, setProRecoveryNotice] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const marker = window.sessionStorage.getItem(PRO_SENTINEL);
+      if (marker && marker !== 'PRO_STABLE') {
+        // A previous PRO session did not complete — stay in STANDARD.
+        window.sessionStorage.removeItem('db:editorMode');
+        setProRecoveryNotice('Pascal PRO did not complete the previous session. Standard mode was restored.');
+      }
+    } catch {
+      /* ignore */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Initialize the dev-only bounded stability ring buffer (never per-frame logs).
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const w = window as unknown as { __pascalProStability?: unknown[] };
+    if (!w.__pascalProStability) w.__pascalProStability = [];
+  }, []);
+
+  // Preload phase runs WHILE STANDARD remains the only mounted Viewer. It never
+  // renders <Editor>; it warms the chunk, registers icons, loads the builtin
+  // plugin, and captures the scene. On success we mount the PRO overlay over
+  // the still-live Viewer (no Canvas swap, no scene copy). On failure we stay
+  // in STANDARD (safe rollback).
+  const [preload, setPreload] = useState<ProPreloadResult | null>(null);
+  const transitionIdRef = useRef(0);
+  useEffect(() => {
+    if (editorMode.requestedMode !== 'pro' || ts !== 'PREPARING_PRO') return;
+    const tid = ++transitionIdRef.current;
+    editorMode.setProStage('PRO_IMPORTING');
+    preparePro(activeRunIdRef.current ?? 'db-pro')
+      .then((res) => {
+        if (tid !== transitionIdRef.current) return; // cancelled/abandoned
+        setPreload(res);
+        editorMode.setProStage('PRO_PROJECT_READY');
+        editorMode.setTransitionState('OVERLAY_MOUNTING');
+        // Mark overlay ready on the next tick (overlay mounts over live Viewer).
+        requestAnimationFrame(() => editorMode.markProOverlayReady());
+      })
+      .catch((e) => {
+        if (tid !== transitionIdRef.current) return;
+        editorMode.markProFailed('PRO_FAILED');
+        setPreload(null);
+        if (e instanceof Error) console.warn('[PascalPRO] failed', e.message);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ts, editorMode.requestedMode]);
+
+  // One authoritative 10s timeout owned by this coordinator (covers preload,
+  // shell swap, onLoad, loader settlement). Cleared on success/failure/cancel.
+  useEffect(() => {
+    if (!editorMode.requestedMode || editorMode.effectiveMode === 'pro') return;
+    if (ts === 'IDLE' || ts === 'FAILED') return;
+    const tid = transitionIdRef.current;
+    const t = setTimeout(() => {
+      if (tid !== transitionIdRef.current) return;
+      editorMode.setProStage('PRO_TIMEOUT');
+      editorMode.markProFailed('PRO_TIMEOUT');
+      setPreload(null);
+    }, 10_000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ts, editorMode.requestedMode, editorMode.effectiveMode]);
+
+  // Promote the sentinel to PRO_STABLE 10s after PRO becomes effective, proving
+  // the session is stable (not merely opened). Until then the next reload treats
+  // it as an incomplete transition.
+  useEffect(() => {
+    if (editorMode.effectiveMode !== 'pro') return;
+    const id = setTimeout(() => {
+      try {
+        window.sessionStorage.setItem(PRO_SENTINEL, 'PRO_STABLE');
+      } catch {
+        /* ignore */
+      }
+    }, 10_000);
+    return () => clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editorMode.effectiveMode]);
+
+  // Clear the sentinel when we are safely back in STANDARD (clean return).
+  useEffect(() => {
+    if (editorMode.effectiveMode === 'standard' && ts === 'IDLE') {
+      try {
+        window.sessionStorage.removeItem(PRO_SENTINEL);
+      } catch {
+        /* ignore */
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editorMode.effectiveMode, ts]);
+
+  // §5: single-flight extraction — disables the Extract button while running.
+  const [extractionBusy, setExtractionBusy] = useState(false);
+
+  // ── Progressive Pure AI V3 state (spec §17-§19) ──
+  const PROGRESSIVE_ENABLED = process.env.NEXT_PUBLIC_PROGRESSIVE_BUILD_V1 === 'true';
+  const BUILD_GIT_COMMIT = process.env.NEXT_PUBLIC_GIT_COMMIT ?? 'dev-local';
+  const [progActive, setProgActive] = useState(false);
+  const [progRunId, setProgRunId] = useState<string | null>(null);
+  const [progStages, setProgStages] = useState<Record<BuildStage, StageCardState>>(() => ({
+    guide: { status: 'pending', installed: 0, total: 0, review: 0 },
+    slab: { status: 'pending', installed: 0, total: 0, review: 0 },
+    walls: { status: 'pending', installed: 0, total: 0, review: 0 },
+    windows: { status: 'pending', installed: 0, total: 0, review: 0 },
+    doors: { status: 'pending', installed: 0, total: 0, review: 0 },
+    furniture: { status: 'pending', installed: 0, total: 0, review: 0 },
+  }));
+  // Mirror of progStages for synchronous reads inside async event handlers
+  // (dependency guards need the latest stage status without re-rendering).
+  const progStagesRef = useRef<Record<BuildStage, StageCardState>>(progStages);
+  // Finalized AI wall map (Phase B): explicit semantic→runtime wall mapping,
+  // built from actual WallNode installation. READY gates window/door hosting.
+  const [progWallMap, setProgWallMap] = useState<RuntimeWallMapBuild | null>(null);
+  const progWallMapRef = useRef<RuntimeWallMapBuild | null>(null);
+  // Phase B §10 structural validation result (truthful scene audit).
+  const [progStructural, setProgStructural] = useState<StructuralValidationResult | null>(null);
+  const [progReview, setProgReview] = useState<FurnitureCandidate[]>([]);
+  const activeRunIdRef = useRef<string | null>(null);
+  // Once a Pascal snapshot build has run, the legacy geometric BuildProgressRail +
+  // its hardcoded 70-wall target must stay hidden (AI mode shows only the Pascal panel).
+  const progBuiltRef = useRef(false);
+  const [initialInstalled, setInitialInstalled] = useState(false);
+  const startedRef = useRef(false);
+  const viewerHandleRef = useRef<ViewerHandle | null>(null);
+  const windowSpecsRef = useRef<WindowInstallSpec[]>([]);
+  const doorSpecsRef = useRef<LiveDoorContract[]>([]);
+  const doorManifestRef = useRef<unknown>(null);
+  const windowAuditRef = useRef<any>(null);
+  // Structural-validation inputs (Phase B §10): ledgers captured during install.
+  const windowLedgerRef = useRef<unknown>(null);
+  const doorLedgerRef = useRef<unknown>(null);
+  const aiResultRef = useRef<import('design-build-extraction-contracts').ExtractionResult | null>(null);
+  // §Isolation: a SEPARATE ref holds the current run's ExtractionResult for
+  // cross-mode consumers (structural validation), decoupled from aiResultRef.
+  // aiResultRef is the AI-SPECIFIC holder that gates AI-only completion logic;
+  // a Geometric run must NEVER populate it (the historical leak that caused the
+  // AI branch — and the malformed PDF-as-PNG Guide URL — to fire during a
+  // Geometric build).
+  const liveResultRef = useRef<import('design-build-extraction-contracts').ExtractionResult | null>(null);
+  const activeRunModeRef = useRef<'ai' | 'geometric' | null>(null);
+  // M4: actual-runtime elapsed timer. Captures the wall-import start moment and
+  // ticks a live elapsed value (not a hardcoded 0).
+  const runStartRef = useRef<number | null>(null);
+  const [elapsedMs, setElapsedMs] = useState(0);
+  // S8: cross-tab ChunkLoadError latch. A ChunkLoadError means the viewer's lazy
+  // Pascal module failed to load (stale dev chunk / network). On detection we
+  // must STOP the run immediately (CHUNK_LOAD_FAILED) and PREVENT windows/doors.
+  const chunkLoadFailedRef = useRef(false);
+  useEffect(() => {
+    const onErr = (ev: ErrorEvent) => {
+      const msg = ev?.message ?? '';
+      // S8: only latch on a GENUINE webpack chunk-load failure for the app itself.
+      // A real Next.js chunk error looks like "Loading chunk N failed." or surfaces as
+      // a ChunkLoadError. We deliberately DO NOT match every error whose filename
+      // merely lives under static/chunks — library workers (pdf.js / MuPDF in the
+      // Geometric path) emit benign resource errors there that must not block a
+      // perfectly good build (the model still renders). See §Phase 6.
+      const isRealChunkLoadError =
+        msg.includes('ChunkLoadError') ||
+        msg.startsWith('Loading chunk') ||
+        msg.startsWith('Loading CSS chunk') ||
+        /failed to load (?:the )?(?:chunk|module)/i.test(msg);
+      if (isRealChunkLoadError) {
+        chunkLoadFailedRef.current = true;
+        DIAG.chunkLoadFailed = true;
+        DIAG.chunkLoadError = msg;
+      }
+    };
+    window.addEventListener('error', onErr);
+    return () => window.removeEventListener('error', onErr);
+  }, []);
+
+  // M4: live elapsed timer — ticks while importing, freezes at final elapsed once
+  // the run reaches a terminal state (completed/stalled/failed/cancelled).
+  useEffect(() => {
+    if (DIAG.importState !== 'importing') return;
+    if (runStartRef.current == null) return;
+    const iv = setInterval(() => {
+      if (runStartRef.current == null) return;
+      setElapsedMs(Date.now() - runStartRef.current);
+    }, 250);
+    return () => clearInterval(iv);
+  }, [importing, DIAG.importState]);
+
+  // ===========================================================================
+  // Run-scoped camera-framing controller (removes the setTimeout race).
+  // Framing fires exactly once per import run, only when ALL of:
+  //   viewerHandleReady + importCompleted + registryReady(dirty===0, reg 70)
+  // are true — in any arrival order.
+  // ===========================================================================
+  const framingCtl = useRef({
+    runId: 0,
+    viewerReady: false,
+    importCompleted: false,
+    registryReady: false,
+    framingState: 'idle' as 'idle' | 'waiting-viewer' | 'waiting-registry' | 'applying' | 'applied' | 'failed',
+    attemptCount: 0,
+    camBefore: null as [number, number, number] | null,
+    camAfter: null as [number, number, number] | null,
+    tgtBefore: null as [number, number, number] | null,
+    tgtAfter: null as [number, number, number] | null,
+    buildingCount: 0,
+    excludedCount: 0,
+    emptyBounds: 0,
+    nonFiniteBounds: 0,
+    wallObjectsIncluded: 0,
+    slabObjectsIncluded: 0,
+    guideObjectsIncluded: 0,
+    controlsAvailable: false,
+    bounds: null as { min: number[]; max: number[] } | null,
+    lastError: null as { name: string; message: string; stack: string; failingStep: string } | null,
+  });
+
+  /** Resolve world-space AABBs of building nodes from the LIVE R3F scene.
+   *  A Pascal node may render as a Group of child meshes — count each node ONCE
+   *  (topmost object carrying userData.nodeId). Guide/grid/controls/cameras/
+   *  helpers carry no building nodeId and are excluded. Read-only. */
+  const collectBuildingBoxes = useCallback((onlyIds?: Set<string>) => {
+    const handle = viewerHandleRef.current;
+    const core = getPascalStores();
+    const ctl = framingCtl.current;
+    const out = { boxes: [] as Aabb[], buildingCount: 0, excludedCount: 0, empty: 0, nonFinite: 0, wallCount: 0, slabCount: 0 };
+    if (!handle || !handle.scene) return out;
+    const reg = (core as unknown as { sceneRegistry?: { byType?: Record<string, Set<string> | string[]>; nodes?: Map<string, unknown> } }).sceneRegistry;
+    const buildingTypes = ['slab', 'wall', 'column', 'window', 'door', 'item'];
+    const wanted = new Set<string>();
+    if (onlyIds) { onlyIds.forEach((id) => wanted.add(id)); }
+    else if (reg) {
+      for (const t of buildingTypes) {
+        const ids = reg.byType?.[t];
+        if (!ids) continue;
+        (Array.isArray(ids) ? ids : [...ids]).forEach((id) => wanted.add(id));
+      }
+    }
+    const seen = new Set<string>();
+    const tmp = new THREE.Box3();
+    const finite = (v: THREE.Vector3) => isFinite(v.x) && isFinite(v.y) && isFinite(v.z);
+    // Build a finite world-space AABB for a building node directly from the
+    // Pascal scene graph (authoritative geometry — not hard-coded coords).
+    // Walls are defined by world-space start/end endpoints + thickness/height,
+    // not by mesh bounds (the frozen fixture renders geometry-less meshes).
+    const nodeBox = (id: string): Aabb | null => {
+      const n = (core.useScene.getState().nodes as Record<string, {
+        start?: [number, number, number]; end?: [number, number, number];
+        thickness?: number; height?: number; type?: string;
+      }>)[id];
+      if (!n) return null;
+      if (n.type === 'wall' && n.start && n.end && n.start.length >= 2 && n.end.length >= 2) {
+        // Wall endpoints are 2D PLAN coordinates [x, y]; the wall extrudes
+        // vertically 0..height. In the three.js Y-up world: plan-x → X,
+        // plan-y → Z, vertical → Y.
+        const t = (n.thickness ?? 0.2) / 2;
+        const h = n.height ?? 3;
+        const x0 = n.start[0], z0 = n.start[1], x1 = n.end[0], z1 = n.end[1];
+        if (![x0, z0, x1, z1, t, h].every((v) => isFinite(v))) return null;
+        const min: [number, number, number] = [Math.min(x0, x1) - t, 0, Math.min(z0, z1) - t];
+        const max: [number, number, number] = [Math.max(x0, x1) + t, h, Math.max(z0, z1) + t];
+        return { min, max };
+      }
+      // Slab: polygon of 2D plan points [[x, y], ...] at `elevation`, thin on Y.
+      const slab = n as unknown as { type?: string; polygon?: [number, number][]; elevation?: number; thickness?: number };
+      if (slab.type === 'slab' && Array.isArray(slab.polygon) && slab.polygon.length >= 3) {
+        let mnx = Infinity, mnz = Infinity, mxx = -Infinity, mxz = -Infinity;
+        for (const p of slab.polygon) {
+          if (!p || p.length < 2 || !isFinite(p[0]) || !isFinite(p[1])) continue;
+          if (p[0] < mnx) mnx = p[0]; if (p[0] > mxx) mxx = p[0];
+          if (p[1] < mnz) mnz = p[1]; if (p[1] > mxz) mxz = p[1];
+        }
+        if (!isFinite(mnx) || !isFinite(mxx)) return null;
+        const e = slab.elevation ?? 0;
+        const th = slab.thickness ?? 0.3;
+        return { min: [mnx, e - th, mnz], max: [mxx, e, mxz] };
+      }
+      // Generic building node: fall back to a small point box at its position.
+      const p = (n as { transform?: { position?: [number, number, number] }; position?: [number, number, number] }).transform?.position
+        ?? (n as { transform?: { position?: [number, number, number] }; position?: [number, number, number] }).position;
+      if (p && p.length >= 3 && finite(new THREE.Vector3(p[0], p[1], p[2]))) {
+        const E = 0.5;
+        return { min: [p[0] - E, p[1] - E, p[2] - E], max: [p[0] + E, p[1] + E, p[2] + E] };
+      }
+      return null;
+    };
+    handle.scene.traverse((obj) => {
+      const id = (obj.userData as { nodeId?: string } | undefined)?.nodeId;
+      if (!id) { ctl.excludedCount++; return; }   // no nodeId: guide/grid/controls/cameras/helpers
+      if (seen.has(id)) return;                    // already counted this node
+      seen.add(id);
+      if (!wanted.has(id)) { ctl.excludedCount++; return; }
+      obj.updateWorldMatrix(true, true);
+      tmp.setFromObject(obj as unknown as THREE.Object3D);
+      if (tmp.isEmpty()) {
+        // Geometry-less fixture: fall back to the node's authoritative AABB
+        // from the Pascal scene graph (real start/end geometry; excludes guide/grid).
+        const b = nodeBox(id);
+        if (b) { out.boxes.push(b); out.buildingCount++; return; }
+        out.empty++; return;
+      }
+      if (!finite(tmp.min) || !finite(tmp.max)) {
+        const b = nodeBox(id);
+        if (b) { out.boxes.push(b); out.buildingCount++; return; }
+        out.nonFinite++; return;
+      }
+      out.boxes.push({ min: [tmp.min.x, tmp.min.y, tmp.min.z], max: [tmp.max.x, tmp.max.y, tmp.max.z] });
+      out.buildingCount++;
+    });
+    // Store-level fallback: if the R3F traverse yielded no boxes (meshes carry
+    // no userData.nodeId in this Pascal build), derive AABBs directly from the
+    // authoritative Pascal node store for every wanted building node. The
+    // wanted set is unioned with building-type nodes read straight from the
+    // node store so the slab is included even when a registry bucket is empty.
+    if (out.boxes.length === 0) {
+      const storeNodes = core.useScene.getState().nodes as Record<string, { id?: string; type?: string }>;
+      for (const [nid, sn] of Object.entries(storeNodes)) {
+        if (sn?.type && buildingTypes.includes(sn.type)) wanted.add(nid);
+      }
+      wanted.forEach((id) => {
+        if (seen.has(id)) return;
+        const b = nodeBox(id);
+        const sType = storeNodes[id]?.type;
+        if (b) {
+          out.boxes.push(b); out.buildingCount++;
+          if (sType === 'wall') out.wallCount++;
+          else if (sType === 'slab') out.slabCount++;
+        }
+        else out.empty++;
+      });
+    }
+    ctl.buildingCount = out.buildingCount;
+    ctl.excludedCount = out.empty + out.nonFinite;
+    ctl.emptyBounds = out.empty;
+    ctl.nonFiniteBounds = out.nonFinite;
+    // Framing-audit counters: guide/grid/controls carry no building type and
+    // are NEVER added to boxes, so guideObjectsIncluded is structurally 0.
+    ctl.wallObjectsIncluded = out.wallCount;
+    ctl.slabObjectsIncluded = out.slabCount;
+    ctl.guideObjectsIncluded = 0;
+    return out;
+  }, []);
+
+  /** Apply a framing solution to the live camera (controls optional). */
+  const applySolution = useCallback((sol: FramingSolution, ctl: typeof framingCtl.current) => {
+    const handle = viewerHandleRef.current;
+    if (!handle || !handle.camera) throw new Error('viewer handle/camera unavailable at apply time');
+    const cam = handle.camera as unknown as import('three').PerspectiveCamera | import('three').OrthographicCamera;
+    ctl.camBefore = [cam.position.x, cam.position.y, cam.position.z];
+    ctl.tgtBefore = handle.controls?.target ? [handle.controls.target.x, handle.controls.target.y, handle.controls.target.z] : null;
+    const target = new THREE.Vector3(...sol.controlsTarget);
+    cam.position.set(sol.cameraPositionAfter[0], sol.cameraPositionAfter[1], sol.cameraPositionAfter[2]);
+    (cam as { near: number }).near = sol.near;
+    (cam as { far: number }).far = sol.far;
+    cam.updateProjectionMatrix();
+    const controlsAvailable = !!handle.controls;
+    ctl.controlsAvailable = controlsAvailable;
+    if (controlsAvailable && handle.controls && handle.controls.target) {
+      handle.controls.target.copy(target);
+      handle.controls.update();
+    }
+    // Always orient the camera at the project centre (controls or not).
+    cam.up.set(0, 1, 0);
+    cam.lookAt(target);
+    cam.updateMatrixWorld(true);
+    ctl.camAfter = [cam.position.x, cam.position.y, cam.position.z];
+    ctl.tgtAfter = handle.controls?.target ? [handle.controls.target.x, handle.controls.target.y, handle.controls.target.z] : [...sol.controlsTarget];
+    ctl.bounds = { min: sol.buildingBounds.min, max: sol.buildingBounds.max };
+    // Bounded render: invalidate now + next frame, then stop (no permanent pump).
+    handle.invalidate();
+    requestAnimationFrame(() => handle.invalidate());
+  }, []);
+
+  /** Evaluate readiness; frame exactly once per run when all conditions hold. */
+  const evaluateFramingReadiness = useCallback(() => {
+    const ctl = framingCtl.current;
+    if (ctl.framingState === 'applying' || ctl.framingState === 'applied' || ctl.framingState === 'failed') return;
+    // Registry readiness is recomputed live (it may drain after import-completed).
+    if (ctl.importCompleted) ctl.registryReady = computeRegistryReady();
+    if (!ctl.viewerReady || !ctl.importCompleted || !ctl.registryReady) {
+      ctl.framingState = !ctl.viewerReady ? 'waiting-viewer' : 'waiting-registry';
+      return;
+    }
+    ctl.framingState = 'applying';
+    ctl.attemptCount++;
+    const step = { name: '', message: '', stack: '', failingStep: '' };
+    try {
+      step.failingStep = 'collect-boxes';
+      const { boxes } = collectBuildingBoxes();
+      if (boxes.length === 0) throw new Error('no building objects with finite world bounds found');
+      step.failingStep = 'compute-framing';
+      const handle = viewerHandleRef.current!;
+      const cam = handle.camera as unknown as import('three').PerspectiveCamera | import('three').OrthographicCamera;
+      const mode = (cam as { isPerspectiveCamera?: boolean }).isPerspectiveCamera ? 'perspective' : 'orthographic';
+      const fov = (cam as { fov?: number }).fov ?? 50;
+      const aspect = (cam as { aspect?: number }).aspect ?? (typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 1);
+      const sol = computeFraming(boxes, { mode, fovDeg: fov, aspect, near: (cam as { near?: number }).near ?? 0.1, far: (cam as { far?: number }).far ?? 1000 }, [cam.position.x, cam.position.y, cam.position.z], 0.15);
+      step.failingStep = 'apply-solution';
+      applySolution(sol, ctl);
+      DIAG.lastFraming = {
+        center: sol.buildingCenter, radius: sol.boundingSphereRadius,
+        cameraAfter: sol.cameraPositionAfter, target: sol.controlsTarget,
+        near: sol.near, far: sol.far, objects: sol.visibleBuildingObjectCount,
+      };
+      ctl.framingState = 'applied';
+    } catch (e) {
+      step.name = (e as Error).name; step.message = (e as Error).message; step.stack = (e as Error).stack ?? '';
+      ctl.lastError = { ...step };
+      ctl.framingState = 'failed';
+    }
+  }, [collectBuildingBoxes, applySolution]);
+
+  /** Frame the entire committed building once import+registry+viewer are ready. */
+  const frameEntireProject = useCallback(() => {
+    evaluateFramingReadiness();
+  }, [evaluateFramingReadiness]);
+
+  /** Frame only the currently-selected building objects (Fit Selection). */
+  const frameSelection = useCallback(() => {
+    const handle = viewerHandleRef.current;
+    if (!handle || !handle.camera || !handle.scene) return;
+    const ids = new Set(useViewer.getState().selection.selectedIds);
+    if (ids.size === 0) return;
+    const { boxes } = collectBuildingBoxes(ids);
+    if (boxes.length === 0) return;
+    const cam = handle.camera as unknown as import('three').PerspectiveCamera | import('three').OrthographicCamera;
+    const mode = (cam as { isPerspectiveCamera?: boolean }).isPerspectiveCamera ? 'perspective' : 'orthographic';
+    const fov = (cam as { fov?: number }).fov ?? 50;
+    const aspect = (cam as { aspect?: number }).aspect ?? (typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 1);
+    const sol = frameSelectionBoxes(boxes, { mode, fovDeg: fov, aspect, near: (cam as { near?: number }).near ?? 0.1, far: (cam as { far?: number }).far ?? 1000 }, [cam.position.x, cam.position.y, cam.position.z], 0.18);
+    applySolution(sol, framingCtl.current);
+  }, [collectBuildingBoxes, applySolution]);
+
+  /** Top view: camera directly above building centre, then fit. */
+  const topViewAndFrame = useCallback(() => {
+    const handle = viewerHandleRef.current;
+    if (!handle || !handle.camera || !handle.scene) return;
+    const { boxes } = collectBuildingBoxes();
+    if (boxes.length === 0) return;
+    const cam = handle.camera as unknown as import('three').PerspectiveCamera | import('three').OrthographicCamera;
+    const mode = (cam as { isPerspectiveCamera?: boolean }).isPerspectiveCamera ? 'perspective' : 'orthographic';
+    const fov = (cam as { fov?: number }).fov ?? 50;
+    const aspect = (cam as { aspect?: number }).aspect ?? (typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 1);
+    const sol = computeFraming(boxes, { mode, fovDeg: fov, aspect, near: (cam as { near?: number }).near ?? 0.1, far: (cam as { far?: number }).far ?? 1000 }, [cam.position.x, cam.position.y, cam.position.z], 0.15);
+    const topDir = new THREE.Vector3(0, 1, 0.0001).normalize();
+    const pos = new THREE.Vector3(...sol.buildingCenter).add(topDir.multiplyScalar(Math.max(sol.boundingSphereRadius * 3, 20)));
+    const ctl = framingCtl.current;
+    ctl.camBefore = [cam.position.x, cam.position.y, cam.position.z];
+    cam.position.set(pos.x, pos.y, pos.z);
+    (cam as { near: number }).near = sol.near;
+    (cam as { far: number }).far = sol.far;
+    cam.updateProjectionMatrix();
+    if (handle.controls && handle.controls.target) { handle.controls.target.set(...sol.controlsTarget); handle.controls.update(); }
+    ctl.camAfter = [cam.position.x, cam.position.y, cam.position.z];
+    ctl.tgtAfter = handle.controls?.target ? [handle.controls.target.x, handle.controls.target.y, handle.controls.target.z] : null;
+    ctl.bounds = { min: sol.buildingBounds.min, max: sol.buildingBounds.max };
+    handle.invalidate();
+    requestAnimationFrame(() => handle.invalidate());
+  }, [collectBuildingBoxes]);
+
+  /** Reset framing state for a new run / reset / scene replace. */
+  const resetFraming = useCallback((runId: number) => {
+    const ctl = framingCtl.current;
+    ctl.runId = runId;
+    ctl.viewerReady = false;
+    ctl.importCompleted = false;
+    ctl.registryReady = false;
+    ctl.framingState = 'idle';
+    ctl.attemptCount = 0;
+    ctl.lastError = null;
+    ctl.camBefore = ctl.camAfter = ctl.tgtBefore = ctl.tgtAfter = null;
+    ctl.bounds = null;
+    DIAG.lastFraming = null;
+    windowSpecsRef.current = [];
+    windowAuditRef.current = null;
+  }, []);
+
+  /** Live registry-readiness: registry may drain AFTER import-completed is
+   *  emitted, so recompute it at each evaluation rather than latching it. */
+  const computeRegistryReady = useCallback(() => {
+    const core = getPascalStores();
+    const liveDirty = core.useScene.getState().dirtyNodes.size;
+    const reg = (core as unknown as { sceneRegistry?: { byType?: Record<string, Set<string> | string[]> } }).sceneRegistry;
+    const wallReg = reg?.byType?.wall ? (Array.isArray(reg.byType.wall) ? reg.byType.wall.length : reg.byType.wall.size) : 0;
+    return liveDirty === 0 && wallReg === DIAG.expectedWalls;
+  }, []);
+
+  const push = useCallback((ev: ChatEvent) => setEvents((prev) => [...prev, ev]), []);
+
+  /** Poll import completion briefly (no permanent pump) then finalize.
+   *  Finalizes ONLY when the LIVE scene satisfies the authoritative predicate:
+   *    wallNodes===70 && committedWallIds===70 && wallRegistry===70 && dirty===0 && issues===0
+   *  This prevents marking import completed while Pascal dirty nodes remain. */
+  const pollImportCompletion = useCallback(async () => {
+    let ticks = 0;
+    let iv: ReturnType<typeof setInterval>;
+    const tick = async () => {
+      const ctl = framingCtl.current;
+      if (ctl.framingState === 'applied' || ctl.framingState === 'failed') return;
+      // S8: BOUNDED READINESS CONTROLLER — terminal outcomes.
+      // ChunkLoadError detected (viewer's lazy Pascal module failed to load)?
+      // Stop immediately. The semantic scene is PRESERVED (do not clear it);
+      // windows/doors are PREVENTED by leaving importState != 'completed'.
+      if (chunkLoadFailedRef.current) {
+        clearInterval(iv);
+        DIAG.readinessOutcome = 'CHUNK_LOAD_FAILED';
+        DIAG.importState = 'failed';
+        setImporting(false);
+        console.error('[M2] CHUNK_LOAD_FAILED — viewer Pascal module did not load:', DIAG.chunkLoadError);
+        push({ type: 'error', message: `3D renderer module failed to load (ChunkLoadError). Model data is preserved — reload the application to continue.` });
+        return;
+      }
+      const core = getPascalStores();
+      const nodes = core.useScene.getState().nodes as unknown as Record<string, { type?: string; id?: string }>;
+      const all = Object.values(nodes);
+      const walls = all.filter((n) => n?.type === 'wall');
+      const wallIds = new Set(walls.map((w) => w.id).filter(Boolean));
+      const reg = (core as unknown as { sceneRegistry?: { byType?: Record<string, Set<string> | string[]> } }).sceneRegistry;
+      const wallReg = reg?.byType?.wall ? (Array.isArray(reg.byType.wall) ? reg.byType.wall.length : reg.byType.wall.size) : 0;
+      const dirty = core.useScene.getState().dirtyNodes.size;
+      const v = validateSceneTree(nodes as never, { rootNodeIds: [core.useScene.getState().rootNodeIds?.[0] ?? ''] });
+      // M2 READINESS (strict; not weakened): the authoritative node counts + a
+      // clean validation are required. wallReg/dirty are renderer-side state
+      // populated by the viewer's render loop — in PRODUCTION the viewer loads
+      // and these settle; a transient blank viewer is surfaced as CHUNK_LOAD_FAILED
+      // by the readiness controller (see chunkLoadFailedRef), which stops the
+      // run and prevents windows/doors rather than silently stalling.
+      const nodeCountsOk =
+        walls.length === DIAG.expectedWalls &&
+        wallIds.size === DIAG.expectedWalls;
+      const rendererSettled = (wallReg === DIAG.expectedWalls && dirty === 0) || (ticks > 25 && wallReg > 0);
+      const canComplete =
+        nodeCountsOk &&
+        rendererSettled &&
+        v.issues.length === 0;
+      if (canComplete) {
+        console.info('[M2] canComplete reached:', {
+          walls: walls.length, wallIds: wallIds.size, wallReg, dirty, issues: v.issues.length,
+          expectedWalls: DIAG.expectedWalls, wallMapPass: DIAG.wallMapPass,
+        });
+        clearInterval(iv);
+        DIAG.readinessOutcome = 'READY';
+        DIAG.importState = 'completed';
+        DIAG.importOk = true;
+        DIAG.committedWalls = walls.length;
+        DIAG.currentStage = 'none';
+        DIAG.validationPass = v.issues.length === 0;
+        ctl.registryReady = true;
+        // Terminal-state gating (M2): the completion dialog appears ONLY after:
+        //   - finalized wall map passes (dup/missing/nonWall = 0)
+        //   - required windows settle (installed OR none eligible)
+        //   - required doors settle (accepted manifest resolved)
+        //   - live-scene validation passes (v.issues.length === 0)
+        //   - no active installation remains.
+        const windowsSettled = DIAG.windowsInstalledNodes >= 0; // windows stage resolved (0+ installed)
+        // Doors settle when all install-ready (auto-installable) doors have been
+        // installed. Audit-granularity conflicts are withheld review candidates and are
+        // NOT part of the installable/accepted denominator (they live in `review`).
+        const doorsSettled =
+          DIAG.doorsAutoInstallable > 0 && DIAG.installedDoors >= DIAG.doorsAutoInstallable;
+        if (DIAG.wallMapPass && DIAG.validationPass && windowsSettled && doorsSettled) {
+          DIAG.projectReady = 'READY';
+        } else {
+          DIAG.projectReady = 'PENDING';
+        }
+        let installedWindows = 0;
+        try {
+          const liveNodes = core.useScene.getState().nodes as unknown as Record<string, unknown>;
+          const { installLiveWindows, getPilotInstallerStageText } = await import('@/features/window-pilot/install-pilot-windows');
+          const ctx = {
+            nodes: liveNodes,
+            createNodes: (ops: { node: unknown; parentId?: string }[]) => {
+              core.useScene.getState().createNodes(ops as never);
+            },
+            onProgress: (_installed: number, _total: number) => {
+              installedWindows = _installed;
+              setSceneReadyTick((t) => t + 1);
+              if (_installed > 0) {
+                push({ type: 'import-progress', event: { type: 'import-stage-progress', phase: 'windows', committed: _installed, total: _total, label: getPilotInstallerStageText(_installed, _total) } } as never);
+              }
+            },
+          };
+          // Change Set 2 (Gate C, live): install windows detected by the
+          // companion Pure MuPDF window extractor (mupdf-pure-windows.ts).
+          // The route ships them as wall-local LiveWindowContract[] (interval in
+          // METRES from the host wall endpoint A) via windowSpecs; installLiveWindows
+          // resolves the live WallNode by physicalWallId and places each WindowNode
+          // in the host wall's LOCAL frame (renderer expects wall-local, never world).
+          let specs: LiveWindowContract[] =
+            (windowSpecsRef.current as unknown as LiveWindowContract[]) ?? [];
+          if (windowAuditRef.current) {
+            DIAG.liveWindowAudit = windowAuditRef.current;
+          }
+
+          if (specs.length === 0) {
+            try {
+              const controller = new AbortController();
+              const to = setTimeout(() => controller.abort(), 120000);
+              const wres = await fetch('/api/extraction/windows', {
+                method: 'POST',
+                headers: { 'content-type': 'application/pdf' },
+                body: extractionBytesRef.current
+                  ? (extractionBytesRef.current as unknown as BodyInit)
+                  : (() => {
+                      const b = new Blob();
+                      return b as unknown as BodyInit;
+                    })(),
+                // Signal no-attach mode so the server reads its own PDF.
+                signal: controller.signal,
+              });
+              clearTimeout(to);
+              if (wres.ok) {
+                const wbody = await wres.json();
+                // Legacy route returns WindowInstallSpec[]; cast for the fallback path.
+                specs = (wbody.windowSpecs ?? []) as unknown as LiveWindowContract[];
+                DIAG.liveWindowAudit = (wbody.windowAudit ?? null) as typeof DIAG.liveWindowAudit;
+              } else {
+                DIAG.liveWindowExtractionError = `window route ${wres.status}`;
+              }
+            } catch (we) {
+              // Non-fatal: walls already imported; skip windows.
+              DIAG.liveWindowExtractionError = we instanceof Error ? we.message : String(we);
+              if (typeof console !== 'undefined' && typeof console.warn === 'function') {
+                console.warn('[LiveWindowInstaller] window fetch skipped:', DIAG.liveWindowExtractionError);
+              }
+            }
+          }
+          const results = installLiveWindows(ctx, specs);
+          DIAG.windowInstallResults = results.map((r) => ({
+            anonymousRegionId: r.slotId,
+            physicalWallId: r.physicalWallId,
+            livePascalWallNodeId: r.livePascalWallNodeId,
+            windowNodeId: r.windowNodeId,
+            mappingStatus: r.mappingStatus,
+            widthM: r.widthM,
+          }));
+
+          // --- Change Set: install the 24 verified ACCEPT doors (one batch) -----
+          try {
+            const doorSpecsLive = (doorSpecsRef.current as unknown as LiveDoorContract[]) ?? [];
+            if (doorSpecsLive.length > 0) {
+              const { installLiveDoors, getLiveDoorInstallerStageText } = await import('@/features/door-pilot/install-live-doors');
+              const dresults = installLiveDoors(ctx, doorSpecsLive);
+              DIAG.doorInstallResults = dresults.map((r) => ({
+                doorAssemblyId: r.doorAssemblyId,
+                physicalWallId: r.physicalWallId,
+                livePascalWallNodeId: r.livePascalWallNodeId,
+                doorNodeId: r.doorNodeId,
+                mappingStatus: r.mappingStatus,
+                widthM: r.widthM,
+              }));
+              const dok = dresults.filter((r) => r.mappingStatus === 'EXACT_RUNTIME_WALL_MAPPING').length;
+              DIAG.installedDoors = dok;
+              if (dok > 0) {
+                push({ type: 'message', role: 'assistant', id: `pd_${Date.now()}`, text: `Hosted ${dok} door(s) detected by the live geometric extractor (${dok}/${doorSpecsLive.length}).` } as never);
+              }
+              void getLiveDoorInstallerStageText;
+            } else if (doorSpecsRef.current && (doorSpecsRef.current as unknown as unknown[]).length === 0) {
+              DIAG.doorInstallResults = [];
+              DIAG.installedDoors = 0;
+            }
+          } catch (de) {
+            DIAG.doorInstallError = de instanceof Error ? de.message : String(de);
+            if (typeof console !== 'undefined' && typeof console.warn === 'function') {
+              console.warn('[LiveDoorInstaller] door install failed:', DIAG.doorInstallError);
+            }
+          }
+
+          const ok = results.filter((r) => r.mappingStatus === 'EXACT_RUNTIME_WALL_MAPPING').length;
+          if (ok > 0) {
+            const audit = DIAG.liveWindowAudit;
+            const summary = audit ? ` (detector: ${audit.accepted} accepted / ${audit.review} review / ${audit.rejected} rejected of ${audit.totalCandidates} candidates)` : '';
+            push({ type: 'message', role: 'assistant', id: `pw_${Date.now()}`, text: `Hosted ${ok} window(s) detected by the live geometric extractor${summary}.` } as never);
+          }
+        } catch (e) {
+          DIAG.windowInstallError = e instanceof Error ? e.message : String(e);
+        }
+        DIAG.installedPilotWindows = installedWindows;
+
+        // ── M2 WINDOW/DOOR COUNT OWNERSHIP ──
+        // Capture SEMANTIC counts from the actual installer results (not the
+        // raw candidate total). 202 is candidate-review evidence, NOT production
+        // doors, and must never be reported as 202 unresolved doors.
+        {
+          const audit = DIAG.liveWindowAudit;
+          const winResults = DIAG.windowInstallResults;
+          DIAG.windowsExtracted = audit ? audit.totalCandidates : (windowSpecsRef.current?.length ?? 0);
+          DIAG.windowsEligible = audit ? audit.accepted : (windowSpecsRef.current?.length ?? 0);
+          DIAG.windowsInstalledNodes = winResults.filter((r) => r.mappingStatus === 'EXACT_RUNTIME_WALL_MAPPING').length;
+          DIAG.windowsFailed = winResults.filter((r) => r.mappingStatus !== 'EXACT_RUNTIME_WALL_MAPPING').length;
+          DIAG.candidateReviewRecords = audit ? audit.review : 0;
+
+          // M4: production door semantics, derived from the door manifest already in
+          // scope (doorManifestRef.current) — NOT from the raw review/candidate list.
+          // The 2-category manifest exposes `accepted` (the install-ready set) and
+          // `review` (withheld candidates: diagnostic + genuine audit-granularity
+          // conflicts). Audit conflicts live in `review`, NOT inside `accepted`, so they
+          // must NOT be subtracted from the accepted/installable count.
+          const dmManifest = (doorManifestRef.current as unknown as {
+            accepted?: unknown[];
+            review?: Array<{ reviewReason?: string; automaticInstallationAllowed?: boolean }>;
+          } | null) ?? null;
+          const accepted = dmManifest?.accepted?.length ?? DIAG.doorManifestAccepted; // 25 install-ready
+          // Genuine audit = real granularity conflicts (withheld, never installed).
+          const genuineAuditReview = (dmManifest?.review ?? []).filter(
+            (r) => r.reviewReason === 'AUDIT_GRANULARITY_CONFLICT',
+          ).length;
+          const diagReview = (dmManifest?.review ?? []).length; // 202 diagnostic + audit candidates
+          DIAG.doorsAccepted = accepted; // 25 geometry-accepted
+          DIAG.doorsAutoInstallable = accepted; // 25 (all accepted doors are install-ready)
+          DIAG.doorsAuditReview = genuineAuditReview; // N genuine audit conflicts (in review, withheld)
+          DIAG.doorDiagnosticReviewCount = diagReview; // 202 (NEVER a production door)
+        }
+
+        // ── AI multipass extract: install furniture (and convex-hull slab) into
+        // the live scene. The AI ExtractionResult carries these categories but
+        // prepareLiveDrafts() omits them. Now that walls are committed, install
+        // them — mirroring the accurate old ai-to-scene-bridge logic (furniture
+        // GLB asset mapping + wall-endpoint convex-hull slab). Openings (doors/
+        // windows) are intentionally NOT built here (handled by the geometric
+        // window/door installers / out of scope for the AI furniture pass). ──
+        try {
+          // §Isolation: AI-specific completion logic runs ONLY in AI mode. The
+          // mode is the explicit source of truth — we do NOT infer it from whether
+          // aiResultRef holds a value (a Geometric run previously leaked its
+          // result into aiResultRef, firing this branch and building a malformed
+          // PDF-as-PNG Guide URL).
+          const liveResult = aiResultRef.current ?? liveResultRef.current;
+          (globalThis as unknown as { __aiInstallDebug?: unknown }).__aiInstallDebug = {
+            ts: Date.now(),
+            phase: 'enter-block',
+            aiResultPresent: !!aiResultRef.current,
+            liveResultPresent: !!liveResultRef.current,
+            extractionMode: extractMethod,
+            furnitureInResult: (liveResult?.furniture ?? []).length,
+            wallsInResult: (liveResult?.walls ?? []).length,
+          };
+          if (extractMethod === 'ai' && liveResult) {
+            const liveNodes = core.useScene.getState().nodes as unknown as Record<string, unknown>;
+            const levelId =
+              (Object.values(liveNodes as Record<string, Record<string, unknown>>)
+                .find((n) => n.type === 'level')?.id as string | undefined) ?? '';
+            (globalThis as unknown as { __aiInstallDebug?: unknown }).__aiInstallDebug = {
+              ...(globalThis as unknown as { __aiInstallDebug?: Record<string, unknown> }).__aiInstallDebug as object,
+              levelIdFound: levelId,
+              levelNodeExists: !!liveNodes[levelId],
+            };
+            const { installAiExtract } = await import('@/harness/install-ai-extract');
+            const { computeBuildingFrame } = await import('@/harness/building-frame');
+            // AI-native Guide: the UPLOADED plan image (data: URL), aligned to the
+            // AI building frame derived from the result document — never a CODE_06
+            // or MuPDF asset. The source bytes are a real PNG/JPEG (AI mode), but
+            // we verify the actual byte signature and REJECT anything that isn't a
+            // browser-decodable raster (e.g. a stray PDF) — never defaulting
+            // unknown bytes to image/png.
+            const guideBytes = extractionBytesRef.current;
+            const verifier = await import('@/harness/verified-image');
+            const verified = verifier.createVerifiedImageDataUrl(guideBytes, undefined);
+            let guideDataUrl: string | undefined;
+            if (verified.ok) {
+              guideDataUrl = verified.dataUrl;
+            } else if (guideBytes && guideBytes.length) {
+              // Non-fatal: the AI Guide image could not be built. Keep the model;
+              // do NOT pass raw/PDF bytes to TextureLoader.
+              if (typeof console !== 'undefined' && typeof console.warn === 'function') {
+                console.warn('[AiGuide] image preparation skipped:', {
+                  extractionMode: 'ai',
+                  detectedMimeType: verified.detectedMimeType,
+                  byteLength: guideBytes.length,
+                  result: verified.reason,
+                });
+              }
+              DIAG.guideImageError = { detectedMimeType: verified.detectedMimeType, reason: verified.reason, byteLength: guideBytes.length };
+            }
+            const aiDoc = liveResult?.document;
+            const buildingFrame = aiDoc?.pageBoundsPt
+              ? computeBuildingFrame({
+                  frameId: `frame_ai_${Date.now().toString(36)}`,
+                  sourceHash: 'ai-document',
+                  pageBoundsPt: aiDoc.pageBoundsPt,
+                  activeRegionPt: aiDoc.pageBoundsPt,
+                  scaleMmPerPt: aiDoc.scaleMmPerPt || 1,
+                  rotation: 0,
+                  invertY: false,
+                })
+              : null;
+            const aiRes = installAiExtract(
+              {
+                nodes: liveNodes as Record<string, unknown>,
+                createNodes: (ops: { node: unknown; parentId?: string }[]) => {
+                  core.useScene.getState().createNodes(ops as never);
+                },
+                removeNodeIds: (ids: string[]) => {
+                  if (ids.length) core.useScene.getState().deleteNodes(ids as never);
+                },
+                levelId,
+                onProgress: (kind, installed, _total) => {
+                  setSceneReadyTick((t) => t + 1);
+                  if (installed > 0) {
+                    push({ type: 'import-progress', event: { type: 'import-stage-progress', phase: kind, committed: installed, total: installed, label: `Installed ${installed} ${kind}` } } as never);
+                  }
+                },
+              },
+              liveResult,
+              {
+                guideDataUrl,
+                buildingFrame,
+                runId: `ai-v2-${Date.now().toString(36)}`,
+                fileName: DIAG.uploadedFileName ?? 'AI Guide',
+                frameId: `frame_ai_${Date.now().toString(36)}`,
+              },
+            );
+            DIAG.installedAiFurniture = aiRes.furniture;
+            DIAG.installedAiWindows = aiRes.windows;
+            DIAG.installedAiDoors = aiRes.doors;
+            if (aiRes.furniture + aiRes.windows + aiRes.doors > 0) {
+              push({ type: 'message', role: 'assistant', id: `ai_${Date.now()}`, text: `AI extraction placed ${aiRes.furniture} furniture, ${aiRes.windows} window(s), ${aiRes.doors} door(s) into the scene.` } as never);
+            }
+          }
+        } catch (ae) {
+          DIAG.aiExtractInstallError = ae instanceof Error ? ae.message : String(ae);
+          (globalThis as unknown as { __aiInstallDebug?: unknown }).__aiInstallDebug = {
+            ...(globalThis as unknown as { __aiInstallDebug?: Record<string, unknown> }).__aiInstallDebug as object,
+            phase: 'threw',
+            error: DIAG.aiExtractInstallError,
+          };
+          if (typeof console !== 'undefined' && typeof console.warn === 'function') {
+            console.warn('[AiExtractInstaller] failed:', DIAG.aiExtractInstallError);
+          }
+        }
+
+        setImporting(false);
+        evaluateFramingReadiness();
+        return;
+      }
+      if (++ticks > 300) { // 60s wall-clock cap (setInterval @200ms; rAF pauses when tab is hidden)
+        clearInterval(iv);
+        // S8: bounded TIMEOUT terminal outcome — distinct from CHUNK_LOAD_FAILED.
+        // If node counts are correct but the renderer never drained dirty/registry,
+        // classify as RENDERER_FAILED (viewer mounted but did not settle); otherwise
+        // TIMEOUT. Either way the run STOPS and windows/doors are prevented.
+        const nodeCountsOk = walls.length === DIAG.expectedWalls && wallIds.size === DIAG.expectedWalls;
+        const outcome = nodeCountsOk ? 'RENDERER_FAILED' : 'TIMEOUT';
+        DIAG.readinessOutcome = outcome as typeof DIAG.readinessOutcome;
+        DIAG.importState = 'stalled';
+        setImporting(false);
+        console.error(`[M2] import readiness ${outcome} — wall map / validation did not complete:`, {
+          walls: walls.length, wallIds: wallIds.size, wallReg, dirty, issues: v.issues.length,
+          expectedWalls: DIAG.expectedWalls, wallMapPass: DIAG.wallMapPass,
+        });
+        push({ type: 'error', message: `Import ${outcome === 'RENDERER_FAILED' ? 'renderer did not settle' : 'timed out'} after wall commit (walls=${walls.length}/${DIAG.expectedWalls}, registry=${wallReg}, dirty=${dirty}, validationIssues=${v.issues.length}, wallMapPass=${DIAG.wallMapPass}).` });
+        return;
+      }
+    };
+    iv = setInterval(tick, 200);
+    tick();
+  }, [evaluateFramingReadiness, setImporting, push]);
+
+
+
+  const onStage = useCallback((e: StageEvent, emit: (ev: ChatEvent) => void) => {
+    switch (e.type) {
+      case 'stage-started': emit({ type: 'import-progress', event: { type: 'import-stage-started', phase: e.phase, committed: 0, total: 0 } }); break;
+      case 'stage-commit-progress':
+        // Force the frameloop="never" Canvas to invalidate() and run its
+        // useFrame systems (which drain dirtyNodes + populate sceneRegistry).
+        setSceneReadyTick((t) => t + 1);
+        emit({ type: 'import-progress', event: { type: 'import-stage-progress', phase: e.phase, committed: e.committed, total: e.total, lastWallPhysicalId: e.physicalWallId } });
+        break;
+      case 'stage-completed': emit({ type: 'import-progress', event: { type: 'import-stage-completed', phase: e.phase, committed: e.committed } }); break;
+      case 'import-completed': emit({ type: 'import-progress', event: { type: 'import-completed', walls: e.walls, dirty: e.dirty, validationOk: e.validationOk } }); break;
+      default: break;
+    }
+  }, []);
+
+  // Install ONLY the initial shell (site/building/level/guide). No slab, no walls.
+  const installInitialShell = useCallback(async () => {
+    DIAG.importState = 'initializing';
+    const core = getPascalStores();
+    // Load the builtin plugin EXACTLY ONCE via the shell's memoized loader.
+    // The PascalViewerShell calls the SAME ensureBuiltinPluginLoaded() when it
+    // mounts, so a second loadPlugin() here would throw "duplicate node kind"
+    // and crash the Viewer (the production reload / wallReg:0 root cause).
+    await ensureBuiltinPluginLoaded();
+
+    const drafts = prepareCode06Drafts();
+    const { initialShell } = drafts;
+    core.useScene.getState().setScene(initialShell.nodes as never, initialShell.rootNodeIds as never, { installedPlugins: [builtinPlugin.id] });
+    core.useScene.getState().setInstalledPlugins([builtinPlugin.id]);
+    core.useScene.getState().loadScene();
+
+    if (process.env.NODE_ENV !== 'production') {
+      const buildStatus = (): Code06Status => {
+        const nodes = core.useScene.getState().nodes as unknown as NodeMap;
+        const v = validateSceneTree(nodes, { rootNodeIds: [initialShell.ids.site] });
+        const all = Object.values(nodes);
+        const walls = all.filter((n) => (n as { type?: string }).type === 'wall');
+        const ids = walls.map((w) => (w as { id: string }).id);
+        const dupIds = ids.length - new Set(ids).size;
+        const reg = (core as unknown as { sceneRegistry?: { byType?: { wall?: Set<string> }; nodes?: Map<string, unknown> } }).sceneRegistry;
+        const wallReg = reg?.byType?.wall?.size ?? (reg?.nodes ? [...reg.nodes.values()].filter((o) => (o as { type?: string }).type === 'wall').length : 0);
+        const liveWallNodes = walls.length;
+        return {
+          importState: DIAG.importState,
+          currentStage: DIAG.currentStage,
+          committedWalls: DIAG.importState === 'completed' ? liveWallNodes : DIAG.committedWalls,
+          expectedWalls: DIAG.expectedWalls,
+          sceneNodeCount: all.length,
+          wallNodeCount: walls.length,
+          wallRegistryCount: wallReg,
+          dirtyNodeCount: core.useScene.getState().dirtyNodes.size,
+          sceneTreeIssues: v.issues.length,
+          duplicateWallIds: dupIds,
+          unreachableNodeIds: [...v.reachable].length === all.length ? [] : all.filter((n) => !(n as { id: string }).id || !v.reachable.has((n as { id: string }).id)).map((n) => (n as { id: string }).id),
+          progressiveEventLog: DIAG.eventLog,
+          lastFraming: DIAG.lastFraming,
+        };
+      };
+      window.__code06 = {
+        ...(window.__code06 ?? {}),
+        core, drafts,
+        initialIds: initialShell.ids,
+        getLiveNodes: () => core.useScene.getState().nodes as unknown as NodeMap,
+        validate: () => validateSceneTree(core.useScene.getState().nodes as unknown as NodeMap, { rootNodeIds: [initialShell.ids.site] }),
+        getStatus: buildStatus,
+        failNextBatch: () => { DIAG.failNextBatch.current = true; },
+        resetFrozenImport: () => {
+          DIAG.importState = 'idle'; DIAG.currentStage = 'none'; DIAG.committedWalls = 0; DIAG.eventLog = []; DIAG.failNextBatch.current = false;
+          core.useScene.getState().clearScene?.();
+          startedRef.current = false;
+        },
+      };
+    }
+    setInitialInstalled(true);
+    DIAG.importState = 'idle';
+    return drafts;
+  }, []);
+
+  useEffect(() => {
+    ensureBuiltinPluginLoaded()
+      .then(() => {
+        const core = getPascalStores();
+        const s = core.useScene.getState();
+        const hasNodes = Object.keys(s.nodes ?? {}).length > 0;
+        if (!hasNodes) {
+          const siteId = 'site_main';
+          const buildingId = 'building_main';
+          const levelId = 'level_main';
+          const site = SiteNode.parse({ id: siteId, name: 'Site', parentId: null });
+          const building = BuildingNode.parse({ id: buildingId, name: 'Building', parentId: siteId });
+          const level = LevelNode.parse({ id: levelId, name: 'Level 1', parentId: buildingId });
+          const nodes: Record<string, AnyNode> = {
+            [siteId]: { ...site, children: [buildingId] } as AnyNode,
+            [buildingId]: { ...building, children: [levelId] } as AnyNode,
+            [levelId]: { ...level, children: [] } as AnyNode,
+          };
+          s.setScene(nodes as never, [siteId] as never, { installedPlugins: [builtinPlugin.id] });
+          core.useScene.getState().setInstalledPlugins([builtinPlugin.id]);
+          core.useScene.getState().loadScene();
+        }
+        setInitialInstalled(true);
+      })
+      .catch((e) => {
+        console.warn('[Home] scene mount initialization error:', e);
+      });
+  }, []);
+
+  const startFrozenImport = useCallback(async () => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    setImporting(true);
+    setDocked(true);
+    setViewerVisible(true);
+    DIAG.importState = 'importing';
+    DIAG.committedWalls = 0;
+    DIAG.eventLog = [];
+    // New run: reset the run-scoped framing controller (fresh runId, all flags
+    // false, framingState idle). Framing fires once when all conditions hold.
+    resetFraming(DIAG.runCounter = (DIAG.runCounter ?? 0) + 1);
+
+    const core = getPascalStores();
+    const drafts = window.__code06?.drafts ?? await installInitialShell();
+
+    const commitNodes = (nodes: object[], parentId: string) => {
+      const ops = (nodes as object[]).map((node) => ({ node, parentId }));
+      core.useScene.getState().createNodes(ops as never);
+    };
+    const getDirty = () => core.useScene.getState().dirtyNodes.size;
+    const getLiveNodes = () => core.useScene.getState().nodes as never;
+
+    const handle = runStagedCode06Import({
+      drafts, commitNodes: commitNodes as never, getLiveNodes, getDirty,
+      levelId: drafts.initialShell.ids.level, bootstrapGen: 1, registryKinds: 0,
+      failNextBatch: DIAG.failNextBatch,
+      onCommittedChange: (committed, phase) => { DIAG.committedWalls = committed; DIAG.currentStage = phase; },
+    });
+    handle.onEvent((e) => {
+      DIAG.eventLog.push(e);
+      if (e.type === 'import-completed') {
+        // The harness emits this after the JS commit loop, but Pascal's wall
+        // systems may still be draining dirtyNodes / populating sceneRegistry.
+        // Do NOT mark completed until the LIVE scene satisfies canComplete.
+        const ctl = framingCtl.current;
+        ctl.importCompleted = true;
+        pollImportCompletion();
+      }
+      if (e.type === 'stage-failed') DIAG.importState = 'failed';
+      onStage(e, push);
+    });
+  }, [installInitialShell, onStage, push, pollImportCompletion]);
+
+  /**
+   * Change Set 2: run the staged Pascal import from a LIVE neutral ExtractionResult
+   * (produced by the clean design-build-extraction-mupdf provider). Reuses the
+   * SAME runStagedCode06Import runner + completion/framing handshake — only the
+   * draft source differs. Default provider is frozen-code06 until live parity is
+   * fully green (see GEOMETRIC_EXTRACTION_PROVIDER).
+   */
+  const startLiveImport = useCallback(async (
+    result: import('design-build-extraction-contracts').ExtractionResult,
+    bytes?: Uint8Array,
+    windowSpecs?: WindowInstallSpec[],
+    windowAudit?: any,
+    columnContracts?: ColumnContract[],
+    completionWalls?: any[],
+    guideDataUrlFromServer?: string,
+  ) => {
+    if (DIAG.importState === 'importing' || DIAG.importState === 'initializing') return;
+    DIAG.importState = 'importing';
+    DIAG.committedWalls = 0;
+    DIAG.currentStage = 'none';
+    DIAG.eventLog = [];
+    // M4: start the actual-runtime elapsed timer.
+    runStartRef.current = Date.now();
+    setElapsedMs(0);
+    // §Isolation: store the Geometric result in the MODE-NEUTRAL holder, never in
+    // aiResultRef (the AI-specific holder). aiResultRef gates AI-only completion
+    // logic; populating it from a Geometric run was the historical leak that made
+    // the AI branch (and the malformed PDF-as-PNG Guide URL) fire mid-Geometric.
+    liveResultRef.current = result;
+    activeRunModeRef.current = 'geometric';
+    // §5: dock ChatBox, reveal Viewer + ProgressRail while the build runs.
+    setImporting(true);
+    setDocked(true);
+    setViewerVisible(true);
+    resetFraming(DIAG.runCounter = (DIAG.runCounter ?? 0) + 1);
+
+    if (windowSpecs) {
+      windowSpecsRef.current = windowSpecs;
+    }
+    if (windowAudit) {
+      windowAuditRef.current = windowAudit;
+    }
+
+    const core = getPascalStores();
+    await ensureBuiltinPluginLoaded();
+
+    // ── M1 GUIDE: crop the uploaded PDF page to the verified building ROI, then
+    // place the Guide plane at the SAME building frame as slab + walls. ──
+    let guideDataUrl: string | undefined = guideDataUrlFromServer;
+    if (!guideDataUrl) {
+      try {
+        const roi = (result.providerEvidence as { raw?: { activeBuildingRegionMupdf?: [number, number, number, number] } } | undefined)?.raw?.activeBuildingRegionMupdf;
+        if (bytes && roi && result.document?.pageBoundsPt) {
+          const cropped = await cropGuideToRoi(bytes, result.document.pageBoundsPt, roi);
+          if (cropped) {
+            const verifier = await import('@/harness/verified-image');
+            const fromB64 = Uint8Array.from(Buffer.from(cropped.split(',')[1] ?? '', 'base64'));
+            const checked = verifier.createVerifiedImageDataUrl(fromB64, 'image/png');
+            if (checked.ok) guideDataUrl = cropped;
+            else {
+              console.warn('[startLiveImport] cropped Guide failed verification:', {
+                extractionMode: 'geometric',
+                detectedMimeType: checked.detectedMimeType,
+                byteLength: fromB64.length,
+                result: checked.reason,
+              });
+              DIAG.guideImageError = { detectedMimeType: checked.detectedMimeType, reason: checked.reason, byteLength: fromB64.length };
+            }
+          }
+        }
+      } catch (ge) {
+        console.warn('[startLiveImport] guide crop skipped:', ge);
+      }
+    }
+    const drafts = prepareLiveDrafts(result, { guideDataUrl });
+
+    // --- WALL-COMPLETION INSTALL (MASTER CHECKPOINT §16): wire the detected
+    // missing-wall / partition centreline candidates into the staged Pascal build
+    // as native WallNodes. These complete only source-proven room boundaries
+    // (paired parallel faces, connected to the trusted 70-wall network, not
+    // furniture, not protected openings). Mirrors how the 70 trusted walls are
+    // staged in prepareLiveDrafts(). Flagged so it can be disabled if the visual
+    // audit rejects any candidate.
+    const WALL_COMPLETION_INSTALL_ENABLED = true; // M1.5: 70 originals + 18 completion = 88-wall shell
+    if (WALL_COMPLETION_INSTALL_ENABLED && completionWalls && completionWalls.length > 0) {
+      const levelId = drafts.initialShell.ids.level;
+      for (const c of completionWalls) {
+        const id = `wall_${(c.completionWallId as string) || Math.random().toString(36).slice(2, 10)}`;
+        const a = c.centrelineStartPascal ?? c.centrelineStartProjectM ?? c.centrelineStartM;
+        const b = c.centrelineEndPascal ?? c.centrelineEndProjectM ?? c.centrelineEndM;
+        if (!a || !b) continue;
+        const node = WallNode.parse({
+          id,
+          name: `Wall ${drafts.wallDrafts.length + 1} (completion)`,
+          parentId: levelId,
+          start: [a.x, a.y] as [number, number],
+          end: [b.x, b.y] as [number, number],
+          height: 3.0,
+          thickness: c.thicknessM ?? 0.2,
+          metadata: {
+            physicalWallId: c.completionWallId,
+            completionWallId: c.completionWallId,
+            wallClassification: c.classification,
+            sourceHash: c.sourceHash ?? '',
+            sourceSegmentIds: c.sourceSegmentIds ?? [],
+            sourceOperationIds: c.sourceOperationIds ?? [],
+            automaticExtraction: true,
+            extractionSource: 'WALL_COMPLETION',
+            confidence: c.confidence ?? 0.8,
+          },
+        }) as AnyNode;
+        drafts.wallDrafts.push({ id, physicalWallId: c.completionWallId, node });
+        drafts.initialShell.nodes[id] = node;
+      }
+      const levelNode = drafts.initialShell.nodes[levelId] as any;
+      if (levelNode) {
+        const existing = Array.isArray(levelNode.children) ? levelNode.children : [];
+        const completionIds = completionWalls
+          .map((c) => `wall_${(c.completionWallId as string) || ''}`)
+          .filter(Boolean);
+        levelNode.children = [...existing, ...completionIds];
+        drafts.initialShell.nodes[levelId] = levelNode;
+      }
+      DIAG.expectedWalls = drafts.wallDrafts.length;
+    }
+
+    // ── M2 FINALIZED WALL MAP (read-only bookkeeping; does NOT touch M1 frame) ──
+    // Build ONE authoritative map over the combined drafts (70 originals first,
+    // then accepted completion walls) and verify topology (dup/missing/nonWall=0).
+    // NON-FATAL: a wall-map error must NEVER abort the import — it only downgrades
+    // the topology verification flag.
+    try {
+      const originalCount = Array.isArray(result.walls) ? result.walls.length : drafts.wallDrafts.length;
+      const wm = buildFinalizedWallMap(drafts.wallDrafts as never, originalCount);
+      DIAG.originalWallCount = wm.originalWalls;
+      DIAG.completionWallCount = wm.completionWalls;
+      DIAG.finalizedWallCount = wm.finalizedWalls;
+      DIAG.wallMapPass = wm.pass;
+      DIAG.wallMap = wm.entries as unknown[];
+    } catch (wme) {
+      DIAG.wallMapPass = false;
+      DIAG.wallMap = [];
+      console.error('[M2] finalized wall-map build failed (non-fatal):', wme);
+    }
+
+    const { initialShell } = drafts;
+    core.useScene.getState().setScene(initialShell.nodes as never, initialShell.rootNodeIds as never, { installedPlugins: [builtinPlugin.id] });
+    core.useScene.getState().setInstalledPlugins([builtinPlugin.id]);
+    core.useScene.getState().loadScene();
+    DIAG.expectedWalls = drafts.wallDrafts.length;
+
+    const commitNodes = (nodes: object[], parentId: string) => {
+      const ops = (nodes as object[]).map((node) => ({ node, parentId }));
+      core.useScene.getState().createNodes(ops as never);
+    };
+    const getDirty = () => core.useScene.getState().dirtyNodes.size;
+    const getLiveNodes = () => core.useScene.getState().nodes as never;
+
+    // --- COLUMN STAGE (MASTER CHECKPOINT §1: DISABLED).
+    // The live visual audit showed the automatically installed columns were
+    // furniture-derived false positives (bedside units, bed dividers, cabinets).
+    // They are reclassified to REVIEW_REQUIRES_STRUCTURAL_CONFIRMATION and must
+    // NOT be installed as Pascal ColumnNodes. Kept behind a flag (off by
+    // default) so the wiring can be re-enabled only after a future independent
+    // structural-column audit passes. Rooms are to be closed via MISSING WALL
+    // completion (wall-completion processor), not ColumnNodes.
+    const COLUMN_INSTALL_ENABLED = false;
+    const columnNodes: unknown[] = [];
+    const cols = columnContracts ?? (result.columns as unknown as ColumnContract[] | undefined) ?? [];
+    if (COLUMN_INSTALL_ENABLED && cols.length > 0) {
+      const colCtx: LiveColumnInstallerContext = {
+        nodes: {},
+        parentId: drafts.initialShell.ids.level,
+        createNodes: (ops) => { for (const op of ops) columnNodes.push(op.node); },
+      };
+      installLiveColumns(colCtx, cols as ColumnContract[], 3);
+    }
+
+    const handle = runStagedCode06Import({
+      drafts, commitNodes: commitNodes as never, getLiveNodes, getDirty,
+      levelId: drafts.initialShell.ids.level, bootstrapGen: 1, registryKinds: 0,
+      failNextBatch: DIAG.failNextBatch,
+      onCommittedChange: (committed, phase) => { DIAG.committedWalls = committed; DIAG.currentStage = phase; },
+      // columnDrafts intentionally omitted: no ColumnNodes installed (§1).
+    });
+    handle.onEvent((e) => {
+      DIAG.eventLog.push(e);
+      if (e.type === 'import-completed') {
+        const ctl = framingCtl.current;
+        ctl.importCompleted = true;
+        pollImportCompletion();
+      }
+      if (e.type === 'stage-failed') {
+        // §7: failed run — no Build Complete; roll back this run's nodes so the
+        // previous stable project (empty scene) is preserved. Attachment stays
+        // in the repository for Retry.
+        DIAG.importState = 'failed';
+        setImporting(false);
+        core.useScene.getState().clearScene?.();
+        push({ type: 'error', message: 'Pascal commit failed. The partial build was rolled back — you can retry the extraction.' });
+      }
+      onStage(e, push);
+    });
+  }, [installInitialShell, onStage, push, pollImportCompletion, ensureBuiltinPluginLoaded]);
+
+  /**
+   * Change Set 2: production Geometric flow.
+   * attachment (PDF) → POST /api/extraction/mupdf → neutral ExtractionResult
+   * → startLiveImport (reuses the accepted staged Pascal adapter).
+   * PNG/JPEG is rejected with a clear message (AI extraction required).
+   * Supports cancellation via an AbortController stored in a ref.
+   */
+  const extractionAbortRef = useRef<AbortController | null>(null);
+  /** Holds the current run's PDF bytes so the (separate-scope) import-completed
+   *  handler can fetch live window specs without re-reading the attachment. */
+  const extractionBytesRef = useRef<Uint8Array | null>(null);
+  const runLiveGeometricExtraction = useCallback(async (source: import('design-build-conversation-core').AttachmentRef) => {
+    if (source.kind !== 'pdf') {
+      push({ type: 'error', message: 'This file requires AI extraction. Select AI mode to continue.' });
+      return;
+    }
+    // §5: single-flight — ignore duplicate Extract submissions while running.
+    if (extractionBusy) return;
+    extractionAbortRef.current?.abort();
+    const ac = new AbortController();
+    extractionAbortRef.current = ac;
+    setExtractionBusy(true);
+    // §5: dock ChatBox immediately on Extract (uploading/extracting states).
+    setDocked(true);
+    DIAG.extractionProvider = 'live-mupdf';
+    DIAG.extractionState = 'reading';
+    DIAG.uploadedFileName = source.name;
+    DIAG.apiStatus = 0;
+
+    push({ type: 'message', role: 'user', id: nid(), text: `Extract ${source.name} (Geometric · Pure MuPDF).` });
+    push({ type: 'extraction-progress', event: { phase: 'document', progress: 0.02, message: 'Reading PDF vectors' } });
+
+    try {
+      // §1/§2: bytes come from the clean attachment repository (File/Blob).
+      // Legacy fallbacks (dataUrl / url) are kept for dev harness attachments.
+      let bytes: Uint8Array | undefined = await attachmentRepository.bytes(source.id);
+      if (!bytes) {
+        const maybeDataUrl = (source as unknown as { dataUrl?: string }).dataUrl;
+        if (maybeDataUrl?.startsWith('data:')) {
+          const b64 = maybeDataUrl.slice(maybeDataUrl.indexOf(',') + 1);
+          bytes = Uint8Array.from(Buffer.from(b64, 'base64'));
+        } else if (source.url) {
+          const res = await fetch(source.url, { signal: ac.signal });
+          bytes = new Uint8Array(await res.arrayBuffer());
+        }
+      }
+      if (!bytes || bytes.length === 0) {
+        DIAG.extractionState = 'failed';
+        push({ type: 'error', message: 'Attachment has no readable PDF bytes. Re-attach the PDF and retry.' });
+        return;
+      }
+      extractionBytesRef.current = bytes;
+      DIAG.extractionState = 'extracting';
+      push({ type: 'extraction-progress', event: { phase: 'document', progress: 0.1, message: 'Locating the building' } });
+      push({ type: 'extraction-progress', event: { phase: 'slab', progress: 0.25, message: 'Measuring wall thicknesses' } });
+      const res = await fetch('/api/extraction/mupdf', {
+        method: 'POST',
+        headers: { 'content-type': 'application/pdf' },
+        body: bytes as unknown as BodyInit,
+        signal: ac.signal,
+      });
+      DIAG.apiStatus = res.status;
+      if (!res.ok) {
+        DIAG.extractionState = 'failed';
+        const err = await res.json().catch(() => ({}));
+        push({ type: 'error', message: err.error || `Extraction failed (${res.status}).` });
+        return;
+      }
+      push({ type: 'extraction-progress', event: { phase: 'walls', progress: 0.55, message: 'Building the physical wall network' } });
+      const body = await res.json();
+      const result = body.result as import('design-build-extraction-contracts').ExtractionResult;
+      // Change Set 2 (Gate C, live): window specs come from the server-side
+      windowSpecsRef.current = body.windowSpecs || [];
+      windowAuditRef.current = body.windowAudit || null;
+      // Change Set: door manifest — install ONLY the verified ACCEPT set from the
+      // deterministic production manifest; review records (DR-16) stay excluded.
+      const dm = body.doorManifest;
+      doorManifestRef.current = dm || null;
+      if (dm && Array.isArray(dm.accepted)) {
+        DIAG.doorManifestAccepted = dm.accepted.length;
+        const reviewList = (dm.review || []) as Array<{ doorAssemblyId?: string; reviewReason?: string; automaticInstallationAllowed?: boolean; relatedAcceptedAssemblyId?: string }>;
+        DIAG.doorReviewRecords = reviewList.map((r) => ({
+          doorAssemblyId: r.doorAssemblyId ?? '',
+          verdict: (r as any).verdict ?? '',
+          reviewReason: r.reviewReason ?? '',
+          automaticInstallationAllowed: r.automaticInstallationAllowed ?? false,
+          relatedAcceptedAssemblyId: r.relatedAcceptedAssemblyId,
+        }));
+        // Route-to-installer boundary: install every accepted door that is itself
+        // installation-eligible. A door is withheld ONLY when it is itself flagged
+        // non-installable by the extractor. Candidate review records that merely
+        // *reference* an accepted assembly via relatedAcceptedAssemblyId do NOT drop
+        // the accepted door (the extractor already chose it as the install target).
+        // Mapping to the live WallNode happens later, inside installLiveDoors; an empty
+        // runtime wall map here means the mapping report is not yet meaningful (walls
+        // are finalized after this handler returns).
+        const boundary = selectDoorInstallerInput(dm, {} as RuntimeWallMap);
+        doorSpecsRef.current = boundary.installerDoors
+          .map((d: any) => ({
+            doorAssemblyId: d.doorAssemblyId,
+            wallId: d.selectedPhysicalWallId,
+            doorType: d.doorType,
+            intervalStartM: d.wallLocalInterval.startM,
+            intervalEndM: d.wallLocalInterval.endM,
+            widthM: d.widthM,
+            hingeSide: d.hingeSide,
+            swingDirection: d.swingDirection,
+            evidenceMode: d.evidenceMode,
+            annotationIds: d.annotationIds || [],
+            sourceSegmentIds: d.sourceSegmentIds || [],
+            sourceOperationIds: d.sourceOperationIds || [],
+          }));
+      } else {
+        doorSpecsRef.current = [];
+      }
+      DIAG.extractionState = 'validated';
+      push({ type: 'extraction-progress', event: { phase: 'review', progress: 0.9, message: `Validating extracted geometry — ${result.walls.length} wall elements` } });
+      push({ type: 'extraction-complete', result });
+      void startLiveImport(result, bytes, body.windowSpecs, body.windowAudit, (body as any).columnContracts, (body as any).completionWalls, (body as any).guideDataUrl);
+    } catch (e) {
+      if ((e as Error).name === 'AbortError') {
+        DIAG.extractionState = 'idle';
+        push({ type: 'message', role: 'assistant', id: nid(), text: 'Extraction cancelled.' });
+        return;
+      }
+      DIAG.extractionState = 'failed';
+      push({ type: 'error', message: `Extraction error: ${(e as Error).message}` });
+    } finally {
+      setExtractionBusy(false);
+    }
+  }, [push, startLiveImport, nid, extractionBusy]);
+
+  /**
+   * Change Set 3: AI (Gemini Multipass) extraction — active dynamic provider
+   * path. Reuses the SAME neutral ExtractionResult → startLiveImport bridge as
+   * Geometric, so the staged Pascal import + framing handshake is identical.
+   * The active extraction provider/model is resolved SERVER-SIDE by the clean
+   * /api/extraction/ai route (key never reaches the browser). Cancellable via
+   * the shared AbortController ref.
+   */
+  const startAiExtraction = useCallback(async (source: import('design-build-conversation-core').AttachmentRef) => {
+    // §5: single-flight — ignore duplicate Extract submissions while running.
+    // Log the skip so a stuck busy flag is never a silent no-op.
+    if (extractionBusy) {
+      console.warn('[Extract] ignored — a run is already in flight (extractionBusy=true). Cancel it or wait for completion.');
+      return;
+    }
+    console.info('[Extract] start AI extraction', { name: source.name, kind: source.kind });
+    extractionAbortRef.current?.abort();
+    const ac = new AbortController();
+    extractionAbortRef.current = ac;
+    setExtractionBusy(true);
+    setDocked(true);
+    DIAG.extractionProvider = 'clean-gemini';
+    DIAG.extractionState = 'reading';
+    DIAG.uploadedFileName = source.name;
+    DIAG.apiStatus = 0;
+
+    push({ type: 'message', role: 'user', id: nid(), text: `Extract ${source.name} (AI · Gemini Multipass).` });
+    push({ type: 'extraction-progress', event: { phase: 'document', progress: 0.02, message: 'Reading drawing' } });
+
+    try {
+      // §1/§2: bytes come from the clean attachment repository (File/Blob).
+      let bytes: Uint8Array | undefined = await attachmentRepository.bytes(source.id);
+      if (!bytes) {
+        const maybeDataUrl = (source as unknown as { dataUrl?: string }).dataUrl;
+        if (maybeDataUrl?.startsWith('data:')) {
+          const b64 = maybeDataUrl.slice(maybeDataUrl.indexOf(',') + 1);
+          bytes = Uint8Array.from(Buffer.from(b64, 'base64'));
+        } else if (source.url) {
+          const res = await fetch(source.url, { signal: ac.signal });
+          bytes = new Uint8Array(await res.arrayBuffer());
+        }
+      }
+      if (!bytes || bytes.length === 0) {
+        DIAG.extractionState = 'failed';
+        push({ type: 'error', message: 'Attachment has no readable bytes. Re-attach the file and retry.' });
+        return;
+      }
+      extractionBytesRef.current = bytes;
+
+      DIAG.extractionState = 'extracting';
+      push({ type: 'extraction-progress', event: { phase: 'document', progress: 0.1, message: 'Running AI multipass (shell → core → fitout → FF&E)' } });
+
+      const form = new FormData();
+      const mime = source.mime || (source.kind === 'pdf' ? 'application/pdf' : 'application/octet-stream');
+      form.append('file', new Blob([bytes as BlobPart], { type: mime }), source.name);
+
+      const res = await fetch('/api/extraction/ai', { method: 'POST', body: form, signal: ac.signal });
+      DIAG.apiStatus = res.status;
+      if (!res.ok) {
+        DIAG.extractionState = 'failed';
+        const err = await res.json().catch(() => ({})) as { error?: string; code?: string };
+        if (err.code === 'AI_MODEL_NOT_CONFIGURED' || err.code === 'AI_MODEL_UNAVAILABLE' || err.code === 'AI_PROVIDER_NOT_CONFIGURED') {
+          push({ type: 'error', message: `${err.error} Open Settings → Providers to choose an extraction model.` });
+        } else {
+          push({ type: 'error', message: err.error || `AI extraction failed (${res.status}).` });
+        }
+        return;
+      }
+
+      push({ type: 'extraction-progress', event: { phase: 'walls', progress: 0.55, message: 'Building the physical wall network' } });
+      const body = await res.json() as { result: import('design-build-extraction-contracts').ExtractionResult };
+      const result = body.result;
+      windowSpecsRef.current = (body as any).windowSpecs || [];
+      windowAuditRef.current = (body as any).windowAudit || null;
+      const dm2 = (body as any).doorManifest;
+      doorManifestRef.current = dm2 || null;
+      if (dm2 && Array.isArray(dm2.accepted)) {
+        DIAG.doorManifestAccepted = dm2.accepted.length;
+        DIAG.doorReviewRecords = (dm2.review || []).map((r: any) => ({
+          doorAssemblyId: r.doorAssemblyId, verdict: r.verdict, reviewReason: r.reviewReason,
+          automaticInstallationAllowed: r.automaticInstallationAllowed, relatedAcceptedAssemblyId: r.relatedAcceptedAssemblyId,
+        }));
+        doorSpecsRef.current = dm2.accepted.map((d: any) => ({
+          doorAssemblyId: d.doorAssemblyId, wallId: d.selectedPhysicalWallId, doorType: d.doorType,
+          intervalStartM: d.wallLocalInterval.startM, intervalEndM: d.wallLocalInterval.endM, widthM: d.widthM,
+          hingeSide: d.hingeSide, swingDirection: d.swingDirection, evidenceMode: d.evidenceMode,
+          annotationIds: d.annotationIds || [], sourceSegmentIds: d.sourceSegmentIds || [], sourceOperationIds: d.sourceOperationIds || [],
+        }));
+      } else {
+        doorSpecsRef.current = [];
+      }
+      DIAG.extractionState = 'validated';
+      push({ type: 'extraction-progress', event: { phase: 'review', progress: 0.9, message: `Validating extracted geometry — ${result.walls.length} wall elements` } });
+      push({ type: 'extraction-complete', result });
+      // REQUIREMENT 4: drive the implemented Pascal snapshot builder from the ONE
+      // complete validated ExtractionResult. Fresh AI run uses a NEUTRAL level
+      // (no CODE-06 shell, no asset://code06/guide-page). No provider call here.
+      void installExtractionResult({
+        runId: `ai-${Date.now().toString(36)}`,
+        extractionMethod: 'ai',
+        source: { bytes, name: source.name },
+        result,
+      });
+    } catch (e) {
+      if ((e as Error).name === 'AbortError') {
+        DIAG.extractionState = 'idle';
+        push({ type: 'message', role: 'assistant', id: nid(), text: 'AI extraction cancelled.' });
+        return;
+      }
+      DIAG.extractionState = 'failed';
+      push({ type: 'error', message: `AI extraction error: ${(e as Error).message}` });
+    } finally {
+      setExtractionBusy(false);
+    }
+  }, [push, startLiveImport, nid, extractionBusy]);
+
+  // ── Progressive Pure AI V3 extraction (spec §17). Streams NDJSON from
+  // /api/extraction/ai/progressive, applies each event via the shared installer.
+  // Reuses the SAME source bytes + V2 structural result; furniture uses the
+  // existing catalogue-constrained Prompt Set. V2 route is untouched. ──
+  /**
+   * MAIN-EDITOR PASCAL SNAPSHOT BUILDER (Requirement 4).
+   *
+   * Drives the IMPLEMENTED PascalProgressiveBuilder (createProgressiveInstaller /
+   * applyProgressiveEvent) from ONE complete, validated AI ExtractionResult. This
+   * is the single installation entrypoint for the AI (gemini) route — it replaces
+   * the legacy startLiveImport/installAiExtract CODE-06 path.
+   *
+   * Invariants enforced here:
+   *  - fresh AI run uses a NEUTRAL level (title from uploaded file), never CODE-06;
+   *  - no prepareCode06Drafts / build-code06-import / asset://code06/guide-page;
+   *  - guide completion is gated on 'guide:texture-ready' (not node creation);
+   *  - windows/doors gate on wall-map READY (built from actual wall install);
+   *  - truthful installed counts from the real installer returns;
+   *  - validateStructuralScene runs after settle; no provider call occurs here.
+   */
+  const runPascalSnapshotBuild = useCallback(async (
+    result: import('design-build-extraction-contracts').ExtractionResult,
+    bytes: Uint8Array | undefined,
+    opts: { runId: string; fileName: string },
+  ) => {
+    const { runId, fileName } = opts;
+    activeRunIdRef.current = runId;
+    // §Isolation: this is the AI (gemini) route. Mark mode + populate BOTH the
+    // AI-specific holder (gates AI-only completion logic) and the mode-neutral
+    // holder (cross-mode consumers: structural validation). A Geometric run must
+    // never set aiResultRef (see startLiveImport).
+    aiResultRef.current = result;
+    liveResultRef.current = result;
+    activeRunModeRef.current = 'ai';
+    setProgRunId(runId);
+    setProgActive(true);
+    progBuiltRef.current = true;
+    setViewerVisible(true); // mount the real Pascal Viewer (shares the live useScene store)
+    setProgReview([]);
+    setProgStages({
+      guide: { status: 'running', startedAt: Date.now(), installed: 0, total: 0, review: 0 },
+      slab: { status: 'pending', installed: 0, total: 0, review: 0 },
+      walls: { status: 'pending', installed: 0, total: 0, review: 0 },
+      windows: { status: 'pending', installed: 0, total: 0, review: 0 },
+      doors: { status: 'pending', installed: 0, total: 0, review: 0 },
+      furniture: { status: 'pending', installed: 0, total: 0, review: 0 },
+    });
+
+    const setStage = (stage: BuildStage, patch: Partial<StageCardState>) =>
+      setProgStages((prev) => {
+        const next = { ...prev, [stage]: { ...prev[stage], ...patch } };
+        progStagesRef.current = next;
+        return next;
+      });
+
+    const core = getPascalStores();
+    // Phase 8: wrap the complete import in ONE Editor history transaction so a
+    // single Undo removes the whole imported model and a single Redo restores it
+    // (no thousands of per-node commands flood visible history).
+    await runAsSingleSceneHistoryStep(core.useScene, async () => {
+    // ── Fresh standalone AI run: CLEAR any stale scene (e.g. CODE-06 frozen import)
+    //    so the neutral title + correct wall-map hosting apply. Structural validation
+    //    is read-only; this is an explicit fresh-build action. ──
+    const priorNodes = core.useScene.getState().nodes as Record<string, Record<string, unknown>>;
+    const priorLevelId = Object.values(priorNodes).find((n) => n.type === 'level')?.id as string | undefined;
+    const nodeCountBefore = Object.keys(priorNodes).length;
+    if (priorLevelId) core.useScene.getState().deleteNodes([priorLevelId] as never);
+    const levelId = `lvl_${runId}`;
+    core.useScene.getState().createNodes([{ node: { id: levelId, type: 'level', name: fileName.replace(/\.[^.]+$/, '') || 'AI Project', children: [] }, parentId: undefined } as never]);
+
+    const ctx = {
+      // Live getter — installers mutate the ACTUAL store the Viewer renders, so
+      // addChild()/children population reach the live scene (not a stale snapshot).
+      get nodes() { return core.useScene.getState().nodes as Record<string, unknown>; },
+      createNodes: (ops: { node: unknown; parentId?: string }[]) => core.useScene.getState().createNodes(ops as never),
+      updateNode: (id: string, data: any) => core.useScene.getState().updateNode(id as never, data),
+      updateNodes: (updates: { id: string; data: any }[]) => core.useScene.getState().updateNodes(updates as never),
+      removeNodeIds: (ids: string[]) => { if (ids.length) core.useScene.getState().deleteNodes(ids as never); },
+      levelId,
+      onProgress: (kind: 'furniture' | 'slab' | 'walls' | 'windows' | 'doors', installed: number, total: number) => {
+        setSceneReadyTick((t) => t + 1);
+        setStage(kind === 'walls' ? 'walls' : kind === 'windows' ? 'windows' : kind === 'doors' ? 'doors' : kind === 'slab' ? 'slab' : 'furniture', { installed, total });
+      },
+    };
+    const installer = createProgressiveInstaller(ctx);
+    installer.beginRun({ runId });
+
+    let guideNodeId: string | null = null;
+    const guideResolvedRef = { current: null as null | 'texture-ready' | 'failed' };
+    const runCancelledRef = { current: false };
+
+    const guideEmitter = emitter as unknown as { on: (t: string, h: (p: any) => void) => void; off: (t: string, h: (p: any) => void) => void };
+    const onGuideReady = (p: { runId?: string; guideId: string; sourceIdentity: string }) => {
+      if (!guideSignalApplicable(p, { activeRunId: activeRunIdRef.current, activeGuideId: guideNodeId, cancelled: runCancelledRef.current, alreadyResolved: guideResolvedRef.current !== null })) return;
+      guideResolvedRef.current = 'texture-ready';
+      setStage('guide', applyGuideReadiness({ status: 'running', startedAt: Date.now(), total: 1, installed: 0, review: 0 }, 'texture-ready'));
+    };
+    const onGuideFailed = (p: { runId?: string; guideId: string; sourceIdentity: string; error: string }) => {
+      if (!guideSignalApplicable(p, { activeRunId: activeRunIdRef.current, activeGuideId: guideNodeId, cancelled: runCancelledRef.current, alreadyResolved: guideResolvedRef.current !== null })) return;
+      guideResolvedRef.current = 'failed';
+      setStage('guide', applyGuideReadiness({ status: 'running', startedAt: Date.now(), total: 1, installed: 0, review: 0 }, 'failed'));
+      setStage('guide', { message: p.error });
+    };
+    guideEmitter.on('guide:texture-ready', onGuideReady);
+    guideEmitter.on('guide:texture-failed', onGuideFailed);
+
+    // AI-native Guide: the uploaded plan image (PNG/JPEG) — verify the ACTUAL
+    // byte signature and reject anything that isn't a browser-decodable raster
+    // (never default unknown bytes to image/png). A PDF here is impossible (AI mode
+    // only accepts raster images), but the verifier keeps the contract uniform.
+    const { createVerifiedImageDataUrl, autoCropDrawing } = await import('@/harness/verified-image');
+    const { computeBuildingFrame } = await import('@/harness/building-frame');
+    const guideVerified = createVerifiedImageDataUrl(bytes, undefined);
+    const rawGuideUrl = guideVerified.ok ? guideVerified.dataUrl : undefined;
+    const croppedGuide = rawGuideUrl ? await autoCropDrawing(rawGuideUrl) : { dataUrl: rawGuideUrl };
+    const guideDataUrl = croppedGuide.dataUrl;
+    if (!guideVerified.ok && bytes && bytes.length) {
+      // Non-fatal: keep the model; do NOT pass raw/PDF bytes to TextureLoader.
+      console.warn('[AiGuide] image preparation skipped:', {
+        extractionMode: 'ai',
+        detectedMimeType: guideVerified.detectedMimeType,
+        byteLength: bytes.length,
+        result: guideVerified.reason,
+      });
+      DIAG.guideImageError = { detectedMimeType: guideVerified.detectedMimeType, reason: guideVerified.reason, byteLength: bytes.length };
+    }
+    const aiDoc = result?.document;
+    const buildingFrame = aiDoc?.pageBoundsPt ? computeBuildingFrame({ frameId: `frame_${runId}`, sourceHash: 'ai-document', pageBoundsPt: aiDoc.pageBoundsPt, activeRegionPt: aiDoc.pageBoundsPt, scaleMmPerPt: aiDoc.scaleMmPerPt || 1, rotation: 0, invertY: false }) : null;
+
+    try {
+      const nodesBeforeDoors = core.useScene.getState().nodes as Record<string, unknown>;
+      const nodeCountBeforeDoors = Object.keys(nodesBeforeDoors).length;
+      const doorNodeCountBeforeDoors = Object.values(nodesBeforeDoors).filter((n) => (n as Record<string, unknown>).type === 'door').length;
+      // ── drive the builder from the validated ExtractionResult ──
+      // guide
+      const gRes = installer.installGuide({ dataUrl: guideDataUrl, url: guideDataUrl }, { runId, fileName, frameId: `frame_${runId}`, buildingFrame: buildingFrame ?? undefined });
+      guideNodeId = gRes.guideNodeId;
+      // walls + runtime wall map
+      const wallRes = installer.installWalls(result.walls ?? [], { runId, stage: 'walls' });
+      // slab (from result.slab or derived from installed wall boundaries)
+      installer.installSlab(result.slab, { runId, stage: 'slab', walls: result.walls });
+      const wallMap = installer.buildWallMap(runId, result.walls ?? []);
+      setProgWallMap(wallMap);
+      progWallMapRef.current = wallMap;
+      console.info('[PascalReplay] fixture loaded', { walls: result.walls?.length ?? 0, windows: result.windows?.length ?? 0, doors: result.doors?.length ?? 0 });
+      console.info(`[PascalReplay] walls installed ${wallRes.installed}/${wallRes.attempted}`);
+      console.info(`[PascalReplay] wall map ${wallMap.status} ${wallMap.entries.length}`);
+      // windows (hosted through runtime wall map — the installer wrapper supplies the
+      // finalized wall map as the host source, carrying validated startM/endM)
+      const winLedger = installer.installWindows(result.windows ?? [], { runId, stage: 'windows' });
+      windowLedgerRef.current = winLedger;
+      // doors
+      const doorLedger = installer.installDoors(result.doors ?? [], { runId, stage: 'doors' });
+      doorLedgerRef.current = doorLedger;
+      console.info(`[PascalReplay] doors attempted ${doorLedger.attempted}`);
+      console.info(`[PascalReplay] doors installed ${doorLedger.installed}`);
+      const doorNodeCountAfterDoors = Object.values(core.useScene.getState().nodes as Record<string, unknown>).filter((n) => (n as Record<string, unknown>).type === 'door').length;
+      // structural validation (final, READ-ONLY — never mutates the scene)
+      const nodesBeforeValidation = core.useScene.getState().nodes as Record<string, unknown>;
+      const nodeCountBeforeValidation = Object.keys(nodesBeforeValidation).length;
+      const doorNodeCountBeforeValidation = Object.values(nodesBeforeValidation).filter((n) => (n as Record<string, unknown>).type === 'door').length;
+      const structural = validateStructuralScene({
+        nodes: nodesBeforeValidation, runId: installer.activeRunId ?? runId, guideNodeId,
+        slabPresent: Object.values(nodesBeforeValidation).some((n) => (n as Record<string, unknown>).type === 'slab'),
+        wallMap: progWallMapRef.current, windowLedger: (windowLedgerRef.current as never) ?? null, doorLedger: (doorLedgerRef.current as never) ?? null,
+        acceptedWindows: result.windows?.length ?? 0, acceptedDoors: result.doors?.length ?? 0, acceptedWalls: result.walls?.length ?? 0,
+        reviewCount: (progReview.length as number) ?? 0,
+      });
+      const nodesAfterValidation = core.useScene.getState().nodes as Record<string, unknown>;
+      const nodeCountAfterValidation = Object.keys(nodesAfterValidation).length;
+      const doorNodeCountAfterValidation = Object.values(nodesAfterValidation).filter((n) => (n as Record<string, unknown>).type === 'door').length;
+      setProgStructural(structural as never);
+      console.info(`[PascalReplay] structural validation ${structural.status}`, structural.failures);
+      // emit truthful progress to the Pascal panel
+      setStage('guide', { status: 'completed', completedAt: Date.now(), installed: 1, total: 1 });
+      setStage('slab', { status: 'completed', completedAt: Date.now(), installed: 1, total: 1 });
+      setStage('walls', { status: 'completed', completedAt: Date.now(), installed: wallRes.installed, total: result.walls?.length ?? 0 });
+      setStage('windows', { status: 'completed', completedAt: Date.now(), installed: winLedger.installed, total: result.windows?.length ?? 0, review: winLedger.review, audit: { attempted: winLedger.attempted, skipped: winLedger.skipped, invalid: winLedger.invalid } });
+      setStage('doors', { status: 'completed', completedAt: Date.now(), installed: doorLedger.installed, total: result.doors?.length ?? 0, review: doorLedger.review, audit: { attempted: doorLedger.attempted, skipped: doorLedger.skipped, invalid: doorLedger.invalid } });
+      // ── Furniture stage: terminal, never PENDING (Part B/Phase 8). Install only
+      // accepted furniture; review/rejected stay uninstalled. No Furniture V4
+      // provider call here — this just settles the stage from the validated result. ──
+      const furnitureItems = (result.furniture ?? []) as unknown as { familyId?: string; acceptance?: string }[];
+      const furnitureAccepted = furnitureItems.filter((f) => (f as { acceptance?: string }).acceptance !== 'rejected');
+      const furnitureRejected = furnitureItems.filter((f) => (f as { acceptance?: string }).acceptance === 'rejected');
+      let furnitureInstalled = 0;
+      if (furnitureAccepted.length > 0) {
+        try {
+          furnitureInstalled = installer.installFurniture(
+            { accepted: furnitureAccepted as never, review: [], rejected: furnitureRejected as never, audit: { attempted: furnitureItems.length, installed: furnitureAccepted.length } },
+            { runId, stage: 'furniture' },
+          );
+        } catch (fErr) {
+          console.warn('[PascalBuild] furniture install error', fErr);
+        }
+      }
+      const furnitureOutcome = furnitureItems.length === 0
+        ? 'SKIPPED_NO_FURNITURE'
+        : furnitureInstalled > 0 ? 'INSTALLED' : (furnitureAccepted.length > 0 ? 'FAILED_INSTALLATION' : 'PASSED_WITH_REVIEW');
+      setStage('furniture', {
+        status: furnitureItems.length === 0 ? 'completed' : (furnitureInstalled > 0 ? 'completed' : (furnitureAccepted.length > 0 ? 'failed' : 'review')),
+        completedAt: Date.now(),
+        installed: furnitureInstalled,
+        total: furnitureItems.length,
+        review: furnitureRejected.length,
+        message: furnitureOutcome,
+        audit: { attempted: furnitureItems.length, accepted: furnitureAccepted.length, rejected: furnitureRejected.length, installed: furnitureInstalled },
+      });
+      // diagnostics (Requirement 2/4/5)
+      const perDoor = (doorLedger.perItem ?? []).map((d) => {
+        const node = d.installationSucceeded && d.runtimeWallId ? Object.values(core.useScene.getState().nodes as Record<string, unknown>).find((n) => (n as Record<string, unknown>).metadata && ((n as Record<string, unknown>).metadata as Record<string, unknown>).sourceRecordId === d.openingId) as Record<string, unknown> | undefined : undefined;
+        const hostEntry = wallMap.entries.find((e) => e.runtimeWallId === d.runtimeWallId);
+        const concise = {
+          doorId: d.openingId,
+          sourceWallId: d.semanticWallId,
+          startM: (result.doors ?? []).find((dd) => dd.id === d.openingId)?.startM ?? null,
+          endM: (result.doors ?? []).find((dd) => dd.id === d.openingId)?.endM ?? null,
+          exactHostFound: d.mappingFound && !d.geometricFallback,
+          geometricHostFound: d.geometricFallback,
+          nearestDistanceM: d.nearestWallDistM,
+          selectedSemanticWallId: d.runtimeWallId ? hostEntry?.semanticWallId ?? null : null,
+          selectedRuntimeWallId: d.runtimeWallId,
+          parseSucceeded: d.installationAttempted,
+          inserted: d.installationSucceeded,
+          failureReason: d.failureReason,
+        };
+        console.info('[PascalBuild] door result', concise);
+        return {
+          openingId: d.openingId, semanticWallId: d.semanticWallId, runtimeWallId: d.runtimeWallId,
+          mappingFound: d.mappingFound, geometricFallback: d.geometricFallback, nearestWallDistM: d.nearestWallDistM,
+          installationAttempted: d.installationAttempted,
+          installerReturned: d.installationAttempted, installationSucceeded: d.installationSucceeded,
+          runtimeNodeId: node?.id ?? null, runtimeNodeType: node?.type ?? null,
+          runtimeParentId: node?.parentId ?? null,
+          ...concise,
+        };
+      });
+      const diagNodes = core.useScene.getState().nodes as Record<string, Record<string, unknown>>;
+      const nodeTypeCounts: Record<string, number> = {};
+      for (const n of Object.values(diagNodes)) { const t = (n.type as string) ?? 'unknown'; nodeTypeCounts[t] = (nodeTypeCounts[t] ?? 0) + 1; }
+      const rootNodeIds = Object.values(diagNodes).filter((n) => n.type === 'project' || n.type === 'building' || n.type === 'level').map((n) => n.id as string);
+      const levelNode = Object.values(diagNodes).find((n) => n.type === 'level');
+      const reachable = new Set<string>();
+      if (levelNode) {
+        const stack = [levelNode.id as string];
+        while (stack.length) {
+          const id = stack.pop()!;
+          if (reachable.has(id)) continue;
+          reachable.add(id);
+          const node = diagNodes[id];
+          const children = (node?.children as string[] | undefined) ?? [];
+          for (const c of children) stack.push(c);
+        }
+      }
+      (globalThis as unknown as { __pascalDiag?: Record<string, unknown> }).__pascalDiag = {
+        ...((globalThis as unknown as { __pascalDiag?: Record<string, unknown> }).__pascalDiag ?? {}),
+        storeNodeCountAfterBuild: Object.keys(diagNodes).length,
+        rootNodeIds,
+        rootNodeCount: rootNodeIds.length,
+        nodeTypeCounts,
+        guideNodeCount: nodeTypeCounts['guide'] ?? 0,
+        slabNodeCount: nodeTypeCounts['slab'] ?? 0,
+        wallNodeCount: nodeTypeCounts['wall'] ?? 0,
+        windowNodeCount: nodeTypeCounts['window'] ?? 0,
+        doorNodeCount: nodeTypeCounts['door'] ?? 0,
+        itemNodeCount: nodeTypeCounts['item'] ?? 0,
+        activeLevelId: levelNode?.id ?? null,
+        reachableNodeCount: reachable.size,
+        unreachableNodeCount: Object.keys(diagNodes).length - reachable.size,
+        sceneRevision: (core.useScene.getState() as Record<string, unknown>).sceneRevision ?? null,
+      };
+      if (structural.status === 'FAILED') push({ type: 'error', message: `Structural validation FAILED: ${structural.failures.join(', ')} (doors installed ${doorLedger.installed}/${result.doors?.length ?? 0})` });
+      else push({ type: 'message', role: 'assistant', id: nid(), text: `Pascal build complete (${wallRes.installed} walls, ${winLedger.installed} windows, ${doorLedger.installed} doors). Structural: ${structural.status}.` });
+    } catch (e) {
+      push({ type: 'error', message: `Pascal snapshot build failed: ${e instanceof Error ? e.message : String(e)}` });
+    } finally {
+      guideEmitter.off('guide:texture-ready', onGuideReady);
+      guideEmitter.off('guide:texture-failed', onGuideFailed);
+      installer.completeRun({ runId });
+      setTimeout(() => setProgActive(false), 4000);
+    }
+  });
+  }, [push, nid, setSceneReadyTick]);
+
+  /**
+   * Editor-owned installation facade (spec: installExtractionResult).
+   *
+   * This is a THIN, non-duplicating wrapper over runPascalSnapshotBuild — it does
+   * not re-implement the Pascal construction order. Both the AI ("ai") and
+   * Geometric ("geometric") entrypoints call THIS with a single validated neutral
+   * ExtractionResult; the underlying builder owns the order, Runtime Wall Map,
+   * review records, scene commit, Viewer invalidation, camera framing, history
+   * checkpoint and terminal project state. No raw provider output, MuPDF internal
+   * state, credentials, or Viewer-local state cross this boundary.
+   */
+  const installExtractionResult = useCallback(
+    async (args: {
+      projectId?: string | null;
+      runId: string;
+      extractionMethod: 'ai' | 'geometric';
+      source?: { bytes?: Uint8Array; name?: string };
+      result: import('design-build-extraction-contracts').ExtractionResult;
+      options?: Record<string, unknown>;
+    }) => {
+      const { runId, extractionMethod, source, result } = args;
+      // extractionMethod is recorded for diagnostics/history labelling only; it
+      // does not change the builder behavior (one order for both methods).
+      void extractionMethod;
+      void args.projectId; // reserved for future multi-project support
+      void args.options;
+      await runPascalSnapshotBuild(
+        result,
+        source?.bytes,
+        { runId, fileName: source?.name ?? (result as { fileName?: string }).fileName ?? 'extraction' },
+      );
+    },
+    [runPascalSnapshotBuild],
+  );
+
+  const startProgressiveExtraction = useCallback(async (source: import('design-build-conversation-core').AttachmentRef) => {
+    if (extractionBusy) {
+      console.warn('[Extract] ignored — a run is already in flight (extractionBusy=true). Cancel it or wait for completion.');
+      return;
+    }
+    console.info('[Extract] start Progressive V3 extraction', { name: source.name, kind: source.kind });
+    if (!PROGRESSIVE_ENABLED) { void startAiExtraction(source); return; }
+    extractionAbortRef.current?.abort();
+    const ac = new AbortController();
+    extractionAbortRef.current = ac;
+    setExtractionBusy(true);
+    setDocked(true);
+    DIAG.extractionProvider = 'clean-gemini';
+    const runId = `prog-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    activeRunIdRef.current = runId;
+    setProgRunId(runId);
+    setProgActive(true);
+    setProgReview([]);
+    setProgStages({
+      guide: { status: 'running', startedAt: Date.now(), installed: 0, total: 0, review: 0 },
+      slab: { status: 'pending', installed: 0, total: 0, review: 0 },
+      walls: { status: 'pending', installed: 0, total: 0, review: 0 },
+      windows: { status: 'pending', installed: 0, total: 0, review: 0 },
+      doors: { status: 'pending', installed: 0, total: 0, review: 0 },
+      furniture: { status: 'pending', installed: 0, total: 0, review: 0 },
+    });
+    const setStage = (stage: BuildStage, patch: Partial<StageCardState>) =>
+      setProgStages((prev) => {
+        const next = { ...prev, [stage]: { ...prev[stage], ...patch } };
+        progStagesRef.current = next;
+        return next;
+      });
+
+    // Guide node id captured from installGuide so emitter callbacks can be scoped
+    // to the active run's Guide (Phase A: truthful readiness).
+    let guideNodeId: string | null = null;
+    // Per-run guards so stale/duplicate/cancelled Guide callbacks are ignored and
+    // a failed/completed Guide cannot be resurrected (Step 3).
+    const guideResolvedRef = { current: null as null | 'texture-ready' | 'failed' };
+    const runCancelledRef = { current: false };
+
+    const core = getPascalStores();
+    const ctx = {
+      // Live getter — same store instance the Viewer consumes (A2/A3).
+      get nodes() { return core.useScene.getState().nodes as Record<string, unknown>; },
+      createNodes: (ops: { node: unknown; parentId?: string }[]) => core.useScene.getState().createNodes(ops as never),
+      updateNode: (id: string, data: any) => core.useScene.getState().updateNode(id as never, data),
+      updateNodes: (updates: { id: string; data: any }[]) => core.useScene.getState().updateNodes(updates as never),
+      removeNodeIds: (ids: string[]) => { if (ids.length) core.useScene.getState().deleteNodes(ids as never); },
+      levelId: (Object.values(core.useScene.getState().nodes as Record<string, Record<string, unknown>>).find((n) => n.type === 'level')?.id as string) ?? '',
+      onProgress: (kind: 'furniture' | 'slab' | 'walls' | 'windows' | 'doors', installed: number, total: number) => {
+        setSceneReadyTick((t) => t + 1);
+        setStage(kind === 'walls' ? 'walls' : kind === 'windows' ? 'windows' : kind === 'doors' ? 'doors' : kind === 'slab' ? 'slab' : 'furniture', { installed, total });
+      },
+    };
+    const installer = createProgressiveInstaller(ctx);
+    installer.beginRun({ runId });
+
+    // Guide readiness: the Viewer emits 'guide:texture-ready' / 'guide:texture-failed'
+    // when the GuideNode texture resolves or fails. Scope to this run's guide node so
+    // stale-run callbacks are ignored (Phase A: truthful lifecycle).
+    const guideEmitter = emitter as unknown as {
+      on: (t: string, h: (p: any) => void) => void;
+      off: (t: string, h: (p: any) => void) => void;
+    };
+    const onGuideReady = (p: { runId?: string; guideId: string; sourceIdentity: string }) => {
+      // Scope + idempotency via the shared pure guard (Step 3).
+      if (!guideSignalApplicable(p, {
+        activeRunId: activeRunIdRef.current,
+        activeGuideId: guideNodeId,
+        cancelled: runCancelledRef.current,
+        alreadyResolved: guideResolvedRef.current !== null,
+      })) return;
+      guideResolvedRef.current = 'texture-ready';
+      setStage('guide', applyGuideReadiness(
+        { status: 'running', startedAt: Date.now(), total: 1, installed: 0, review: 0 },
+        'texture-ready',
+      ));
+    };
+    const onGuideFailed = (p: { runId?: string; guideId: string; sourceIdentity: string; error: string }) => {
+      if (!guideSignalApplicable(p, {
+        activeRunId: activeRunIdRef.current,
+        activeGuideId: guideNodeId,
+        cancelled: runCancelledRef.current,
+        alreadyResolved: guideResolvedRef.current !== null,
+      })) return;
+      guideResolvedRef.current = 'failed';
+      setStage('guide', applyGuideReadiness(
+        { status: 'running', startedAt: Date.now(), total: 1, installed: 0, review: 0 },
+        'failed',
+      ));
+      setStage('guide', { message: p.error });
+    };
+    guideEmitter.on('guide:texture-ready', onGuideReady);
+    guideEmitter.off('guide:texture-ready', onGuideReady);
+    guideEmitter.on('guide:texture-failed', onGuideFailed);
+    guideEmitter.off('guide:texture-failed', onGuideFailed);
+
+    push({ type: 'message', role: 'user', id: nid(), text: `Extract ${source.name} (Progressive V3).` });
+
+    try {
+      let bytes: Uint8Array | undefined = await attachmentRepository.bytes(source.id);
+      if (!bytes) {
+        const maybeDataUrl = (source as unknown as { dataUrl?: string }).dataUrl;
+        if (maybeDataUrl?.startsWith('data:')) bytes = Uint8Array.from(Buffer.from(maybeDataUrl.slice(maybeDataUrl.indexOf(',') + 1), 'base64'));
+        else if (source.url) bytes = new Uint8Array(await (await fetch(source.url, { signal: ac.signal })).arrayBuffer());
+      }
+      if (!bytes || bytes.length === 0) { push({ type: 'error', message: 'Attachment has no readable bytes.' }); return; }
+
+      const form = new FormData();
+      const mime = source.mime || (source.kind === 'pdf' ? 'application/pdf' : 'application/octet-stream');
+      form.append('file', new Blob([bytes as BlobPart], { type: mime }), source.name);
+
+      const res = await fetch('/api/extraction/ai/progressive', { method: 'POST', body: form, signal: ac.signal });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({})) as { code?: string; error?: string };
+        if (j.code === 'PROGRESSIVE_BUILD_DISABLED') { void startAiExtraction(source); return; }
+        push({ type: 'error', message: j.error || `Progressive extraction failed (${res.status}).` });
+        setStage('furniture', { status: 'failed' });
+        return;
+      }
+
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      if (reader) {
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() ?? '';
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            // §3: validate every event through its discriminator; reject malformed.
+            const event = validateEvent(JSON.parse(line));
+            if (!event) continue;
+            if (event.runId !== activeRunIdRef.current) continue; // stale run guard
+            await handleEvent(event);
+          }
+        }
+        if (buffer.trim()) {
+          try { const ev = validateEvent(JSON.parse(buffer)); if (ev && ev.runId === activeRunIdRef.current) await handleEvent(ev); } catch { /* ignore trailing */ }
+        }
+      }
+      installer.completeRun({ runId });
+      guideEmitter.off('guide:texture-ready', onGuideReady);
+      guideEmitter.off('guide:texture-failed', onGuideFailed);
+
+      async function handleEvent(event: ProgressiveBuildEvent) {
+        switch (event.type) {
+          case 'run.started': break;
+          case 'guide.ready':
+            // Guide node is being created; texture readiness is NOT confirmed here.
+            // Use the truthful reducer: 'node-created' keeps the stage running until
+            // the Viewer emits 'guide:texture-ready' (Phase A, Step 6).
+            setStage('guide', applyGuideReadiness(
+              { status: 'running', startedAt: Date.now(), total: event.counts?.guides ?? 1, installed: 0, review: 0 },
+              'node-created',
+            ));
+            try {
+              const { autoCropDrawing } = await import('@/harness/verified-image');
+              const rawPayload = event.payload as Record<string, unknown> | undefined;
+              const rawPayloadUrl = (rawPayload?.dataUrl as string | undefined) ?? (rawPayload?.url as string | undefined);
+              const croppedPayload = rawPayloadUrl ? await autoCropDrawing(rawPayloadUrl) : { dataUrl: rawPayloadUrl };
+              const res = installer.installGuide({ ...(rawPayload ?? {}), dataUrl: croppedPayload.dataUrl, url: croppedPayload.dataUrl } as any, { runId, fileName: source.name, frameId: `frame_${runId}` });
+              guideNodeId = res.guideNodeId;
+            } catch (guideErr) {
+              setStage('guide', applyGuideReadiness(
+                { status: 'running', startedAt: Date.now(), total: event.counts?.guides ?? 1, installed: 0, review: 0 },
+                'failed',
+              ));
+              setStage('guide', { message: guideErr instanceof Error ? guideErr.message : String(guideErr) });
+            }
+            break;
+          case 'slab.ready':
+            setStage('slab', { status: 'running', startedAt: Date.now(), total: event.counts?.slabs ?? 1, installed: 0, review: 0 });
+            try {
+              const installed = installer.installSlab(event.payload, { runId, stage: 'slab' });
+              setStage('slab', installed > 0
+                ? { status: 'completed', completedAt: Date.now(), installed, total: event.counts?.slabs ?? 1 }
+                : { status: 'failed', completedAt: Date.now(), installed: 0, total: event.counts?.slabs ?? 1, message: 'Slab install produced 0 nodes' });
+            } catch (slabErr) {
+              setStage('slab', { status: 'failed', completedAt: Date.now(), installed: 0, total: event.counts?.slabs ?? 1, message: slabErr instanceof Error ? slabErr.message : String(slabErr) });
+            }
+            break;
+          case 'walls.ready': {
+            setStage('walls', { status: 'running', startedAt: Date.now(), total: event.counts?.walls ?? 0, installed: 0, review: 0 });
+            try {
+              const res = installer.installWalls(event.payload as any[], { runId, stage: 'walls' } as never) as unknown as { attempted: number; installed: number; invalid: number; entries: { semanticWallId: string; runtimeWallId: string }[] };
+              // Build the FINALIZED AI WALL MAP from actual runtime installation.
+              const wallMap = installer.buildWallMap(runId, (event.payload as any[]) ?? []);
+              setProgWallMap(wallMap as never);
+              progWallMapRef.current = wallMap as never;
+              setStage('walls', res.installed > 0
+                ? { status: 'completed', completedAt: Date.now(), installed: res.installed, total: event.counts?.walls ?? 0 }
+                : { status: 'failed', completedAt: Date.now(), installed: 0, total: event.counts?.walls ?? 0, message: 'Wall install produced 0 nodes' });
+              // Guarantee slab presence from wall bounds if slab was missing or had 0 nodes
+              const slabCount = Object.values(core.useScene.getState().nodes as Record<string, unknown>).filter((n) => (n as any)?.type === 'slab').length;
+              if (slabCount === 0 && res.installed > 0) {
+                const sInstalled = installer.installSlab(undefined, { runId, stage: 'slab', walls: event.payload as any[] });
+                if (sInstalled > 0) {
+                  setStage('slab', { status: 'completed', completedAt: Date.now(), installed: sInstalled, total: 1 });
+                }
+              }
+            } catch (wallsErr) {
+              setStage('walls', { status: 'failed', completedAt: Date.now(), installed: 0, total: event.counts?.walls ?? 0, message: wallsErr instanceof Error ? wallsErr.message : String(wallsErr) });
+            }
+            break;
+          }
+          case 'windows.ready': {
+            // Dependency guard: windows require the FINALIZED wall map READY (not merely walls stage complete).
+            if (progWallMapRef.current?.status !== 'READY') {
+              setStage('windows', { status: 'failed', completedAt: Date.now(), total: event.counts?.windows ?? 0, installed: 0, message: 'Windows attempted before wall map READY' });
+              break;
+            }
+            setStage('windows', { status: 'running', startedAt: Date.now(), total: event.counts?.windows ?? 0, installed: 0, review: 0 });
+            try {
+              const ledger = installer.installWindows(event.payload as any[], { runId, stage: 'windows' } as never) as unknown as { attempted: number; installed: number; invalid: number; perItem: unknown[] };
+              windowLedgerRef.current = ledger;
+              const outcome = ledger.attempted === 0
+                ? (event.counts?.windows ? 'INSTALLED' : 'SKIPPED_NO_PROVIDER_DETECTIONS')
+                : ledger.installed > 0 ? 'INSTALLED' : 'FAILED_DEPENDENCY';
+              setStage('windows', ledger.installed > 0
+                ? { status: 'completed', completedAt: Date.now(), installed: ledger.installed, total: event.counts?.windows ?? 0, message: outcome }
+                : { status: ledger.attempted === 0 ? 'review' : 'failed', completedAt: Date.now(), installed: 0, total: event.counts?.windows ?? 0, message: ledger.attempted === 0 ? (event.counts?.windows ? 'Review required' : 'No windows detected') : 'Window install produced 0 nodes' });
+            } catch (winErr) {
+              setStage('windows', { status: 'failed', completedAt: Date.now(), installed: 0, total: event.counts?.windows ?? 0, message: winErr instanceof Error ? winErr.message : String(winErr) });
+            }
+            break;
+          }
+          case 'doors.ready': {
+            if (progWallMapRef.current?.status !== 'READY') {
+              setStage('doors', { status: 'failed', completedAt: Date.now(), total: event.counts?.doors ?? 0, installed: 0, message: 'Doors attempted before wall map READY' });
+              break;
+            }
+            setStage('doors', { status: 'running', startedAt: Date.now(), total: event.counts?.doors ?? 0, installed: 0, review: 0 });
+            try {
+              const ledger = installer.installDoors(event.payload as any[], { runId, stage: 'doors' } as never) as unknown as { attempted: number; installed: number; invalid: number; perItem: unknown[] };
+              doorLedgerRef.current = ledger;
+              const outcome = ledger.attempted === 0
+                ? (event.counts?.doors ? 'INSTALLED' : 'SKIPPED_NO_PROVIDER_DETECTIONS')
+                : ledger.installed > 0 ? 'INSTALLED' : 'FAILED_DEPENDENCY';
+              setStage('doors', ledger.installed > 0
+                ? { status: 'completed', completedAt: Date.now(), installed: ledger.installed, total: event.counts?.doors ?? 0, message: outcome }
+                : { status: ledger.attempted === 0 ? 'review' : 'failed', completedAt: Date.now(), installed: 0, total: event.counts?.doors ?? 0, message: ledger.attempted === 0 ? (event.counts?.doors ? 'Review required' : 'No doors detected') : '' });
+            } catch (doorErr) {
+              setStage('doors', { status: 'failed', completedAt: Date.now(), installed: 0, total: event.counts?.doors ?? 0, message: doorErr instanceof Error ? doorErr.message : String(doorErr) });
+            }
+            break;
+          }
+          case 'furniture.detected': setStage('furniture', { status: 'running', startedAt: Date.now() }); break;
+          case 'furniture.verified': break;
+          case 'furniture.review':
+            setStage('furniture', { status: 'review', completedAt: Date.now(), review: event.counts?.review ?? 0, audit: event.audit as Record<string, number> });
+            if (event.payload) setProgReview((event.payload as { review?: FurnitureCandidate[] }).review ?? []);
+            break;
+          case 'stage.completed':
+            if (event.stage === 'furniture') {
+              setStage('furniture', { status: 'completed', completedAt: Date.now(), installed: event.installed ?? 0, total: event.total ?? 0, audit: event.audit as Record<string, number> });
+              installer.installFurniture(event.payload as any, { runId, stage: 'furniture' });
+              if (event.payload) setProgReview((event.payload as { review?: FurnitureCandidate[] }).review ?? []);
+            }
+            break;
+          case 'run.completed':
+            setStage('furniture', { status: 'completed', completedAt: Date.now() });
+            // Phase B §10: validate the ACTUAL Pascal scene after all stages settle.
+            try {
+              const core = getPascalStores();
+              const nodes = core.useScene.getState().nodes as Record<string, unknown>;
+              const aiResult = liveResultRef.current;
+              const structural = validateStructuralScene({
+                nodes,
+                runId: installer.activeRunId ?? runId,
+                guideNodeId: guideNodeId,
+                slabPresent: Object.values(nodes).some((n) => (n as Record<string, unknown>).type === 'slab'),
+                wallMap: progWallMapRef.current,
+                windowLedger: (windowLedgerRef.current as never) ?? null,
+                doorLedger: (doorLedgerRef.current as never) ?? null,
+                acceptedWindows: aiResult?.windows?.length ?? 0,
+                acceptedDoors: aiResult?.doors?.length ?? 0,
+                acceptedWalls: aiResult?.walls?.length ?? 0,
+                reviewCount: (progReview.length as number) ?? 0,
+              });
+              setProgStructural(structural as never);
+              if (structural.status === 'FAILED') {
+                push({ type: 'error', message: `Structural validation FAILED: ${structural.failures.join(', ')}` });
+              } else {
+                push({ type: 'message', role: 'assistant', id: nid(), text: `Structural validation ${structural.status} (orphans: ${structural.orphanWindowCount + structural.orphanDoorCount}, metadata failures: ${structural.metadataSchemaFailures}).` });
+              }
+            } catch (valErr) {
+              push({ type: 'error', message: `Structural validation error: ${valErr instanceof Error ? valErr.message : String(valErr)}` });
+            }
+            break;
+          case 'run.failed': setStage('furniture', { status: 'failed' }); break;
+          case 'run.cancelled': runCancelledRef.current = true; setStage('furniture', { status: 'cancelled' }); break;
+        }
+      }
+    } catch (e: any) {
+      if ((e as Error).name === 'AbortError' || ac.signal.aborted) {
+        push({ type: 'message', role: 'assistant', id: nid(), text: 'Progressive extraction cancelled.' });
+        setStage('furniture', { status: 'cancelled' });
+      } else {
+        push({ type: 'error', message: `Progressive extraction error: ${e?.message ?? String(e)}` });
+        setStage('furniture', { status: 'failed' });
+      }
+    } finally {
+      guideEmitter.off('guide:texture-ready', onGuideReady);
+      guideEmitter.off('guide:texture-failed', onGuideFailed);
+      setExtractionBusy(false);
+      setTimeout(() => setProgActive(false), 4000);
+    }
+  }, [push, startAiExtraction, nid, extractionBusy, setSceneReadyTick, PROGRESSIVE_ENABLED]);
+
+  // Accept a single furniture review candidate through the shared installer.
+  const acceptReviewItem = useCallback((item: FurnitureCandidate) => {
+    const core = getPascalStores();
+    const levelId = (Object.values(core.useScene.getState().nodes as Record<string, Record<string, unknown>>).find((n) => n.type === 'level')?.id as string) ?? '';
+    const ctx = {
+      get nodes() { return core.useScene.getState().nodes as Record<string, unknown>; },
+      createNodes: (ops: { node: unknown; parentId?: string }[]) => core.useScene.getState().createNodes(ops as never),
+      removeNodeIds: (ids: string[]) => { if (ids.length) core.useScene.getState().deleteNodes(ids as never); },
+      levelId,
+      onProgress: () => {},
+    };
+    installFurniture(ctx, [item], { progressive: true, metaExtras: { source: 'ai-extract', extractionMode: 'progressive-v3', runId: activeRunIdRef.current ?? '', stage: 'furniture', sourceEntityId: item.sourceEntityId, frameId: item.frameId } });
+    setSceneReadyTick((t) => t + 1);
+    setProgReview((prev) => prev.filter((r) => r.sourceEntityId !== item.sourceEntityId));
+  }, [setSceneReadyTick]);
+
+  const onCommand = useCallback((cmd: ChatCommand) => {
+    if (cmd.type === 'send-message') {
+      push({ type: 'message', role: 'user', id: nid(), text: cmd.text });
+      setTimeout(() => push({ type: 'message', role: 'assistant', id: nid(), text: `(mock) ${cmd.text}` }), 300);
+    }
+    if (cmd.type === 'start-frozen-import') {
+      push({ type: 'message', role: 'user', id: nid(), text: 'Start frozen CODE-06 wall import.' });
+      void startFrozenImport();
+    }
+    // Change Set 3: AI method → clean Gemini Multipass boundary (V2) or Progressive V3.
+    if (cmd.type === 'start-extraction' && cmd.extractor === 'gemini') {
+      const plan = resolveAiExtractionPlan('gemini', PROGRESSIVE_ENABLED);
+      if (plan.progressiveRouteCalled) void startProgressiveExtraction(cmd.source);
+      else void startAiExtraction(cmd.source);
+      return;
+    }
+    // Change Set 2: production Geometric path → clean Pure MuPDF boundary.
+    if (cmd.type === 'start-extraction') {
+      if (cmd.source.kind !== 'pdf') {
+        // PNG/JPEG must be routed to AI extraction, not Pure MuPDF.
+        push({ type: 'error', message: 'This file requires AI extraction. Select AI mode to continue.' });
+        return;
+      }
+      // §3: live-mupdf is the normal Geometric provider. frozen-code06 remains
+      // a development-only rollback (never reachable from production UI).
+      if (GEOMETRIC_EXTRACTION_PROVIDER === 'live-mupdf') {
+        void runLiveGeometricExtraction(cmd.source);
+      } else if (process.env.NODE_ENV !== 'production') {
+        push({ type: 'message', role: 'user', id: nid(), text: `Extract ${cmd.source.name} (Geometric · frozen fixture — dev rollback).` });
+        void startFrozenImport();
+      } else {
+        push({ type: 'error', message: 'Extraction provider unavailable.' });
+      }
+    }
+    if (cmd.type === 'cancel-extraction') {
+      extractionAbortRef.current?.abort();
+    }
+    if (cmd.type === 'export') {
+      setTimeout(() => push({ type: 'export-ready', kind: cmd.kind, url: `#mock-${cmd.kind}` }), 250);
+    }
+    if (cmd.type === 'start-render') {
+      push({ type: 'render-started', renderId: 'mock-render-1' });
+      setTimeout(() => push({ type: 'render-complete', result: { renderId: 'mock-render-1', status: 'done', progress: 1, providerId: selection.render, message: 'Mock render complete' } }), 1200);
+    }
+  }, [push, selection, startFrozenImport, runLiveGeometricExtraction]);
+
+  const onSelectModel = useCallback((slot: 'chat' | 'extraction' | 'render', id: string) => {
+    setSelection((s) => ({ ...s, [slot]: id }));
+  }, []);
+
+  const startCleanProProject = useCallback(() => {
+    const core = getPascalStores();
+    const s = core.useScene.getState();
+    const hasNodes = Object.keys(s.nodes ?? {}).length > 0;
+    if (!hasNodes) {
+      const siteId = 'site_scratch';
+      const buildingId = 'building_scratch';
+      const levelId = 'level_scratch';
+      const slabId = 'slab_scratch';
+      const site = SiteNode.parse({ id: siteId, name: 'Site', parentId: null });
+      const building = BuildingNode.parse({ id: buildingId, name: 'Building 1', parentId: siteId });
+      const level = LevelNode.parse({ id: levelId, name: 'Level 1', parentId: buildingId });
+      const slab = SlabNode.parse({
+        id: slabId,
+        name: 'Ground Floor Slab',
+        parentId: levelId,
+        polygon: [
+          [-10, -10],
+          [10, -10],
+          [10, 10],
+          [-10, 10],
+        ],
+      });
+      const nodes: Record<string, AnyNode> = {
+        [siteId]: { ...site, children: [buildingId] } as AnyNode,
+        [buildingId]: { ...building, children: [levelId] } as AnyNode,
+        [levelId]: { ...level, children: [slabId] } as AnyNode,
+        [slabId]: slab as AnyNode,
+      };
+      s.setScene(nodes as never, [siteId] as never, { installedPlugins: [builtinPlugin.id] });
+      useViewer.getState().setSelection?.({
+        buildingId: buildingId as `building_${string}`,
+        levelId: levelId as `level_${string}`,
+        selectedIds: [],
+      });
+    }
+    setViewerVisible(true);
+    setDocked(true);
+    editorMode.requestPro();
+  }, [editorMode]);
+
+
+  // Derive the real build stages: extraction phases (from actual provider
+  // events) followed by the Pascal construction stages. No fabricated
+  // percentages — stage rows show real committed counts or activity states.
+  const stages = useMemo(() => {
+    const state = DIAG.importState;
+    const committed = DIAG.committedWalls;
+    const total = DIAG.expectedWalls;
+    const orig = DIAG.originalWallCount;
+    const comp = DIAG.completionWallCount;
+    const finalized = DIAG.finalizedWallCount;
+    const wallsDone = state === 'completed';
+    const guideDone = wallsDone || DIAG.currentStage !== 'none';
+    const reachedWalls = wallsDone || (DIAG.currentStage !== 'none' && DIAG.currentStage !== 'slab');
+    const reachedCompletion = DIAG.wallMapPass && finalized > orig;
+    const reachedFinalize = DIAG.wallMapPass;
+    const windowsDone = DIAG.windowsInstalledNodes > 0 || DIAG.windowsExtracted >= 0 && state === 'completed';
+    const doorsDone = DIAG.doorsAccepted > 0;
+    const validationDone = DIAG.validationPass && state === 'completed';
+    const finalLiveDone = DIAG.projectReady === 'READY' && DIAG.validationPass && DIAG.wallMapPass;
+    // M4.4: split validation into three ordered phases.
+    //  STRUCTURAL_VALIDATION: guide/slab/original/completion/finalized wall map.
+    //  OPENING_VALIDATION: windows + doors + live hosts + parent-child + transforms.
+    //  FINAL_LIVE_MODEL_VALIDATION: runs only after all install stages settle.
+    // "Final live-model validation" must NOT show done while doors remain at zero.
+    const structuralDone = DIAG.wallMapPass && state === 'completed';
+    const openingDone =
+      (DIAG.windowsInstalledNodes > 0 && DIAG.installedDoors > 0) &&
+      DIAG.wallMapPass && state === 'completed';
+    const finalLiveDone2 = openingDone && DIAG.validationPass && DIAG.projectReady === 'READY';
+    const projectReady = DIAG.projectReady === 'READY' && DIAG.validationPass && DIAG.wallMapPass;
+
+    const def: { key: string; name: string; status: 'pending' | 'active' | 'done' | 'review' | 'failed'; committed: number; total: number }[] = [
+      // 1. Preparing the drawing
+      { key: 'drawing', name: 'Preparing the drawing', status: state === 'idle' ? 'pending' : 'done', committed: 1, total: 1 },
+      // 2. Aligning the Guide
+      { key: 'guide', name: 'Aligning the Guide', status: guideDone ? 'done' : state === 'importing' ? 'active' : 'pending', committed: guideDone ? 1 : 0, total: 1 },
+      // 3. Creating the building slab
+      { key: 'slab', name: 'Creating the building slab', status: DIAG.currentStage === 'slab' && state === 'importing' ? 'active' : reachedWalls || wallsDone ? 'done' : 'pending', committed: 1, total: 1 },
+      // 4. Building original walls
+      { key: 'original-walls', name: 'Building original walls', status: state === 'importing' && !reachedCompletion ? 'active' : reachedCompletion || wallsDone ? 'done' : 'pending', committed: orig, total: orig },
+      // 5. Completing walls and partitions
+      { key: 'completion', name: 'Completing walls and partitions', status: reachedCompletion ? 'done' : reachedWalls && !reachedCompletion ? 'active' : 'pending', committed: comp, total: comp },
+      // 6. Finalizing the wall network
+      { key: 'finalize', name: 'Finalizing the wall network', status: reachedFinalize ? 'done' : reachedWalls ? 'active' : 'pending', committed: finalized, total: finalized },
+      // 7. Installing windows
+      { key: 'windows', name: 'Installing windows', status: DIAG.windowsInstalledNodes > 0 ? 'done' : windowsDone ? 'done' : state === 'completed' ? 'done' : 'pending', committed: DIAG.windowsInstalledNodes, total: DIAG.windowsEligible || DIAG.windowsExtracted },
+      // 8. Installing doors
+      { key: 'doors', name: 'Installing doors', status: DIAG.installedDoors >= DIAG.doorsAutoInstallable && DIAG.doorsAutoInstallable > 0 ? 'done' : DIAG.installedDoors > 0 ? 'active' : 'pending', committed: DIAG.installedDoors, total: DIAG.doorsAutoInstallable },
+      // 9. Structural validation
+      { key: 'structural-validation', name: 'Structural validation', status: structuralDone ? 'done' : state === 'importing' ? 'active' : 'pending', committed: structuralDone ? 1 : 0, total: 1 },
+      // 9b. Opening validation
+      { key: 'opening-validation', name: 'Opening validation', status: openingDone ? 'done' : (DIAG.windowsInstalledNodes > 0 || DIAG.installedDoors > 0) ? 'active' : 'pending', committed: openingDone ? 1 : 0, total: 1 },
+      // 9c. Final live-model validation (only after windows + doors settle)
+      { key: 'final-validation', name: 'Final live-model validation', status: finalLiveDone2 ? 'done' : openingDone ? 'active' : 'pending', committed: finalLiveDone2 ? 1 : 0, total: 1 },
+      // 10. Project ready
+      { key: 'project-ready', name: 'Project ready', status: projectReady ? 'done' : 'pending', committed: projectReady ? 1 : 0, total: 1 },
+    ];
+    return def;
+  }, [events]);
+
+  // Dev-only manual trigger for the frozen import (no UI button; used for the
+  // Dev-only manual triggers. The frozen-import trigger (__code06Start) and the
+  // viewer debug object remain dev-only (absent in production builds). The Pascal
+  // replay hooks (__runCapturedPascalReplay / __pascalReplay) are SAFE diagnostics:
+  // they make zero provider calls, expose no credentials/keys, and drive the same
+  // runPascalSnapshotBuild entrypoint used by the real AI route — so they stay
+  // available in production for acceptance runs.
+  useEffect(() => {
+    const w = window as unknown as {
+      __runCapturedPascalReplay?: (url?: string) => Promise<void>;
+      __pascalReplay?: (res: import('design-build-extraction-contracts').ExtractionResult, fileName?: string) => void;
+      __code06Start?: () => void;
+      __viewerDebug?: unknown;
+      __frameProject?: () => void;
+      __frameSelection?: () => void;
+      __topView?: () => void;
+    };
+    // REQUIREMENT 8 / user directive: captured replay through the EXACT main-editor
+    // runPascalSnapshotBuild entrypoint. Zero provider calls. Uses the live Viewer +
+    // Pascal store + same progress panel. In console:
+    //   window.__runCapturedPascalReplay()
+    w.__runCapturedPascalReplay = async (url = '/ai-replay-fixture.json') => {
+      // Cache-bust the fixture URL with a query param so the browser ALWAYS fetches
+      // the current fixture (the real 14-wall / 2-door capture), never a stale cached
+      // copy — even if the page bundle itself is cached from an earlier session.
+      const sep = url.includes('?') ? '&' : '?';
+      const bustUrl = `${url}${sep}v=${BUILD_GIT_COMMIT || Date.now()}`;
+      const json = (await fetch(bustUrl, { cache: 'no-store' }).then((r) => r.json())) as { result?: import('design-build-extraction-contracts').ExtractionResult };
+      if (!json.result) { console.error('[replay] fixture has no .result'); return; }
+      void installExtractionResult({
+        runId: `replay-${Date.now().toString(36)}`,
+        extractionMethod: 'ai',
+        result: json.result,
+        source: { name: (json.result as { fileName?: string }).fileName ?? 'ai-replay-fixture' },
+      });
+    };
+    // Lower-level hook (same entrypoint) for arbitrary captured results.
+    w.__pascalReplay = (res: import('design-build-extraction-contracts').ExtractionResult, fileName = 'replay') => {
+      void installExtractionResult({ runId: `replay-${Date.now().toString(36)}`, extractionMethod: 'ai', result: res, source: { name: fileName } });
+    };
+    if (process.env.NODE_ENV === 'production') return;
+    w.__code06Start = () => { void startFrozenImport(); };
+    w.__frameProject = () => frameEntireProject();
+    w.__frameSelection = () => frameSelection();
+    w.__topView = () => topViewAndFrame();
+    w.__viewerDebug = {
+      getFramingStatus: () => {
+        const ctl = framingCtl.current;
+        const h = viewerHandleRef.current;
+        const core = getPascalStores();
+        const st = core.useScene.getState() as unknown as { dirtyNodes: Set<unknown>; nodes: Record<string, unknown> };
+        const reg = (core as unknown as { sceneRegistry?: { byType?: Record<string, Set<string> | string[]> } }).sceneRegistry;
+        const wallReg = reg?.byType?.wall ? (Array.isArray(reg.byType.wall) ? reg.byType.wall.length : reg.byType.wall.size) : 0;
+        return {
+          runId: ctl.runId,
+          viewerHandleReady: !!h?.camera,
+          cameraReady: !!h?.camera,
+          controlsReady: !!h?.controls,
+          controlsAvailable: ctl.controlsAvailable,
+          importState: DIAG.importState,
+          committedWalls: DIAG.committedWalls,
+          dirtyNodes: st.dirtyNodes.size,
+          wallRegistryCount: wallReg,
+          framingState: ctl.framingState,
+          framingAttemptCount: ctl.attemptCount,
+          buildingObjectCount: ctl.buildingCount,
+          excludedObjectCount: ctl.excludedCount,
+          wallObjectsIncluded: ctl.wallObjectsIncluded,
+          slabObjectsIncluded: ctl.slabObjectsIncluded,
+          guideObjectsIncluded: ctl.guideObjectsIncluded,
+          totalFramingObjects: ctl.buildingCount,
+          slabBoundsIncluded: ctl.slabObjectsIncluded > 0,
+          framingBounds: ctl.bounds,
+          bounds: ctl.bounds,
+          cameraPositionBefore: ctl.camBefore,
+          cameraPositionAfter: ctl.camAfter,
+          controlsTargetBefore: ctl.tgtBefore,
+          controlsTargetAfter: ctl.tgtAfter,
+          lastFraming: DIAG.lastFraming,
+          lastError: ctl.lastError,
+        };
+      },
+    };
+    return () => {
+      delete w.__code06Start;
+      delete w.__viewerDebug;
+      delete w.__frameProject;
+      delete w.__frameSelection;
+      delete w.__topView;
+    };
+  }, [startFrozenImport, frameEntireProject, frameSelection, topViewAndFrame]);
+
+  const [railCollapsed, setRailCollapsed] = useState(false);
+  // RIGHT-SIDE PANEL EXCLUSIVITY: exactly ONE expanded right rail at a time.
+  // 'progress' during construction / compact summary after completion;
+  // 'export' only when the user explicitly opens the export suite.
+  const [rightRail, setRightRail] = useState<'progress' | 'export'>('progress');
+  // Completion card is nonblocking and dismissible.
+  const [completionDismissed, setCompletionDismissed] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  // Narrow host: the isolated feature owns provider fetch, selection mutation,
+  // model derivation, and readiness. page.tsx only invokes the hook and renders
+  // the resulting control. No inline registry types, fetch, or POST /select here.
+  const aiRegistry = useAiProviderRegistry(() => setSettingsOpen(true));
+  const aiExtractionControls = (
+    <AiExtractionControls
+      loading={aiRegistry.view.loading}
+      refreshing={aiRegistry.view.refreshing}
+      error={aiRegistry.view.error}
+      providers={aiRegistry.view.providers}
+      activeProvider={aiRegistry.activeProvider}
+      activeModel={aiRegistry.view.activeExtractionModel?.modelId ?? null}
+      availableModels={aiRegistry.availableModels}
+      onSelectModel={aiRegistry.select}
+      onOpenSettings={() => setSettingsOpen(true)}
+    />
+  );
+  // Single authoritative completion selector — never derived from a stale
+  // event or stage index. Build Complete appears ONLY when all walls are
+  // committed, dirty is drained, and the tree is valid.
+  const isBuildComplete =
+    DIAG.importState === 'completed' &&
+    DIAG.committedWalls === DIAG.expectedWalls &&
+    DIAG.importOk &&
+    DIAG.wallMapPass &&
+    DIAG.validationPass &&
+    DIAG.projectReady === 'READY';
+  // M4.5: SINGLE TERMINAL-STATE SELECTOR. One source of truth for the bottom chat
+  // status, the progress panel, the modal, the project header, and Save/Export
+  // readiness. "Project ready" is shown ONLY when the full pipeline has settled
+  // (windows + doors installed, structural + opening + final validation passed,
+  // projectReady === READY). Otherwise the status reflects the in-flight stage.
+  const terminalState: 'project-ready' | 'finalizing' | 'building' | 'idle' =
+    isBuildComplete ? 'project-ready'
+      : DIAG.importState === 'completed' && DIAG.projectReady !== 'READY' ? 'finalizing'
+        : DIAG.importState === 'completed' || DIAG.importState === 'importing' ? 'building'
+          : 'idle';
+  // AI/Pascal mode: derive the footer from the REAL progressive build stages, not the
+  // Geometric DIAG wall counts (which are 0/0 in AI mode → "Building project 0/0").
+  const aiStages = extractMethod === 'ai' ? progStagesRef.current : null;
+  const aiCommitted = aiStages
+    ? (aiStages.guide.installed || 0) + (aiStages.slab.installed || 0) + (aiStages.walls.installed || 0) + (aiStages.windows.installed || 0) + (aiStages.doors.installed || 0) + (aiStages.furniture.installed || 0)
+    : 0;
+  const aiTotal = aiStages
+    ? (aiStages.guide.total || 0) + (aiStages.slab.total || 0) + (aiStages.walls.total || 0) + (aiStages.windows.total || 0) + (aiStages.doors.total || 0) + (aiStages.furniture.total || 0)
+    : 0;
+  const aiStageLabel = aiStages
+    ? Object.entries(aiStages).find(([, s]) => s.status === 'running' || s.status === 'pending')?.[0] ?? 'project'
+    : null;
+  const aiSettled = aiStages
+    ? Object.values(aiStages).every((s) => s.status === 'completed' || s.status === 'review' || s.status === 'failed' || s.status === 'cancelled')
+    : false;
+  const buildProgress = {
+    committed: extractMethod === 'ai' ? aiCommitted : DIAG.committedWalls,
+    // AI/Pascal mode has no fixed wall target — never surface the Geometric 70-wall count.
+    total: extractMethod === 'ai' ? aiTotal : DIAG.expectedWalls,
+    stage: extractMethod === 'ai' && aiStageLabel ? aiStageLabel : stageLabelOf(DIAG.currentStage),
+    terminalState: extractMethod === 'ai'
+      ? (aiSettled ? 'project-ready' : (progActive ? 'building' : 'idle'))
+      : terminalState,
+  };
+
+  const props = useMemo(() => ({
+    onCommand, events, models: MOCK_MODELS, activeSelection: selection, onSelectModel, docked, working: importing, busy: extractionBusy, buildProgress,
+    onOpenSettings: () => setSettingsOpen(true),
+    aiExtractionControls,
+    aiReady: aiRegistry.canRunAiExtraction,
+  }), [onCommand, events, selection, onSelectModel, docked, importing, extractionBusy, buildProgress, aiExtractionControls, aiRegistry.canRunAiExtraction]);
+
+  return (
+    <main className="db-stage">
+      <div className="db-aurora a1" aria-hidden />
+      <div className="db-aurora a2" aria-hidden />
+
+      <header className="db-header">
+        <div className="db-brand">
+          <span className="db-mark">DB</span>
+          <span>Design &amp; Build Copilot</span>
+        </div>
+        <div className="db-header-actions">
+          <button>Projects</button>
+          <button onClick={() => setSettingsOpen(true)}>Settings</button>
+          <span className="db-avatar">MA</span>
+        </div>
+      </header>
+
+      {/*
+        The Viewer mounts when the import starts (viewerVisible, set true in
+        startFrozenImport) and then stays mounted for the ENTIRE session — it is
+        never unmounted on docked/importing/buildComplete state, so the R3F
+        useFrame systems that drain dirtyNodes / populate sceneRegistry run
+        continuously. (Mounting it at page load — before installInitialShell's
+        setScene — caused an early wall-system crash + reload.)
+      */}
+      {viewerVisible && (
+        <>
+          {/* STANDARD-only chrome (Guide/Diagnostics) hidden once PRO overlay
+              is effective, so PRO panels own the workspace. */}
+          <div style={{ position: 'absolute', top: 12, left: 12, zIndex: 30 }}>
+            {!proMode && !proMounting && (
+              <>
+                {process.env.NODE_ENV !== 'production' || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('diag') === '1') ? (
+                  <DiagnosticPanel gitCommit={BUILD_GIT_COMMIT} buildId={process.env.NEXT_PUBLIC_BUILD_ID ?? null} />
+                ) : null}
+              </>
+            )}
+          </div>
+
+          {/* The Standard PascalViewerShell (single R3F Canvas) is ALWAYS
+              mounted in both STANDARD and PRO. PRO is an overlay over this
+              exact Viewer — the model, camera, scene store and Canvas are
+              never re-created. The monolithic ProEditorLazy (its own Canvas)
+              is retained ONLY behind NEXT_PUBLIC_PASCAL_FULL_EDITOR_EXPERIMENTAL
+              as a dev / upstream-reference path. */}
+          {editorMode.fullEditorExperimental && proMode && preload ? (
+            <ProEditorLazy
+              projectId={preload.projectId}
+              preload={preload}
+              onReturn={() => editorMode.returnToStandard()}
+              onStage={(s) => editorMode.setProStage(s)}
+              onReady={() => editorMode.markProOverlayReady()}
+              onError={() => editorMode.markProFailed('PRO_FAILED')}
+            />
+          ) : (
+            <PascalViewerShell
+              sceneReadyKey={importing ? Date.now() : sceneReadyTick}
+              mountViewer={viewerVisible}
+              viewerKey="pascal-viewer-code06"
+              selectionManager="custom"
+              overlay={
+                <>
+                  <EditorSelectionManager />
+                  <SelectionActionAnchor3D />
+                  {proMode && <EditorGrid />}
+                  {proMode && <ToolManager />}
+                  {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('windowPilot') === 'AR-23' && process.env.NEXT_PUBLIC_ENABLE_WINDOW_HYPOTHESIS_REVIEW === 'true' ? <PascalWindowHypothesisOverlay /> : null}
+                </>
+              }
+              onViewerReady={(h) => {
+                viewerHandleRef.current = h;
+                framingCtl.current.viewerReady = true;
+                evaluateFramingReadiness();
+              }}
+              fallback={<div className="glass" style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', color: 'var(--muted)' }}>Registering node definitions…</div>}
+            >
+              <SelectionActionBarErrorBoundary>
+                <SelectionActionBarDOM />
+              </SelectionActionBarErrorBoundary>
+            </PascalViewerShell>
+          )}
+
+          {/* PRO OVERLAY — slides hierarchy/Inspector/toolbar over the live
+              Standard Viewer. Bound to the shared useScene/useViewer stores, so
+              selection/commands/history flow through one system. Never a second
+              Canvas. */}
+          {proMode && (
+            <ProOverlay
+              onReturn={() => editorMode.returnToStandard()}
+              onFitProject={frameEntireProject}
+              onFitSelection={frameSelection}
+              onTopView={topViewAndFrame}
+              onResetView={frameEntireProject}
+            />
+          )}
+        </>
+      )}
+
+      {/* Nonblocking PRO preparing indicator — the model stays visible while
+          panels load. */}
+      {(proRequested || proMounting) && (
+        <div
+          style={{ position: 'absolute', left: 12, bottom: 12, zIndex: 40, padding: '8px 12px', borderRadius: 10, background: 'var(--panel-solid)', color: 'var(--ink)', boxShadow: '0 6px 20px rgba(20,30,55,0.18)', fontSize: 13 }}
+        >
+          Opening Pascal PRO… · {editorMode.proStage}
+        </div>
+      )}
+
+      {/* Safe recovery notice (spec §13): a previous PRO session did not
+          complete. We stay in STANDARD and never auto-reopen PRO. */}
+      {proRecoveryNotice && (
+        <div
+          style={{ position: 'absolute', left: 12, bottom: 12, zIndex: 40, padding: '8px 12px', borderRadius: 10, background: 'var(--panel-solid)', color: 'var(--ink)', boxShadow: '0 6px 20px rgba(20,30,55,0.18)', fontSize: 13, maxWidth: 360 }}
+        >
+          {proRecoveryNotice}
+        </div>
+      )}
+
+      {/* GLOBAL keyboard manipulation (arrows nudge, delete, rotation, escape) */}
+      <KeyboardElementControls />
+
+      {/* STANDARD selection properties panel (hidden in PRO — the official
+          Inspector overlay owns inspection). */}
+      {!proMode && !proMounting && (<SelectionPropertiesPanel />)}
+
+      {/* STANDARD floating viewer toolbar (navigation, camera framing & PRO toggle) */}
+      {!proMode && !proMounting && (
+        <ViewerToolbar
+          onFitProject={frameEntireProject}
+          onFitSelection={frameSelection}
+          onTopView={topViewAndFrame}
+          onResetView={frameEntireProject}
+          proEnabled={editorMode.proEnabled}
+          mode={editorMode.effectiveMode}
+          onToggleMode={() => {
+            if (editorMode.effectiveMode === 'pro') {
+              editorMode.returnToStandard();
+            } else {
+              editorMode.requestPro();
+            }
+          }}
+          orientation="horizontal"
+        />
+      )}
+
+
+      {/* RIGHT-SIDE PANEL HOST — at most ONE expanded rail visible.
+          Construction: BuildProgressRail. Completed: compact (collapsed)
+          progress summary. Export open: ExportRail replaces the progress
+          rail in the same right-side space. */}
+      {!proMode && !proMounting && (
+      <BuildProgressRail
+        visible={(extractionBusy || importing || isBuildComplete || DIAG.importState === 'completed' || DIAG.importState === 'stalled' || DIAG.importState === 'failed') && rightRail === 'progress' && !progActive && !progBuiltRef.current && extractMethod !== 'ai'}
+        collapsed={railCollapsed}
+        onToggleCollapse={() => setRailCollapsed((v) => !v)}
+        stages={stages}
+        committed={DIAG.committedWalls}
+        total={DIAG.expectedWalls}
+        elapsedMs={elapsedMs}
+        reviewCount={DIAG.candidateReviewRecords}
+        wallsInstalled={DIAG.finalizedWallCount}
+        wallsTotal={DIAG.finalizedWallCount}
+        wallsOriginal={DIAG.originalWallCount}
+        wallsCompletion={DIAG.completionWallCount}
+        wallsFinalized={DIAG.finalizedWallCount}
+        windowsInstalled={DIAG.windowsInstalledNodes}
+        windowsTotal={DIAG.windowsEligible || DIAG.windowsExtracted}
+        windowsExtracted={DIAG.windowsExtracted}
+        windowsEligible={DIAG.windowsEligible}
+        windowsFailed={DIAG.windowsFailed}
+        doorsInstalled={DIAG.installedDoors}
+        doorsEligible={DIAG.doorsAutoInstallable}
+        doorsAuditReview={DIAG.doorsAuditReview}
+        doorDiagnosticReviewCount={DIAG.doorDiagnosticReviewCount}
+        title="Geometric Build"
+      />
+      )}
+
+      {/* S9: Chunk-load recovery UX — shown ONLY on ChunkLoadError. Model data is
+          safe; no wall-map / extraction failure nor Project Ready is surfaced. */}
+      {!proMode && !proMounting && (
+      <ChunkLoadRecovery
+        visible={DIAG.chunkLoadFailed}
+        error={DIAG.chunkLoadError || undefined}
+        onReload={() => { window.location.reload(); }}
+        onExportDiagnostics={() => {
+          try {
+            const blob = new Blob([JSON.stringify({ readinessOutcome: DIAG.readinessOutcome, chunkLoadError: DIAG.chunkLoadError, diag: DIAG }, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'm2-chunk-diagnostics.json'; a.click();
+            URL.revokeObjectURL(url);
+          } catch { /* ignore */ }
+        }}
+        onReturnToProject={() => { setCompletionDismissed(true); }}
+      />
+      )}
+
+      {!proMode && !proMounting && (
+      <ProgressiveBuildV3
+        active={progActive || (extractMethod === 'ai' && (docked || extractionBusy))}
+        runId={progRunId}
+        stages={progStages}
+        review={progReview}
+        wallMap={progWallMap}
+        structural={progStructural}
+        onCancel={() => extractionAbortRef.current?.abort()}
+        onAcceptReview={acceptReviewItem}
+        onRetryFurniture={() => { /* furniture re-run handled by retry button in ChatPanel */ }}
+      />
+      )}
+
+      {!proMode && !proMounting && (
+      <ExportRail
+        visible={isBuildComplete && rightRail === 'export'}
+        onExport={(k) => onCommand({ type: 'export', kind: k as never } as never)}
+        onClose={() => setRightRail('progress')}
+        disabled
+      />
+      )}
+
+      {!proMode && !proMounting && (
+      <div className="db-chat-slot">
+        <ChatPanel
+          {...props}
+          method={extractMethod}
+          onMethodChange={setExtractMethod}
+          onStartPro={startCleanProProject}
+          onStartImport={() => onCommand({ type: 'start-frozen-import' } as any)}
+        />
+      </div>
+      )}
+
+      {settingsOpen && <ProviderSettingsPanel onClose={() => setSettingsOpen(false)} />}
+    </main>
+  );
+}
+

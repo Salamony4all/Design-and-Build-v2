@@ -1,0 +1,38 @@
+{
+  "repositoryRoot": "C:\\Users\\Mohamad60025\\Desktop\\Design And Build - Clean",
+  "packageManager": "pnpm@10.32.1",
+  "nodeVersion": "v24.10.0",
+  "pnpmVersion": "10.32.1",
+  "currentBuildFailure": {
+    "command": "pnpm --filter design-build-editor build",
+    "exitCode": 1,
+    "stage": "Collecting page data",
+    "route": "/api/extraction/mupdf",
+    "error": "TypeError: a is not a function",
+    "cause": "MuPDF WASM bootstrap inlined into emitted route chunk and evaluated at build-time page-data collection"
+  },
+  "protectedSourceFileCount": {
+    "trackedFilesTotal": 2605,
+    "typescriptSourceFiles": 742
+  },
+  "excludedGeneratedPaths": [
+    "node_modules/",
+    ".next/",
+    "dist/",
+    "build/",
+    "coverage/",
+    ".turbo/",
+    "*.tsbuildinfo",
+    ".env",
+    "*.log",
+    "pagechunk.js",
+    "nul",
+    "c6_*",
+    "out_get.json",
+    "ai_post_result.json",
+    "tmp/",
+    ".data/",
+    "archive/"
+  ],
+  "baselineCommit": "1ea78369740820deffc791bc9d65819ad2a43d83"
+}

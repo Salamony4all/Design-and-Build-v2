@@ -1,0 +1,2478 @@
+{
+  "file": "CODE_06 1 room .pdf",
+  "timestamp": "2026-07-22T19:42:47.041Z",
+  "schemaVersion": "0.9.1",
+  "entities": [
+    {
+      "id": "wall_1",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        2,
+        1.4,
+        1.6625
+      ],
+      "size": [
+        2,
+        2.8,
+        0.2
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            1,
+            1.6625
+          ],
+          [
+            3,
+            1.6625
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_2",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        8.5,
+        1.4,
+        1.68984375
+      ],
+      "size": [
+        9,
+        2.8,
+        0.2
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            4,
+            1.68984375
+          ],
+          [
+            13,
+            1.68984375
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_3",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        11,
+        1.4,
+        15.740625000000001
+      ],
+      "size": [
+        4,
+        2.8,
+        0.2
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            9,
+            15.740625000000001
+          ],
+          [
+            13,
+            15.740625000000001
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_4",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        4,
+        1.4,
+        11.0875
+      ],
+      "size": [
+        6.002551540803294,
+        2.8,
+        0.2
+      ],
+      "rotation": -0.029158400245143972,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            1,
+            11
+          ],
+          [
+            7,
+            11.175
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_5",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        3.5,
+        1.4,
+        6.178906250000001
+      ],
+      "size": [
+        5.002021319942194,
+        2.8,
+        0.2
+      ],
+      "rotation": -0.028429837996752402,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            1,
+            6.1078125000000005
+          ],
+          [
+            6,
+            6.25
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_6",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        13.5,
+        1.4,
+        6.0546875
+      ],
+      "size": [
+        13,
+        2.8,
+        0.2
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            7,
+            6.0546875
+          ],
+          [
+            20,
+            6.0546875
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_7",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        2,
+        1.4,
+        7.3187500000000005
+      ],
+      "size": [
+        2,
+        2.8,
+        0.1
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            1,
+            7.3187500000000005
+          ],
+          [
+            3,
+            7.3187500000000005
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_8",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        5,
+        1.4,
+        8.49375
+      ],
+      "size": [
+        2,
+        2.8,
+        0.1
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            4,
+            8.49375
+          ],
+          [
+            6,
+            8.49375
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_9",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        2,
+        1.4,
+        9.799999999999999
+      ],
+      "size": [
+        2,
+        2.8,
+        0.1
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            1,
+            9.799999999999999
+          ],
+          [
+            3,
+            9.799999999999999
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_10",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        2,
+        1.4,
+        8.799999999999999
+      ],
+      "size": [
+        2,
+        2.8,
+        0.1
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            1,
+            8.799999999999999
+          ],
+          [
+            3,
+            8.799999999999999
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_11",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        2,
+        1.4,
+        10.899999999999999
+      ],
+      "size": [
+        2.009975124224178,
+        2.8,
+        0.1
+      ],
+      "rotation": 0.09966865249116255,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            1,
+            11
+          ],
+          [
+            3,
+            10.799999999999999
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_12",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        23,
+        1.4,
+        1.7419921874999997
+      ],
+      "size": [
+        8.001340992116205,
+        2.8,
+        0.2
+      ],
+      "rotation": -0.018308500923480492,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            19,
+            1.6687499999999997
+          ],
+          [
+            27,
+            1.815234375
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_13",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        20,
+        1.4,
+        15.740234375
+      ],
+      "size": [
+        10.000714360470784,
+        2.8,
+        0.2
+      ],
+      "rotation": -0.011952555772464271,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            15,
+            15.68046875
+          ],
+          [
+            25,
+            15.8
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_14",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        18.5,
+        1.4,
+        11.6125
+      ],
+      "size": [
+        7,
+        2.8,
+        0.2
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            15,
+            11.6125
+          ],
+          [
+            22,
+            11.6125
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_15",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        24,
+        1.4,
+        5.915625
+      ],
+      "size": [
+        6,
+        2.8,
+        0.2
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            21,
+            5.915625
+          ],
+          [
+            27,
+            5.915625
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_16",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        23.5,
+        1.4,
+        9.5
+      ],
+      "size": [
+        1.0198039027185568,
+        2.8,
+        0.2
+      ],
+      "rotation": -0.19739555984988008,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            23,
+            9.4
+          ],
+          [
+            24,
+            9.6
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_17",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        23.5,
+        1.4,
+        10.5
+      ],
+      "size": [
+        1.0198039027185568,
+        2.8,
+        0.2
+      ],
+      "rotation": -0.19739555984988008,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            23,
+            10.4
+          ],
+          [
+            24,
+            10.6
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_18",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        13.5,
+        1.4,
+        2.75
+      ],
+      "size": [
+        3,
+        2.8,
+        0.098
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            12,
+            2.75
+          ],
+          [
+            15,
+            2.75
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_19",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        26.5,
+        1.4,
+        5.262499999999999
+      ],
+      "size": [
+        1,
+        2.8,
+        0.098
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            26,
+            5.262499999999999
+          ],
+          [
+            27,
+            5.262499999999999
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_20",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        26.5,
+        1.4,
+        7.575
+      ],
+      "size": [
+        1.0111874208078344,
+        2.8,
+        0.098
+      ],
+      "rotation": -0.14888994760949759,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            26,
+            7.5
+          ],
+          [
+            27,
+            7.65
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_21",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        23,
+        1.4,
+        8.498437500000001
+      ],
+      "size": [
+        2,
+        2.8,
+        0.1
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            22,
+            8.498437500000001
+          ],
+          [
+            24,
+            8.498437500000001
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_22",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        2,
+        1.4,
+        8.165624999999999
+      ],
+      "size": [
+        2,
+        2.8,
+        0.2
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            1,
+            8.165624999999999
+          ],
+          [
+            3,
+            8.165624999999999
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_23",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        33.5,
+        1.4,
+        -0.40937500000000004
+      ],
+      "size": [
+        1,
+        2.8,
+        0.1
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            33,
+            -0.40937500000000004
+          ],
+          [
+            34,
+            -0.40937500000000004
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_24",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        35,
+        1.4,
+        -2.0375
+      ],
+      "size": [
+        2,
+        2.8,
+        0.3
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            34,
+            -2.0375
+          ],
+          [
+            36,
+            -2.0375
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_25",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        34,
+        1.4,
+        13.45
+      ],
+      "size": [
+        6,
+        2.8,
+        0.3
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            31,
+            13.45
+          ],
+          [
+            37,
+            13.45
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_26",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        33,
+        1.4,
+        21.75
+      ],
+      "size": [
+        2,
+        2.8,
+        0.2
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            32,
+            21.75
+          ],
+          [
+            34,
+            21.75
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_27",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        8,
+        1.4,
+        15.5953125
+      ],
+      "size": [
+        2.0210054157831943,
+        2.8,
+        0.2
+      ],
+      "rotation": -0.14430247310067024,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            7,
+            15.45
+          ],
+          [
+            9,
+            15.740625000000001
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_28",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        12,
+        1.4,
+        6.0546875
+      ],
+      "size": [
+        4,
+        2.8,
+        0.098
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            10,
+            6.0546875
+          ],
+          [
+            14,
+            6.0546875
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_29",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        1.5,
+        1.4,
+        11
+      ],
+      "size": [
+        1,
+        2.8,
+        0.3
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            1,
+            11
+          ],
+          [
+            2,
+            11
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_30",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        6.5,
+        1.4,
+        1.68984375
+      ],
+      "size": [
+        3,
+        2.8,
+        0.3
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            5,
+            1.68984375
+          ],
+          [
+            8,
+            1.68984375
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_31",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        18.5,
+        1.4,
+        1.6687499999999997
+      ],
+      "size": [
+        1,
+        2.8,
+        0.2
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            18,
+            1.6687499999999997
+          ],
+          [
+            19,
+            1.6687499999999997
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_32",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        17.5,
+        1.4,
+        6.0546875
+      ],
+      "size": [
+        3,
+        2.8,
+        0.2
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            16,
+            6.0546875
+          ],
+          [
+            19,
+            6.0546875
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_33",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        15.5,
+        1.4,
+        6.22734375
+      ],
+      "size": [
+        1.057941738781607,
+        2.8,
+        0.1
+      ],
+      "rotation": 0.33249278480031036,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            15,
+            6.4
+          ],
+          [
+            16,
+            6.0546875
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_34",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        5.5,
+        1.4,
+        6.25
+      ],
+      "size": [
+        1,
+        2.8,
+        0.4
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            5,
+            6.25
+          ],
+          [
+            6,
+            6.25
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_35",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        25.5,
+        1.4,
+        7.5
+      ],
+      "size": [
+        1,
+        2.8,
+        0.1
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            25,
+            7.5
+          ],
+          [
+            26,
+            7.5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_36",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        22.5,
+        1.4,
+        9.4
+      ],
+      "size": [
+        1,
+        2.8,
+        0.1
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            22,
+            9.4
+          ],
+          [
+            23,
+            9.4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_37",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        22.5,
+        1.4,
+        10.4
+      ],
+      "size": [
+        1,
+        2.8,
+        0.1
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            22,
+            10.4
+          ],
+          [
+            23,
+            10.4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "wall_38",
+      "kind": "wall",
+      "status": "validated",
+      "position": [
+        24,
+        1.4,
+        15.8
+      ],
+      "size": [
+        2,
+        2.8,
+        0.4
+      ],
+      "rotation": 0,
+      "confidence": 0.98,
+      "metadata": {
+        "points": [
+          [
+            23,
+            15.8
+          ],
+          [
+            25,
+            15.8
+          ]
+        ]
+      }
+    },
+    {
+      "id": "opening_0001",
+      "kind": "window",
+      "status": "validated",
+      "position": [
+        -0.2129,
+        1.5,
+        10.6213
+      ],
+      "size": [
+        1.423,
+        1.2,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_0280",
+      "metadata": {
+        "openingKind": "window"
+      }
+    },
+    {
+      "id": "opening_0002",
+      "kind": "door",
+      "status": "validated",
+      "position": [
+        28.3465,
+        1.05,
+        7.7653
+      ],
+      "size": [
+        2.209,
+        2.1,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.85,
+      "hostWallId": "wall_1_0280",
+      "metadata": {
+        "openingKind": "door"
+      }
+    },
+    {
+      "id": "opening_0003",
+      "kind": "window",
+      "status": "validated",
+      "position": [
+        2.5288,
+        1.5,
+        5.6942
+      ],
+      "size": [
+        1,
+        1.2,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_0538",
+      "metadata": {
+        "openingKind": "window"
+      }
+    },
+    {
+      "id": "opening_arc_0004",
+      "kind": "door",
+      "status": "validated",
+      "position": [
+        -2.1269,
+        1.05,
+        9.979
+      ],
+      "size": [
+        0.566,
+        2.1,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_0829",
+      "metadata": {
+        "openingKind": "door"
+      }
+    },
+    {
+      "id": "opening_arc_0005",
+      "kind": "door",
+      "status": "validated",
+      "position": [
+        -1.7268,
+        1.05,
+        9.979
+      ],
+      "size": [
+        0.566,
+        2.1,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_0829",
+      "metadata": {
+        "openingKind": "door"
+      }
+    },
+    {
+      "id": "opening_arc_0006",
+      "kind": "door",
+      "status": "validated",
+      "position": [
+        -1.7268,
+        1.05,
+        10.379
+      ],
+      "size": [
+        0.566,
+        2.1,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_0829",
+      "metadata": {
+        "openingKind": "door"
+      }
+    },
+    {
+      "id": "opening_arc_0007",
+      "kind": "door",
+      "status": "validated",
+      "position": [
+        14.0084,
+        1.05,
+        -1.6203
+      ],
+      "size": [
+        0.566,
+        2.1,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_1012",
+      "metadata": {
+        "openingKind": "door"
+      }
+    },
+    {
+      "id": "opening_arc_0008",
+      "kind": "door",
+      "status": "validated",
+      "position": [
+        14.4085,
+        1.05,
+        -1.6203
+      ],
+      "size": [
+        0.566,
+        2.1,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_1011",
+      "metadata": {
+        "openingKind": "door"
+      }
+    },
+    {
+      "id": "opening_arc_0009",
+      "kind": "door",
+      "status": "validated",
+      "position": [
+        13.4666,
+        1.05,
+        -2.268
+      ],
+      "size": [
+        0.566,
+        2.1,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_1010",
+      "metadata": {
+        "openingKind": "door"
+      }
+    },
+    {
+      "id": "opening_arc_0010",
+      "kind": "door",
+      "status": "validated",
+      "position": [
+        13.4666,
+        1.05,
+        -1.8679
+      ],
+      "size": [
+        0.566,
+        2.1,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_1011",
+      "metadata": {
+        "openingKind": "door"
+      }
+    },
+    {
+      "id": "opening_arc_0011",
+      "kind": "door",
+      "status": "validated",
+      "position": [
+        13.0665,
+        1.05,
+        -1.8679
+      ],
+      "size": [
+        0.566,
+        2.1,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_1012",
+      "metadata": {
+        "openingKind": "door"
+      }
+    },
+    {
+      "id": "opening_arc_0012",
+      "kind": "door",
+      "status": "validated",
+      "position": [
+        13.0665,
+        1.05,
+        -2.268
+      ],
+      "size": [
+        0.566,
+        2.1,
+        0.12
+      ],
+      "rotation": 0,
+      "confidence": 0.82,
+      "hostWallId": "wall_1_1011",
+      "metadata": {
+        "openingKind": "door"
+      }
+    },
+    {
+      "id": "bed_1",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        1.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_2",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        1.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_3",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        13.5,
+        0,
+        4.6
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999996
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_4",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        5,
+        0,
+        8
+      ],
+      "size": [
+        2,
+        0.6,
+        1
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 2000,
+          "depth": 1000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_5",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        5,
+        0,
+        8.95
+      ],
+      "size": [
+        2,
+        0.6,
+        0.9000000000000004
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 2000,
+          "depth": 900,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_6",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        5,
+        0,
+        9.95
+      ],
+      "size": [
+        2,
+        0.6,
+        0.9000000000000004
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 2000,
+          "depth": 900,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_7",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        5,
+        0,
+        10.95
+      ],
+      "size": [
+        2,
+        0.6,
+        0.9000000000000004
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 2000,
+          "depth": 900,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_8",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        2,
+        0,
+        10.95
+      ],
+      "size": [
+        2,
+        0.6,
+        0.9000000000000004
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 2000,
+          "depth": 900,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_9",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        2,
+        0,
+        9.95
+      ],
+      "size": [
+        2,
+        0.6,
+        0.9000000000000004
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 2000,
+          "depth": 900,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_10",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        2,
+        0,
+        8.95
+      ],
+      "size": [
+        2,
+        0.6,
+        0.9000000000000004
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 2000,
+          "depth": 900,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_11",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        2,
+        0,
+        7.95
+      ],
+      "size": [
+        2,
+        0.6,
+        0.9000000000000004
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 2000,
+          "depth": 900,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_12",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        3.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_13",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        2.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_14",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        5.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_15",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        8.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_16",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        10.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_17",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        24.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_18",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        22.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_19",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        19.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_20",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        17.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_21",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        3.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_22",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        2.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_23",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        5.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_24",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        8.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_25",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        10.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_26",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        24.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_27",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        22.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_28",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        19.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_29",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        17.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_30",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        15.5,
+        0,
+        14.4
+      ],
+      "size": [
+        1,
+        0.6,
+        2
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_31",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        15.5,
+        0,
+        2.8
+      ],
+      "size": [
+        1,
+        0.6,
+        1.9999999999999998
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 1000,
+          "depth": 2000,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "bed_32",
+      "kind": "bed",
+      "status": "validated",
+      "position": [
+        36,
+        0,
+        22.65
+      ],
+      "size": [
+        2,
+        0.6,
+        1.0999999999999979
+      ],
+      "rotation": 0,
+      "confidence": 0.94,
+      "metadata": {
+        "catalogQuery": [
+          "single bed",
+          "bed"
+        ],
+        "package": "Furniture",
+        "dimensionsMm": {
+          "width": 2000,
+          "depth": 1100,
+          "height": 600
+        }
+      }
+    },
+    {
+      "id": "toilet_33",
+      "kind": "toilet",
+      "status": "validated",
+      "position": [
+        -1.7258,
+        0,
+        15.4665
+      ],
+      "size": [
+        0.4996,
+        0.8,
+        0.4996
+      ],
+      "rotation": 0,
+      "confidence": 0.88,
+      "metadata": {
+        "catalogQuery": [
+          "toilet",
+          "wc"
+        ],
+        "package": "Fit-out"
+      }
+    },
+    {
+      "id": "toilet_34",
+      "kind": "toilet",
+      "status": "validated",
+      "position": [
+        26.5307,
+        0,
+        -1.1451
+      ],
+      "size": [
+        0.5017,
+        0.8,
+        0.4996
+      ],
+      "rotation": 0,
+      "confidence": 0.88,
+      "metadata": {
+        "catalogQuery": [
+          "toilet",
+          "wc"
+        ],
+        "package": "Fit-out"
+      }
+    },
+    {
+      "id": "toilet_35",
+      "kind": "toilet",
+      "status": "validated",
+      "position": [
+        -1.7258,
+        0,
+        11.4681
+      ],
+      "size": [
+        0.4996,
+        0.8,
+        0.4996
+      ],
+      "rotation": 0,
+      "confidence": 0.88,
+      "metadata": {
+        "catalogQuery": [
+          "toilet",
+          "wc"
+        ],
+        "package": "Fit-out"
+      }
+    },
+    {
+      "id": "toilet_36",
+      "kind": "toilet",
+      "status": "validated",
+      "position": [
+        -1.7258,
+        0,
+        1.6679
+      ],
+      "size": [
+        0.4996,
+        0.8,
+        0.4995
+      ],
+      "rotation": 0,
+      "confidence": 0.88,
+      "metadata": {
+        "catalogQuery": [
+          "toilet",
+          "wc"
+        ],
+        "package": "Fit-out"
+      }
+    },
+    {
+      "id": "toilet_37",
+      "kind": "toilet",
+      "status": "validated",
+      "position": [
+        -1.7258,
+        0,
+        5.6673
+      ],
+      "size": [
+        0.4996,
+        0.8,
+        0.4995
+      ],
+      "rotation": 0,
+      "confidence": 0.88,
+      "metadata": {
+        "catalogQuery": [
+          "toilet",
+          "wc"
+        ],
+        "package": "Fit-out"
+      }
+    },
+    {
+      "id": "toilet_38",
+      "kind": "toilet",
+      "status": "validated",
+      "position": [
+        12.531,
+        0,
+        -1.1451
+      ],
+      "size": [
+        0.5016,
+        0.8,
+        0.4996
+      ],
+      "rotation": 0,
+      "confidence": 0.88,
+      "metadata": {
+        "catalogQuery": [
+          "toilet",
+          "wc"
+        ],
+        "package": "Fit-out"
+      }
+    },
+    {
+      "id": "toilet_39",
+      "kind": "toilet",
+      "status": "validated",
+      "position": [
+        21.6305,
+        0,
+        -1.1451
+      ],
+      "size": [
+        0.5017,
+        0.8,
+        0.4996
+      ],
+      "rotation": 0,
+      "confidence": 0.88,
+      "metadata": {
+        "catalogQuery": [
+          "toilet",
+          "wc"
+        ],
+        "package": "Fit-out"
+      }
+    }
+  ],
+  "audit": {
+    "raw": 187,
+    "inRoi": 171,
+    "validated": 38,
+    "furnitureCount": 0,
+    "rawOpenings": 12
+  },
+  "seeds": [
+    {
+      "code": "6 BED UNIT",
+      "text": "6 BED UNIT",
+      "xM": 53.413314626585304,
+      "yM": -71.93487180132126
+    }
+  ],
+  "roi": [
+    52.8133146265853,
+    0,
+    54.013314626585306,
+    -71.33487180132127
+  ]
+}

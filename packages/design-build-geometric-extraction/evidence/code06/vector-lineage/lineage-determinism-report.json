@@ -1,0 +1,41 @@
+{
+  "lineageHashRun1": "d2a0c395c6fcc8c344fe208e2ab885ba5447d370d51305cbe4902dda756ba832",
+  "lineageHashRun2": "d2a0c395c6fcc8c344fe208e2ab885ba5447d370d51305cbe4902dda756ba832",
+  "fullSha256Length": 64,
+  "match": true,
+  "lineageStats": {
+    "operationCount": 63826,
+    "subpathCount": 63885,
+    "segmentCount": 66405,
+    "lineSegmentCount": 63381,
+    "cubicSegmentCount": 3024,
+    "closeSegmentCount": 0,
+    "closedSubpathCount": 676,
+    "missingOperationBounds": 0,
+    "missingSubpathBounds": 0,
+    "missingSegmentBounds": 14,
+    "nonFiniteOperationBounds": 0,
+    "nonFiniteSubpathBounds": 0,
+    "nonFiniteSegmentBounds": 0,
+    "zeroPointOperationBounds": 16945,
+    "zeroPointSubpathBounds": 16945,
+    "zeroPointSegmentBounds": 16997,
+    "zeroWidthNonZeroHeightBounds": 57397,
+    "zeroHeightNonZeroWidthBounds": 43117,
+    "moveCommandsWithoutDrawnGeometry": 0,
+    "closeCommands": 179,
+    "zeroLengthLineSegments": 16997,
+    "operationsWithNoDrawableSegments": 16945,
+    "subpathsWithNoDrawableSegments": 16945
+  },
+  "mappingStats": {
+    "muVectorCount": 127711,
+    "vectorLineageRecordCount": 127711,
+    "referenceEdgeCount": 127711,
+    "vectorsWithOneOperation": 127711,
+    "vectorsWithMultipleOperations": 0,
+    "vectorsWithNoLineage": 0,
+    "operationsWithNoVector": 0,
+    "unmappedVectorReferences": 0
+  }
+}

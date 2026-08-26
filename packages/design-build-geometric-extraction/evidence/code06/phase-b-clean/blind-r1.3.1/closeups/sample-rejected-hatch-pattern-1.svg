@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="202.80001831054688 400.54000091552734 45.63996887207031 266.7999688720703" width="300" height="200">
+  <rect x="202.80001831054688" y="400.54000091552734" width="45.63996887207031" height="266.7999688720703" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <text x="222.80001831054688" y="415.54000091552734" font-size="7" font-family="monospace" fill="#222" font-weight="bold">Rejected Hatch Pattern: c_v3-grammar-v1_fr12_feb81a39ad1a</text>
+  <text x="222.80001831054688" y="657.3399697875976" font-size="6" font-family="monospace" fill="#999">ID: c_v3-grammar-v1_fr12_feb81a39ad1a | Wall: fr12</text>
+  <rect x="222.80001831054688" y="420.54000091552734" width="5.6399688720703125" height="226.79996887207028" fill="none" stroke="#00cc00" stroke-width="2" stroke-dasharray="none"/>
+  <text x="226.80001831054688" y="432.54000091552734" font-size="6" font-family="monospace" fill="#00cc00">Verdict: ACCEPTED | Width: 221.2pt</text>
+</svg>

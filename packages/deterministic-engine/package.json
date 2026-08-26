@@ -1,0 +1,29 @@
+{
+  "name": "@pascal-app/deterministic-engine",
+  "version": "0.1.0",
+  "description": "Track 2 Deterministic Ingestion and openBIM Compiler",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./guide-trace": "./src/guide-trace/index.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pascal-app/layout-intelligence": "workspace:*",
+    "zod": "^4.3.6"
+  },
+  "peerDependencies": {
+    "@pascal-app/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@pascal-app/core": "workspace:*",
+    "@pascal-app/layout-intelligence": "workspace:*",
+    "@pascal/typescript-config": "workspace:*",
+    "@types/node": "^22.19.12",
+    "typescript": "5.9.3",
+    "vitest": "^4.1.10"
+  }
+
+}

@@ -1,0 +1,1555 @@
+{
+  "method": "render-space pixel ink-signature audit against the real CODE-06 PDF",
+  "renderDpi": 300,
+  "raster": {
+    "width": 9933,
+    "height": 7016
+  },
+  "inkThreshold": 240,
+  "pxPerMetre": 238.0469,
+  "gates": {
+    "perimeterInkRatio": ">= 0.90 for CONFIRMED (footprint outline must be drawn)",
+    "cornerInk": "4/4 corners must carry ink (rectangles)",
+    "radialSizeAgreement": ">= 0.75 of axis rays hit ink at the reported half-size",
+    "haloInkRatio": "<= 0.55 (object must be discrete, not a hole in dense hatch)"
+  },
+  "summary": {
+    "accepted": 28,
+    "confirmed": 28,
+    "weak": 0,
+    "failed": 0,
+    "visualConfirmRate": 1
+  },
+  "acceptedAudit": [
+    {
+      "deterministicExtractionId": "col_8955546e",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 6.733968,
+        "y": 7.032228
+      },
+      "widthM": 0.470496,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1083,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_8769cd66",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 6.733968,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470496,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.075,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_c58c8ae6",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 8.619101,
+        "y": 7.032228
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1083,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_baa4de9a",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 8.619101,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.472596,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0917,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_bbe2e056",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 10.504234,
+        "y": 7.032228
+      },
+      "widthM": 0.470496,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.175,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_bea25cf2",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 10.504234,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470496,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1583,
+      "cornerInk": 4,
+      "radialSizeAgreement": 0.75,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_2c869a16",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 11.819101,
+        "y": 7.032228
+      },
+      "widthM": 0.470495,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.2083,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_379fe3ea",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 11.819101,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1833,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_f36b9364",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 13.704234,
+        "y": 7.032228
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1833,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_64f235f2",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 13.704234,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.472596,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.2,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_4d02e473",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 13.941582,
+        "y": 12.215031
+      },
+      "widthM": 0.695242,
+      "depthM": 0.695241,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0333,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_1a547bbb",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 15.367772,
+        "y": 12.215031
+      },
+      "widthM": 0.695242,
+      "depthM": 0.695241,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.025,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_52b907f6",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 15.690187,
+        "y": 7.032228
+      },
+      "widthM": 0.470495,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.175,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_6ee9b2ea",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 15.690187,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1917,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_0889f2ca",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 20.62619,
+        "y": 7.032228
+      },
+      "widthM": 0.470495,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1167,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_8bbfa4c4",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 20.62619,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0667,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_a35d46e3",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 20.948605,
+        "y": 12.215031
+      },
+      "widthM": 0.695242,
+      "depthM": 0.695241,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0167,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_d0bf599b",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 22.374795,
+        "y": 12.215031
+      },
+      "widthM": 0.695242,
+      "depthM": 0.695241,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0667,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_39151dbd",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 22.611093,
+        "y": 7.032228
+      },
+      "widthM": 0.470495,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_401f99f3",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 22.611093,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0667,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_80ac5c9a",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 24.496226,
+        "y": 7.032228
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.175,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_7192305d",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 24.496226,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.472596,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.2,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_59fcebde",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 25.811094,
+        "y": 7.032228
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.2833,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_d5fc597a",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 25.811094,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.472596,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.2667,
+      "cornerInk": 4,
+      "radialSizeAgreement": 0.75,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_e7215b74",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 27.696226,
+        "y": 7.032228
+      },
+      "widthM": 0.470495,
+      "depthM": 0.470494,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.2,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_8866978a",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 27.696226,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470494,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1917,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_862f8c76",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 29.58136,
+        "y": 7.032228
+      },
+      "widthM": 0.472596,
+      "depthM": 0.470495,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1667,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_a4c233ea",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 29.58136,
+        "y": 20.055924
+      },
+      "widthM": 0.472596,
+      "depthM": 0.472596,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1833,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    }
+  ],
+  "reviewAudit": [
+    {
+      "deterministicExtractionId": "col_8ac0a2fb",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 6.001969,
+        "y": 7.015425
+      },
+      "widthM": 0.741451,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.45,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_71fe9af7",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 6.001969,
+        "y": 20.071677
+      },
+      "widthM": 0.741451,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.4583,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_cf35e7e0",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 6.037902,
+        "y": 12.898509
+      },
+      "widthM": 0.29069,
+      "depthM": 0.29069,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0167,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_3243769f",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 7.095241,
+        "y": 13.88067
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0333,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_a4d7c0d7",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 7.095241,
+        "y": 14.872072
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0333,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_aaf827a7",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 7.095241,
+        "y": 15.864522
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0417,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_76a51bef",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 7.888152,
+        "y": 7.015425
+      },
+      "widthM": 0.74145,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.325,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_f1e01b67",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 7.888152,
+        "y": 20.071677
+      },
+      "widthM": 0.74145,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.3083,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_e504a807",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 8.499377,
+        "y": 13.88067
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0417,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_999a5e3f",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 8.499377,
+        "y": 14.872072
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0333,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_261f9c1f",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 8.499377,
+        "y": 15.864522
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0417,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_8039b183",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 9.772235,
+        "y": 7.015425
+      },
+      "widthM": 0.741451,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.4333,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_673ea067",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 9.772235,
+        "y": 20.071677
+      },
+      "widthM": 0.741451,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.4083,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_2e05633f",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 10.072596,
+        "y": 11.433673
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0583,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_d8e9b807",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 11.311848,
+        "y": 10.258484
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.075,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_ea76fdf7",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 11.311848,
+        "y": 16.807614
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0333,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_d10dcf3f",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 12.5511,
+        "y": 7.015425
+      },
+      "widthM": 0.74145,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_044df997",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 12.5511,
+        "y": 20.071677
+      },
+      "widthM": 0.74145,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.1,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_cb9cffe0",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 12.923305,
+        "y": 11.762135
+      },
+      "widthM": 0.64845,
+      "depthM": 0.64845,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.625,
+      "haloInkRatio": 0.1833,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.63)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_a50adeb2",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 12.92339,
+        "y": 12.469231
+      },
+      "widthM": 0.648818,
+      "depthM": 0.648818,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6667,
+      "haloInkRatio": 0.1583,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.67)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_319fcfb8",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 13.587711,
+        "y": 11.233329
+      },
+      "widthM": 0.648646,
+      "depthM": 0.648646,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6167,
+      "haloInkRatio": 0.125,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.62)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_360b811f",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 14.295011,
+        "y": 11.233508
+      },
+      "widthM": 0.64886,
+      "depthM": 0.64886,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6417,
+      "haloInkRatio": 0.2083,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.64)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_a43f3e36",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 14.436232,
+        "y": 7.015425
+      },
+      "widthM": 0.743551,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.3083,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_62e264b3",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 14.436232,
+        "y": 20.071677
+      },
+      "widthM": 0.743551,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.3,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_92852ecf",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 15.009479,
+        "y": 11.23328
+      },
+      "widthM": 0.648386,
+      "depthM": 0.648386,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6583,
+      "haloInkRatio": 0.25,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.66)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_eb8050e6",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 15.716902,
+        "y": 11.233447
+      },
+      "widthM": 0.648982,
+      "depthM": 0.648982,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6667,
+      "haloInkRatio": 0.15,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.67)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_ea6985c5",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 16.393583,
+        "y": 11.77074
+      },
+      "widthM": 0.648646,
+      "depthM": 0.648646,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.625,
+      "haloInkRatio": 0.1583,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.63)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_42b25d36",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 16.393612,
+        "y": 12.477702
+      },
+      "widthM": 0.648842,
+      "depthM": 0.648842,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6667,
+      "haloInkRatio": 0.1,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.67)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_93bf305b",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 16.422185,
+        "y": 7.015425
+      },
+      "widthM": 0.74145,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.3333,
+      "cornerInk": 4,
+      "radialSizeAgreement": 0.75,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_66d83d5f",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 16.422185,
+        "y": 20.071677
+      },
+      "widthM": 0.74145,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.3083,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_1fc3206b",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 19.894191,
+        "y": 7.015425
+      },
+      "widthM": 0.741452,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.5333,
+      "cornerInk": 4,
+      "radialSizeAgreement": 0.75,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_4b49aa40",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 19.894191,
+        "y": 20.071677
+      },
+      "widthM": 0.741452,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.5083,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_3a1c58b5",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 19.922115,
+        "y": 12.477562
+      },
+      "widthM": 0.648556,
+      "depthM": 0.648556,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6917,
+      "haloInkRatio": 0.1833,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.69)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_c9997ba1",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 19.922142,
+        "y": 11.7706
+      },
+      "widthM": 0.64836,
+      "depthM": 0.64836,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.675,
+      "haloInkRatio": 0.225,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.68)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_b412e8d2",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 20.598907,
+        "y": 11.233401
+      },
+      "widthM": 0.648554,
+      "depthM": 0.648554,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6083,
+      "haloInkRatio": 0.1333,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.61)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_93009570",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 21.306153,
+        "y": 11.23346
+      },
+      "widthM": 0.6487,
+      "depthM": 0.6487,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6667,
+      "haloInkRatio": 0.2,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.67)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_6cf65b6b",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 21.879095,
+        "y": 7.015425
+      },
+      "widthM": 0.74145,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.3417,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_e655dda7",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 21.879095,
+        "y": 20.071677
+      },
+      "widthM": 0.74145,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.325,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_9ccecdf5",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 22.02071,
+        "y": 11.233367
+      },
+      "widthM": 0.648498,
+      "depthM": 0.648498,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6583,
+      "haloInkRatio": 0.2083,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.66)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_efaf705b",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 22.727784,
+        "y": 11.2333
+      },
+      "widthM": 0.64884,
+      "depthM": 0.64884,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.675,
+      "haloInkRatio": 0.15,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.68)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_57b50f68",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 23.39261,
+        "y": 12.469348
+      },
+      "widthM": 0.648608,
+      "depthM": 0.648608,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.6667,
+      "haloInkRatio": 0.125,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.67)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_3d654a72",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 23.392695,
+        "y": 11.762253
+      },
+      "widthM": 0.648238,
+      "depthM": 0.648238,
+      "rotationRad": 0,
+      "perimeterInkRatio": 0.625,
+      "haloInkRatio": 0.15,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "FAILED",
+      "notes": [
+        "weak-outline(0.63)"
+      ]
+    },
+    {
+      "deterministicExtractionId": "col_e0ac6e13",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 23.765278,
+        "y": 7.015425
+      },
+      "widthM": 0.741452,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.3167,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_31486e4b",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 23.765278,
+        "y": 20.071677
+      },
+      "widthM": 0.741452,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.3167,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_068512e7",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 24.923663,
+        "y": 10.194421
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_0999b7af",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 25.006629,
+        "y": 16.749854
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0167,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_eee3bb63",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 26.542042,
+        "y": 7.015425
+      },
+      "widthM": 0.741452,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.4417,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_d618732b",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 26.542042,
+        "y": 20.071677
+      },
+      "widthM": 0.741452,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.425,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_a3ded9a7",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 26.593503,
+        "y": 12.40617
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0167,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_4ef57eb7",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 27.833803,
+        "y": 13.88067
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0333,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_333586af",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 27.833803,
+        "y": 14.872072
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0333,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_675aa10f",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 27.833803,
+        "y": 15.864522
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0333,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_9e4a1313",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 28.428225,
+        "y": 7.015425
+      },
+      "widthM": 0.74145,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.125,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_90b73aa2",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 28.428225,
+        "y": 20.071677
+      },
+      "widthM": 0.74145,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0833,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_bb3de91f",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 29.238989,
+        "y": 12.888218
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0417,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_10efc537",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 29.238989,
+        "y": 13.88067
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0417,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_8ac31c9f",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 29.238989,
+        "y": 14.872072
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0333,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_c927c147",
+      "footprintType": "CIRCULAR",
+      "centreProjectM": {
+        "x": 29.238989,
+        "y": 15.864522
+      },
+      "widthM": 0.380682,
+      "depthM": 0.380682,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.0583,
+      "cornerInk": 0,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_054708a3",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 30.313358,
+        "y": 7.015425
+      },
+      "widthM": 0.74355,
+      "depthM": 0.302461,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.25,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    },
+    {
+      "deterministicExtractionId": "col_c68c1a2f",
+      "footprintType": "RECTANGULAR",
+      "centreProjectM": {
+        "x": 30.313358,
+        "y": 20.071677
+      },
+      "widthM": 0.74355,
+      "depthM": 0.302462,
+      "rotationRad": 0,
+      "perimeterInkRatio": 1,
+      "haloInkRatio": 0.2417,
+      "cornerInk": 4,
+      "radialSizeAgreement": 1,
+      "visualVerdict": "CONFIRMED",
+      "notes": []
+    }
+  ]
+}

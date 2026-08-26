@@ -1,0 +1,78 @@
+{
+  "canonicalHash": "65026dba38da6224ea35c83a304b757975a81face29dfe93795a4a8c70717301",
+  "generatedAt": "2026-07-30T00:21:47.031Z",
+  "section5_roiBehavior": {
+    "productionWallsTotal": 70,
+    "productionWallsInsideRoi": 70,
+    "productionWallsOutsideRoi": 0,
+    "coordinateSpace": "Stage A (PDF page units)",
+    "status": "PASS"
+  },
+  "section6_candidateFunnel": {
+    "generatedCandidateHypotheses": 12096,
+    "uniqueHost": 10465,
+    "ambiguousHostReview": 1631,
+    "noHost": 0,
+    "validInsideFiniteWall": 8553,
+    "validWithEndpointTolerance": 1691,
+    "materialExtensionBeyondWall": 1852,
+    "reversedInterval": 0,
+    "zeroWidthInterval": 0,
+    "frameGatePassed": 8544,
+    "openingEvidencePassed": 387,
+    "continuousWallFaceConflict": 3552,
+    "hatchConflict": 328,
+    "doorCurveConflict": 2954,
+    "retain": 373,
+    "review": 11664,
+    "reject": 59,
+    "sumCheck": 12096,
+    "disjointViolation": false
+  },
+  "section7_hostGate": {
+    "retainedWithAmbiguousHost": 0,
+    "retainedWithNoHost": 0,
+    "retainedWithUniqueHost": 373,
+    "status": "PASS"
+  },
+  "section8_intervalEnforcement": {
+    "materialExtensionsRetained": 0,
+    "reversedIntervalsRetained": 0,
+    "zeroWidthIntervalsRetained": 0,
+    "endpointToleranceAdjustmentsRetained": 316,
+    "status": "PASS"
+  },
+  "section9_mergeEvidence": {
+    "totalMergeGroups": 125,
+    "allRetainGroups": 35,
+    "mixedRetainRejectGroups": 22,
+    "allRejectGroups": 10,
+    "unresolvedHostConflictGroups": 58,
+    "evidenceDeletionDetected": false,
+    "status": "PASS"
+  },
+  "section10_openingEvidence": {
+    "retainedByValidJambPair": 362,
+    "retainedByValidSourceWallFaceGap": 25,
+    "retainedByVerifiedFrameBay": 0,
+    "retainedWithNoOpeningEvidence": 0,
+    "status": "PASS"
+  },
+  "section13_phaseAParity": {
+    "acceptedWallCount": 70,
+    "uniquePhysicalWallIds": 70,
+    "geometryHash": "8c825b31b7758856",
+    "evidenceHash": "8c2491f14db76203",
+    "lineageHash": "d2a0c395c6fcc8c344fe208e2ab885ba5447d370d51305cbe4902dda756ba832",
+    "wallCountMatch": true,
+    "uniqueWallIdMatch": true,
+    "status": "PASS"
+  },
+  "exclusionLedgerSummary": {
+    "totalChecked": 4627770,
+    "accepted": 22880,
+    "provisionallyExcluded": 1811820,
+    "permanentlyExcluded": 2793070
+  },
+  "assemblies": 373
+}

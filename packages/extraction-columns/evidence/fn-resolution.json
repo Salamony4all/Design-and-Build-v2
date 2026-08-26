@@ -1,0 +1,781 @@
+{
+  "method": "each unmatched raster cavity mapped to the nearest production rejection within 0.6 m",
+  "unmatchedCount": 48,
+  "consideredAndRejected": 19,
+  "neverConsidered": 29,
+  "reasonHistogram": {
+    "NOT-CONSIDERED": 29,
+    "below-min-size(..)": 19
+  },
+  "rows": [
+    {
+      "centreProjectM": {
+        "x": 17.2109,
+        "y": 8.0362
+      },
+      "widthM": 0.2605,
+      "depthM": 0.6301,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 17.2109,
+        "y": 8.4941
+      },
+      "widthM": 0.2605,
+      "depthM": 0.2521,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 6.0072,
+        "y": 10.2669
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 7.8892,
+        "y": 10.2669
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [
+        {
+          "distanceM": 0.5482,
+          "reason": "below-min-size(0.034m)",
+          "sizeM": [
+            0.034,
+            0.034
+          ],
+          "edges": 8,
+          "verts": 8
+        },
+        {
+          "distanceM": 0.5482,
+          "reason": "below-min-size(0.048m)",
+          "sizeM": [
+            0.048,
+            0.05
+          ],
+          "edges": 8,
+          "verts": 8
+        },
+        {
+          "distanceM": 0.5566,
+          "reason": "below-min-size(0.034m)",
+          "sizeM": [
+            0.034,
+            0.034
+          ],
+          "edges": 8,
+          "verts": 8
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 9.7712,
+        "y": 10.2669
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 12.5521,
+        "y": 10.2669
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [
+        {
+          "distanceM": 0.3465,
+          "reason": "below-min-size(0.042m)",
+          "sizeM": [
+            0.042,
+            0.042
+          ],
+          "edges": 8,
+          "verts": 8
+        },
+        {
+          "distanceM": 0.4541,
+          "reason": "below-min-size(0.040m)",
+          "sizeM": [
+            0.042,
+            0.04
+          ],
+          "edges": 4,
+          "verts": 4
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 14.4383,
+        "y": 10.2669
+      },
+      "widthM": 0.8822,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 16.4169,
+        "y": 10.2669
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [
+        {
+          "distanceM": 0.4566,
+          "reason": "below-min-size(0.040m)",
+          "sizeM": [
+            0.042,
+            0.04
+          ],
+          "edges": 4,
+          "verts": 4
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 19.8994,
+        "y": 10.2669
+      },
+      "widthM": 0.8654,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 21.878,
+        "y": 10.2669
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 23.7642,
+        "y": 10.2669
+      },
+      "widthM": 0.8822,
+      "depthM": 0.5713,
+      "nearestRejections": [
+        {
+          "distanceM": 0.4155,
+          "reason": "below-min-size(0.042m)",
+          "sizeM": [
+            0.042,
+            0.042
+          ],
+          "edges": 8,
+          "verts": 8
+        },
+        {
+          "distanceM": 0.457,
+          "reason": "below-min-size(0.040m)",
+          "sizeM": [
+            0.042,
+            0.04
+          ],
+          "edges": 4,
+          "verts": 4
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 26.541,
+        "y": 10.2669
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 28.4272,
+        "y": 10.2669
+      },
+      "widthM": 0.8822,
+      "depthM": 0.5713,
+      "nearestRejections": [
+        {
+          "distanceM": 0.5482,
+          "reason": "below-min-size(0.050m)",
+          "sizeM": [
+            0.05,
+            0.05
+          ],
+          "edges": 8,
+          "verts": 8
+        },
+        {
+          "distanceM": 0.5482,
+          "reason": "below-min-size(0.034m)",
+          "sizeM": [
+            0.034,
+            0.034
+          ],
+          "edges": 8,
+          "verts": 8
+        },
+        {
+          "distanceM": 0.5567,
+          "reason": "below-min-size(0.034m)",
+          "sizeM": [
+            0.034,
+            0.034
+          ],
+          "edges": 8,
+          "verts": 8
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 30.3092,
+        "y": 10.2669
+      },
+      "widthM": 0.8654,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 17.3285,
+        "y": 10.2165
+      },
+      "widthM": 0.4957,
+      "depthM": 0.2521,
+      "nearestRejections": [
+        {
+          "distanceM": 0.2711,
+          "reason": "below-min-size(0.227m)",
+          "sizeM": [
+            0.42,
+            0.227
+          ],
+          "edges": 4,
+          "verts": 4
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.841,
+        "y": 10.2165
+      },
+      "widthM": 0.4957,
+      "depthM": 0.2521,
+      "nearestRejections": [
+        {
+          "distanceM": 0.267,
+          "reason": "below-min-size(0.227m)",
+          "sizeM": [
+            0.42,
+            0.227
+          ],
+          "edges": 4,
+          "verts": 4
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.3285,
+        "y": 10.4853
+      },
+      "widthM": 0.4957,
+      "depthM": 0.2521,
+      "nearestRejections": [
+        {
+          "distanceM": 0.4356,
+          "reason": "below-min-size(0.227m)",
+          "sizeM": [
+            0.42,
+            0.227
+          ],
+          "edges": 4,
+          "verts": 4
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.841,
+        "y": 10.4853
+      },
+      "widthM": 0.4957,
+      "depthM": 0.2521,
+      "nearestRejections": [
+        {
+          "distanceM": 0.4331,
+          "reason": "below-min-size(0.227m)",
+          "sizeM": [
+            0.42,
+            0.227
+          ],
+          "edges": 4,
+          "verts": 4
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.841,
+        "y": 10.75
+      },
+      "widthM": 0.4957,
+      "depthM": 0.2605,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 19.6558,
+        "y": 10.9978
+      },
+      "widthM": 0.3781,
+      "depthM": 0.4369,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 24.3061,
+        "y": 10.9978
+      },
+      "widthM": 0.3529,
+      "depthM": 0.4369,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 17.841,
+        "y": 11.0188
+      },
+      "widthM": 0.4957,
+      "depthM": 0.2605,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 17.3285,
+        "y": 11.2835
+      },
+      "widthM": 0.4957,
+      "depthM": 0.2521,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 17.841,
+        "y": 11.2835
+      },
+      "widthM": 0.4957,
+      "depthM": 0.2521,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 17.3285,
+        "y": 11.5523
+      },
+      "widthM": 0.4957,
+      "depthM": 0.2521,
+      "nearestRejections": [
+        {
+          "distanceM": 0.5998,
+          "reason": "below-min-size(0.237m)",
+          "sizeM": [
+            0.237,
+            0.302
+          ],
+          "edges": 7,
+          "verts": 8
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.841,
+        "y": 11.5523
+      },
+      "widthM": 0.4957,
+      "depthM": 0.2521,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 6.0072,
+        "y": 16.8202
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 7.8892,
+        "y": 16.8202
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 9.7712,
+        "y": 16.8202
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 12.5521,
+        "y": 16.8202
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 14.4383,
+        "y": 16.8202
+      },
+      "widthM": 0.8822,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 16.4169,
+        "y": 16.8202
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 19.8994,
+        "y": 16.8202
+      },
+      "widthM": 0.8654,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 21.878,
+        "y": 16.8202
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 23.7642,
+        "y": 16.8202
+      },
+      "widthM": 0.8822,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 26.541,
+        "y": 16.8202
+      },
+      "widthM": 0.8738,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 28.4272,
+        "y": 16.8202
+      },
+      "widthM": 0.8822,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 30.3092,
+        "y": 16.8202
+      },
+      "widthM": 0.8654,
+      "depthM": 0.5713,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 6.0072,
+        "y": 18.9963
+      },
+      "widthM": 0.8738,
+      "depthM": 1.2939,
+      "nearestRejections": [],
+      "consideredByProduction": false
+    },
+    {
+      "centreProjectM": {
+        "x": 17.2109,
+        "y": 19.1223
+      },
+      "widthM": 0.2605,
+      "depthM": 0.2857,
+      "nearestRejections": [
+        {
+          "distanceM": 0.2385,
+          "reason": "below-min-size(0.130m)",
+          "sizeM": [
+            0.13,
+            0.244
+          ],
+          "edges": 7,
+          "verts": 8
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.526,
+        "y": 19.1223
+      },
+      "widthM": 0.3361,
+      "depthM": 0.2857,
+      "nearestRejections": [
+        {
+          "distanceM": 0.1666,
+          "reason": "below-min-size(0.130m)",
+          "sizeM": [
+            0.13,
+            0.244
+          ],
+          "edges": 7,
+          "verts": 8
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.925,
+        "y": 19.1223
+      },
+      "widthM": 0.4453,
+      "depthM": 0.2857,
+      "nearestRejections": [
+        {
+          "distanceM": 0.2362,
+          "reason": "below-min-size(0.227m)",
+          "sizeM": [
+            0.42,
+            0.227
+          ],
+          "edges": 4,
+          "verts": 4
+        },
+        {
+          "distanceM": 0.5252,
+          "reason": "below-min-size(0.130m)",
+          "sizeM": [
+            0.13,
+            0.244
+          ],
+          "edges": 7,
+          "verts": 8
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.526,
+        "y": 19.4163
+      },
+      "widthM": 0.3361,
+      "depthM": 0.2857,
+      "nearestRejections": [
+        {
+          "distanceM": 0.3962,
+          "reason": "below-min-size(0.130m)",
+          "sizeM": [
+            0.13,
+            0.16
+          ],
+          "edges": 5,
+          "verts": 6
+        },
+        {
+          "distanceM": 0.4325,
+          "reason": "below-min-size(0.130m)",
+          "sizeM": [
+            0.13,
+            0.244
+          ],
+          "edges": 7,
+          "verts": 8
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.925,
+        "y": 19.4163
+      },
+      "widthM": 0.4453,
+      "depthM": 0.2857,
+      "nearestRejections": [
+        {
+          "distanceM": 0.4056,
+          "reason": "below-min-size(0.227m)",
+          "sizeM": [
+            0.42,
+            0.227
+          ],
+          "edges": 4,
+          "verts": 4
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.2109,
+        "y": 19.7146
+      },
+      "widthM": 0.2605,
+      "depthM": 0.2773,
+      "nearestRejections": [
+        {
+          "distanceM": 0.2196,
+          "reason": "below-min-size(0.130m)",
+          "sizeM": [
+            0.13,
+            0.16
+          ],
+          "edges": 5,
+          "verts": 6
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.526,
+        "y": 19.7146
+      },
+      "widthM": 0.3361,
+      "depthM": 0.2773,
+      "nearestRejections": [
+        {
+          "distanceM": 0.1382,
+          "reason": "below-min-size(0.130m)",
+          "sizeM": [
+            0.13,
+            0.16
+          ],
+          "edges": 5,
+          "verts": 6
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 17.925,
+        "y": 19.7146
+      },
+      "widthM": 0.4453,
+      "depthM": 0.2773,
+      "nearestRejections": [
+        {
+          "distanceM": 0.5169,
+          "reason": "below-min-size(0.130m)",
+          "sizeM": [
+            0.13,
+            0.16
+          ],
+          "edges": 5,
+          "verts": 6
+        }
+      ],
+      "consideredByProduction": true
+    },
+    {
+      "centreProjectM": {
+        "x": 7.2045,
+        "y": 19.9709
+      },
+      "widthM": 0.2436,
+      "depthM": 0.6217,
+      "nearestRejections": [
+        {
+          "distanceM": 0.5393,
+          "reason": "below-min-size(0.023m)",
+          "sizeM": [
+            0.496,
+            0.023
+          ],
+          "edges": 4,
+          "verts": 4
+        }
+      ],
+      "consideredByProduction": true
+    }
+  ]
+}

@@ -1,0 +1,5937 @@
+{
+  "generatedAt": "2026-07-30T01:29:26.419Z",
+  "canonicalHash": "65026dba38da6224ea35c83a304b757975a81face29dfe93795a4a8c70717301",
+  "retainCount": 373,
+  "reviewSampleCount": 10,
+  "rejectSampleCount": 10,
+  "manifest": [
+    {
+      "filename": "retain-000.svg",
+      "candidateId": "6215f5f8103b",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "323.0",
+      "intervalEnd": "374.2",
+      "widthPx": "51.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-001.svg",
+      "candidateId": "bbcb61b435ac",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "323.0",
+      "intervalEnd": "374.2",
+      "widthPx": "51.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-002.svg",
+      "candidateId": "8cc5fd9e7177",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "323.0",
+      "intervalEnd": "374.2",
+      "widthPx": "51.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-003.svg",
+      "candidateId": "ac3804a0748e",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "323.0",
+      "intervalEnd": "374.2",
+      "widthPx": "51.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-004.svg",
+      "candidateId": "a88a295300f4",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "323.0",
+      "intervalEnd": "374.2",
+      "widthPx": "51.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-005.svg",
+      "candidateId": "2a5dde23945f",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "323.0",
+      "intervalEnd": "379.4",
+      "widthPx": "56.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-006.svg",
+      "candidateId": "27c0b2d6d619",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "323.0",
+      "intervalEnd": "340.3",
+      "widthPx": "17.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-007.svg",
+      "candidateId": "656a16a81264",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "323.0",
+      "intervalEnd": "362.5",
+      "widthPx": "39.5",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-008.svg",
+      "candidateId": "85334cca5caf",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "328.4",
+      "intervalEnd": "362.5",
+      "widthPx": "34.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-009.svg",
+      "candidateId": "bb63640c1203",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "328.4",
+      "intervalEnd": "365.0",
+      "widthPx": "36.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-010.svg",
+      "candidateId": "21aa97e5d8b4",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "356.9",
+      "intervalEnd": "365.0",
+      "widthPx": "8.2",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-011.svg",
+      "candidateId": "169d826d6764",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "356.9",
+      "intervalEnd": "368.4",
+      "widthPx": "11.5",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-012.svg",
+      "candidateId": "6f20a2880bac",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "360.0",
+      "intervalEnd": "368.4",
+      "widthPx": "8.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-013.svg",
+      "candidateId": "4d39c40b9b67",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "366.1",
+      "intervalEnd": "379.4",
+      "widthPx": "13.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-014.svg",
+      "candidateId": "72659d251abc",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "371.0",
+      "intervalEnd": "379.8",
+      "widthPx": "8.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-015.svg",
+      "candidateId": "cb51c15a7f5b",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "487.4",
+      "intervalEnd": "498.5",
+      "widthPx": "11.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-016.svg",
+      "candidateId": "48e53688a4c0",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "490.1",
+      "intervalEnd": "544.2",
+      "widthPx": "54.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-017.svg",
+      "candidateId": "b9be9f60bd33",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "490.1",
+      "intervalEnd": "510.4",
+      "widthPx": "20.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-018.svg",
+      "candidateId": "c8e8af945645",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "544.2",
+      "widthPx": "51.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-019.svg",
+      "candidateId": "a49641ca3bc0",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "544.2",
+      "widthPx": "51.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-020.svg",
+      "candidateId": "425c9c1f180e",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "544.2",
+      "widthPx": "51.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-021.svg",
+      "candidateId": "ab3d0b01a6c1",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "544.2",
+      "widthPx": "51.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-022.svg",
+      "candidateId": "01f465f18999",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "544.2",
+      "widthPx": "51.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-023.svg",
+      "candidateId": "4e41b7eed656",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "510.4",
+      "widthPx": "17.2",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-024.svg",
+      "candidateId": "8017fc9d37a4",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "541.1",
+      "widthPx": "47.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-025.svg",
+      "candidateId": "796399081e9f",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "507.0",
+      "intervalEnd": "541.1",
+      "widthPx": "34.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-026.svg",
+      "candidateId": "2cd6aa1597e4",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "507.0",
+      "intervalEnd": "541.1",
+      "widthPx": "34.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-027.svg",
+      "candidateId": "e88d4bbc8767",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "507.0",
+      "intervalEnd": "544.2",
+      "widthPx": "37.2",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-028.svg",
+      "candidateId": "2906ed83743d",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "507.0",
+      "intervalEnd": "541.1",
+      "widthPx": "34.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-029.svg",
+      "candidateId": "3def898e696d",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "507.0",
+      "intervalEnd": "541.1",
+      "widthPx": "34.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-030.svg",
+      "candidateId": "baea21376c20",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "527.0",
+      "intervalEnd": "538.6",
+      "widthPx": "11.5",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-031.svg",
+      "candidateId": "aa56f17a465e",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "527.0",
+      "intervalEnd": "535.9",
+      "widthPx": "8.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-032.svg",
+      "candidateId": "5bb9ab009179",
+      "physicalWallId": "fr0",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "530.0",
+      "intervalEnd": "538.6",
+      "widthPx": "8.5",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-033.svg",
+      "candidateId": "a16040b4b4ff",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-034.svg",
+      "candidateId": "af9561649c71",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-035.svg",
+      "candidateId": "fb9c4a97c44d",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-036.svg",
+      "candidateId": "2efc02f5281f",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-037.svg",
+      "candidateId": "5580428b9b04",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-038.svg",
+      "candidateId": "7a0e3f69814b",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-039.svg",
+      "candidateId": "f17187606c11",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-040.svg",
+      "candidateId": "e76a3a55142e",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-041.svg",
+      "candidateId": "5ae4867aa996",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-042.svg",
+      "candidateId": "934107dda4d7",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-043.svg",
+      "candidateId": "c2a570353856",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-044.svg",
+      "candidateId": "f9ced906a6c4",
+      "physicalWallId": "fr14",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-045.svg",
+      "candidateId": "a971049daaca",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-046.svg",
+      "candidateId": "72d334baba47",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-047.svg",
+      "candidateId": "49fe4fb3dbbc",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-048.svg",
+      "candidateId": "bf181a4f4c2d",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-049.svg",
+      "candidateId": "3296085e7b24",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-050.svg",
+      "candidateId": "a0de43292dbe",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-051.svg",
+      "candidateId": "be5ef88c3b4f",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-052.svg",
+      "candidateId": "48277aabe747",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-053.svg",
+      "candidateId": "74a3c74e1d65",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-054.svg",
+      "candidateId": "85b5da574726",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-055.svg",
+      "candidateId": "53a46c52fe85",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-056.svg",
+      "candidateId": "db086a4405c2",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-057.svg",
+      "candidateId": "33330368b4c9",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-058.svg",
+      "candidateId": "8a77ec67695b",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-059.svg",
+      "candidateId": "598f2ddfab25",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-060.svg",
+      "candidateId": "a8e9e606675d",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-061.svg",
+      "candidateId": "19b1fc4c6b33",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-062.svg",
+      "candidateId": "067cd66b93b4",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-063.svg",
+      "candidateId": "551c51808e8b",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-064.svg",
+      "candidateId": "69f2e7704401",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-065.svg",
+      "candidateId": "dc03fcb1bc82",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-066.svg",
+      "candidateId": "0f34587bb935",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-067.svg",
+      "candidateId": "de749bc10c00",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-068.svg",
+      "candidateId": "c7b56ae99df2",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-069.svg",
+      "candidateId": "f82ddba6660f",
+      "physicalWallId": "fr18",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-070.svg",
+      "candidateId": "a46ca95d92f1",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-071.svg",
+      "candidateId": "b93ffafcef42",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-072.svg",
+      "candidateId": "6d954fa1d687",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-073.svg",
+      "candidateId": "25e6356fa833",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-074.svg",
+      "candidateId": "744bf17ebdc9",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-075.svg",
+      "candidateId": "bb7f50d43c95",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-076.svg",
+      "candidateId": "7e3a595f2561",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-077.svg",
+      "candidateId": "a546d7338646",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-078.svg",
+      "candidateId": "da66fa5e26c9",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-079.svg",
+      "candidateId": "dc0f382398d9",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-080.svg",
+      "candidateId": "74b5639cef32",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-081.svg",
+      "candidateId": "956882954ab1",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-082.svg",
+      "candidateId": "ef0524cbdc69",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-083.svg",
+      "candidateId": "3e0cfca96126",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-084.svg",
+      "candidateId": "09d8f93745a5",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-085.svg",
+      "candidateId": "4b0cada1e5e8",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-086.svg",
+      "candidateId": "4f28fe1c0757",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-087.svg",
+      "candidateId": "f70204ea5f53",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-088.svg",
+      "candidateId": "b1b46516b24c",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-089.svg",
+      "candidateId": "17b50ca86654",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-090.svg",
+      "candidateId": "8edbe4ea8e30",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-091.svg",
+      "candidateId": "0244d6d3e4e2",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-092.svg",
+      "candidateId": "9ae00b3c2d75",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-093.svg",
+      "candidateId": "32f22900b9fa",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-094.svg",
+      "candidateId": "b9d17128654f",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-095.svg",
+      "candidateId": "19c5d792c774",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-096.svg",
+      "candidateId": "a792ea3b914d",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-097.svg",
+      "candidateId": "09d42f5e5598",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-098.svg",
+      "candidateId": "07c7f3153b38",
+      "physicalWallId": "fr20",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "85.1",
+      "intervalEnd": "90.7",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-099.svg",
+      "candidateId": "55cbd82ba522",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "490.1",
+      "intervalEnd": "544.2",
+      "widthPx": "54.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-100.svg",
+      "candidateId": "955efc93fae5",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "490.1",
+      "intervalEnd": "499.1",
+      "widthPx": "9.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-101.svg",
+      "candidateId": "3138a5511258",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "544.2",
+      "widthPx": "51.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-102.svg",
+      "candidateId": "1f2f9b3f2dfd",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "544.2",
+      "widthPx": "51.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-103.svg",
+      "candidateId": "0645d24c9c44",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "544.2",
+      "widthPx": "51.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-104.svg",
+      "candidateId": "858ff3f2cd37",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "544.2",
+      "widthPx": "51.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-105.svg",
+      "candidateId": "46184e7fd07b",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "493.2",
+      "intervalEnd": "544.2",
+      "widthPx": "51.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-106.svg",
+      "candidateId": "1d2a2eb50052",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "498.4",
+      "intervalEnd": "510.4",
+      "widthPx": "12.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-107.svg",
+      "candidateId": "38833a3e4f49",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "498.4",
+      "intervalEnd": "507.4",
+      "widthPx": "9.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-108.svg",
+      "candidateId": "3a5740329222",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "498.4",
+      "intervalEnd": "507.4",
+      "widthPx": "9.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-109.svg",
+      "candidateId": "cf1c7f65833c",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "498.8",
+      "intervalEnd": "510.4",
+      "widthPx": "11.5",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-110.svg",
+      "candidateId": "816e2f0811fc",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "498.8",
+      "intervalEnd": "507.4",
+      "widthPx": "8.5",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-111.svg",
+      "candidateId": "34a778a4fb3e",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "500.2",
+      "intervalEnd": "510.4",
+      "widthPx": "10.2",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-112.svg",
+      "candidateId": "5f8539c950b2",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "500.2",
+      "intervalEnd": "541.1",
+      "widthPx": "40.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-113.svg",
+      "candidateId": "a3e7b88d89ee",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "507.0",
+      "intervalEnd": "541.1",
+      "widthPx": "34.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-114.svg",
+      "candidateId": "62e1e92f1d3c",
+      "physicalWallId": "fr21",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "507.0",
+      "intervalEnd": "544.2",
+      "widthPx": "37.2",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-115.svg",
+      "candidateId": "4bf5dc3ffd23",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-116.svg",
+      "candidateId": "2c3edd8c67d8",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-117.svg",
+      "candidateId": "357100f4374d",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-118.svg",
+      "candidateId": "02f56dba8b09",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-119.svg",
+      "candidateId": "b8f70ffc4fd2",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-120.svg",
+      "candidateId": "9ece13496cf4",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-121.svg",
+      "candidateId": "44ce0d508f31",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-122.svg",
+      "candidateId": "fc03ff277b6b",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-123.svg",
+      "candidateId": "7fadc0ff7259",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-124.svg",
+      "candidateId": "9792b07a0d9a",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-125.svg",
+      "candidateId": "ba0ab7ef4cc8",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-126.svg",
+      "candidateId": "59fd8e21a5f3",
+      "physicalWallId": "fr35",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-127.svg",
+      "candidateId": "e19ebd513f98",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-128.svg",
+      "candidateId": "aa62495d2d9e",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-129.svg",
+      "candidateId": "03a2ce2024dc",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-130.svg",
+      "candidateId": "2a64dfc67630",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-131.svg",
+      "candidateId": "35c32113d422",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-132.svg",
+      "candidateId": "ccb6f39e4d16",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-133.svg",
+      "candidateId": "2e99ef309ae7",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-134.svg",
+      "candidateId": "4606871b7cda",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-135.svg",
+      "candidateId": "11d458dc74c7",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-136.svg",
+      "candidateId": "7df2d9c98ffb",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-137.svg",
+      "candidateId": "bbfa5cb5b9ef",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-138.svg",
+      "candidateId": "494b4aa8778e",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-139.svg",
+      "candidateId": "310706802fd9",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-140.svg",
+      "candidateId": "5e90c6608b5b",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-141.svg",
+      "candidateId": "ad2d3d3ad5f9",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-142.svg",
+      "candidateId": "dd4c6e3d4065",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-143.svg",
+      "candidateId": "933d7716afda",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-144.svg",
+      "candidateId": "aa9ef3309484",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-145.svg",
+      "candidateId": "0a1e5a199e56",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-146.svg",
+      "candidateId": "044fa98704f8",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-147.svg",
+      "candidateId": "497e79b6b4a0",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-148.svg",
+      "candidateId": "737dd3ab4d60",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-149.svg",
+      "candidateId": "3d7631387709",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-150.svg",
+      "candidateId": "59216bcc1759",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-151.svg",
+      "candidateId": "04448a9c92bb",
+      "physicalWallId": "fr37",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-152.svg",
+      "candidateId": "6f1b5c9db10a",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-153.svg",
+      "candidateId": "4937af113279",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-154.svg",
+      "candidateId": "38653b0fd0bc",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-155.svg",
+      "candidateId": "fbee2604be70",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-156.svg",
+      "candidateId": "00848ab12391",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-157.svg",
+      "candidateId": "9275a39cfb68",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-158.svg",
+      "candidateId": "63241f75b219",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-159.svg",
+      "candidateId": "0acb8752ed9b",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-160.svg",
+      "candidateId": "3001cc2cce6b",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-161.svg",
+      "candidateId": "845062528981",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-162.svg",
+      "candidateId": "430d0d4b680a",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-163.svg",
+      "candidateId": "604cac798eee",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-164.svg",
+      "candidateId": "e25b13123f95",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-165.svg",
+      "candidateId": "4886ce179177",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-166.svg",
+      "candidateId": "dcff94c1eb52",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-167.svg",
+      "candidateId": "85097a640915",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-168.svg",
+      "candidateId": "c6e2438882ed",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-169.svg",
+      "candidateId": "294c372b985f",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-170.svg",
+      "candidateId": "6e5199f836cc",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-171.svg",
+      "candidateId": "27fca0d6d378",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-172.svg",
+      "candidateId": "79968725318c",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-173.svg",
+      "candidateId": "e048c254f539",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-174.svg",
+      "candidateId": "94f6799236f9",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-175.svg",
+      "candidateId": "9f1c5300ca11",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-176.svg",
+      "candidateId": "3f8efb39729b",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-177.svg",
+      "candidateId": "53b54b796988",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-178.svg",
+      "candidateId": "9435c7b130e4",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-179.svg",
+      "candidateId": "ef8f65d217ff",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-180.svg",
+      "candidateId": "996e5bda7b23",
+      "physicalWallId": "fr38",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "96.4",
+      "intervalEnd": "102.1",
+      "widthPx": "5.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-181.svg",
+      "candidateId": "d40a13a3d098",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-182.svg",
+      "candidateId": "7faa3e7e9333",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-183.svg",
+      "candidateId": "17e5aa14e88b",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-184.svg",
+      "candidateId": "5dadcf05d8d2",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-185.svg",
+      "candidateId": "834d88bff243",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-186.svg",
+      "candidateId": "02ec6ff8de61",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-187.svg",
+      "candidateId": "04cb341429cd",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-188.svg",
+      "candidateId": "5221d2a67dca",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-189.svg",
+      "candidateId": "68e25e15b0d7",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-190.svg",
+      "candidateId": "5405cbbef1f9",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-191.svg",
+      "candidateId": "c0d3746e5178",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-192.svg",
+      "candidateId": "e796d779bd4c",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-193.svg",
+      "candidateId": "ea54803533d7",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-194.svg",
+      "candidateId": "19f0edbfac0b",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-195.svg",
+      "candidateId": "5556b292ce1a",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-196.svg",
+      "candidateId": "f9fd27242465",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-197.svg",
+      "candidateId": "7c20cd1b5807",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-198.svg",
+      "candidateId": "5e6fa15239f7",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-199.svg",
+      "candidateId": "3c6ba475a697",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-200.svg",
+      "candidateId": "190f1503b383",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-201.svg",
+      "candidateId": "8f7ce73a4f4a",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-202.svg",
+      "candidateId": "ef0f63747814",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-203.svg",
+      "candidateId": "3ab9a613ba89",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-204.svg",
+      "candidateId": "6862c01fc596",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-205.svg",
+      "candidateId": "c5fad548e7ac",
+      "physicalWallId": "fr39",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-206.svg",
+      "candidateId": "b0f431f697d0",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-207.svg",
+      "candidateId": "76a9d1f21341",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-208.svg",
+      "candidateId": "3d834e74dd3c",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-209.svg",
+      "candidateId": "ce0a314c6ad0",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-210.svg",
+      "candidateId": "875f92457f3b",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-211.svg",
+      "candidateId": "d888f110d869",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-212.svg",
+      "candidateId": "daebbc9735c1",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-213.svg",
+      "candidateId": "a09592f6cda1",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-214.svg",
+      "candidateId": "e05b577bf8d6",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-215.svg",
+      "candidateId": "80f36922c740",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-216.svg",
+      "candidateId": "cffe43855be9",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-217.svg",
+      "candidateId": "b21d262cfd42",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-218.svg",
+      "candidateId": "f69c9c91094a",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-219.svg",
+      "candidateId": "f7a6519f0567",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-220.svg",
+      "candidateId": "48777757cd74",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-221.svg",
+      "candidateId": "9fd3e9eb92ef",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-222.svg",
+      "candidateId": "44cddeb640e0",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-223.svg",
+      "candidateId": "5616fdfdae21",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-224.svg",
+      "candidateId": "94a777fbf126",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-225.svg",
+      "candidateId": "ab508f2bf887",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-226.svg",
+      "candidateId": "69d84f8195c2",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-227.svg",
+      "candidateId": "cd5a70d721f0",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-228.svg",
+      "candidateId": "f55a21ef8ca8",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-229.svg",
+      "candidateId": "5bf359542322",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-230.svg",
+      "candidateId": "650291bccd50",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-231.svg",
+      "candidateId": "49b18f20cfaf",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-232.svg",
+      "candidateId": "8c1ca1e16f02",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-233.svg",
+      "candidateId": "4bad0e210329",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-234.svg",
+      "candidateId": "a61acef619db",
+      "physicalWallId": "fr41",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-5.6",
+      "intervalEnd": "0.0",
+      "widthPx": "5.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-235.svg",
+      "candidateId": "034f7b84df03",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-236.svg",
+      "candidateId": "34b0831752c8",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-237.svg",
+      "candidateId": "48e0d15d9217",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-238.svg",
+      "candidateId": "72c5523ffaff",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-239.svg",
+      "candidateId": "9822cbf88c94",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "26.9",
+      "widthPx": "26.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-240.svg",
+      "candidateId": "6c1454bf9a73",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "26.9",
+      "widthPx": "26.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-241.svg",
+      "candidateId": "bb79e6cd4d36",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-242.svg",
+      "candidateId": "cd499b003b48",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-243.svg",
+      "candidateId": "fb8100de28e7",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-244.svg",
+      "candidateId": "48c9b26fc1b9",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-245.svg",
+      "candidateId": "8b1ec6efeb06",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-246.svg",
+      "candidateId": "6c1f73f07197",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-247.svg",
+      "candidateId": "a063596d238e",
+      "physicalWallId": "fr47",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-248.svg",
+      "candidateId": "0f1ffed722a6",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-249.svg",
+      "candidateId": "4f67a4a970d8",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-250.svg",
+      "candidateId": "4bfd00a634e1",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-251.svg",
+      "candidateId": "3105a32b1dff",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-252.svg",
+      "candidateId": "2070789a42f1",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-253.svg",
+      "candidateId": "8eba8bacfb27",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-254.svg",
+      "candidateId": "372c0d7001b4",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-255.svg",
+      "candidateId": "102d161af1a4",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-256.svg",
+      "candidateId": "2517abba32a5",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-257.svg",
+      "candidateId": "ddc9d165cfa3",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "26.9",
+      "widthPx": "26.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-258.svg",
+      "candidateId": "400d6e12b70f",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-259.svg",
+      "candidateId": "87b7dee85a51",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "26.9",
+      "widthPx": "26.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-260.svg",
+      "candidateId": "57e023968da6",
+      "physicalWallId": "fr49",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-261.svg",
+      "candidateId": "2ca7b06afe74",
+      "physicalWallId": "fr50",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-262.svg",
+      "candidateId": "2202f4cb681a",
+      "physicalWallId": "fr50",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-263.svg",
+      "candidateId": "459bbf848366",
+      "physicalWallId": "fr50",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-264.svg",
+      "candidateId": "cbbc5eed8cb3",
+      "physicalWallId": "fr50",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-265.svg",
+      "candidateId": "98265d7df72c",
+      "physicalWallId": "fr50",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-266.svg",
+      "candidateId": "31e365b83f52",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-267.svg",
+      "candidateId": "779540bd215d",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-268.svg",
+      "candidateId": "79228ed30c60",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-269.svg",
+      "candidateId": "2cbee1e00265",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-270.svg",
+      "candidateId": "ad6fd4645a2f",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "26.9",
+      "widthPx": "26.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-271.svg",
+      "candidateId": "03481163a836",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "26.9",
+      "widthPx": "26.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-272.svg",
+      "candidateId": "77ec45cd3e3a",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-273.svg",
+      "candidateId": "a6c3aa6edee1",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-274.svg",
+      "candidateId": "e789d2ddef5f",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-275.svg",
+      "candidateId": "3064715d4d88",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-276.svg",
+      "candidateId": "0be2521fb8b1",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-277.svg",
+      "candidateId": "29b0560214b2",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-278.svg",
+      "candidateId": "f7e1946fb6b6",
+      "physicalWallId": "fr51",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-279.svg",
+      "candidateId": "4540f08a72f0",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-280.svg",
+      "candidateId": "73d91e7d4802",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-281.svg",
+      "candidateId": "8fbf9c04b0c8",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-282.svg",
+      "candidateId": "dbf347fcd47c",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-283.svg",
+      "candidateId": "7a2af8dcb954",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "26.9",
+      "widthPx": "26.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-284.svg",
+      "candidateId": "fbcf5c548e6c",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "26.9",
+      "widthPx": "26.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-285.svg",
+      "candidateId": "c127d9b07556",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-286.svg",
+      "candidateId": "7e862731422c",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-287.svg",
+      "candidateId": "ce70e04bb12a",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-288.svg",
+      "candidateId": "8884f88b02d8",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-289.svg",
+      "candidateId": "a0e82dc16719",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-290.svg",
+      "candidateId": "d01b06ee9a5d",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-291.svg",
+      "candidateId": "285804d73f1f",
+      "physicalWallId": "fr52",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-292.svg",
+      "candidateId": "142e69e2f3fc",
+      "physicalWallId": "fr55",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-293.svg",
+      "candidateId": "08da06241045",
+      "physicalWallId": "fr55",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-294.svg",
+      "candidateId": "52f4bbf4afda",
+      "physicalWallId": "fr55",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-295.svg",
+      "candidateId": "0a6b937d73a6",
+      "physicalWallId": "fr55",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-296.svg",
+      "candidateId": "b20753cf74fb",
+      "physicalWallId": "fr55",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.3",
+      "widthPx": "113.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-297.svg",
+      "candidateId": "302b49ff6b71",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-298.svg",
+      "candidateId": "cc8392e9dc09",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-299.svg",
+      "candidateId": "94240de4a054",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-300.svg",
+      "candidateId": "91377a760b2b",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-301.svg",
+      "candidateId": "ac5e916e6261",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-302.svg",
+      "candidateId": "27e48254843e",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-303.svg",
+      "candidateId": "42d079b1d43d",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-304.svg",
+      "candidateId": "d955be7897c9",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-305.svg",
+      "candidateId": "fa5273201401",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-306.svg",
+      "candidateId": "bd9c01a04a2d",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-307.svg",
+      "candidateId": "93dd938be305",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-308.svg",
+      "candidateId": "441e3d794243",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-309.svg",
+      "candidateId": "cb0df5e1a05d",
+      "physicalWallId": "fr57",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-310.svg",
+      "candidateId": "a0ca7ca25ea5",
+      "physicalWallId": "fr59",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-311.svg",
+      "candidateId": "f8a501d80a92",
+      "physicalWallId": "fr59",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-312.svg",
+      "candidateId": "441e2ca56d7d",
+      "physicalWallId": "fr59",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-313.svg",
+      "candidateId": "f9c5ee678175",
+      "physicalWallId": "fr59",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-314.svg",
+      "candidateId": "d81526b809a3",
+      "physicalWallId": "fr59",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-315.svg",
+      "candidateId": "92b3776ac7dc",
+      "physicalWallId": "fr59",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-316.svg",
+      "candidateId": "3c66d27334ba",
+      "physicalWallId": "fr59",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-317.svg",
+      "candidateId": "8fa0724bbfe5",
+      "physicalWallId": "fr59",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-318.svg",
+      "candidateId": "317f130431b8",
+      "physicalWallId": "fr59",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-319.svg",
+      "candidateId": "bd9fb16c7423",
+      "physicalWallId": "fr60",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-320.svg",
+      "candidateId": "e2f924a5dddc",
+      "physicalWallId": "fr60",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-321.svg",
+      "candidateId": "3fb2350320ed",
+      "physicalWallId": "fr60",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-322.svg",
+      "candidateId": "6faad00dddf7",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-323.svg",
+      "candidateId": "38b2274f2310",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-324.svg",
+      "candidateId": "6af87a5c168a",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-325.svg",
+      "candidateId": "5aa5afe21fd2",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-326.svg",
+      "candidateId": "954a6a0838ce",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-327.svg",
+      "candidateId": "281298fa80ae",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-328.svg",
+      "candidateId": "746ab21dd746",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-329.svg",
+      "candidateId": "c58c6dc91b31",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-330.svg",
+      "candidateId": "7a669ec0d417",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-331.svg",
+      "candidateId": "3b9324ccd7d3",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-332.svg",
+      "candidateId": "24869eb01741",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-333.svg",
+      "candidateId": "b7b824b05460",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-334.svg",
+      "candidateId": "f9c36b2cb389",
+      "physicalWallId": "fr61",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-335.svg",
+      "candidateId": "2bdd09f0694f",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-336.svg",
+      "candidateId": "1fd089c866ce",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-337.svg",
+      "candidateId": "21452dd5d93b",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-338.svg",
+      "candidateId": "f35adea7c90e",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-339.svg",
+      "candidateId": "a4f6e331efc7",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-340.svg",
+      "candidateId": "bfe3efa0ccdc",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-341.svg",
+      "candidateId": "a553eb4e91fb",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-342.svg",
+      "candidateId": "e899fb854898",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-343.svg",
+      "candidateId": "e5cb5664579b",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-344.svg",
+      "candidateId": "9459fa553c49",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-345.svg",
+      "candidateId": "ae15ec334ae8",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-346.svg",
+      "candidateId": "68eba951304f",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-347.svg",
+      "candidateId": "5bc9f29899a2",
+      "physicalWallId": "fr62",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-348.svg",
+      "candidateId": "a0938ea614c1",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-349.svg",
+      "candidateId": "cd70ce621dd0",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-350.svg",
+      "candidateId": "08bd92a8c9f1",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-351.svg",
+      "candidateId": "eadf9543de40",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-352.svg",
+      "candidateId": "45ca141f8f77",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-353.svg",
+      "candidateId": "0563d31a4cbb",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-354.svg",
+      "candidateId": "37d39e9f238c",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-355.svg",
+      "candidateId": "3267b5892959",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-356.svg",
+      "candidateId": "a8b966057092",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-357.svg",
+      "candidateId": "9a8031a4b29f",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-358.svg",
+      "candidateId": "4ed3432346a7",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-359.svg",
+      "candidateId": "3a324a2b140e",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-360.svg",
+      "candidateId": "0a10218a5cc3",
+      "physicalWallId": "fr63",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-361.svg",
+      "candidateId": "3e800e838c73",
+      "physicalWallId": "fr64",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-362.svg",
+      "candidateId": "304144181c01",
+      "physicalWallId": "fr64",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-363.svg",
+      "candidateId": "f17ecbb1a27f",
+      "physicalWallId": "fr64",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-364.svg",
+      "candidateId": "a840f31b6504",
+      "physicalWallId": "fr64",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-365.svg",
+      "candidateId": "ae5247b42554",
+      "physicalWallId": "fr64",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-366.svg",
+      "candidateId": "e47d75cba2b5",
+      "physicalWallId": "fr64",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-367.svg",
+      "candidateId": "07cfb1e0125d",
+      "physicalWallId": "fr64",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-368.svg",
+      "candidateId": "98d6923bd48d",
+      "physicalWallId": "fr64",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-369.svg",
+      "candidateId": "70f9f6a935d5",
+      "physicalWallId": "fr64",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "86.4",
+      "intervalEnd": "113.4",
+      "widthPx": "27.0",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-370.svg",
+      "candidateId": "8a084b4836e8",
+      "physicalWallId": "fr65",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-371.svg",
+      "candidateId": "4715f680085e",
+      "physicalWallId": "fr65",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "retain-372.svg",
+      "candidateId": "9245644d6deb",
+      "physicalWallId": "fr65",
+      "finalDecision": "RETAIN",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "113.4",
+      "widthPx": "113.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "review-000.svg",
+      "candidateId": "9d996f3aa61b",
+      "physicalWallId": "fr0",
+      "finalDecision": "REVIEW",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "-28.7",
+      "intervalEnd": "204.0",
+      "widthPx": "232.7",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "continuous-wall-face-detected",
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "review-001.svg",
+      "candidateId": "0ec70ebe9df1",
+      "physicalWallId": "fr2",
+      "finalDecision": "REVIEW",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "36.8",
+      "intervalEnd": "70.9",
+      "widthPx": "34.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "review-002.svg",
+      "candidateId": "a54aec4ccd52",
+      "physicalWallId": "fr4",
+      "finalDecision": "REVIEW",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "90.7",
+      "intervalEnd": "164.4",
+      "widthPx": "73.7",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "door-curve-intersection-conflict"
+      ]
+    },
+    {
+      "filename": "review-003.svg",
+      "candidateId": "ec5b1fb3f6b3",
+      "physicalWallId": "fr6",
+      "finalDecision": "REVIEW",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "357.1",
+      "intervalEnd": "629.3",
+      "widthPx": "272.2",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "continuous-wall-face-detected"
+      ]
+    },
+    {
+      "filename": "review-004.svg",
+      "candidateId": "4c4028167510",
+      "physicalWallId": "fr9",
+      "finalDecision": "REVIEW",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "204.1",
+      "widthPx": "204.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "continuous-wall-face-detected",
+        "door-curve-intersection-conflict"
+      ]
+    },
+    {
+      "filename": "review-005.svg",
+      "candidateId": "a45f365551f3",
+      "physicalWallId": "fr21",
+      "finalDecision": "REVIEW",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "442.2",
+      "intervalEnd": "450.6",
+      "widthPx": "8.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "review-006.svg",
+      "candidateId": "450e59b9eacd",
+      "physicalWallId": "fr23",
+      "finalDecision": "REVIEW",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "AMBIGUOUS_HOST_REVIEW",
+      "intervalStart": "175.8",
+      "intervalEnd": "235.2",
+      "widthPx": "59.4",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "review-007.svg",
+      "candidateId": "5fd5861e8ec3",
+      "physicalWallId": "fr26",
+      "finalDecision": "REVIEW",
+      "jambVerdict": "NO_JAMB_PAIR",
+      "hostStatus": "AMBIGUOUS_HOST_REVIEW",
+      "intervalStart": "90.7",
+      "intervalEnd": "317.5",
+      "widthPx": "226.8",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "continuous-wall-face-detected",
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "review-008.svg",
+      "candidateId": "0ebd3fa15f01",
+      "physicalWallId": "fr28",
+      "finalDecision": "REVIEW",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "158.6",
+      "intervalEnd": "192.7",
+      "widthPx": "34.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "review-009.svg",
+      "candidateId": "72b3e42924cd",
+      "physicalWallId": "fr40",
+      "finalDecision": "REVIEW",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "0.0",
+      "intervalEnd": "85.1",
+      "widthPx": "85.1",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "filename": "reject-000.svg",
+      "candidateId": "eb6aa1ac086f",
+      "physicalWallId": "fr42",
+      "finalDecision": "REJECT",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "226.8",
+      "intervalEnd": "238.1",
+      "widthPx": "11.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "reject-001.svg",
+      "candidateId": "bb621c0b468c",
+      "physicalWallId": "fr42",
+      "finalDecision": "REJECT",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "226.8",
+      "intervalEnd": "239.4",
+      "widthPx": "12.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "reject-002.svg",
+      "candidateId": "581a066ed0a5",
+      "physicalWallId": "fr42",
+      "finalDecision": "REJECT",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "226.8",
+      "intervalEnd": "240.7",
+      "widthPx": "13.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "reject-003.svg",
+      "candidateId": "e87ff1eb5f71",
+      "physicalWallId": "fr42",
+      "finalDecision": "REJECT",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "226.8",
+      "intervalEnd": "238.1",
+      "widthPx": "11.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "reject-004.svg",
+      "candidateId": "e546bf911ea3",
+      "physicalWallId": "fr42",
+      "finalDecision": "REJECT",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "226.8",
+      "intervalEnd": "239.4",
+      "widthPx": "12.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "reject-005.svg",
+      "candidateId": "e0b66eb15242",
+      "physicalWallId": "fr42",
+      "finalDecision": "REJECT",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "226.8",
+      "intervalEnd": "239.4",
+      "widthPx": "12.6",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "reject-006.svg",
+      "candidateId": "ddde2970342e",
+      "physicalWallId": "fr43",
+      "finalDecision": "REJECT",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "226.8",
+      "intervalEnd": "240.7",
+      "widthPx": "13.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "reject-007.svg",
+      "candidateId": "6ab91663d86c",
+      "physicalWallId": "fr43",
+      "finalDecision": "REJECT",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "226.8",
+      "intervalEnd": "238.1",
+      "widthPx": "11.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "reject-008.svg",
+      "candidateId": "d340c27a27c5",
+      "physicalWallId": "fr43",
+      "finalDecision": "REJECT",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "226.8",
+      "intervalEnd": "240.7",
+      "widthPx": "13.9",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "interval-extends-beyond-wall"
+      ]
+    },
+    {
+      "filename": "reject-009.svg",
+      "candidateId": "9870913282f8",
+      "physicalWallId": "fr43",
+      "finalDecision": "REJECT",
+      "jambVerdict": "VALID_JAMB_PAIR",
+      "hostStatus": "UNIQUE_HOST",
+      "intervalStart": "226.8",
+      "intervalEnd": "238.1",
+      "widthPx": "11.3",
+      "positiveEvidence": [
+        "parallel-frame-strokes"
+      ],
+      "negativeEvidence": [
+        "interval-extends-beyond-wall"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,944 @@
+{
+  "generatedAt": "2026-07-28T21:27:10.019Z",
+  "changeSetStatus": {
+    "changeSet4Foundation": "COMPLETE",
+    "changeSet4_1": "IN_PROGRESS",
+    "ffeVisionQuality": "PARTIAL_EVIDENCE_REVIEW_REQUIRED",
+    "windowVisionQuality": "PARTIAL_EVIDENCE_REVIEW_REQUIRED",
+    "doorVisionQuality": "NOT_REACHED",
+    "productionPascalIntegration": "NOT_STARTED"
+  },
+  "aiNormalization": {
+    "aiFurnitureLoaded": 16,
+    "looseFfe": 12,
+    "sanitary": 4,
+    "missingSourcePrimitiveIds": 16,
+    "missingRotation": 0,
+    "missingDimensions": 0,
+    "dropped": 0
+  },
+  "coordinateValidation": {
+    "sourceCoordinateSystem": "PDF user-space points (origin bottom-left, y-up)",
+    "aiCoordinateSystem": "AI model world coordinates (metres, origin building corner)",
+    "aiUnits": "metres",
+    "pdfToAiTransform": "x,y = pt -> (pt*5.14/1000) m",
+    "aiToPdfTransform": "x,y = m -> (m*1000/5.14) pt",
+    "coordinateRoundTripError": 0,
+    "invalidAiRecords": 16,
+    "missingPositions": 0
+  },
+  "catalogResolution": [
+    {
+      "originalFamilyReference": "catalog:toilet",
+      "resolvedProductType": "toilet",
+      "resolvedCategory": "sanitary",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:shower-square",
+      "resolvedProductType": "shower-square",
+      "resolvedCategory": "sanitary",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:bathtub",
+      "resolvedProductType": "bathtub",
+      "resolvedCategory": "sanitary",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:toilet",
+      "resolvedProductType": "toilet",
+      "resolvedCategory": "sanitary",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    },
+    {
+      "originalFamilyReference": "catalog:single-bed",
+      "resolvedProductType": "single-bed",
+      "resolvedCategory": "loose-ffe",
+      "resolvedScope": "accommodation",
+      "resolutionConfidence": 0.85,
+      "resolutionSource": "LEGACY_CATALOGUE_MAPPING",
+      "warnings": [
+        "Do not infer manufacturer/BOQ/Pascal asset from uri"
+      ]
+    }
+  ],
+  "reconciliation": {
+    "aiFurnitureInstances": 16,
+    "geometricFamilies": 0,
+    "geometricInstances": 0,
+    "confirmedByAiAndGeometry": 0,
+    "partialGeometricSupport": 3,
+    "aiOnly": 13,
+    "geometricOnly": 0,
+    "conflicts": 0,
+    "multipleCandidates": 0,
+    "coordinateConflicts": 0,
+    "reviewRequired": 3,
+    "dropped": 0
+  },
+  "bedReconciliation": [
+    {
+      "aiInstanceId": "ai_fitout_1",
+      "aiFamilyReference": "catalog:toilet",
+      "proposedProductType": "toilet",
+      "scope": "sanitary",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 10.795,
+        "y": 3.395
+      },
+      "aiDimensions": {
+        "widthM": 0.7,
+        "depthM": 0.4
+      },
+      "rotationStatus": "rotation=180",
+      "sourcePdfRoi": [
+        1973.7354085603115,
+        563.2295719844358,
+        2226.6536964980546,
+        757.7821011673152
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:toilet",
+        "{\"x\":10.795,\"y\":3.395}m",
+        "0.7x0.4m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_fitout_2",
+      "aiFamilyReference": "catalog:shower-square",
+      "proposedProductType": "shower-square",
+      "scope": "sanitary",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 10.795,
+        "y": 2.515
+      },
+      "aiDimensions": {
+        "widthM": 0.8,
+        "depthM": 0.8
+      },
+      "rotationStatus": "rotation=0",
+      "sourcePdfRoi": [
+        1964.0077821011675,
+        353.1128404669261,
+        2236.381322957199,
+        625.4863813229572
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:shower-square",
+        "{\"x\":10.795,\"y\":2.515}m",
+        "0.8x0.8m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_fitout_3",
+      "aiFamilyReference": "catalog:bathtub",
+      "proposedProductType": "bathtub",
+      "scope": "sanitary",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 9.79,
+        "y": 0.85
+      },
+      "aiDimensions": {
+        "widthM": 0.7,
+        "depthM": 1.7
+      },
+      "rotationStatus": "rotation=0",
+      "sourcePdfRoi": [
+        1778.2101167315177,
+        -58.365758754863805,
+        2031.1284046692608,
+        389.1050583657588
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:bathtub",
+        "{\"x\":9.79,\"y\":0.85}m",
+        "0.7x1.7m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_fitout_4",
+      "aiFamilyReference": "catalog:toilet",
+      "proposedProductType": "toilet",
+      "scope": "sanitary",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 10.04,
+        "y": 0.35
+      },
+      "aiDimensions": {
+        "widthM": 0.7,
+        "depthM": 0.4
+      },
+      "rotationStatus": "rotation=180",
+      "sourcePdfRoi": [
+        1826.8482490272374,
+        -29.182879377431917,
+        2079.766536964981,
+        165.36964980544747
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:toilet",
+        "{\"x\":10.04,\"y\":0.35}m",
+        "0.7x0.4m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_1",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 0.825,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        14.591439688715951,
+        330.739299610895,
+        306.42023346303506,
+        797.6653696498056
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":0.825,\"y\":2.9}m",
+        "0.9x1.8m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_2",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 2.2,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        282.1011673151751,
+        330.739299610895,
+        573.9299610894942,
+        797.6653696498056
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":2.2,\"y\":2.9}m",
+        "0.9x1.8m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_3",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 3.7,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        573.9299610894942,
+        330.739299610895,
+        865.7587548638134,
+        797.6653696498056
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":3.7,\"y\":2.9}m",
+        "0.9x1.8m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_4",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 5.8,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        982.490272373541,
+        330.739299610895,
+        1274.31906614786,
+        797.6653696498056
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":5.8,\"y\":2.9}m",
+        "0.9x1.8m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_5",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 7.325,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        1279.182879377432,
+        330.739299610895,
+        1571.011673151751,
+        797.6653696498056
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":7.325,\"y\":2.9}m",
+        "0.9x1.8m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_6",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 10.4,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        1877.4319066147862,
+        330.739299610895,
+        2169.2607003891053,
+        797.6653696498056
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":10.4,\"y\":2.9}m",
+        "0.9x1.8m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_7",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 0.825,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        14.591439688715951,
+        -19.455252918287954,
+        306.42023346303506,
+        447.4708171206226
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 954,
+      "localDescriptor": {
+        "fillCount": 6,
+        "strokeCount": 948,
+        "closedCount": 6,
+        "openCount": 948,
+        "avgStrokeWidth": 0.8311949569724141,
+        "meanArea": 41.69414570162903,
+        "meanAspect": 14269.468398473176
+      },
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":0.825,\"y\":1.1}m",
+        "0.9x1.8m",
+        "plausible local bed topology"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_8",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 2.2,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        282.1011673151751,
+        -19.455252918287954,
+        573.9299610894942,
+        447.4708171206226
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 1027,
+      "localDescriptor": {
+        "fillCount": 9,
+        "strokeCount": 1018,
+        "closedCount": 9,
+        "openCount": 1018,
+        "avgStrokeWidth": 0.7827069042023804,
+        "meanArea": 29.761447856249276,
+        "meanAspect": 14774.259231066817
+      },
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":2.2,\"y\":1.1}m",
+        "0.9x1.8m",
+        "plausible local bed topology"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_9",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 3.7,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        573.9299610894942,
+        -19.455252918287954,
+        865.7587548638134,
+        447.4708171206226
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 670,
+      "localDescriptor": {
+        "fillCount": 6,
+        "strokeCount": 664,
+        "closedCount": 6,
+        "openCount": 664,
+        "avgStrokeWidth": 0.8310447634156071,
+        "meanArea": 52.023046499263465,
+        "meanAspect": 12795.859490458211
+      },
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":3.7,\"y\":1.1}m",
+        "0.9x1.8m",
+        "plausible local bed topology"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_10",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 5.8,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        982.490272373541,
+        -19.455252918287954,
+        1274.31906614786,
+        447.4708171206226
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":5.8,\"y\":1.1}m",
+        "0.9x1.8m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_11",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 7.325,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        1279.182879377432,
+        -19.455252918287954,
+        1571.011673151751,
+        447.4708171206226
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":7.325,\"y\":1.1}m",
+        "0.9x1.8m",
+        "zero primitives in ROI"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_12",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "sector": "accommodation",
+      "spaceType": "six-bed-unit",
+      "aiPosition": {
+        "x": 10.4,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "sourcePdfRoi": [
+        1877.4319066147862,
+        -19.455252918287954,
+        2169.2607003891053,
+        447.4708171206226
+      ],
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "localDescriptor": {
+        "fillCount": 0,
+        "strokeCount": 0,
+        "closedCount": 0,
+        "openCount": 0,
+        "avgStrokeWidth": 0,
+        "meanArea": 0,
+        "meanAspect": 0
+      },
+      "geometricEvidenceStatus": "NO_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "AI_ONLY",
+      "reasons": [
+        "catalog:single-bed",
+        "{\"x\":10.4,\"y\":1.1}m",
+        "0.9x1.8m",
+        "zero primitives in ROI"
+      ]
+    }
+  ],
+  "wallsLoaded": {
+    "wallCount": 70,
+    "uniquePhysicalWallIds": 70,
+    "duplicatePhysicalWallIds": 0
+  },
+  "windowReport": {
+    "generatedCandidates": 72,
+    "accepted": 2,
+    "review": 4,
+    "rejected": 66,
+    "hosted": 27,
+    "unhosted": 45,
+    "duplicates": 0,
+    "uniqueHostWalls": 14,
+    "oracleWaCount": 24,
+    "deterministicHash": "e66140ad2dcecd3277e87c3a952a792ad422c60570f980fb777b9e8287762bd7"
+  },
+  "doorReport": {
+    "generatedCandidates": 0,
+    "accepted": 0,
+    "review": 0,
+    "rejected": 0,
+    "hosted": 0,
+    "unhosted": 0,
+    "duplicates": 0,
+    "uniqueHostWalls": 0,
+    "oracleDtCount": 25,
+    "deterministicHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "primitiveOwnership": {
+    "totalPrimitives": 127711,
+    "ownedPrimitives": 72,
+    "unclaimedPrimitives": 127711,
+    "ownershipConflicts": 0,
+    "acceptedCrossCategoryConflicts": 0
+  },
+  "hashes": {
+    "aiInputHash": "d651a6dce032c0ad8c2bc32dfdb2d67a3c6bfb010104d5da1dbb367e2272f3d8",
+    "ffeCandidateHash": "580ad2b641ea1f9a4f5d5b882a404cdfea4f7050f58279eb6a022240533cd2f3",
+    "ffeReconciliationHash": "580ad2b641ea1f9a4f5d5b882a404cdfea4f7050f58279eb6a022240533cd2f3",
+    "windowCandidateHash": "e66140ad2dcecd3277e87c3a952a792ad422c60570f980fb777b9e8287762bd7",
+    "doorCandidateHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "primitiveOwnershipHash": "pending-iteration-2"
+  },
+  "overlaysGenerated": [
+    "ai-bed-roi-overlay.svg",
+    "code06-windows-all.svg"
+  ]
+}

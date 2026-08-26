@@ -1,0 +1,1669 @@
+[
+  {
+    "candidateId": "c_v3-grammar-v1_fr0_72ef8b3033e7",
+    "selectedPhysicalWallId": "fr0",
+    "consideredHosts": [
+      "fr0",
+      "fr1",
+      "fr14",
+      "fr6"
+    ],
+    "bestHostScore": 31,
+    "secondBestHostScore": 187,
+    "selectionMargin": -156,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr0_56fe5fb9b0cd",
+    "selectedPhysicalWallId": "fr0",
+    "consideredHosts": [
+      "fr0",
+      "fr14",
+      "fr19"
+    ],
+    "bestHostScore": 11,
+    "secondBestHostScore": 17,
+    "selectionMargin": -6,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr0_068b9b3f9282",
+    "selectedPhysicalWallId": "fr0",
+    "consideredHosts": [
+      "fr0",
+      "fr18",
+      "fr19",
+      "fr20"
+    ],
+    "bestHostScore": 18,
+    "secondBestHostScore": 18,
+    "selectionMargin": 0,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr0_76fcf78e54ce",
+    "selectedPhysicalWallId": "fr0",
+    "consideredHosts": [
+      "fr0",
+      "fr20",
+      "fr4"
+    ],
+    "bestHostScore": 11,
+    "secondBestHostScore": 140,
+    "selectionMargin": -129,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr0_eb2bed3d97f6",
+    "selectedPhysicalWallId": "fr0",
+    "consideredHosts": [
+      "fr0",
+      "fr2",
+      "fr4"
+    ],
+    "bestHostScore": 23,
+    "secondBestHostScore": 140,
+    "selectionMargin": -117,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr1_acf5906f7c9c",
+    "selectedPhysicalWallId": "fr1",
+    "consideredHosts": [
+      "fr0",
+      "fr1"
+    ],
+    "bestHostScore": 28,
+    "secondBestHostScore": 31,
+    "selectionMargin": -3,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr1_ae705623683f",
+    "selectedPhysicalWallId": "fr1",
+    "consideredHosts": [
+      "fr1",
+      "fr46"
+    ],
+    "bestHostScore": 24,
+    "secondBestHostScore": 10,
+    "selectionMargin": 14,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr1_aef3c4cb4e73",
+    "selectedPhysicalWallId": "fr1",
+    "consideredHosts": [
+      "fr1",
+      "fr47",
+      "fr48"
+    ],
+    "bestHostScore": 31,
+    "secondBestHostScore": 6,
+    "selectionMargin": 25,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr1_5708d7eaf5cc",
+    "selectedPhysicalWallId": "fr1",
+    "consideredHosts": [
+      "fr1",
+      "fr49"
+    ],
+    "bestHostScore": 24,
+    "secondBestHostScore": 6,
+    "selectionMargin": 18,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr1_3e1a8f1a28ba",
+    "selectedPhysicalWallId": "fr1",
+    "consideredHosts": [
+      "fr1",
+      "fr50",
+      "fr7"
+    ],
+    "bestHostScore": 52,
+    "secondBestHostScore": 111,
+    "selectionMargin": -59,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr2_f424a07b3c0c",
+    "selectedPhysicalWallId": "fr2",
+    "consideredHosts": [
+      "fr0",
+      "fr2",
+      "fr56"
+    ],
+    "bestHostScore": 53,
+    "secondBestHostScore": 23,
+    "selectionMargin": 30,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr2_4ca05bd47fa7",
+    "selectedPhysicalWallId": "fr2",
+    "consideredHosts": [
+      "fr2",
+      "fr57",
+      "fr58"
+    ],
+    "bestHostScore": 31,
+    "secondBestHostScore": 6,
+    "selectionMargin": 25,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr2_a259441d717f",
+    "selectedPhysicalWallId": "fr2",
+    "consideredHosts": [
+      "fr2",
+      "fr59"
+    ],
+    "bestHostScore": 24,
+    "secondBestHostScore": 5,
+    "selectionMargin": 19,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr2_a3df8d065395",
+    "selectedPhysicalWallId": "fr2",
+    "consideredHosts": [
+      "fr2",
+      "fr3",
+      "fr60"
+    ],
+    "bestHostScore": 54,
+    "secondBestHostScore": 35,
+    "selectionMargin": 19,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr3_9e379d99a94e",
+    "selectedPhysicalWallId": "fr3",
+    "consideredHosts": [
+      "fr2",
+      "fr29",
+      "fr3",
+      "fr4",
+      "fr7",
+      "fr8"
+    ],
+    "bestHostScore": 35,
+    "secondBestHostScore": 140,
+    "selectionMargin": -105,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr4_9510ef81318a",
+    "selectedPhysicalWallId": "fr4",
+    "consideredHosts": [
+      "fr0",
+      "fr12",
+      "fr13",
+      "fr3",
+      "fr4",
+      "fr42",
+      "fr5",
+      "fr7"
+    ],
+    "bestHostScore": 140,
+    "secondBestHostScore": 111,
+    "selectionMargin": 29,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr5_2ea35b8ad860",
+    "selectedPhysicalWallId": "fr5",
+    "consideredHosts": [
+      "fr4",
+      "fr42",
+      "fr5",
+      "fr6"
+    ],
+    "bestHostScore": 49,
+    "secondBestHostScore": 187,
+    "selectionMargin": -138,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr6_02f9531a9ec5",
+    "selectedPhysicalWallId": "fr6",
+    "consideredHosts": [
+      "fr0",
+      "fr10",
+      "fr42",
+      "fr44",
+      "fr5",
+      "fr6",
+      "fr7",
+      "fr9"
+    ],
+    "bestHostScore": 187,
+    "secondBestHostScore": 111,
+    "selectionMargin": 76,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr7_20b0a1d38296",
+    "selectedPhysicalWallId": "fr7",
+    "consideredHosts": [
+      "fr1",
+      "fr29",
+      "fr3",
+      "fr4",
+      "fr6",
+      "fr67",
+      "fr68",
+      "fr69",
+      "fr7",
+      "fr8"
+    ],
+    "bestHostScore": 111,
+    "secondBestHostScore": 187,
+    "selectionMargin": -76,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr8_1770984e2163",
+    "selectedPhysicalWallId": "fr8",
+    "consideredHosts": [
+      "fr28",
+      "fr29",
+      "fr3",
+      "fr7",
+      "fr8",
+      "fr9"
+    ],
+    "bestHostScore": 23,
+    "secondBestHostScore": 111,
+    "selectionMargin": -88,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr9_267051cf8cf5",
+    "selectedPhysicalWallId": "fr9",
+    "consideredHosts": [
+      "fr6",
+      "fr8",
+      "fr9"
+    ],
+    "bestHostScore": 59,
+    "secondBestHostScore": 187,
+    "selectionMargin": -128,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr10_d3bddc311314",
+    "selectedPhysicalWallId": "fr10",
+    "consideredHosts": [
+      "fr10",
+      "fr6"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 187,
+    "selectionMargin": -177,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr11_cffc8c86e12c",
+    "selectedPhysicalWallId": "fr11",
+    "consideredHosts": [
+      "fr11",
+      "fr12",
+      "fr42"
+    ],
+    "bestHostScore": 28,
+    "secondBestHostScore": 75,
+    "selectionMargin": -47,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr12_feb81a39ad1a",
+    "selectedPhysicalWallId": "fr12",
+    "consideredHosts": [
+      "fr11",
+      "fr12",
+      "fr15",
+      "fr16",
+      "fr17",
+      "fr19",
+      "fr4"
+    ],
+    "bestHostScore": 59,
+    "secondBestHostScore": 140,
+    "selectionMargin": -81,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr13_be6ebf663c16",
+    "selectedPhysicalWallId": "fr13",
+    "consideredHosts": [
+      "fr13",
+      "fr14",
+      "fr15",
+      "fr18",
+      "fr19",
+      "fr20",
+      "fr4"
+    ],
+    "bestHostScore": 56,
+    "secondBestHostScore": 140,
+    "selectionMargin": -84,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr14_694c1aca969b",
+    "selectedPhysicalWallId": "fr14",
+    "consideredHosts": [
+      "fr0",
+      "fr13",
+      "fr14",
+      "fr44"
+    ],
+    "bestHostScore": 16,
+    "secondBestHostScore": 56,
+    "selectionMargin": -40,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr14_627500d9c3be",
+    "selectedPhysicalWallId": "fr14",
+    "consideredHosts": [
+      "fr13",
+      "fr14"
+    ],
+    "bestHostScore": 7,
+    "secondBestHostScore": 56,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr15_06f76ca3a1ab",
+    "selectedPhysicalWallId": "fr15",
+    "consideredHosts": [
+      "fr12",
+      "fr13",
+      "fr15",
+      "fr19"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 59,
+    "selectionMargin": -53,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr15_09934dc848a9",
+    "selectedPhysicalWallId": "fr15",
+    "consideredHosts": [
+      "fr12",
+      "fr15",
+      "fr19",
+      "fr42"
+    ],
+    "bestHostScore": 20,
+    "secondBestHostScore": 75,
+    "selectionMargin": -55,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr16_620b0a976476",
+    "selectedPhysicalWallId": "fr16",
+    "consideredHosts": [
+      "fr12",
+      "fr16"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 59,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr16_82531e9a50ed",
+    "selectedPhysicalWallId": "fr16",
+    "consideredHosts": [
+      "fr12",
+      "fr16",
+      "fr42"
+    ],
+    "bestHostScore": 13,
+    "secondBestHostScore": 75,
+    "selectionMargin": -62,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr17_be178a59b3a8",
+    "selectedPhysicalWallId": "fr17",
+    "consideredHosts": [
+      "fr12",
+      "fr17"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 59,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr17_2772990df8a4",
+    "selectedPhysicalWallId": "fr17",
+    "consideredHosts": [
+      "fr12",
+      "fr17",
+      "fr42"
+    ],
+    "bestHostScore": 13,
+    "secondBestHostScore": 75,
+    "selectionMargin": -62,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr18_a85d8d4e2c99",
+    "selectedPhysicalWallId": "fr18",
+    "consideredHosts": [
+      "fr0",
+      "fr13",
+      "fr18"
+    ],
+    "bestHostScore": 17,
+    "secondBestHostScore": 56,
+    "selectionMargin": -39,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr18_bafe45ac3480",
+    "selectedPhysicalWallId": "fr18",
+    "consideredHosts": [
+      "fr13",
+      "fr18"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 56,
+    "selectionMargin": -46,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr19_2bc1d27a96b5",
+    "selectedPhysicalWallId": "fr19",
+    "consideredHosts": [
+      "fr0",
+      "fr13",
+      "fr15",
+      "fr19"
+    ],
+    "bestHostScore": 17,
+    "secondBestHostScore": 56,
+    "selectionMargin": -39,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr19_248323c4bf45",
+    "selectedPhysicalWallId": "fr19",
+    "consideredHosts": [
+      "fr12",
+      "fr13",
+      "fr15",
+      "fr19"
+    ],
+    "bestHostScore": 11,
+    "secondBestHostScore": 59,
+    "selectionMargin": -48,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr20_c75608fa792f",
+    "selectedPhysicalWallId": "fr20",
+    "consideredHosts": [
+      "fr0",
+      "fr13",
+      "fr20"
+    ],
+    "bestHostScore": 18,
+    "secondBestHostScore": 56,
+    "selectionMargin": -38,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr20_f3670a316878",
+    "selectedPhysicalWallId": "fr20",
+    "consideredHosts": [
+      "fr13",
+      "fr20"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 56,
+    "selectionMargin": -46,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr21_5824fc08acb5",
+    "selectedPhysicalWallId": "fr21",
+    "consideredHosts": [
+      "fr21",
+      "fr22",
+      "fr27",
+      "fr35"
+    ],
+    "bestHostScore": 29,
+    "secondBestHostScore": 162,
+    "selectionMargin": -133,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr21_b81a1d462acd",
+    "selectedPhysicalWallId": "fr21",
+    "consideredHosts": [
+      "fr21",
+      "fr35",
+      "fr40"
+    ],
+    "bestHostScore": 9,
+    "secondBestHostScore": 16,
+    "selectionMargin": -7,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr21_9ece0ad865e6",
+    "selectedPhysicalWallId": "fr21",
+    "consideredHosts": [
+      "fr21",
+      "fr39",
+      "fr40"
+    ],
+    "bestHostScore": 8,
+    "secondBestHostScore": 15,
+    "selectionMargin": -7,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr21_da3d15e7af02",
+    "selectedPhysicalWallId": "fr21",
+    "consideredHosts": [
+      "fr21",
+      "fr39",
+      "fr41"
+    ],
+    "bestHostScore": 8,
+    "secondBestHostScore": 16,
+    "selectionMargin": -8,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr21_12dc6b869222",
+    "selectedPhysicalWallId": "fr21",
+    "consideredHosts": [
+      "fr21",
+      "fr25",
+      "fr41"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 118,
+    "selectionMargin": -108,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr21_a12e91446c6b",
+    "selectedPhysicalWallId": "fr21",
+    "consideredHosts": [
+      "fr21",
+      "fr23",
+      "fr25"
+    ],
+    "bestHostScore": 22,
+    "secondBestHostScore": 118,
+    "selectionMargin": -96,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr22_17c9b594dd41",
+    "selectedPhysicalWallId": "fr22",
+    "consideredHosts": [
+      "fr22",
+      "fr28",
+      "fr54",
+      "fr55"
+    ],
+    "bestHostScore": 76,
+    "secondBestHostScore": 107,
+    "selectionMargin": -31,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr22_944a7e0b1133",
+    "selectedPhysicalWallId": "fr22",
+    "consideredHosts": [
+      "fr22",
+      "fr51",
+      "fr52",
+      "fr53"
+    ],
+    "bestHostScore": 55,
+    "secondBestHostScore": 6,
+    "selectionMargin": 49,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr22_08f11e8ae4f4",
+    "selectedPhysicalWallId": "fr22",
+    "consideredHosts": [
+      "fr21",
+      "fr22"
+    ],
+    "bestHostScore": 25,
+    "secondBestHostScore": 29,
+    "selectionMargin": -4,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr23_26f32d6c3326",
+    "selectedPhysicalWallId": "fr23",
+    "consideredHosts": [
+      "fr23",
+      "fr24",
+      "fr64",
+      "fr65"
+    ],
+    "bestHostScore": 78,
+    "secondBestHostScore": 23,
+    "selectionMargin": 55,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr23_389a934447c2",
+    "selectedPhysicalWallId": "fr23",
+    "consideredHosts": [
+      "fr23",
+      "fr61",
+      "fr62",
+      "fr63"
+    ],
+    "bestHostScore": 55,
+    "secondBestHostScore": 6,
+    "selectionMargin": 49,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr23_4c883a666e6b",
+    "selectedPhysicalWallId": "fr23",
+    "consideredHosts": [
+      "fr21",
+      "fr23"
+    ],
+    "bestHostScore": 25,
+    "secondBestHostScore": 22,
+    "selectionMargin": 3,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr24_df52f925dd1f",
+    "selectedPhysicalWallId": "fr24",
+    "consideredHosts": [
+      "fr23",
+      "fr24",
+      "fr25"
+    ],
+    "bestHostScore": 23,
+    "secondBestHostScore": 118,
+    "selectionMargin": -95,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr25_d8181aa934dc",
+    "selectedPhysicalWallId": "fr25",
+    "consideredHosts": [
+      "fr21",
+      "fr24",
+      "fr25",
+      "fr26",
+      "fr33",
+      "fr34",
+      "fr43"
+    ],
+    "bestHostScore": 118,
+    "secondBestHostScore": 58,
+    "selectionMargin": 60,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr26_7b5c20c3ddb2",
+    "selectedPhysicalWallId": "fr26",
+    "consideredHosts": [
+      "fr25",
+      "fr26",
+      "fr27",
+      "fr43"
+    ],
+    "bestHostScore": 40,
+    "secondBestHostScore": 162,
+    "selectionMargin": -122,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr27_d7cb5302560b",
+    "selectedPhysicalWallId": "fr27",
+    "consideredHosts": [
+      "fr21",
+      "fr26",
+      "fr27",
+      "fr28",
+      "fr30",
+      "fr31",
+      "fr43",
+      "fr45"
+    ],
+    "bestHostScore": 162,
+    "secondBestHostScore": 107,
+    "selectionMargin": 55,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr28_d14bc4197e09",
+    "selectedPhysicalWallId": "fr28",
+    "consideredHosts": [
+      "fr22",
+      "fr27",
+      "fr28",
+      "fr29",
+      "fr67",
+      "fr68",
+      "fr8"
+    ],
+    "bestHostScore": 107,
+    "secondBestHostScore": 162,
+    "selectionMargin": -55,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr29_efb399aaa2d9",
+    "selectedPhysicalWallId": "fr29",
+    "consideredHosts": [
+      "fr28",
+      "fr29",
+      "fr3",
+      "fr30",
+      "fr7",
+      "fr8"
+    ],
+    "bestHostScore": 21,
+    "secondBestHostScore": 111,
+    "selectionMargin": -90,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr30_ca4b9c1b5c6e",
+    "selectedPhysicalWallId": "fr30",
+    "consideredHosts": [
+      "fr27",
+      "fr29",
+      "fr30",
+      "fr67"
+    ],
+    "bestHostScore": 58,
+    "secondBestHostScore": 162,
+    "selectionMargin": -104,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr31_f6ad6cddb13f",
+    "selectedPhysicalWallId": "fr31",
+    "consideredHosts": [
+      "fr27",
+      "fr31"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 162,
+    "selectionMargin": -156,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr32_cca6074fb4d8",
+    "selectedPhysicalWallId": "fr32",
+    "consideredHosts": [
+      "fr32",
+      "fr33",
+      "fr43"
+    ],
+    "bestHostScore": 28,
+    "secondBestHostScore": 58,
+    "selectionMargin": -30,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr33_3b01a447b86a",
+    "selectedPhysicalWallId": "fr33",
+    "consideredHosts": [
+      "fr25",
+      "fr32",
+      "fr33",
+      "fr36",
+      "fr37",
+      "fr38",
+      "fr40"
+    ],
+    "bestHostScore": 56,
+    "secondBestHostScore": 118,
+    "selectionMargin": -62,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr34_bf751f494e43",
+    "selectedPhysicalWallId": "fr34",
+    "consideredHosts": [
+      "fr25",
+      "fr34",
+      "fr35",
+      "fr36",
+      "fr39",
+      "fr40",
+      "fr41"
+    ],
+    "bestHostScore": 52,
+    "secondBestHostScore": 118,
+    "selectionMargin": -66,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr35_8fbda402ec2e",
+    "selectedPhysicalWallId": "fr35",
+    "consideredHosts": [
+      "fr34",
+      "fr35"
+    ],
+    "bestHostScore": 7,
+    "secondBestHostScore": 52,
+    "selectionMargin": -45,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr35_7de19a5bc134",
+    "selectedPhysicalWallId": "fr35",
+    "consideredHosts": [
+      "fr21",
+      "fr34",
+      "fr35",
+      "fr45"
+    ],
+    "bestHostScore": 16,
+    "secondBestHostScore": 52,
+    "selectionMargin": -36,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr36_b1d8c3b47ad9",
+    "selectedPhysicalWallId": "fr36",
+    "consideredHosts": [
+      "fr33",
+      "fr36",
+      "fr40",
+      "fr43"
+    ],
+    "bestHostScore": 18,
+    "secondBestHostScore": 58,
+    "selectionMargin": -40,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr36_7f1db4691b01",
+    "selectedPhysicalWallId": "fr36",
+    "consideredHosts": [
+      "fr33",
+      "fr34",
+      "fr36",
+      "fr40"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 56,
+    "selectionMargin": -50,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr37_4deb4fd79551",
+    "selectedPhysicalWallId": "fr37",
+    "consideredHosts": [
+      "fr33",
+      "fr37",
+      "fr43"
+    ],
+    "bestHostScore": 11,
+    "secondBestHostScore": 58,
+    "selectionMargin": -47,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr37_300bcd8e03e9",
+    "selectedPhysicalWallId": "fr37",
+    "consideredHosts": [
+      "fr33",
+      "fr37"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 56,
+    "selectionMargin": -46,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr38_38556ba265ab",
+    "selectedPhysicalWallId": "fr38",
+    "consideredHosts": [
+      "fr33",
+      "fr38",
+      "fr43"
+    ],
+    "bestHostScore": 11,
+    "secondBestHostScore": 58,
+    "selectionMargin": -47,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr38_5435a32cfbe8",
+    "selectedPhysicalWallId": "fr38",
+    "consideredHosts": [
+      "fr33",
+      "fr38"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 56,
+    "selectionMargin": -46,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr39_12ac04f4acba",
+    "selectedPhysicalWallId": "fr39",
+    "consideredHosts": [
+      "fr34",
+      "fr39"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 52,
+    "selectionMargin": -42,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr39_cfa29a4b86b0",
+    "selectedPhysicalWallId": "fr39",
+    "consideredHosts": [
+      "fr21",
+      "fr34",
+      "fr39"
+    ],
+    "bestHostScore": 15,
+    "secondBestHostScore": 52,
+    "selectionMargin": -37,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr40_15f7957ec573",
+    "selectedPhysicalWallId": "fr40",
+    "consideredHosts": [
+      "fr33",
+      "fr34",
+      "fr36",
+      "fr40"
+    ],
+    "bestHostScore": 11,
+    "secondBestHostScore": 56,
+    "selectionMargin": -45,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr40_8cf1322648c7",
+    "selectedPhysicalWallId": "fr40",
+    "consideredHosts": [
+      "fr21",
+      "fr34",
+      "fr36",
+      "fr40"
+    ],
+    "bestHostScore": 15,
+    "secondBestHostScore": 52,
+    "selectionMargin": -37,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr41_1588e21c2a82",
+    "selectedPhysicalWallId": "fr41",
+    "consideredHosts": [
+      "fr34",
+      "fr41"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 52,
+    "selectionMargin": -42,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr41_6f56160158e6",
+    "selectedPhysicalWallId": "fr41",
+    "consideredHosts": [
+      "fr21",
+      "fr34",
+      "fr41"
+    ],
+    "bestHostScore": 16,
+    "secondBestHostScore": 52,
+    "selectionMargin": -36,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr42_7d6a05f973d5",
+    "selectedPhysicalWallId": "fr42",
+    "consideredHosts": [
+      "fr11",
+      "fr15",
+      "fr16",
+      "fr17",
+      "fr4",
+      "fr42",
+      "fr5",
+      "fr6"
+    ],
+    "bestHostScore": 75,
+    "secondBestHostScore": 187,
+    "selectionMargin": -112,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr42_1076833a7ca1",
+    "selectedPhysicalWallId": "fr42",
+    "consideredHosts": [
+      "fr4",
+      "fr42",
+      "fr5"
+    ],
+    "bestHostScore": 11,
+    "secondBestHostScore": 140,
+    "selectionMargin": -129,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr43_304d672f18f4",
+    "selectedPhysicalWallId": "fr43",
+    "consideredHosts": [
+      "fr25",
+      "fr26",
+      "fr27",
+      "fr32",
+      "fr36",
+      "fr37",
+      "fr38",
+      "fr43"
+    ],
+    "bestHostScore": 58,
+    "secondBestHostScore": 162,
+    "selectionMargin": -104,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr43_abfb73baabba",
+    "selectedPhysicalWallId": "fr43",
+    "consideredHosts": [
+      "fr25",
+      "fr26",
+      "fr43"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 118,
+    "selectionMargin": -108,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr44_a1d64e840f5b",
+    "selectedPhysicalWallId": "fr44",
+    "consideredHosts": [
+      "fr14",
+      "fr44",
+      "fr6"
+    ],
+    "bestHostScore": 7,
+    "secondBestHostScore": 187,
+    "selectionMargin": -180,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr45_30d027f57794",
+    "selectedPhysicalWallId": "fr45",
+    "consideredHosts": [
+      "fr27",
+      "fr35",
+      "fr45"
+    ],
+    "bestHostScore": 5,
+    "secondBestHostScore": 162,
+    "selectionMargin": -157,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr46_ddebae8f4993",
+    "selectedPhysicalWallId": "fr46",
+    "consideredHosts": [
+      "fr1",
+      "fr46"
+    ],
+    "bestHostScore": 10,
+    "secondBestHostScore": 24,
+    "selectionMargin": -14,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr47_735842dc5513",
+    "selectedPhysicalWallId": "fr47",
+    "consideredHosts": [
+      "fr1",
+      "fr47"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 31,
+    "selectionMargin": -28,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr47_da5c93accf5d",
+    "selectedPhysicalWallId": "fr47",
+    "consideredHosts": [
+      "fr1",
+      "fr47"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 31,
+    "selectionMargin": -25,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr48_bb8eb5ce52a0",
+    "selectedPhysicalWallId": "fr48",
+    "consideredHosts": [
+      "fr1",
+      "fr48"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 31,
+    "selectionMargin": -25,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr48_7862dcd9c5d5",
+    "selectedPhysicalWallId": "fr48",
+    "consideredHosts": [
+      "fr1",
+      "fr48"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 31,
+    "selectionMargin": -25,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr49_2f6196ef7e7d",
+    "selectedPhysicalWallId": "fr49",
+    "consideredHosts": [
+      "fr1",
+      "fr49"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 24,
+    "selectionMargin": -21,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr49_e2487afb9bf9",
+    "selectedPhysicalWallId": "fr49",
+    "consideredHosts": [
+      "fr1",
+      "fr49"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 24,
+    "selectionMargin": -18,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr50_e3ed5c620c3a",
+    "selectedPhysicalWallId": "fr50",
+    "consideredHosts": [
+      "fr1",
+      "fr50"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 52,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr50_0d95d054bdba",
+    "selectedPhysicalWallId": "fr50",
+    "consideredHosts": [
+      "fr1",
+      "fr50"
+    ],
+    "bestHostScore": 4,
+    "secondBestHostScore": 52,
+    "selectionMargin": -48,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr51_e420a1983e74",
+    "selectedPhysicalWallId": "fr51",
+    "consideredHosts": [
+      "fr22",
+      "fr51"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 55,
+    "selectionMargin": -52,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr51_486f86ee351d",
+    "selectedPhysicalWallId": "fr51",
+    "consideredHosts": [
+      "fr22",
+      "fr51"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 55,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr52_6ad9ac9e907f",
+    "selectedPhysicalWallId": "fr52",
+    "consideredHosts": [
+      "fr22",
+      "fr52"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 55,
+    "selectionMargin": -52,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr52_8321d9bafc88",
+    "selectedPhysicalWallId": "fr52",
+    "consideredHosts": [
+      "fr22",
+      "fr52"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 55,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr53_835b0b417751",
+    "selectedPhysicalWallId": "fr53",
+    "consideredHosts": [
+      "fr22",
+      "fr53"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 55,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr53_dfce598a8ebd",
+    "selectedPhysicalWallId": "fr53",
+    "consideredHosts": [
+      "fr22",
+      "fr53"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 55,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr54_d587c3721ee2",
+    "selectedPhysicalWallId": "fr54",
+    "consideredHosts": [
+      "fr22",
+      "fr54"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 76,
+    "selectionMargin": -73,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr54_3965d9e53b5e",
+    "selectedPhysicalWallId": "fr54",
+    "consideredHosts": [
+      "fr22",
+      "fr54"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 76,
+    "selectionMargin": -70,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr55_d3985f9c1bdf",
+    "selectedPhysicalWallId": "fr55",
+    "consideredHosts": [
+      "fr22",
+      "fr55"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 76,
+    "selectionMargin": -73,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr55_eda5c33f75f6",
+    "selectedPhysicalWallId": "fr55",
+    "consideredHosts": [
+      "fr22",
+      "fr55"
+    ],
+    "bestHostScore": 4,
+    "secondBestHostScore": 76,
+    "selectionMargin": -72,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr56_e0cb6a91320e",
+    "selectedPhysicalWallId": "fr56",
+    "consideredHosts": [
+      "fr2",
+      "fr56"
+    ],
+    "bestHostScore": 12,
+    "secondBestHostScore": 53,
+    "selectionMargin": -41,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr57_9ca9e58afe2b",
+    "selectedPhysicalWallId": "fr57",
+    "consideredHosts": [
+      "fr2",
+      "fr57"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 31,
+    "selectionMargin": -25,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr57_324e7bd8ee9f",
+    "selectedPhysicalWallId": "fr57",
+    "consideredHosts": [
+      "fr2",
+      "fr57"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 31,
+    "selectionMargin": -28,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr58_f242a0b856c1",
+    "selectedPhysicalWallId": "fr58",
+    "consideredHosts": [
+      "fr2",
+      "fr58"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 31,
+    "selectionMargin": -25,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr58_5a06e9597647",
+    "selectedPhysicalWallId": "fr58",
+    "consideredHosts": [
+      "fr2",
+      "fr58"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 31,
+    "selectionMargin": -25,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr59_f7f7aaaa25e8",
+    "selectedPhysicalWallId": "fr59",
+    "consideredHosts": [
+      "fr2",
+      "fr59"
+    ],
+    "bestHostScore": 5,
+    "secondBestHostScore": 24,
+    "selectionMargin": -19,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr59_d8e2bfa0350e",
+    "selectedPhysicalWallId": "fr59",
+    "consideredHosts": [
+      "fr2",
+      "fr59"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 24,
+    "selectionMargin": -21,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr60_785a04234d93",
+    "selectedPhysicalWallId": "fr60",
+    "consideredHosts": [
+      "fr2",
+      "fr60"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 54,
+    "selectionMargin": -51,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr60_348d212a3bac",
+    "selectedPhysicalWallId": "fr60",
+    "consideredHosts": [
+      "fr2",
+      "fr60"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 54,
+    "selectionMargin": -51,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr61_fba828b67a70",
+    "selectedPhysicalWallId": "fr61",
+    "consideredHosts": [
+      "fr23",
+      "fr61"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 55,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr61_81b1c77955d7",
+    "selectedPhysicalWallId": "fr61",
+    "consideredHosts": [
+      "fr23",
+      "fr61"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 55,
+    "selectionMargin": -52,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr62_5707d38ff8f7",
+    "selectedPhysicalWallId": "fr62",
+    "consideredHosts": [
+      "fr23",
+      "fr62"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 55,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr62_d1db15320823",
+    "selectedPhysicalWallId": "fr62",
+    "consideredHosts": [
+      "fr23",
+      "fr62"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 55,
+    "selectionMargin": -52,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr63_f5eaf0e496b2",
+    "selectedPhysicalWallId": "fr63",
+    "consideredHosts": [
+      "fr23",
+      "fr63"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 55,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr63_1f7d02420f7f",
+    "selectedPhysicalWallId": "fr63",
+    "consideredHosts": [
+      "fr23",
+      "fr63"
+    ],
+    "bestHostScore": 6,
+    "secondBestHostScore": 55,
+    "selectionMargin": -49,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr64_ccca71264f4b",
+    "selectedPhysicalWallId": "fr64",
+    "consideredHosts": [
+      "fr23",
+      "fr64"
+    ],
+    "bestHostScore": 5,
+    "secondBestHostScore": 78,
+    "selectionMargin": -73,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr64_faeeea9aba64",
+    "selectedPhysicalWallId": "fr64",
+    "consideredHosts": [
+      "fr23",
+      "fr64"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 78,
+    "selectionMargin": -75,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr65_06e2d3b61739",
+    "selectedPhysicalWallId": "fr65",
+    "consideredHosts": [
+      "fr23",
+      "fr65"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 78,
+    "selectionMargin": -75,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr65_5eb0756eefc5",
+    "selectedPhysicalWallId": "fr65",
+    "consideredHosts": [
+      "fr23",
+      "fr65"
+    ],
+    "bestHostScore": 3,
+    "secondBestHostScore": 78,
+    "selectionMargin": -75,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr66_41842b2ede2c",
+    "selectedPhysicalWallId": "fr66",
+    "consideredHosts": [
+      "fr66",
+      "fr67",
+      "fr69"
+    ],
+    "bestHostScore": 43,
+    "secondBestHostScore": 34,
+    "selectionMargin": 9,
+    "hostStatus": "UNIQUE_HOST"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr67_43fec797ba20",
+    "selectedPhysicalWallId": "fr67",
+    "consideredHosts": [
+      "fr66",
+      "fr67",
+      "fr7"
+    ],
+    "bestHostScore": 5,
+    "secondBestHostScore": 111,
+    "selectionMargin": -106,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr67_748eae7e9327",
+    "selectedPhysicalWallId": "fr67",
+    "consideredHosts": [
+      "fr28",
+      "fr66",
+      "fr67"
+    ],
+    "bestHostScore": 21,
+    "secondBestHostScore": 107,
+    "selectionMargin": -86,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr67_4f95ba3c8421",
+    "selectedPhysicalWallId": "fr67",
+    "consideredHosts": [
+      "fr28",
+      "fr30",
+      "fr67"
+    ],
+    "bestHostScore": 2,
+    "secondBestHostScore": 107,
+    "selectionMargin": -105,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr68_f5a9412e603a",
+    "selectedPhysicalWallId": "fr68",
+    "consideredHosts": [
+      "fr28",
+      "fr68",
+      "fr7"
+    ],
+    "bestHostScore": 28,
+    "secondBestHostScore": 111,
+    "selectionMargin": -83,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  },
+  {
+    "candidateId": "c_v3-grammar-v1_fr69_2f8e9e169a75",
+    "selectedPhysicalWallId": "fr69",
+    "consideredHosts": [
+      "fr66",
+      "fr69",
+      "fr7"
+    ],
+    "bestHostScore": 34,
+    "secondBestHostScore": 111,
+    "selectionMargin": -77,
+    "hostStatus": "AMBIGUOUS_HOST_REVIEW"
+  }
+]

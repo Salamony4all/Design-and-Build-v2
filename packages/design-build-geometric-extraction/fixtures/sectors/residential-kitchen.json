@@ -1,0 +1,1263 @@
+{
+  "$schema": "cs4-ffe-sector-fixture",
+  "sector": "residential",
+  "prioritySpace": "kitchen",
+  "units": "mm",
+  "unitsPerMeter": 1000,
+  "synthetic": true,
+  "priorityProducts": [
+    "base-cabinet",
+    "wall-cabinet",
+    "tall-cabinet",
+    "kitchen-island",
+    "countertop",
+    "sink-unit",
+    "refrigerator",
+    "cooker",
+    "oven",
+    "dishwasher",
+    "microwave",
+    "extractor-hood",
+    "dining-table",
+    "dining-chair"
+  ],
+  "scopeRule": "Separate built-in joinery from appliances and loose FF&E.",
+  "groups": [
+    {
+      "name": "base-cabinet-run",
+      "hint": "base cabinet floor unit",
+      "scopeClass": "built-in-joinery",
+      "expected": {
+        "productType": "base-cabinet",
+        "scope": "built-in-joinery",
+        "category": "kitchen-cabinetry"
+      },
+      "components": [
+        {
+          "id": "bc-01",
+          "bounds": [
+            0,
+            3400,
+            600,
+            4000
+          ],
+          "points": [
+            {
+              "x": 0,
+              "y": 3400
+            },
+            {
+              "x": 600,
+              "y": 3400
+            },
+            {
+              "x": 600,
+              "y": 4000
+            },
+            {
+              "x": 0,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "bc-01-p1"
+            ],
+            "rootIds": [
+              "bc-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "bc-02",
+          "bounds": [
+            600,
+            3400,
+            1200,
+            4000
+          ],
+          "points": [
+            {
+              "x": 600,
+              "y": 3400
+            },
+            {
+              "x": 1200,
+              "y": 3400
+            },
+            {
+              "x": 1200,
+              "y": 4000
+            },
+            {
+              "x": 600,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "bc-02-p1"
+            ],
+            "rootIds": [
+              "bc-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "bc-03",
+          "bounds": [
+            1200,
+            3400,
+            1800,
+            4000
+          ],
+          "points": [
+            {
+              "x": 1200,
+              "y": 3400
+            },
+            {
+              "x": 1800,
+              "y": 3400
+            },
+            {
+              "x": 1800,
+              "y": 4000
+            },
+            {
+              "x": 1200,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "bc-03-p1"
+            ],
+            "rootIds": [
+              "bc-03"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "bc-04",
+          "bounds": [
+            1800,
+            3400,
+            2400,
+            4000
+          ],
+          "points": [
+            {
+              "x": 1800,
+              "y": 3400
+            },
+            {
+              "x": 2400,
+              "y": 3400
+            },
+            {
+              "x": 2400,
+              "y": 4000
+            },
+            {
+              "x": 1800,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "bc-04-p1"
+            ],
+            "rootIds": [
+              "bc-04"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "bc-05",
+          "bounds": [
+            2400,
+            3400,
+            3000,
+            4000
+          ],
+          "points": [
+            {
+              "x": 2400,
+              "y": 3400
+            },
+            {
+              "x": 3000,
+              "y": 3400
+            },
+            {
+              "x": 3000,
+              "y": 4000
+            },
+            {
+              "x": 2400,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "bc-05-p1"
+            ],
+            "rootIds": [
+              "bc-05"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "bc-06",
+          "bounds": [
+            3000,
+            3400,
+            3600,
+            4000
+          ],
+          "points": [
+            {
+              "x": 3000,
+              "y": 3400
+            },
+            {
+              "x": 3600,
+              "y": 3400
+            },
+            {
+              "x": 3600,
+              "y": 4000
+            },
+            {
+              "x": 3000,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "bc-06-p1"
+            ],
+            "rootIds": [
+              "bc-06"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "wall-cabinet-run",
+      "hint": "wall cabinet upper unit",
+      "scopeClass": "built-in-joinery",
+      "expected": {
+        "productType": "wall-cabinet",
+        "scope": "built-in-joinery",
+        "category": "kitchen-cabinetry"
+      },
+      "components": [
+        {
+          "id": "wc-01",
+          "bounds": [
+            0,
+            0,
+            600,
+            350
+          ],
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 600,
+              "y": 0
+            },
+            {
+              "x": 600,
+              "y": 350
+            },
+            {
+              "x": 0,
+              "y": 350
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "wc-01-p1"
+            ],
+            "rootIds": [
+              "wc-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "wc-02",
+          "bounds": [
+            600,
+            0,
+            1200,
+            350
+          ],
+          "points": [
+            {
+              "x": 600,
+              "y": 0
+            },
+            {
+              "x": 1200,
+              "y": 0
+            },
+            {
+              "x": 1200,
+              "y": 350
+            },
+            {
+              "x": 600,
+              "y": 350
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "wc-02-p1"
+            ],
+            "rootIds": [
+              "wc-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "wc-03",
+          "bounds": [
+            1200,
+            0,
+            1800,
+            350
+          ],
+          "points": [
+            {
+              "x": 1200,
+              "y": 0
+            },
+            {
+              "x": 1800,
+              "y": 0
+            },
+            {
+              "x": 1800,
+              "y": 350
+            },
+            {
+              "x": 1200,
+              "y": 350
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "wc-03-p1"
+            ],
+            "rootIds": [
+              "wc-03"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "wc-04",
+          "bounds": [
+            1800,
+            0,
+            2400,
+            350
+          ],
+          "points": [
+            {
+              "x": 1800,
+              "y": 0
+            },
+            {
+              "x": 2400,
+              "y": 0
+            },
+            {
+              "x": 2400,
+              "y": 350
+            },
+            {
+              "x": 1800,
+              "y": 350
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "wc-04-p1"
+            ],
+            "rootIds": [
+              "wc-04"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "wc-05",
+          "bounds": [
+            2400,
+            0,
+            3000,
+            350
+          ],
+          "points": [
+            {
+              "x": 2400,
+              "y": 0
+            },
+            {
+              "x": 3000,
+              "y": 0
+            },
+            {
+              "x": 3000,
+              "y": 350
+            },
+            {
+              "x": 2400,
+              "y": 350
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "wc-05-p1"
+            ],
+            "rootIds": [
+              "wc-05"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "tall-unit-bank",
+      "hint": "tall unit larder",
+      "scopeClass": "built-in-joinery",
+      "expected": {
+        "productType": "tall-cabinet",
+        "scope": "built-in-joinery",
+        "category": "kitchen-cabinetry"
+      },
+      "components": [
+        {
+          "id": "tu-01",
+          "bounds": [
+            4300,
+            3350,
+            4900,
+            4000
+          ],
+          "points": [
+            {
+              "x": 4300,
+              "y": 3350
+            },
+            {
+              "x": 4900,
+              "y": 3350
+            },
+            {
+              "x": 4900,
+              "y": 4000
+            },
+            {
+              "x": 4300,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "tu-01-p1"
+            ],
+            "rootIds": [
+              "tu-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "tu-02",
+          "bounds": [
+            4900,
+            3350,
+            5500,
+            4000
+          ],
+          "points": [
+            {
+              "x": 4900,
+              "y": 3350
+            },
+            {
+              "x": 5500,
+              "y": 3350
+            },
+            {
+              "x": 5500,
+              "y": 4000
+            },
+            {
+              "x": 4900,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "tu-02-p1"
+            ],
+            "rootIds": [
+              "tu-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "tu-03",
+          "bounds": [
+            5500,
+            3350,
+            6100,
+            4000
+          ],
+          "points": [
+            {
+              "x": 5500,
+              "y": 3350
+            },
+            {
+              "x": 6100,
+              "y": 3350
+            },
+            {
+              "x": 6100,
+              "y": 4000
+            },
+            {
+              "x": 5500,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "tu-03-p1"
+            ],
+            "rootIds": [
+              "tu-03"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "sink-cabinet",
+      "hint": "sink unit sink base",
+      "scopeClass": "built-in-joinery",
+      "expected": {
+        "productType": "sink-unit",
+        "scope": "built-in-joinery",
+        "category": "kitchen-cabinetry"
+      },
+      "components": [
+        {
+          "id": "sk-01",
+          "bounds": [
+            3600,
+            3400,
+            4600,
+            4000
+          ],
+          "points": [
+            {
+              "x": 3600,
+              "y": 3400
+            },
+            {
+              "x": 4600,
+              "y": 3400
+            },
+            {
+              "x": 4600,
+              "y": 4000
+            },
+            {
+              "x": 3600,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "sk-01-p1"
+            ],
+            "rootIds": [
+              "sk-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "island",
+      "hint": "kitchen island",
+      "scopeClass": "built-in-joinery",
+      "expected": {
+        "productType": "kitchen-island",
+        "scope": "built-in-joinery",
+        "category": "kitchen-cabinetry"
+      },
+      "components": [
+        {
+          "id": "is-01",
+          "bounds": [
+            1500,
+            5600,
+            3900,
+            6600
+          ],
+          "points": [
+            {
+              "x": 1500,
+              "y": 5600
+            },
+            {
+              "x": 3900,
+              "y": 5600
+            },
+            {
+              "x": 3900,
+              "y": 6600
+            },
+            {
+              "x": 1500,
+              "y": 6600
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "is-01-p1"
+            ],
+            "rootIds": [
+              "is-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "refrigerator",
+      "hint": "refrigerator fridge",
+      "scopeClass": "appliance",
+      "expected": {
+        "productType": "refrigerator",
+        "scope": "appliance",
+        "category": "kitchen-appliances"
+      },
+      "components": [
+        {
+          "id": "rf-01",
+          "bounds": [
+            6100,
+            3350,
+            7000,
+            4100
+          ],
+          "points": [
+            {
+              "x": 6100,
+              "y": 3350
+            },
+            {
+              "x": 7000,
+              "y": 3350
+            },
+            {
+              "x": 7000,
+              "y": 4100
+            },
+            {
+              "x": 6100,
+              "y": 4100
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "rf-01-p1"
+            ],
+            "rootIds": [
+              "rf-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "cooker",
+      "hint": "cooker range",
+      "scopeClass": "appliance",
+      "expected": {
+        "productType": "cooker",
+        "scope": "appliance",
+        "category": "kitchen-appliances"
+      },
+      "components": [
+        {
+          "id": "ck-01",
+          "bounds": [
+            7200,
+            3400,
+            8100,
+            4050
+          ],
+          "points": [
+            {
+              "x": 7200,
+              "y": 3400
+            },
+            {
+              "x": 8100,
+              "y": 3400
+            },
+            {
+              "x": 8100,
+              "y": 4050
+            },
+            {
+              "x": 7200,
+              "y": 4050
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "ck-01-p1"
+            ],
+            "rootIds": [
+              "ck-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "oven",
+      "hint": "oven",
+      "scopeClass": "appliance",
+      "expected": {
+        "productType": "oven",
+        "scope": "appliance",
+        "category": "kitchen-appliances"
+      },
+      "components": [
+        {
+          "id": "ov-01",
+          "bounds": [
+            8300,
+            3400,
+            8900,
+            4000
+          ],
+          "points": [
+            {
+              "x": 8300,
+              "y": 3400
+            },
+            {
+              "x": 8900,
+              "y": 3400
+            },
+            {
+              "x": 8900,
+              "y": 4000
+            },
+            {
+              "x": 8300,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "ov-01-p1"
+            ],
+            "rootIds": [
+              "ov-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "dishwasher",
+      "hint": "dishwasher",
+      "scopeClass": "appliance",
+      "expected": {
+        "productType": "dishwasher",
+        "scope": "appliance",
+        "category": "kitchen-appliances"
+      },
+      "components": [
+        {
+          "id": "dw-01",
+          "bounds": [
+            9100,
+            3400,
+            9700,
+            4000
+          ],
+          "points": [
+            {
+              "x": 9100,
+              "y": 3400
+            },
+            {
+              "x": 9700,
+              "y": 3400
+            },
+            {
+              "x": 9700,
+              "y": 4000
+            },
+            {
+              "x": 9100,
+              "y": 4000
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "dw-01-p1"
+            ],
+            "rootIds": [
+              "dw-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "microwave",
+      "hint": "microwave",
+      "scopeClass": "appliance",
+      "expected": {
+        "productType": "microwave",
+        "scope": "appliance",
+        "category": "kitchen-appliances"
+      },
+      "components": [
+        {
+          "id": "mw-01",
+          "bounds": [
+            9900,
+            3500,
+            10400,
+            3900
+          ],
+          "points": [
+            {
+              "x": 9900,
+              "y": 3500
+            },
+            {
+              "x": 10400,
+              "y": 3500
+            },
+            {
+              "x": 10400,
+              "y": 3900
+            },
+            {
+              "x": 9900,
+              "y": 3900
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "mw-01-p1"
+            ],
+            "rootIds": [
+              "mw-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "extractor-hood",
+      "hint": "extractor hood",
+      "scopeClass": "appliance",
+      "expected": {
+        "productType": "extractor-hood",
+        "scope": "appliance",
+        "category": "kitchen-appliances"
+      },
+      "components": [
+        {
+          "id": "eh-01",
+          "bounds": [
+            7200,
+            0,
+            8100,
+            500
+          ],
+          "points": [
+            {
+              "x": 7200,
+              "y": 0
+            },
+            {
+              "x": 8100,
+              "y": 0
+            },
+            {
+              "x": 8100,
+              "y": 500
+            },
+            {
+              "x": 7200,
+              "y": 500
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "eh-01-p1"
+            ],
+            "rootIds": [
+              "eh-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "dining-table",
+      "hint": "dining table",
+      "scopeClass": "loose-ffe",
+      "expected": {
+        "productType": "dining-table",
+        "scope": "loose-ffe",
+        "category": "tables-work-surfaces"
+      },
+      "components": [
+        {
+          "id": "dt-01",
+          "bounds": [
+            5500,
+            6000,
+            7300,
+            6900
+          ],
+          "points": [
+            {
+              "x": 5500,
+              "y": 6000
+            },
+            {
+              "x": 7300,
+              "y": 6000
+            },
+            {
+              "x": 7300,
+              "y": 6900
+            },
+            {
+              "x": 5500,
+              "y": 6900
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "dt-01-p1"
+            ],
+            "rootIds": [
+              "dt-01"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "dining-chairs",
+      "hint": "dining chair",
+      "scopeClass": "loose-ffe",
+      "expected": {
+        "productType": "dining-chair",
+        "scope": "loose-ffe",
+        "category": "seating"
+      },
+      "components": [
+        {
+          "id": "dc-01",
+          "bounds": [
+            5700,
+            5400,
+            6180,
+            5880
+          ],
+          "points": [
+            {
+              "x": 5700,
+              "y": 5400
+            },
+            {
+              "x": 6180,
+              "y": 5400
+            },
+            {
+              "x": 6180,
+              "y": 5880
+            },
+            {
+              "x": 5700,
+              "y": 5880
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "dc-01-p1"
+            ],
+            "rootIds": [
+              "dc-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "dc-02",
+          "bounds": [
+            6980,
+            5400,
+            7460,
+            5880
+          ],
+          "points": [
+            {
+              "x": 6980,
+              "y": 5400
+            },
+            {
+              "x": 7460,
+              "y": 5400
+            },
+            {
+              "x": 7460,
+              "y": 5880
+            },
+            {
+              "x": 6980,
+              "y": 5880
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "dc-02-p1"
+            ],
+            "rootIds": [
+              "dc-02"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "dc-r2-01",
+          "bounds": [
+            5700,
+            7050,
+            6180,
+            7530
+          ],
+          "points": [
+            {
+              "x": 5700,
+              "y": 7050
+            },
+            {
+              "x": 6180,
+              "y": 7050
+            },
+            {
+              "x": 6180,
+              "y": 7530
+            },
+            {
+              "x": 5700,
+              "y": 7530
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "dc-r2-01-p1"
+            ],
+            "rootIds": [
+              "dc-r2-01"
+            ],
+            "page": 1
+          }
+        },
+        {
+          "id": "dc-r2-02",
+          "bounds": [
+            6980,
+            7050,
+            7460,
+            7530
+          ],
+          "points": [
+            {
+              "x": 6980,
+              "y": 7050
+            },
+            {
+              "x": 7460,
+              "y": 7050
+            },
+            {
+              "x": 7460,
+              "y": 7530
+            },
+            {
+              "x": 6980,
+              "y": 7530
+            }
+          ],
+          "closed": true,
+          "curves": 0,
+          "lines": 4,
+          "strokeWidth": 1,
+          "source": {
+            "primitiveIds": [
+              "dc-r2-02-p1"
+            ],
+            "rootIds": [
+              "dc-r2-02"
+            ],
+            "page": 1
+          }
+        }
+      ]
+    }
+  ]
+}

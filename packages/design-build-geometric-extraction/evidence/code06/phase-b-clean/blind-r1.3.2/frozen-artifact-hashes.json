@@ -1,0 +1,68 @@
+{
+  "src/window/automatic-detector-clean.ts": {
+    "path": "C:\\Users\\Mohamad60025\\Desktop\\App\\Design And Build\\packages\\design-build-geometric-extraction\\src\\window\\automatic-detector-clean.ts",
+    "exists": true,
+    "sha256": "0164ddaedf2d2d28066e54689c68a4d4acccc283db5808a4639755d2522b5724"
+  },
+  "src/window/clean-detector-config.ts": {
+    "path": "C:\\Users\\Mohamad60025\\Desktop\\App\\Design And Build\\packages\\design-build-geometric-extraction\\src\\window\\clean-detector-config.ts",
+    "exists": true,
+    "sha256": "b550b81325fb12cdda9abe00c06067f2b5d57a65d3d347cc3a3668cc4028c2e6"
+  },
+  "../../apps/design-build-editor/public/CODE_06.pdf": {
+    "path": "C:\\Users\\Mohamad60025\\Desktop\\App\\Design And Build\\packages\\design-build-geometric-extraction\\..\\..\\apps\\design-build-editor\\public\\CODE_06.pdf",
+    "exists": true,
+    "sha256": "6414a5f8ef7bc7034364c05db17291f5319ad4931c4c43d0a6c3a659fbf407b9"
+  },
+  "../../apps/design-build-editor/tests/fixtures/code06-pure-mupdf-golden.json": {
+    "path": "C:\\Users\\Mohamad60025\\Desktop\\App\\Design And Build\\packages\\design-build-geometric-extraction\\..\\..\\apps\\design-build-editor\\tests\\fixtures\\code06-pure-mupdf-golden.json",
+    "exists": true,
+    "sha256": "e4b8320451bbafdf103f96b74ad419a55448c86e2a80c6e952a94af4f1eeeabf"
+  },
+  "evidence/code06/vector-lineage/post-instrumentation-lineage-run1.json": {
+    "path": "C:\\Users\\Mohamad60025\\Desktop\\App\\Design And Build\\packages\\design-build-geometric-extraction\\evidence\\code06\\vector-lineage\\post-instrumentation-lineage-run1.json",
+    "exists": true,
+    "sha256": "c75a59e942e4846de2f1af5ace084e905607ce99c1e41e0648c3cc95e98d6850"
+  },
+  "evidence/code06/phase-b-clean/blind-r1.3.1/r13.1-accounting-report.json": {
+    "path": "C:\\Users\\Mohamad60025\\Desktop\\App\\Design And Build\\packages\\design-build-geometric-extraction\\evidence\\code06\\phase-b-clean\\blind-r1.3.1\\r13.1-accounting-report.json",
+    "exists": true,
+    "sha256": "26eab8a11885a6c8f98a1cec4e219b925d4b0e01f932fde07709f06bdb40cc6d"
+  },
+  "evidence/code06/phase-b-clean/blind-r1.3.1/group-evidence/group-evidence-manifest.json": {
+    "path": "C:\\Users\\Mohamad60025\\Desktop\\App\\Design And Build\\packages\\design-build-geometric-extraction\\evidence\\code06\\phase-b-clean\\blind-r1.3.1\\group-evidence\\group-evidence-manifest.json",
+    "exists": true,
+    "sha256": "adfdd9584e3690e65a3a4e711084840af7f5ff8b14abde63a8bc029a366cf61d"
+  },
+  "region-svgs": {
+    "path": "evidence/code06/phase-b-clean/blind-r1.3.1/group-evidence/region-*.svg",
+    "count": 25,
+    "sha256": {
+      "region-000.svg": "e766cc8196d490ce0c4581cd958e5f90c4c9e4d15655f9568c13be5aa4df1adf",
+      "region-001.svg": "a5e6c3ce622bb72421613bb1621a155bf68859c0372a197337fcefd38e6c4dfd",
+      "region-002.svg": "6e5b35fb985e4cd7f17d602c81228d92745ce9a913f2be696ff67f43352d86b0",
+      "region-003.svg": "34f43a55a13a44cb98742ec47b494f60aa6f9d06f3eeacb132ff5c04b44c74fb",
+      "region-004.svg": "3e9a8aa267a81126aa638f363a5fd087fb0c7e13e63189c185e3d5c3fc5e3bf4",
+      "region-005.svg": "efaedcc351876e24a6434a16e19caa948745aefc7a1a81b3ba84cdc832ee0d75",
+      "region-006.svg": "86d58ed5b7d634ba82132bddd970f42d932dab472b1c19d78a5517b49da89dfa",
+      "region-007.svg": "72d51ee3022f4fa14fc98e37877fb673b5b3b25a92211c952f1a83a9934a2e9c",
+      "region-008.svg": "7c29a438f8f886076832a79caf871ff968a02500058bfb9714194b4d5ee1e190",
+      "region-009.svg": "f326ee63c11113df1631920194483399410b48e1d80abcb6258f2c0b608db336",
+      "region-010.svg": "6553b68ce5044d50648bf05eeb8204f88b451de3768f7e10d5ace6cc49db42ee",
+      "region-011.svg": "2874dcc9be4d95bc95f700ab1c7cae9339d275ffa0a0ec072627829478611bdf",
+      "region-012.svg": "91ce1f38470515469a38d6246ee5315eca11e1a8b0edf3da6fc6b4be36e4614c",
+      "region-013.svg": "6137f548dc24b1a119eb4be81303f0c34c3d3680870b95db312bd3e904292e85",
+      "region-014.svg": "3cef5e1d881e3fc75127f58b7a614279a89ad2c19d4ca4106d7d5b8f0c746e27",
+      "region-015.svg": "7e335dc845dcae47ce463c3b1936544ac127abd4a356a5d558074b4c035430e7",
+      "region-016.svg": "045a9e6ba75a7c455d56138374d7be1df0e605505cf7347451e0582ae1a810df",
+      "region-017.svg": "d05981aa8309983d239651efc362dca8a47dd8e495e9b760b49321e5e4a991ae",
+      "region-018.svg": "b7da726498f9072f12b138f6fd464d75eb01d3a96142dac6b9d6b9df83579b1c",
+      "region-019.svg": "ca2503915cbbb02dbef190b9251aec1db38490b229d9582ef4eb3ef0f36d9f9a",
+      "region-020.svg": "871bf90c4afb5967f79b2dfd867c87001c7f9baad5c5d6560bf25fe8c2fdf526",
+      "region-021.svg": "dca744e3d43f15d7992ded83183d6eaf281ff85df29f85fccf188e7798134c4e",
+      "region-022.svg": "3ccd940b275251796ac87d3c8a2b149792d678524561461e2a9c51c061386022",
+      "region-023.svg": "eaf1b3cac9be9280e93f2f5758c0eff1dd6e40040315d298857238c5ff2ca6a1",
+      "region-024.svg": "c24630d8a1700fb59a6db9ff114ed781bfda15a173f39004de038062965fef4c"
+    }
+  }
+}

@@ -1,0 +1,394 @@
+{
+  "generatedAt": "2026-07-29T03:27:07.301Z",
+  "totalRegions": 25,
+  "classifications": [
+    {
+      "regionId": "DT-01",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:3980"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-02",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:3980"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-03",
+      "classification": "WALL_GAP_ONLY",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": true,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:3980"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.75,
+      "notes": "Region aligned with known physical wall interval - wall gap without leaf symbol at this location"
+    },
+    {
+      "regionId": "DT-04",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:3980"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-05",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:3980"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-06",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4073"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-07",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4073"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-08",
+      "classification": "WALL_GAP_ONLY",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": true,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4073"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.75,
+      "notes": "Region aligned with known physical wall interval - wall gap without leaf symbol at this location"
+    },
+    {
+      "regionId": "DT-09",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4073"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-10",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4073"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-11",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-12",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-13",
+      "classification": "WALL_GAP_ONLY",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": true,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [],
+      "sourceOperationIndices": null,
+      "confidence": 0.75,
+      "notes": "Region aligned with known physical wall interval - wall gap without leaf symbol at this location"
+    },
+    {
+      "regionId": "DT-14",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-15",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-16",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4119"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-17",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4119"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-18",
+      "classification": "WALL_GAP_ONLY",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": true,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4119"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.75,
+      "notes": "Region aligned with known physical wall interval - wall gap without leaf symbol at this location"
+    },
+    {
+      "regionId": "DT-19",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4119"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-20",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4119"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-21",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4150"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-22",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4150"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-23",
+      "classification": "ANNOTATION_ONLY",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4150"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.5,
+      "notes": "Very low edge ratio, last row - likely annotation rather than door symbol"
+    },
+    {
+      "regionId": "DT-24",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4150"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    },
+    {
+      "regionId": "DT-25",
+      "classification": "MIXED_OR_UNRESOLVED",
+      "visibleLeaf": false,
+      "visibleSwing": false,
+      "visibleWallGap": false,
+      "dominantColour": "sw0|rgbnone|f0|c0 (uniform grey stroke, no fill)",
+      "repeatedDescriptorId": null,
+      "nearestPhysicalWallIds": [
+        "physicalWall:4150"
+      ],
+      "sourceOperationIndices": null,
+      "confidence": 0.4,
+      "notes": "Higher edge density - requires visual inspection of PNG crops"
+    }
+  ],
+  "summary": {
+    "MIXED_OR_UNRESOLVED": 20,
+    "WALL_GAP_ONLY": 4,
+    "ANNOTATION_ONLY": 1
+  },
+  "sumMatches": true,
+  "doorConclusion": {
+    "dominantVisibleRepresentation": "NO_CONSISTENT_PATTERN",
+    "repeatedVisualDescriptorCount": 4,
+    "recoverableDoorRegions": 0,
+    "unresolvedDoorRegions": 20,
+    "explicitlyRejectedRegions": 4,
+    "nextCandidateRule": "stroke-pattern-segmentation-via-local-geometry",
+    "descriptorBreakdown": {
+      "sw0": "stroke width = 0 (hairline / very thin stroke, below 0.6pt threshold)",
+      "rgbnone": "no explicit RGB colour was recorded — likely a default ink colour (black or near-black) with no explicit fill",
+      "f0": "fill colour = none (no fill applied)",
+      "c0": "clipping group = none (no clipping path active for this operation)"
+    },
+    "rgbnoneMeaning": "Colour data was not explicitly present; the stroke uses the default ink colour (black). rgbnone does NOT mean \"colour was discarded\" — it means no colour object was attached to the stroking path.",
+    "summary": "0 regions classified as REPEATED_LOCAL_SYMBOL (uniform stroke convention); 4 as WALL_GAP_ONLY; 0 as NO_VISIBLE_DOOR_SYMBOL; 1 as ANNOTATION_ONLY; 20 as MIXED_OR_UNRESOLVED. All 25 DT regions share the same sw0|rgbnone|f0|c0 cluster — confirming a uniform stroke-based door convention across the full drawing set."
+  },
+  "deterministicHash": "4c4e004e1ff2"
+}

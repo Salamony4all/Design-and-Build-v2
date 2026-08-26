@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" font-family="monospace" font-size="10">
+    <rect width="400" height="200" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="10" y="20" font-weight="bold" font-size="12">as_v2_fr5_b9147b687913</text>
+    <text x="10" y="35">Wall: fr5 | Width: 5860 mm</text>
+    <text x="10" y="50">Interval: [-17.28 - 317.52] | Panels: UNRESOLVED</text>
+    <text x="10" y="65">WA label match: none</text>
+    <!-- Wall centerline -->
+    <line x1="133.3" y1="201.8" x2="133.3" y2="224.4" stroke="#cbd5e1" stroke-width="6" stroke-linecap="round"/>
+    <!-- Window centerline -->
+    <line x1="133.3" y1="197.4" x2="133.3" y2="281.1" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
+  </svg>

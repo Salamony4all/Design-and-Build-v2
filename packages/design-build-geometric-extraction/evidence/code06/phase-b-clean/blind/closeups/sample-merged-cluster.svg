@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="687.480002746582 185.67999267578125 116.559994506836 45.75999450683594" width="300" height="200">
+  <!-- Background -->
+  <rect x="687.480002746582" y="185.67999267578125" width="116.559994506836" height="45.75999450683594" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <!-- Host Wall centerline representation -->
+  <text x="707.480002746582" y="200.67999267578125" font-size="7" font-family="monospace" fill="#666">Candidate from merged cluster (fr69)</text>
+  <text x="707.480002746582" y="221.4399871826172" font-size="6" font-family="monospace" fill="#999">ID: c_v3-clean_fr69_c98fa4319269</text>
+  <!-- Candidate Box -->
+  <rect x="707.480002746582" y="205.67999267578125" width="76.559994506836" height="5.7599945068359375" fill="none" stroke="#0066ff" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="711.480002746582" y="217.67999267578125" font-size="6" font-family="monospace" fill="#0066ff">Interval: [-5.6, 65.2]</text>
+</svg>

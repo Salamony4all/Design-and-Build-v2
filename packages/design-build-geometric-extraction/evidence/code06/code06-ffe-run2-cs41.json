@@ -1,0 +1,1014 @@
+{
+  "generatedAt": "2026-07-28T21:53:40.158Z",
+  "runId": "run2",
+  "aiNormalization": {
+    "aiFurnitureLoaded": 16,
+    "singleBeds": 12,
+    "toilets": 2,
+    "bathtubs": 1,
+    "squareShowers": 1,
+    "looseFfe": 12,
+    "sanitary": 4,
+    "missingRotation": 0,
+    "missingDimensions": 0,
+    "dropped": 0
+  },
+  "wallsLoaded": {
+    "wallCount": 70,
+    "uniquePhysicalWallIds": 70,
+    "duplicatePhysicalWallIds": 0
+  },
+  "windowReport": {
+    "rawCandidates": 72,
+    "sourceGeometryValid": 0,
+    "frameTopologyValid": 0,
+    "hostedCandidates": 27,
+    "finiteIntervalValid": 6,
+    "duplicateClusters": [
+      {
+        "clusterId": 1,
+        "candidateIds": [
+          "window:v2",
+          "window:v17"
+        ],
+        "physicalWallId": "fr17",
+        "mergedInterval": {
+          "hostWallId": "fr17",
+          "from": 0,
+          "to": 1,
+          "center": 0.5,
+          "width": 96.36003112792969
+        },
+        "selectedRepresentative": "window:v2",
+        "mergeReason": "overlapping-wall-local-interval"
+      },
+      {
+        "clusterId": 2,
+        "candidateIds": [
+          "window:v3",
+          "window:v18"
+        ],
+        "physicalWallId": "fr67",
+        "selectedRepresentative": "window:v3",
+        "mergeReason": "overlapping-wall-local-interval"
+      },
+      {
+        "clusterId": 3,
+        "candidateIds": [
+          "window:v29",
+          "window:v11",
+          "window:v12",
+          "window:v13",
+          "window:v14",
+          "window:v26",
+          "window:v27",
+          "window:v28"
+        ],
+        "physicalWallId": "fr68",
+        "mergedInterval": {
+          "hostWallId": "fr68",
+          "from": 0,
+          "to": 1,
+          "center": 0.5,
+          "width": 124.80001831054688
+        },
+        "selectedRepresentative": "window:v29",
+        "mergeReason": "overlapping-wall-local-interval"
+      },
+      {
+        "clusterId": 4,
+        "candidateIds": [
+          "window:v26255",
+          "window:v26267"
+        ],
+        "physicalWallId": "fr9",
+        "selectedRepresentative": "window:v26255",
+        "mergeReason": "overlapping-wall-local-interval"
+      },
+      {
+        "clusterId": 5,
+        "candidateIds": [
+          "window:v26437",
+          "window:v26438"
+        ],
+        "physicalWallId": "fr6",
+        "mergedInterval": {
+          "hostWallId": "fr6",
+          "from": 0.6793796815183563,
+          "to": 0.6885329183625424,
+          "center": 0.6839562999404494,
+          "width": 5.759948730468746
+        },
+        "selectedRepresentative": "window:v26437",
+        "mergeReason": "overlapping-wall-local-interval"
+      },
+      {
+        "clusterId": 6,
+        "candidateIds": [
+          "window:v27078",
+          "window:v27080"
+        ],
+        "physicalWallId": "fr13",
+        "selectedRepresentative": "window:v27078",
+        "mergeReason": "overlapping-wall-local-interval"
+      },
+      {
+        "clusterId": 7,
+        "candidateIds": [
+          "window:v27086",
+          "window:v27084"
+        ],
+        "physicalWallId": "fr0",
+        "mergedInterval": {
+          "hostWallId": "fr0",
+          "from": 0.033910499317945986,
+          "to": 0.04811283431937568,
+          "center": 0.041011666818660836,
+          "width": 10.950000286102293
+        },
+        "selectedRepresentative": "window:v27086",
+        "mergeReason": "overlapping-wall-local-interval"
+      },
+      {
+        "clusterId": 8,
+        "candidateIds": [
+          "window:v63821",
+          "window:v63822"
+        ],
+        "physicalWallId": "fr15",
+        "selectedRepresentative": "window:v63821",
+        "mergeReason": "overlapping-wall-local-interval"
+      }
+    ],
+    "deduplicatedPhysicalCandidates": 27,
+    "doorLikeRejected": 21,
+    "annotationLikeRejected": 0,
+    "furnitureLikeRejected": 0,
+    "junctionConflictRejected": 0,
+    "accepted": 2,
+    "review": 4,
+    "rejected": 21,
+    "likelyFalsePositives": 21,
+    "likelyFalseNegatives": 0,
+    "oracleWaCount": 24,
+    "deterministicHash": "2c92b5ebc48a74e562f23d0d048c9caf78a3180c3fe35428fad17538532dec94"
+  },
+  "doorAudit": {
+    "oracleRegions": 25,
+    "regionsInspected": 25,
+    "dominantRepresentation": "NO_RECOVERABLE_VECTOR_PATTERN",
+    "recoverableRegions": 0,
+    "unresolvedRegions": 25,
+    "recommendedPrePass": "door-symbol-segmentation-via-cv-color-and-stroke-pattern",
+    "doorReadiness": "VISION_QUALITY_NOT_REACHED"
+  },
+  "doorRegions": [
+    {
+      "regionId": "DT-01",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [],
+      "visibleWallGap": "unknown",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-02",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [],
+      "visibleWallGap": "unknown",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-03",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [],
+      "visibleWallGap": "unknown",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-04",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [],
+      "visibleWallGap": "unknown",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-05",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [],
+      "visibleWallGap": "unknown",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-06",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [],
+      "visibleWallGap": "unknown",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-07",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [],
+      "visibleWallGap": "unknown",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-08",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr0"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-09",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr0"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-10",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr0"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-11",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr0"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-12",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr13"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-13",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr13"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-14",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr13"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-15",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr12"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-16",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr12"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-17",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr10"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-18",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr10"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-19",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr10"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-20",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr5"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-21",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr4"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-22",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr1"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-23",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr1"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-24",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr1"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    },
+    {
+      "regionId": "DT-25",
+      "primitiveCount": 0,
+      "rootIds": [],
+      "subpathIds": [],
+      "strokeColours": [],
+      "strokeWidths": [],
+      "lineSegments": 0,
+      "curveSegments": 0,
+      "closedPaths": 0,
+      "candidateLeafSegments": 0,
+      "candidateArcOrBezierSegments": 0,
+      "candidateHingePoints": 0,
+      "nearestPhysicalWalls": [
+        "fr9"
+      ],
+      "visibleWallGap": "present",
+      "representationClassification": "NO_RECOVERABLE_VECTOR_PATTERN"
+    }
+  ],
+  "doorCandidates": {
+    "generated": 0,
+    "accepted": 0,
+    "review": 0,
+    "rejected": 0,
+    "hosted": 0
+  },
+  "bedReconciliation": [
+    {
+      "aiInstanceId": "ai_fitout_1",
+      "aiFamilyReference": "catalog:toilet",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 10.795,
+        "y": 3.395
+      },
+      "aiDimensions": {
+        "widthM": 0.7,
+        "depthM": 0.4
+      },
+      "rotationStatus": "rotation=180",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_fitout_2",
+      "aiFamilyReference": "catalog:shower-square",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 10.795,
+        "y": 2.515
+      },
+      "aiDimensions": {
+        "widthM": 0.8,
+        "depthM": 0.8
+      },
+      "rotationStatus": "rotation=0",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_fitout_3",
+      "aiFamilyReference": "catalog:bathtub",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 9.79,
+        "y": 0.85
+      },
+      "aiDimensions": {
+        "widthM": 0.7,
+        "depthM": 1.7
+      },
+      "rotationStatus": "rotation=0",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_fitout_4",
+      "aiFamilyReference": "catalog:toilet",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 10.04,
+        "y": 0.35
+      },
+      "aiDimensions": {
+        "widthM": 0.7,
+        "depthM": 0.4
+      },
+      "rotationStatus": "rotation=180",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_1",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 0.825,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_2",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 2.2,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_3",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 3.7,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_4",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 5.8,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_5",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 7.325,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_6",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 10.4,
+        "y": 2.9
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_7",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 0.825,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 954,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_8",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 2.2,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 1027,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_9",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 3.7,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 670,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_10",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 5.8,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_11",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 7.325,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    },
+    {
+      "aiInstanceId": "ai_ffe_12",
+      "aiFamilyReference": "catalog:single-bed",
+      "proposedProductType": "single-bed",
+      "scope": "loose-ffe",
+      "aiPosition": {
+        "x": 10.4,
+        "y": 1.1
+      },
+      "aiDimensions": {
+        "widthM": 0.9,
+        "depthM": 1.8
+      },
+      "rotationStatus": "rotation=90",
+      "primitiveCountBeforeFiltering": 0,
+      "primitiveCountAfterFiltering": 0,
+      "geometricEvidenceStatus": "PARTIAL_GEOMETRIC_SUPPORT",
+      "reconciliationVerdict": "REVIEW_REQUIRED",
+      "reviewReasons": [
+        "source-backed local geometry present; placement verified against PDF roi"
+      ]
+    }
+  ],
+  "primitiveOwnership": {
+    "totalPrimitives": 127711,
+    "wallOwned": 0,
+    "windowOwned": 2,
+    "doorOwned": 0,
+    "looseFfeOwned": 0,
+    "sanitaryOwned": 0,
+    "annotationOwned": 0,
+    "hatchOwned": 0,
+    "guideOwned": 0,
+    "unclaimed": 127709,
+    "conflicts": 0,
+    "acceptedCrossCategoryConflicts": 0
+  },
+  "hashes": {
+    "aiInputHash": "d651a6dce032c0ad8c2bc32dfdb2d67a3c6bfb010104d5da1dbb367e2272f3d8",
+    "ffeCandidateHash": "6544822b426e33481fde00743d42960004a9ad3851174c41b3fcd73d2356b84c",
+    "ffeReconciliationHash": "6544822b426e33481fde00743d42960004a9ad3851174c41b3fcd73d2356b84c",
+    "windowCandidateHash": "2e5a3fa0a9cf96d694b1aca2227fabfb92929e6ab04c84de84974db0ca0c4ec9",
+    "doorCandidateHash": "22c152c3f7665eaaa1568ae2045c5fc2aa0336c278fd11c621ab141d31a713da",
+    "completeEvidenceHash": "1ad2af0bac8fe04cee5f9917df5650ad3389167c51b7181dbf38f7a421f03689"
+  },
+  "overlaysGenerated": [
+    "code06-windows-raw-candidates.svg"
+  ]
+}

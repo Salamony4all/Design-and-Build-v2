@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Wall Counter — CODE_06</title>
+<style>
+  body { margin: 0; background: #111; display: flex; gap: 16px; padding: 16px; font-family: monospace; }
+  canvas { border: 1px solid #333; cursor: crosshair; max-width: 100%; }
+  #info { color: #eee; min-width: 240px; font-size: 13px; }
+  #info h2 { color: #0cf; margin: 0 0 8px; }
+  .stat { background: #222; padding: 8px; margin: 4px 0; border-radius: 4px; }
+  .stat span { color: #0cf; font-size: 18px; font-weight: bold; }
+  button { background: #0cf; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin: 4px 0; }
+  #log { background: #1a1a1a; padding: 8px; max-height: 300px; overflow-y: auto; font-size: 11px; color: #aaa; }
+</style>
+</head>
+<body>
+<div id="info">
+  <h2>Wall Counter</h2>
+  <div class="stat">H-walls detected: <span id="hcount">-</span></div>
+  <div class="stat">V-walls detected: <span id="vcount">-</span></div>
+  <div class="stat">Total walls: <span id="total">-</span></div>
+  <div class="stat">Min length filter: <span id="minlen">-</span></div>
+  <br>
+  <label style="color:#eee">Luma threshold: <input type="range" id="luma" min="100" max="220" value="165"></label>
+  <div style="color:#0cf" id="lumaval">165</div>
+  <label style="color:#eee">Min run % (of width): <input type="range" id="minpct" min="5" max="60" value="15" step="1"></label>
+  <div style="color:#0cf" id="minpctval">1.5%</div>
+  <label style="color:#eee">Junction min % (of width): <input type="range" id="jmpct" min="20" max="80" value="40" step="5"></label>
+  <div style="color:#0cf" id="jmpctval">4.0%</div>
+  <br>
+  <button onclick="rerun()">🔄 Re-run Detection</button>
+  <button onclick="toggleOverlay()">👁 Toggle Overlay</button>
+  <br><br>
+  <div id="log"></div>
+</div>
+<canvas id="c"></canvas>
+
+<script type="module">
+import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.min.mjs';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs';
+
+let origImageData = null;
+let showOverlay = true;
+
+function log(msg) {
+  const el = document.getElementById('log');
+  el.innerHTML += msg + '<br>';
+  el.scrollTop = el.scrollHeight;
+}
+
+async function loadPDF() {
+  log('Loading PDF...');
+  const url = 'CODE_06 1 page.pdf';
+  const doc = await pdfjsLib.getDocument(url).promise;
+  const page = await doc.getPage(1);
+  const vp = page.getViewport({ scale: 2.5 });
+  const canvas = document.getElementById('c');
+  canvas.width = vp.width;
+  canvas.height = vp.height;
+  const ctx = canvas.getContext('2d');
+  await page.render({ canvasContext: ctx, viewport: vp }).promise;
+  origImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  log('PDF rendered: ' + Math.round(vp.width) + 'x' + Math.round(vp.height));
+  rerun();
+}
+
+window.rerun = function() {
+  if (!origImageData) return;
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const luma = parseInt(document.getElementById('luma').value);
+  const minPct = parseInt(document.getElementById('minpct').value) / 1000;
+  const jmPct = parseInt(document.getElementById('jmpct').value) / 1000;
+
+  const sw = canvas.width, sh = canvas.height;
+  const pixels = origImageData.data;
+
+  // Restore original image
+  ctx.putImageData(origImageData, 0, 0);
+
+  // Binarize
+  const mask = new Uint8Array(sw * sh);
+  for (let i = 0; i < pixels.length; i += 4) {
+    const l = 0.299*pixels[i] + 0.587*pixels[i+1] + 0.114*pixels[i+2];
+    mask[i>>2] = l < luma ? 1 : 0;
+  }
+
+  const minHpx = Math.ceil(sw * minPct);
+  const minVpx = Math.ceil(sh * minPct);
+  const minJH = Math.ceil(sw * jmPct);
+  const minJV = Math.ceil(sh * jmPct);
+  const margin = 15;
+
+  document.getElementById('minlen').textContent = (minPct * 100).toFixed(1) + '% = ' + minHpx + 'px';
+
+  // Detect H runs
+  const hRuns = [];
+  for (let y = margin; y < sh - margin; y++) {
+    let s = -1;
+    for (let x = margin; x < sw - margin; x++) {
+      const ink = mask[y*sw+x] === 1;
+      if (ink && s < 0) s = x;
+      if (!ink && s >= 0) { if (x-s >= minHpx) hRuns.push({axis:y,start:s,end:x}); s=-1; }
+    }
+    if (s >= 0 && sw-margin-s >= minHpx) hRuns.push({axis:y,start:s,end:sw-margin});
+  }
+
+  // Detect V runs
+  const vRuns = [];
+  for (let x = margin; x < sw - margin; x++) {
+    let s = -1;
+    for (let y = margin; y < sh - margin; y++) {
+      const ink = mask[y*sw+x] === 1;
+      if (ink && s < 0) s = y;
+      if (!ink && s >= 0) { if (y-s >= minVpx) vRuns.push({axis:x,start:s,end:y}); s=-1; }
+    }
+    if (s >= 0 && sh-margin-s >= minVpx) vRuns.push({axis:x,start:s,end:sh-margin});
+  }
+
+  // Merge axis runs
+  function mergeRuns(runs, axisTol=10, overlapR=0.20) {
+    if (!runs.length) return [];
+    const sorted = runs.slice().sort((a,b)=>a.axis-b.axis||a.start-b.start);
+    const clusters = [];
+    for (const r of sorted) {
+      let merged = false;
+      for (let i = clusters.length-1; i >= 0; i--) {
+        const c = clusters[i];
+        if (r.axis - Math.max(...c.axes) > axisTol) break;
+        const ov = Math.max(0, Math.min(r.end,c.end)-Math.max(r.start,c.start));
+        const sh2 = Math.max(1, Math.min(r.end-r.start, c.end-c.start));
+        if (ov/sh2 >= overlapR) { c.axes.push(r.axis); c.start=Math.min(c.start,r.start); c.end=Math.max(c.end,r.end); merged=true; break; }
+      }
+      if (!merged) clusters.push({axes:[r.axis],start:r.start,end:r.end});
+    }
+    return clusters.filter(c => !(c.axes.length>6 && Math.max(...c.axes)-Math.min(...c.axes)<15))
+      .map(c => ({axis:Math.round(c.axes.reduce((s,a)=>s+a,0)/c.axes.length),start:c.start,end:c.end}));
+  }
+
+  const hLines = mergeRuns(hRuns);
+  const vLines = mergeRuns(vRuns);
+
+  // Auto zone
+  let zoneX1 = sw - margin;
+  if (hLines.length > 8) {
+    const ends = hLines.map(r=>r.end).sort((a,b)=>a-b);
+    const p88 = ends[Math.floor(ends.length*0.88)]??zoneX1;
+    const p96 = ends[Math.floor(ends.length*0.96)]??zoneX1;
+    if (p96-p88 > sw*0.05) { zoneX1=p88; log('Title block detected at X=' + p88); }
+  }
+
+  const hZ = hLines.filter(l=>l.start<=zoneX1&&l.end>=margin);
+  const vZ = vLines.filter(l=>l.axis<=zoneX1);
+  const majH = hZ.filter(l=>l.end-l.start>=minJH);
+  const majV = vZ.filter(l=>l.end-l.start>=minJV);
+
+  // Find junctions
+  const SNAP = 12;
+  const jRow = new Map(), jCol = new Map();
+  for (const hl of majH) {
+    for (const vl of majV) {
+      if (vl.axis>=hl.start-SNAP&&vl.axis<=hl.end+SNAP&&hl.axis>=vl.start-SNAP&&hl.axis<=vl.end+SNAP) {
+        if (!jRow.has(hl.axis)) jRow.set(hl.axis,[]);
+        if (!jCol.has(vl.axis)) jCol.set(vl.axis,[]);
+        jRow.get(hl.axis).push(vl.axis);
+        jCol.get(vl.axis).push(hl.axis);
+      }
+    }
+  }
+
+  const minWallPx = minHpx;
+  const hWalls = [], vWalls = [];
+
+  for (const hl of hZ) {
+    const jxs = jRow.get(hl.axis)??[];
+    const pts = [...new Set([hl.start,...jxs,hl.end])].sort((a,b)=>a-b);
+    for (let i=0;i<pts.length-1;i++) {
+      if (pts[i+1]-pts[i]>=minWallPx) hWalls.push({y:hl.axis,x1:pts[i],x2:pts[i+1]});
+    }
+  }
+  for (const vl of vZ) {
+    const jys = jCol.get(vl.axis)??[];
+    const pts = [...new Set([vl.start,...jys,vl.end])].sort((a,b)=>a-b);
+    for (let i=0;i<pts.length-1;i++) {
+      if (pts[i+1]-pts[i]>=minWallPx) vWalls.push({x:vl.axis,y1:pts[i],y2:pts[i+1]});
+    }
+  }
+
+  document.getElementById('hcount').textContent = hWalls.length;
+  document.getElementById('vcount').textContent = vWalls.length;
+  document.getElementById('total').textContent = hWalls.length + vWalls.length;
+  log('H-walls: '+hWalls.length+' | V-walls: '+vWalls.length+' | Total: '+(hWalls.length+vWalls.length));
+
+  // Draw overlay
+  if (showOverlay) {
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(0,200,255,0.8)';
+    for (const w of hWalls) { ctx.beginPath(); ctx.moveTo(w.x1,w.y); ctx.lineTo(w.x2,w.y); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(255,100,0,0.8)';
+    for (const w of vWalls) { ctx.beginPath(); ctx.moveTo(w.x,w.y1); ctx.lineTo(w.x,w.y2); ctx.stroke(); }
+    // Draw zone boundary
+    ctx.strokeStyle='rgba(255,255,0,0.5)'; ctx.lineWidth=2; ctx.setLineDash([8,4]);
+    ctx.beginPath(); ctx.moveTo(zoneX1,0); ctx.lineTo(zoneX1,sh); ctx.stroke(); ctx.setLineDash([]);
+    // Draw junctions
+    ctx.fillStyle='rgba(0,255,100,0.9)';
+    for (const [row,cols] of jRow) {
+      for (const col of cols) { ctx.beginPath(); ctx.arc(col,row,4,0,Math.PI*2); ctx.fill(); }
+    }
+  }
+};
+
+window.toggleOverlay = function() { showOverlay=!showOverlay; rerun(); };
+
+['luma','minpct','jmpct'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function() {
+    if(id==='luma') document.getElementById('lumaval').textContent = this.value;
+    if(id==='minpct') document.getElementById('minpctval').textContent = (this.value/10).toFixed(1)+'%';
+    if(id==='jmpct') document.getElementById('jmpctval').textContent = (this.value/10).toFixed(1)+'%';
+  });
+});
+
+loadPDF();
+</script>
+</body>
+</html>

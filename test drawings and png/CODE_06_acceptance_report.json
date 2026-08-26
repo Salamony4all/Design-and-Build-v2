@@ -1,0 +1,702 @@
+{
+  "report": {
+    "textItems": 611,
+    "roomSeeds": 11,
+    "rawLinesBySource": {
+      "guide-fine": 139,
+      "guide-medium": 145,
+      "guide-coarse": 148,
+      "pdf-vector": 145
+    },
+    "confirmedFacesBySource": {
+      "guide-coarse": 148,
+      "guide-fine": 139,
+      "guide-medium": 145,
+      "pdf-vector": 145,
+      "w132": 1,
+      "w156": 1,
+      "w163": 1,
+      "w141": 1,
+      "w162": 1,
+      "w117": 1,
+      "w112": 1,
+      "w113": 1,
+      "w110": 1,
+      "w111": 1,
+      "w161": 1,
+      "w122": 1,
+      "w125": 1,
+      "w5": 1,
+      "w26": 1,
+      "w51": 1,
+      "w62": 1,
+      "w6": 1,
+      "w27": 1,
+      "w15": 1,
+      "w79": 1,
+      "w81": 1,
+      "w35": 1,
+      "w36": 1,
+      "w97": 1,
+      "w98": 1,
+      "w13": 1,
+      "w14": 1,
+      "w16": 1,
+      "w80": 1,
+      "w86": 1,
+      "w34": 1,
+      "w37": 1,
+      "w123": 1,
+      "w124": 1,
+      "w46": 1,
+      "w18": 1,
+      "w83": 1,
+      "w85": 1,
+      "w100": 1,
+      "w101": 1,
+      "w39": 1,
+      "w19": 1,
+      "w84": 1,
+      "w87": 1,
+      "w40": 1,
+      "w92": 1,
+      "w99": 1,
+      "w11": 1,
+      "w76": 1,
+      "w89": 1,
+      "w32": 1,
+      "w90": 1,
+      "w95": 1,
+      "w10": 1,
+      "w12": 1,
+      "w77": 1,
+      "w78": 1,
+      "w9": 1,
+      "w30": 1,
+      "w31": 1,
+      "w33": 1,
+      "w94": 1,
+      "w96": 1,
+      "w142": 1,
+      "w143": 1,
+      "w144": 1,
+      "w145": 1,
+      "w146": 1,
+      "w147": 1,
+      "w151": 1,
+      "w7": 1,
+      "w28": 1,
+      "w56": 1,
+      "w67": 1,
+      "w73": 1,
+      "w8": 1,
+      "w29": 1,
+      "w148": 1,
+      "w164": 1,
+      "w104": 1,
+      "w105": 1,
+      "w102": 1,
+      "w107": 1,
+      "w165": 1,
+      "w166": 1,
+      "w167": 1,
+      "w149": 1,
+      "w103": 1,
+      "w106": 1,
+      "w129": 1,
+      "w128": 1,
+      "w168": 1,
+      "w150": 1,
+      "w152": 1,
+      "w153": 1,
+      "w154": 1,
+      "w155": 1,
+      "w158": 1,
+      "w138": 1,
+      "w135": 1,
+      "w157": 1,
+      "w118": 1,
+      "w114": 1,
+      "w115": 1,
+      "w116": 1,
+      "w119": 1,
+      "w120": 1,
+      "w121": 1,
+      "w1": 1,
+      "w54": 1,
+      "w74": 1,
+      "w0": 1,
+      "w3": 1,
+      "w2": 1,
+      "w4": 1,
+      "w20": 1,
+      "w57": 1,
+      "w58": 1,
+      "w108": 1,
+      "w43": 1,
+      "w88": 1,
+      "w60": 1,
+      "w17": 1,
+      "w82": 1,
+      "w75": 1,
+      "w126": 1,
+      "w127": 1,
+      "w71": 1,
+      "w38": 1,
+      "w109": 1,
+      "w68": 1,
+      "w69": 1,
+      "w91": 1,
+      "w44": 1,
+      "w41": 1,
+      "w22": 1,
+      "w65": 1,
+      "w21": 1,
+      "w24": 1,
+      "w23": 1,
+      "w25": 1,
+      "w93": 1,
+      "w140": 1,
+      "w130": 1,
+      "w139": 1,
+      "w159": 1,
+      "w160": 1
+    },
+    "wallBands": 32,
+    "acceptedBands": 10,
+    "graphFaces": 0,
+    "principalComponentRate": 0.313,
+    "endpointSupportRate": 0.6,
+    "danglingEndpointCount": 8,
+    "roomsExpected": 11,
+    "roomsDetected": 0,
+    "seedCollisionCount": 0,
+    "spaceOverlapCount": 0,
+    "outOfBoundsWorldPointCount": 0,
+    "roundTripMaxErrorPt": 0,
+    "productionAllowed": false
+  },
+  "unresolvedReport": [
+    {
+      "bandId": "band_V_9230_3642_5603_183",
+      "axis": "V",
+      "role": "start",
+      "point": [
+        9.23,
+        3.642
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_9230_3642_5603_183",
+      "axis": "V",
+      "role": "end",
+      "point": [
+        9.23,
+        5.603
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_13384_16738_19761_158",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        16.738,
+        13.384
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_9278_16738_19761_207",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        16.738,
+        9.278
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_11835_16946_19561_209",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        16.945,
+        11.835
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_11835_16946_19561_209",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        19.561,
+        11.835
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_5460_5898_8133_160",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        5.897,
+        5.46
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_5460_5898_8133_160",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        8.133,
+        5.46
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_312_16738_19761_148",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        16.738,
+        0.312
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_1158_16738_19761_148",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        16.738,
+        1.158
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_8821_16738_19761_143",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        16.738,
+        8.821
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_8536_16738_19761_142",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        16.738,
+        8.536
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_13039_16738_19761_218",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        16.738,
+        13.039
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_11125_17284_19223_220",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        17.284,
+        11.124
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_11125_17284_19223_220",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        19.223,
+        11.124
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_3052_2853_8085_220",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        2.853,
+        3.052
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_3052_2853_8085_220",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        8.085,
+        3.052
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_3052_9322_14554_220",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        9.322,
+        3.052
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_3052_9322_14554_220",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        14.553,
+        3.052
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_10661_17057_19508_223",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        17.057,
+        10.661
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_10661_17057_19508_223",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        19.508,
+        10.661
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_121_238_13887_233",
+      "axis": "V",
+      "role": "start",
+      "point": [
+        0.121,
+        0.238
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_2170_5921_9774_238",
+      "axis": "V",
+      "role": "start",
+      "point": [
+        2.171,
+        5.921
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_2170_5921_9774_238",
+      "axis": "V",
+      "role": "end",
+      "point": [
+        2.171,
+        9.774
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_4863_5652_7823_262",
+      "axis": "V",
+      "role": "start",
+      "point": [
+        4.863,
+        5.652
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_4863_5652_7823_262",
+      "axis": "V",
+      "role": "end",
+      "point": [
+        4.863,
+        7.823
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_6920_5849_8180_96",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        5.849,
+        6.92
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_6920_5849_8180_96",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        8.18,
+        6.92
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_6920_9227_11556_96",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        9.227,
+        6.92
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_6920_9227_11556_96",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        11.556,
+        6.92
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_5112_9464_14744_95",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        9.464,
+        5.112
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_5112_9464_14744_95",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        14.744,
+        5.112
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_5112_2663_7942_95",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        2.663,
+        5.112
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_5112_2663_7942_95",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        7.942,
+        5.112
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_7871_9464_14744_95",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        9.464,
+        7.871
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_7871_9464_14744_95",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        14.744,
+        7.871
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_7871_2663_7942_95",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        2.663,
+        7.871
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_7871_2663_7942_95",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        7.942,
+        7.871
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_2616_3258_9726_95",
+      "axis": "V",
+      "role": "start",
+      "point": [
+        2.615,
+        3.258
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_2616_3258_9726_95",
+      "axis": "V",
+      "role": "end",
+      "point": [
+        2.615,
+        9.726
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_9774_2853_8085_95",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        2.853,
+        9.774
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_9774_2853_8085_95",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        8.085,
+        9.774
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_14791_5255_7823_95",
+      "axis": "V",
+      "role": "start",
+      "point": [
+        14.791,
+        5.255
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_14791_5255_7823_95",
+      "axis": "V",
+      "role": "end",
+      "point": [
+        14.791,
+        7.823
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_9774_9322_14554_95",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        9.322,
+        9.774
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_9774_9322_14554_95",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        14.553,
+        9.774
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_2399_2568_8133_268",
+      "axis": "H",
+      "role": "start",
+      "point": [
+        2.568,
+        2.399
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_H_2399_2568_8133_268",
+      "axis": "H",
+      "role": "end",
+      "point": [
+        8.133,
+        2.399
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_12466_5921_7823_83",
+      "axis": "V",
+      "role": "start",
+      "point": [
+        12.466,
+        5.921
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_12466_5921_7823_83",
+      "axis": "V",
+      "role": "end",
+      "point": [
+        12.466,
+        7.823
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_2452_3258_5112_326",
+      "axis": "V",
+      "role": "start",
+      "point": [
+        2.452,
+        3.258
+      ],
+      "classification": "unresolved defect"
+    },
+    {
+      "bandId": "band_V_2452_3258_5112_326",
+      "axis": "V",
+      "role": "end",
+      "point": [
+        2.452,
+        5.112
+      ],
+      "classification": "unresolved defect"
+    }
+  ],
+  "danglingCount": 52
+}

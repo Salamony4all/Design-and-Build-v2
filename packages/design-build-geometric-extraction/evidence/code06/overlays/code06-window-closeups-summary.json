@@ -1,0 +1,83 @@
+{
+  "closeupsGenerated": 6,
+  "visuallyConfirmed": 2,
+  "likelyWindows": 2,
+  "rejectedAfterVisualAudit": 1,
+  "unresolved": 1,
+  "sourceBackedAccepted": 0,
+  "candidates": [
+    {
+      "candidateId": "win-provisional-1",
+      "verdict": "VISIBLE_WINDOW",
+      "confidence": 0.82,
+      "topologyClass": "PARALLEL_FRAME_LINES",
+      "physicalWallId": "physicalWall:4073",
+      "finiteWallInterval": {
+        "x0": 215.3,
+        "x1": 247.1
+      },
+      "width": 31.8,
+      "closeupSvg": "win-provisional-1-closeup.svg"
+    },
+    {
+      "candidateId": "win-provisional-2",
+      "verdict": "VISIBLE_WINDOW",
+      "confidence": 0.74,
+      "topologyClass": "PARALLEL_FRAME_LINES",
+      "physicalWallId": "physicalWall:4119",
+      "finiteWallInterval": {
+        "x0": 310,
+        "x1": 341.8
+      },
+      "width": 31.8,
+      "closeupSvg": "win-provisional-2-closeup.svg"
+    },
+    {
+      "candidateId": "win-provisional-3",
+      "verdict": "LIKELY_WINDOW",
+      "confidence": 0.61,
+      "topologyClass": "WALL_GAP_WITH_GLAZING",
+      "physicalWallId": "physicalWall:3980",
+      "finiteWallInterval": {
+        "x0": 162,
+        "x1": 208
+      },
+      "width": 46,
+      "closeupSvg": "win-provisional-3-closeup.svg"
+    },
+    {
+      "candidateId": "win-provisional-4",
+      "verdict": "LIKELY_WINDOW",
+      "confidence": 0.58,
+      "topologyClass": "WALL_GAP_WITH_GLAZING",
+      "physicalWallId": "physicalWall:4150",
+      "finiteWallInterval": {
+        "x0": 422,
+        "x1": 468
+      },
+      "width": 46,
+      "closeupSvg": "win-provisional-4-closeup.svg"
+    },
+    {
+      "candidateId": "win-provisional-5",
+      "verdict": "UNRESOLVED",
+      "confidence": 0.55,
+      "topologyClass": "SINGLE_FRAME_SYMBOL",
+      "physicalWallId": null,
+      "finiteWallInterval": null,
+      "width": null,
+      "closeupSvg": "win-provisional-5-closeup.svg"
+    },
+    {
+      "candidateId": "win-provisional-6",
+      "verdict": "NOT_A_WINDOW",
+      "confidence": 0.52,
+      "topologyClass": "WALL_GAP_WITH_GLAZING",
+      "physicalWallId": null,
+      "finiteWallInterval": null,
+      "width": null,
+      "closeupSvg": "win-provisional-6-closeup.svg"
+    }
+  ],
+  "provenanceGap": "sourceOperationIndices are null for all 6 candidates — full per-primitive provenance requires instrumenting extractPageVectors (deferred to CS4.3)"
+}

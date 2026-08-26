@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="27.12000274658203 397.720004119873 51.280006408691406 108.0400064086914" width="300" height="200">
+  <rect x="27.12000274658203" y="397.720004119873" width="51.280006408691406" height="108.0400064086914" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <text x="47.12000274658203" y="412.720004119873" font-size="7" font-family="monospace" fill="#222" font-weight="bold">Retained High-Evidence Hypothesis: c_v3-grammar-v1_fr0_56fe5fb9b0cd (Jamb pair verified)</text>
+  <text x="47.12000274658203" y="495.7600105285644" font-size="6" font-family="monospace" fill="#999">ID: c_v3-grammar-v1_fr0_56fe5fb9b0cd | Wall: fr0</text>
+  <rect x="47.12000274658203" y="417.720004119873" width="11.280006408691406" height="68.0400064086914" fill="none" stroke="#00cc00" stroke-width="2" stroke-dasharray="none"/>
+  <text x="51.12000274658203" y="429.720004119873" font-size="6" font-family="monospace" fill="#00cc00">Verdict: ACCEPTED | Width: 56.8pt</text>
+</svg>

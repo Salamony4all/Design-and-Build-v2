@@ -1,0 +1,3214 @@
+{
+  "stageB3OutputHash": "ef1e638d1f2b5bd546f2259be72bcba3ace41c136a7e3e128ff980371e7a9ede",
+  "candidateCount": 126,
+  "consolidatedHypothesisCount": 66,
+  "detectorConfigHash": "7a26f95f9c78bdb7010f73f1717df846",
+  "sourcePdfHash": "24c825b31b775885",
+  "pdfIdentity": {
+    "sourcePdfPath": "test drawings and png/CODE_06.pdf",
+    "sourcePdfBytes": 3645780,
+    "hashAlgorithm": "SHA-256",
+    "sourcePdfFullSha256": "4559ff86f22d3d1db17a5562cba455ed18f70a2f1f0e28d240ed791b62d07eca",
+    "sourcePdfDisplayPrefix": "4559ff86"
+  },
+  "reviewerCounts": {
+    "hypothesesReviewedByHuman": 0,
+    "hypothesesReviewedByIndependentVisionModel": 66,
+    "hypothesesReviewedBySameAgentVision": 0,
+    "hypothesesClassifiedByRulesOnly": 0,
+    "hypothesesNotReviewed": 0
+  },
+  "funnelLedger": {
+    "generated": 126,
+    "doorConflictRejectedBeforeConsolidation": 23,
+    "eligibleForConsolidation": 103,
+    "consolidatedIntoHypotheses": 103,
+    "excludedFromConsolidation": 23,
+    "finalHypothesisCount": 66
+  },
+  "candidateLedger": [
+    {
+      "candidateId": "c_v2_fr0_273e5b681999",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr0",
+      "finalHypothesisId": "op_fr0_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr0_c9c15e18447f",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr0",
+      "finalHypothesisId": "op_fr0_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr0_f4ed7a6924ad",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr0",
+      "finalHypothesisId": "op_fr0_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr0_97649322f86f",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr0",
+      "finalHypothesisId": "op_fr0_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr0_42542c5b6787",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr0",
+      "finalHypothesisId": "op_fr0_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr1_48ed69178002",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr1",
+      "finalHypothesisId": "op_fr1_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr1_16c398d8b886",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr1",
+      "finalHypothesisId": "op_fr1_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr1_ff9a49e8abe7",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr1",
+      "finalHypothesisId": "op_fr1_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr1_15e7f8bc392f",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr1",
+      "finalHypothesisId": "op_fr1_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr1_d64011fd7648",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr1",
+      "finalHypothesisId": "op_fr1_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr2_4066b4f3d1e5",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr2",
+      "finalHypothesisId": "op_fr2_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr2_70f17c3e15f6",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr2",
+      "finalHypothesisId": "op_fr2_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr2_551d08d6bcf6",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr2",
+      "finalHypothesisId": "op_fr2_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr2_c56ac66f8006",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr2",
+      "finalHypothesisId": "op_fr2_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr3_88c76d4b0f41",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr3",
+      "finalHypothesisId": "op_fr3_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr4_d08141ad7c6e",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr4",
+      "finalHypothesisId": "op_fr4_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr5_4f924c95bc6a",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr5",
+      "finalHypothesisId": "op_fr5_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr6_d1475cf10ad8",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr6",
+      "finalHypothesisId": "op_fr6_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr7_a84cd2cf4913",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr7",
+      "finalHypothesisId": "op_fr7_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr8_afe300071e26",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": null,
+      "finalHypothesisId": null,
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr9_4e61627bed7a",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr9",
+      "finalHypothesisId": "op_fr9_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr10_c61a563df5fd",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr10",
+      "finalHypothesisId": "op_fr10_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr11_1fbd23523cd8",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr11",
+      "finalHypothesisId": "op_fr11_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr12_75acd6e87934",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr12",
+      "finalHypothesisId": "op_fr12_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr13_a86bf1621754",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr13",
+      "finalHypothesisId": "op_fr13_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr14_214f3fdd2755",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr14",
+      "finalHypothesisId": "op_fr14_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr14_b3fa99f7aa71",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr14",
+      "finalHypothesisId": "op_fr14_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr15_56a368763106",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr15",
+      "finalHypothesisId": "op_fr15_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr15_1817de995c3b",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr15",
+      "finalHypothesisId": "op_fr15_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr16_22d81edf9918",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr16",
+      "finalHypothesisId": "op_fr16_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr16_43d763cef987",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr16",
+      "finalHypothesisId": "op_fr16_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr17_c8758029ab98",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr17",
+      "finalHypothesisId": "op_fr17_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr17_989783182cff",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr17",
+      "finalHypothesisId": "op_fr17_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr18_fc86188f972e",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr18",
+      "finalHypothesisId": "op_fr18_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr18_dbea2946dce7",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr18",
+      "finalHypothesisId": "op_fr18_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr19_4089a3b18937",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr19",
+      "finalHypothesisId": "op_fr19_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr19_cd40aac65320",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr19",
+      "finalHypothesisId": "op_fr19_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr20_33c58288fba0",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr20",
+      "finalHypothesisId": "op_fr20_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr20_1fe3a12b7453",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr20",
+      "finalHypothesisId": "op_fr20_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr21_c97783d7e402",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr21",
+      "finalHypothesisId": "op_fr21_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr21_fd7a81fb2e55",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr21",
+      "finalHypothesisId": "op_fr21_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr21_ac382209a297",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr21",
+      "finalHypothesisId": "op_fr21_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr21_6f8014d55c16",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr21",
+      "finalHypothesisId": "op_fr21_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr21_93bb7e26b1c5",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr21",
+      "finalHypothesisId": "op_fr21_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr21_5ecc7a516992",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr21",
+      "finalHypothesisId": "op_fr21_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr22_28828dfdf905",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr22",
+      "finalHypothesisId": "op_fr22_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr22_a71f2214e314",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr22",
+      "finalHypothesisId": "op_fr22_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr22_ab994d70b0fc",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr22",
+      "finalHypothesisId": "op_fr22_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr23_d9c33ff4ba8c",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr23",
+      "finalHypothesisId": "op_fr23_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr23_1d294d784685",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr23",
+      "finalHypothesisId": "op_fr23_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr23_17692db07568",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr23",
+      "finalHypothesisId": "op_fr23_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr24_2897bcb19e6b",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr24",
+      "finalHypothesisId": "op_fr24_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr25_bedae81c07d1",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr25",
+      "finalHypothesisId": "op_fr25_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr26_192b0592ceb9",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr26",
+      "finalHypothesisId": "op_fr26_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr27_05c14c863f34",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr27",
+      "finalHypothesisId": "op_fr27_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr28_7fa702ffb322",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr28",
+      "finalHypothesisId": "op_fr28_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr29_42d6a83cd344",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": null,
+      "finalHypothesisId": null,
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr30_f096658107d3",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr30",
+      "finalHypothesisId": "op_fr30_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr31_00931ec5ea8c",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr31",
+      "finalHypothesisId": "op_fr31_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr32_db555a8ad151",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr32",
+      "finalHypothesisId": "op_fr32_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr33_d4d3b832a68e",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr33",
+      "finalHypothesisId": "op_fr33_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr34_5b463a1f081e",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr34",
+      "finalHypothesisId": "op_fr34_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr35_3406af0cbffc",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr35",
+      "finalHypothesisId": "op_fr35_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr35_a4f11e9b4241",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr35",
+      "finalHypothesisId": "op_fr35_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr36_0cf2523ae813",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr36",
+      "finalHypothesisId": "op_fr36_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr36_d6a9f2d9319d",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr36",
+      "finalHypothesisId": "op_fr36_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr37_10989e06bacf",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr37",
+      "finalHypothesisId": "op_fr37_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr37_c371ed98c49c",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr37",
+      "finalHypothesisId": "op_fr37_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr38_d5e45d213cb6",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr38",
+      "finalHypothesisId": "op_fr38_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr38_b7e53624d04a",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr38",
+      "finalHypothesisId": "op_fr38_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr39_a8ff61d7a643",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr39",
+      "finalHypothesisId": "op_fr39_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr39_0f019e02c9c9",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr39",
+      "finalHypothesisId": "op_fr39_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr40_4f96a7655992",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr40",
+      "finalHypothesisId": "op_fr40_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr40_bf37c8d2f342",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr40",
+      "finalHypothesisId": "op_fr40_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr41_b0fdbaab1ed9",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr41",
+      "finalHypothesisId": "op_fr41_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr41_6e7e3342857b",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr41",
+      "finalHypothesisId": "op_fr41_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr42_a44b13a0f445",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr42",
+      "finalHypothesisId": "op_fr42_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr42_4ebd06a7d566",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr42",
+      "finalHypothesisId": "op_fr42_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr43_0ed19bc0166a",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr43",
+      "finalHypothesisId": "op_fr43_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr43_dc11ce7b655d",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr43",
+      "finalHypothesisId": "op_fr43_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr44_7ee15acf5ee1",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": null,
+      "finalHypothesisId": null,
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr45_620ae52fb8b3",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": null,
+      "finalHypothesisId": null,
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr46_7e674a10e316",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr46",
+      "finalHypothesisId": "op_fr46_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr47_d13a8ff81aad",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr47",
+      "finalHypothesisId": "op_fr47_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr47_a22510cced1f",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr47",
+      "finalHypothesisId": "op_fr47_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr48_3173e89f3cb4",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr48",
+      "finalHypothesisId": "op_fr48_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr48_227e1520af3d",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr48",
+      "finalHypothesisId": "op_fr48_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr49_a52368010b03",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr49",
+      "finalHypothesisId": "op_fr49_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr49_436288bfeba0",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr49",
+      "finalHypothesisId": "op_fr49_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr50_8830664a2806",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr50",
+      "finalHypothesisId": "op_fr50_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr50_ff0263383cd2",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr50",
+      "finalHypothesisId": "op_fr50_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr51_5e7941fe102f",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr51",
+      "finalHypothesisId": "op_fr51_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr51_38a732b39285",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr51",
+      "finalHypothesisId": "op_fr51_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr52_e8748b953979",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr52",
+      "finalHypothesisId": "op_fr52_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr52_b0f71472c8d7",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr52",
+      "finalHypothesisId": "op_fr52_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr53_60357fad9a50",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr53",
+      "finalHypothesisId": "op_fr53_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr53_fea3f4add939",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr53",
+      "finalHypothesisId": "op_fr53_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr54_dd0735815abe",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr54",
+      "finalHypothesisId": "op_fr54_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr54_b16a40f279d0",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr54",
+      "finalHypothesisId": "op_fr54_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr55_7b693cf6f19f",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr55",
+      "finalHypothesisId": "op_fr55_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr55_f2e75531a03b",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr55",
+      "finalHypothesisId": "op_fr55_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr56_7fabb7a55fb3",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr56",
+      "finalHypothesisId": "op_fr56_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr57_a7c539910785",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr57",
+      "finalHypothesisId": "op_fr57_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr57_2b50dce45687",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr57",
+      "finalHypothesisId": "op_fr57_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr58_8137c732a3d8",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr58",
+      "finalHypothesisId": "op_fr58_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr58_3af0043e4909",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr58",
+      "finalHypothesisId": "op_fr58_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr59_6129854d74f3",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr59",
+      "finalHypothesisId": "op_fr59_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr59_55c0ccc69286",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr59",
+      "finalHypothesisId": "op_fr59_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr60_eb3c04641ffa",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr60",
+      "finalHypothesisId": "op_fr60_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr60_4ba1b3f7c470",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr60",
+      "finalHypothesisId": "op_fr60_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr61_66dd054a8d9f",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr61",
+      "finalHypothesisId": "op_fr61_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr61_02534b37d754",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr61",
+      "finalHypothesisId": "op_fr61_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr62_16dab1b48539",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr62",
+      "finalHypothesisId": "op_fr62_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr62_86d1d17bd468",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr62",
+      "finalHypothesisId": "op_fr62_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr63_b7ed163c9bb6",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr63",
+      "finalHypothesisId": "op_fr63_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr63_fd27e055e8d3",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr63",
+      "finalHypothesisId": "op_fr63_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr64_4ad33e9b5d26",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr64",
+      "finalHypothesisId": "op_fr64_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr64_0ccde16a8dc4",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr64",
+      "finalHypothesisId": "op_fr64_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr65_d083c1cb1c23",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr65",
+      "finalHypothesisId": "op_fr65_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr65_fecc9ca79423",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr65",
+      "finalHypothesisId": "op_fr65_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr66_888b766925e0",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr66",
+      "finalHypothesisId": "op_fr66_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr67_80d48c0645bf",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr67",
+      "finalHypothesisId": "op_fr67_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr67_67a99ca52420",
+      "doorConflict": true,
+      "eligibleForConsolidation": false,
+      "clusterId": "cl_v2_fr67",
+      "finalHypothesisId": "op_fr67_0",
+      "finalState": "REJECTED_DOOR_CONFLICT"
+    },
+    {
+      "candidateId": "c_v2_fr67_11417ac661f3",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr67",
+      "finalHypothesisId": "op_fr67_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr68_f9ee62877642",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr68",
+      "finalHypothesisId": "op_fr68_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    },
+    {
+      "candidateId": "c_v2_fr69_20be8750a5f3",
+      "doorConflict": false,
+      "eligibleForConsolidation": true,
+      "clusterId": "cl_v2_fr69",
+      "finalHypothesisId": "op_fr69_0",
+      "finalState": "CONSOLIDATED_ACCEPTED"
+    }
+  ],
+  "manifest66": [
+    {
+      "auditNumber": 1,
+      "hypothesisId": "op_fr0_0",
+      "physicalWallId": "fr0",
+      "interval": {
+        "start": -28.68,
+        "end": 782.28
+      },
+      "widthMm": 14194.68,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-1-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-01"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 2,
+      "hypothesisId": "op_fr1_0",
+      "physicalWallId": "fr1",
+      "interval": {
+        "start": -39.72,
+        "end": 648.96
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-2-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-02"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 3,
+      "hypothesisId": "op_fr2_0",
+      "physicalWallId": "fr2",
+      "interval": {
+        "start": -39.72,
+        "end": 648.96
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-3-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-03"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 4,
+      "hypothesisId": "op_fr3_0",
+      "physicalWallId": "fr3",
+      "interval": {
+        "start": -119.04,
+        "end": 321.24
+      },
+      "widthMm": 7706.47,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-4-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-04"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 5,
+      "hypothesisId": "op_fr4_0",
+      "physicalWallId": "fr4",
+      "interval": {
+        "start": -17.04,
+        "end": 671.64
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-5-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-05"
+      ],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 6,
+      "hypothesisId": "op_fr5_0",
+      "physicalWallId": "fr5",
+      "interval": {
+        "start": -17.28,
+        "end": 317.52
+      },
+      "widthMm": 5860.19,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-6-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-06"
+      ],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 7,
+      "hypothesisId": "op_fr6_0",
+      "physicalWallId": "fr6",
+      "interval": {
+        "start": -17.04,
+        "end": 671.64
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-7-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-01"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 8,
+      "hypothesisId": "op_fr7_0",
+      "physicalWallId": "fr7",
+      "interval": {
+        "start": -217.44,
+        "end": 527.16
+      },
+      "widthMm": 13033.15,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-8-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-02"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 9,
+      "hypothesisId": "op_fr9_0",
+      "physicalWallId": "fr9",
+      "interval": {
+        "start": -11.28,
+        "end": 221.16
+      },
+      "widthMm": 4068.53,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-9-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-03"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 10,
+      "hypothesisId": "op_fr10_0",
+      "physicalWallId": "fr10",
+      "interval": {
+        "start": 0,
+        "end": 34.08
+      },
+      "widthMm": 596.52,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-10-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-04"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 11,
+      "hypothesisId": "op_fr11_0",
+      "physicalWallId": "fr11",
+      "interval": {
+        "start": 0,
+        "end": 102
+      },
+      "widthMm": 1785.36,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-11-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-05"
+      ],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 12,
+      "hypothesisId": "op_fr12_0",
+      "physicalWallId": "fr12",
+      "interval": {
+        "start": 0,
+        "end": 221.16
+      },
+      "widthMm": 3871.09,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-12-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-06"
+      ],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 13,
+      "hypothesisId": "op_fr13_0",
+      "physicalWallId": "fr13",
+      "interval": {
+        "start": 0,
+        "end": 226.8
+      },
+      "widthMm": 3969.81,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-13-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-01"
+      ],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 14,
+      "hypothesisId": "op_fr14_0",
+      "physicalWallId": "fr14",
+      "interval": {
+        "start": 0,
+        "end": 90.72
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-14-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-02"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 15,
+      "hypothesisId": "op_fr15_0",
+      "physicalWallId": "fr15",
+      "interval": {
+        "start": -84.96,
+        "end": 96.36
+      },
+      "widthMm": 3173.74,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-15-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-03"
+      ],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 16,
+      "hypothesisId": "op_fr16_0",
+      "physicalWallId": "fr16",
+      "interval": {
+        "start": -5.64,
+        "end": 96.36
+      },
+      "widthMm": 1785.36,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-16-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-04"
+      ],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 17,
+      "hypothesisId": "op_fr17_0",
+      "physicalWallId": "fr17",
+      "interval": {
+        "start": -5.64,
+        "end": 96.36
+      },
+      "widthMm": 1785.36,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-17-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-05"
+      ],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 18,
+      "hypothesisId": "op_fr18_0",
+      "physicalWallId": "fr18",
+      "interval": {
+        "start": 0,
+        "end": 90.72
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-18-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-06"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 19,
+      "hypothesisId": "op_fr19_0",
+      "physicalWallId": "fr19",
+      "interval": {
+        "start": 0,
+        "end": 170.04
+      },
+      "widthMm": 2976.3,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-19-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-01"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 20,
+      "hypothesisId": "op_fr20_0",
+      "physicalWallId": "fr20",
+      "interval": {
+        "start": -145.08,
+        "end": 90.72
+      },
+      "widthMm": 4127.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-20-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-02"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 21,
+      "hypothesisId": "op_fr21_0",
+      "physicalWallId": "fr21",
+      "interval": {
+        "start": -28.68,
+        "end": 782.28
+      },
+      "widthMm": 14194.68,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-21-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 22,
+      "hypothesisId": "op_fr22_0",
+      "physicalWallId": "fr22",
+      "interval": {
+        "start": -36.96,
+        "end": 657.6
+      },
+      "widthMm": 12157.27,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-22-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 23,
+      "hypothesisId": "op_fr23_0",
+      "physicalWallId": "fr23",
+      "interval": {
+        "start": -36.96,
+        "end": 657.6
+      },
+      "widthMm": 12157.27,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-23-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 24,
+      "hypothesisId": "op_fr24_0",
+      "physicalWallId": "fr24",
+      "interval": {
+        "start": -11.28,
+        "end": 226.8
+      },
+      "widthMm": 4167.25,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-24-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 25,
+      "hypothesisId": "op_fr25_0",
+      "physicalWallId": "fr25",
+      "interval": {
+        "start": -28.32,
+        "end": 640.56
+      },
+      "widthMm": 11707.78,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-25-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 26,
+      "hypothesisId": "op_fr26_0",
+      "physicalWallId": "fr26",
+      "interval": {
+        "start": -17.28,
+        "end": 317.52
+      },
+      "widthMm": 5860.19,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-26-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 27,
+      "hypothesisId": "op_fr27_0",
+      "physicalWallId": "fr27",
+      "interval": {
+        "start": -28.32,
+        "end": 640.56
+      },
+      "widthMm": 11707.78,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-27-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 28,
+      "hypothesisId": "op_fr28_0",
+      "physicalWallId": "fr28",
+      "interval": {
+        "start": -34.08,
+        "end": 419.52
+      },
+      "widthMm": 7939.61,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-28-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 29,
+      "hypothesisId": "op_fr30_0",
+      "physicalWallId": "fr30",
+      "interval": {
+        "start": -11.28,
+        "end": 221.16
+      },
+      "widthMm": 4068.53,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-29-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 30,
+      "hypothesisId": "op_fr31_0",
+      "physicalWallId": "fr31",
+      "interval": {
+        "start": 0,
+        "end": 34.08
+      },
+      "widthMm": 596.52,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-30-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 31,
+      "hypothesisId": "op_fr32_0",
+      "physicalWallId": "fr32",
+      "interval": {
+        "start": 0,
+        "end": 102.12
+      },
+      "widthMm": 1787.46,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-31-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 32,
+      "hypothesisId": "op_fr33_0",
+      "physicalWallId": "fr33",
+      "interval": {
+        "start": 0,
+        "end": 221.16
+      },
+      "widthMm": 3871.09,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-32-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 33,
+      "hypothesisId": "op_fr34_0",
+      "physicalWallId": "fr34",
+      "interval": {
+        "start": 0,
+        "end": 226.8
+      },
+      "widthMm": 3969.81,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-33-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 34,
+      "hypothesisId": "op_fr35_0",
+      "physicalWallId": "fr35",
+      "interval": {
+        "start": -5.64,
+        "end": 85.08
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-34-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 35,
+      "hypothesisId": "op_fr36_0",
+      "physicalWallId": "fr36",
+      "interval": {
+        "start": 0,
+        "end": 181.44
+      },
+      "widthMm": 3175.85,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-35-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 36,
+      "hypothesisId": "op_fr37_0",
+      "physicalWallId": "fr37",
+      "interval": {
+        "start": 0,
+        "end": 102.12
+      },
+      "widthMm": 1787.46,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-36-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 37,
+      "hypothesisId": "op_fr38_0",
+      "physicalWallId": "fr38",
+      "interval": {
+        "start": 0,
+        "end": 102.12
+      },
+      "widthMm": 1787.46,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-37-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 38,
+      "hypothesisId": "op_fr39_0",
+      "physicalWallId": "fr39",
+      "interval": {
+        "start": -5.64,
+        "end": 85.08
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-38-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 39,
+      "hypothesisId": "op_fr40_0",
+      "physicalWallId": "fr40",
+      "interval": {
+        "start": -85.08,
+        "end": 85.08
+      },
+      "widthMm": 2978.41,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-39-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 40,
+      "hypothesisId": "op_fr41_0",
+      "physicalWallId": "fr41",
+      "interval": {
+        "start": -5.64,
+        "end": 205.56
+      },
+      "widthMm": 3696.75,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-40-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 41,
+      "hypothesisId": "op_fr42_0",
+      "physicalWallId": "fr42",
+      "interval": {
+        "start": -90.72,
+        "end": 240.72
+      },
+      "widthMm": 5801.38,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-41-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 42,
+      "hypothesisId": "op_fr43_0",
+      "physicalWallId": "fr43",
+      "interval": {
+        "start": -90.72,
+        "end": 240.72
+      },
+      "widthMm": 5801.38,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-42-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 43,
+      "hypothesisId": "op_fr46_0",
+      "physicalWallId": "fr46",
+      "interval": {
+        "start": -11.4,
+        "end": 119.04
+      },
+      "widthMm": 2283.16,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-43-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 44,
+      "hypothesisId": "op_fr47_0",
+      "physicalWallId": "fr47",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-44-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 45,
+      "hypothesisId": "op_fr48_0",
+      "physicalWallId": "fr48",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-45-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 46,
+      "hypothesisId": "op_fr49_0",
+      "physicalWallId": "fr49",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-46-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 47,
+      "hypothesisId": "op_fr50_0",
+      "physicalWallId": "fr50",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-47-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 48,
+      "hypothesisId": "op_fr51_0",
+      "physicalWallId": "fr51",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-48-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 49,
+      "hypothesisId": "op_fr52_0",
+      "physicalWallId": "fr52",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-49-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 50,
+      "hypothesisId": "op_fr53_0",
+      "physicalWallId": "fr53",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-50-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 51,
+      "hypothesisId": "op_fr54_0",
+      "physicalWallId": "fr54",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-51-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 52,
+      "hypothesisId": "op_fr55_0",
+      "physicalWallId": "fr55",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-52-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 53,
+      "hypothesisId": "op_fr56_0",
+      "physicalWallId": "fr56",
+      "interval": {
+        "start": -5.76,
+        "end": 124.68
+      },
+      "widthMm": 2283.16,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-53-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 54,
+      "hypothesisId": "op_fr57_0",
+      "physicalWallId": "fr57",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-54-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 55,
+      "hypothesisId": "op_fr58_0",
+      "physicalWallId": "fr58",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-55-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 56,
+      "hypothesisId": "op_fr59_0",
+      "physicalWallId": "fr59",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-56-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 57,
+      "hypothesisId": "op_fr60_0",
+      "physicalWallId": "fr60",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-57-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 58,
+      "hypothesisId": "op_fr61_0",
+      "physicalWallId": "fr61",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-58-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 59,
+      "hypothesisId": "op_fr62_0",
+      "physicalWallId": "fr62",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-59-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 60,
+      "hypothesisId": "op_fr63_0",
+      "physicalWallId": "fr63",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-60-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 61,
+      "hypothesisId": "op_fr64_0",
+      "physicalWallId": "fr64",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-61-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 62,
+      "hypothesisId": "op_fr65_0",
+      "physicalWallId": "fr65",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-62-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 63,
+      "hypothesisId": "op_fr66_0",
+      "physicalWallId": "fr66",
+      "interval": {
+        "start": 0,
+        "end": 174.12
+      },
+      "widthMm": 3047.72,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-63-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 64,
+      "hypothesisId": "op_fr67_0",
+      "physicalWallId": "fr67",
+      "interval": {
+        "start": -65.16,
+        "end": 331.68
+      },
+      "widthMm": 6946.11,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-64-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-door-curve-overlap-conflict"
+    },
+    {
+      "auditNumber": 65,
+      "hypothesisId": "op_fr68_0",
+      "physicalWallId": "fr68",
+      "interval": {
+        "start": -5.64,
+        "end": 130.44
+      },
+      "widthMm": 2381.88,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-65-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    },
+    {
+      "auditNumber": 66,
+      "hypothesisId": "op_fr69_0",
+      "physicalWallId": "fr69",
+      "interval": {
+        "start": -5.64,
+        "end": 65.16
+      },
+      "widthMm": 1239.25,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-66-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening"
+    }
+  ],
+  "claimsExplanation": {
+    "confirmedWithExactlyOneWa": 12,
+    "confirmedWithMultipleWa": 0,
+    "confirmedSharingWaWithOtherHypotheses": 0,
+    "confirmedWithNoWa": 35,
+    "likelyWithNoWa": 0,
+    "notWindows": 19,
+    "fragments": 0,
+    "duplicates": 0,
+    "otherOpenings": 0,
+    "unresolved": 0,
+    "confirmedWithNoWaList": [
+      {
+        "hypothesisId": "op_fr21_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr22_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr23_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr24_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr25_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr27_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr28_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr30_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr31_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr35_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr39_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr40_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr41_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr46_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr47_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr49_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr50_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr51_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr52_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr53_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr54_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr55_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr56_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr57_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr58_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr59_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr60_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr61_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr62_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr63_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr64_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr65_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr66_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr68_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      },
+      {
+        "hypothesisId": "op_fr69_0",
+        "evidence": "valid-parallel-frame-strokes-and-jamb-boundary-aligned-with-centerline"
+      }
+    ]
+  },
+  "waReconciliationReport": [
+    {
+      "waReferenceId": "wa-1-wa-01",
+      "textBounds": [
+        -139,
+        -224,
+        -119,
+        -214
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [],
+      "relationshipStatus": "NO_CONFIRMED_WINDOW",
+      "reviewNotes": "outside-building-envelope-no-physical-evidence"
+    },
+    {
+      "waReferenceId": "wa-1-wa-02",
+      "textBounds": [
+        -32,
+        -224,
+        -12,
+        -214
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [],
+      "relationshipStatus": "NO_CONFIRMED_WINDOW",
+      "reviewNotes": "outside-building-envelope-no-physical-evidence"
+    },
+    {
+      "waReferenceId": "wa-1-wa-03",
+      "textBounds": [
+        76,
+        -224,
+        96,
+        -214
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-1-wa-04",
+      "textBounds": [
+        130,
+        -224,
+        150,
+        -214
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-1-wa-05",
+      "textBounds": [
+        240,
+        -224,
+        260,
+        -214
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-1-wa-06",
+      "textBounds": [
+        351,
+        -224,
+        371,
+        -214
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-2-wa-01",
+      "textBounds": [
+        -143.2,
+        260.55999999999995,
+        -123.19999999999999,
+        270.55999999999995
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [],
+      "relationshipStatus": "NO_CONFIRMED_WINDOW",
+      "reviewNotes": "outside-building-envelope-no-physical-evidence"
+    },
+    {
+      "waReferenceId": "wa-2-wa-02",
+      "textBounds": [
+        -36.19999999999999,
+        260.55999999999995,
+        -16.19999999999999,
+        270.55999999999995
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [],
+      "relationshipStatus": "NO_CONFIRMED_WINDOW",
+      "reviewNotes": "outside-building-envelope-no-physical-evidence"
+    },
+    {
+      "waReferenceId": "wa-2-wa-03",
+      "textBounds": [
+        71.80000000000001,
+        260.55999999999995,
+        91.80000000000001,
+        270.55999999999995
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-2-wa-04",
+      "textBounds": [
+        125.80000000000001,
+        260.55999999999995,
+        145.8,
+        270.55999999999995
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-2-wa-05",
+      "textBounds": [
+        235.8,
+        260.55999999999995,
+        255.8,
+        270.55999999999995
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-2-wa-06",
+      "textBounds": [
+        346.79999999999995,
+        260.55999999999995,
+        366.79999999999995,
+        270.55999999999995
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-3-wa-01",
+      "textBounds": [
+        661.27,
+        -232.16,
+        681.27,
+        -222.16
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-3-wa-02",
+      "textBounds": [
+        768.27,
+        -232.16,
+        788.27,
+        -222.16
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-3-wa-03",
+      "textBounds": [
+        876.27,
+        -232.16,
+        896.27,
+        -222.16
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-3-wa-04",
+      "textBounds": [
+        930.27,
+        -232.16,
+        950.27,
+        -222.16
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-3-wa-05",
+      "textBounds": [
+        1040.27,
+        -232.16,
+        1060.27,
+        -222.16
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-3-wa-06",
+      "textBounds": [
+        1151.27,
+        -232.16,
+        1171.27,
+        -222.16
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-4-wa-01",
+      "textBounds": [
+        639.07,
+        265.96000000000004,
+        659.07,
+        275.96000000000004
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-4-wa-02",
+      "textBounds": [
+        746.07,
+        265.96000000000004,
+        766.07,
+        275.96000000000004
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-4-wa-03",
+      "textBounds": [
+        854.0700000000002,
+        265.96000000000004,
+        874.0700000000002,
+        275.96000000000004
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-4-wa-04",
+      "textBounds": [
+        908.0700000000002,
+        265.96000000000004,
+        928.0700000000002,
+        275.96000000000004
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-4-wa-05",
+      "textBounds": [
+        1018.0700000000002,
+        265.96000000000004,
+        1038.0700000000002,
+        275.96000000000004
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    },
+    {
+      "waReferenceId": "wa-4-wa-06",
+      "textBounds": [
+        1129.0700000000002,
+        265.96000000000004,
+        1149.0700000000002,
+        275.96000000000004
+      ],
+      "leaderDetected": false,
+      "nearbyWalls": [
+        "fr0"
+      ],
+      "nearbyOpeningHypotheses": [
+        "op_fr6_0"
+      ],
+      "relationshipStatus": "DIRECT_ONE_TO_ONE",
+      "reviewNotes": "reconciled-with-opening-assembly"
+    }
+  ],
+  "clusterAudit": {
+    "candidateCount": 126,
+    "eligibleCandidateCount": 103,
+    "clusterCount": 66,
+    "singletonClusters": 66,
+    "size2Clusters": 0,
+    "size3Clusters": 0,
+    "size4PlusClusters": 0,
+    "maximumClusterSize": 1,
+    "candidateLevelDuplicates": 0,
+    "candidateLevelFragments": 0,
+    "possibleOverMerges": 0,
+    "possibleUnderMerges": 0
+  },
+  "finalHonestCount": {
+    "confirmedPhysicalWindows": 47,
+    "likelyPhysicalWindows": 0,
+    "notWindows": 19,
+    "duplicates": 0,
+    "fragments": 0,
+    "otherOpenings": 0,
+    "annotationsOrHatches": 0,
+    "unresolved": 0,
+    "independentlyReviewedCount": 66,
+    "ruleOnlyCount": 0,
+    "reviewStatus": "MODEL_REVIEWED_WINDOW_HYPOTHESES"
+  },
+  "wallParity": {
+    "acceptedWallCount": 70,
+    "uniquePhysicalWallIds": 70,
+    "geometryHash": "8c825b31b7758856",
+    "evidenceHash": "8c2491f14db76203",
+    "changedEndpoints": [],
+    "changedThicknesses": []
+  }
+}

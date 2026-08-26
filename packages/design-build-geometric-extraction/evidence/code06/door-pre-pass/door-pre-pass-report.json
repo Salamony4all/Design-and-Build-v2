@@ -1,0 +1,980 @@
+{
+  "generatedAt": "2026-07-29T03:46:37.262Z",
+  "dtAnchors": [
+    {
+      "regionId": "DT-01",
+      "pdfCentre": {
+        "x": 80,
+        "y": 60
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-02",
+      "pdfCentre": {
+        "x": 210,
+        "y": 60
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-03",
+      "pdfCentre": {
+        "x": 340,
+        "y": 60
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-04",
+      "pdfCentre": {
+        "x": 470,
+        "y": 60
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-05",
+      "pdfCentre": {
+        "x": 600,
+        "y": 60
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-06",
+      "pdfCentre": {
+        "x": 80,
+        "y": 115
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-07",
+      "pdfCentre": {
+        "x": 210,
+        "y": 115
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-08",
+      "pdfCentre": {
+        "x": 340,
+        "y": 115
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-09",
+      "pdfCentre": {
+        "x": 470,
+        "y": 115
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-10",
+      "pdfCentre": {
+        "x": 600,
+        "y": 115
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-11",
+      "pdfCentre": {
+        "x": 80,
+        "y": 170
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-12",
+      "pdfCentre": {
+        "x": 210,
+        "y": 170
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-13",
+      "pdfCentre": {
+        "x": 340,
+        "y": 170
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-14",
+      "pdfCentre": {
+        "x": 470,
+        "y": 170
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-15",
+      "pdfCentre": {
+        "x": 600,
+        "y": 170
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-16",
+      "pdfCentre": {
+        "x": 80,
+        "y": 225
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-17",
+      "pdfCentre": {
+        "x": 210,
+        "y": 225
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-18",
+      "pdfCentre": {
+        "x": 340,
+        "y": 225
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-19",
+      "pdfCentre": {
+        "x": 470,
+        "y": 225
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-20",
+      "pdfCentre": {
+        "x": 600,
+        "y": 225
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-21",
+      "pdfCentre": {
+        "x": 80,
+        "y": 280
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-22",
+      "pdfCentre": {
+        "x": 210,
+        "y": 280
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-23",
+      "pdfCentre": {
+        "x": 340,
+        "y": 280
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-24",
+      "pdfCentre": {
+        "x": 470,
+        "y": 280
+      },
+      "halfSize": 22
+    },
+    {
+      "regionId": "DT-25",
+      "pdfCentre": {
+        "x": 600,
+        "y": 280
+      },
+      "halfSize": 22
+    }
+  ],
+  "regionReports": [
+    {
+      "regionId": "DT-01",
+      "pdfCoords": {
+        "x0": 58,
+        "y0": 38,
+        "x1": 102,
+        "y1": 82
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-02",
+      "pdfCoords": {
+        "x0": 188,
+        "y0": 38,
+        "x1": 232,
+        "y1": 82
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-03",
+      "pdfCoords": {
+        "x0": 318,
+        "y0": 38,
+        "x1": 362,
+        "y1": 82
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-04",
+      "pdfCoords": {
+        "x0": 448,
+        "y0": 38,
+        "x1": 492,
+        "y1": 82
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-05",
+      "pdfCoords": {
+        "x0": 578,
+        "y0": 38,
+        "x1": 622,
+        "y1": 82
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-06",
+      "pdfCoords": {
+        "x0": 58,
+        "y0": 93,
+        "x1": 102,
+        "y1": 137
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-07",
+      "pdfCoords": {
+        "x0": 188,
+        "y0": 93,
+        "x1": 232,
+        "y1": 137
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-08",
+      "pdfCoords": {
+        "x0": 318,
+        "y0": 93,
+        "x1": 362,
+        "y1": 137
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-09",
+      "pdfCoords": {
+        "x0": 448,
+        "y0": 93,
+        "x1": 492,
+        "y1": 137
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-10",
+      "pdfCoords": {
+        "x0": 578,
+        "y0": 93,
+        "x1": 622,
+        "y1": 137
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-11",
+      "pdfCoords": {
+        "x0": 58,
+        "y0": 148,
+        "x1": 102,
+        "y1": 192
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-12",
+      "pdfCoords": {
+        "x0": 188,
+        "y0": 148,
+        "x1": 232,
+        "y1": 192
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-13",
+      "pdfCoords": {
+        "x0": 318,
+        "y0": 148,
+        "x1": 362,
+        "y1": 192
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-14",
+      "pdfCoords": {
+        "x0": 448,
+        "y0": 148,
+        "x1": 492,
+        "y1": 192
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-15",
+      "pdfCoords": {
+        "x0": 578,
+        "y0": 148,
+        "x1": 622,
+        "y1": 192
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-16",
+      "pdfCoords": {
+        "x0": 58,
+        "y0": 203,
+        "x1": 102,
+        "y1": 247
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-17",
+      "pdfCoords": {
+        "x0": 188,
+        "y0": 203,
+        "x1": 232,
+        "y1": 247
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-18",
+      "pdfCoords": {
+        "x0": 318,
+        "y0": 203,
+        "x1": 362,
+        "y1": 247
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-19",
+      "pdfCoords": {
+        "x0": 448,
+        "y0": 203,
+        "x1": 492,
+        "y1": 247
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-20",
+      "pdfCoords": {
+        "x0": 578,
+        "y0": 203,
+        "x1": 622,
+        "y1": 247
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 0,
+        "meanG": 0,
+        "meanB": 0,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-21",
+      "pdfCoords": {
+        "x0": 58,
+        "y0": 258,
+        "x1": 102,
+        "y1": 302
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 255,
+        "meanG": 255,
+        "meanB": 255,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-22",
+      "pdfCoords": {
+        "x0": 188,
+        "y0": 258,
+        "x1": 232,
+        "y1": 302
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 255,
+        "meanG": 255,
+        "meanB": 255,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-23",
+      "pdfCoords": {
+        "x0": 318,
+        "y0": 258,
+        "x1": 362,
+        "y1": 302
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 255,
+        "meanG": 255,
+        "meanB": 255,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-24",
+      "pdfCoords": {
+        "x0": 448,
+        "y0": 258,
+        "x1": 492,
+        "y1": 302
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 255,
+        "meanG": 255,
+        "meanB": 255,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    },
+    {
+      "regionId": "DT-25",
+      "pdfCoords": {
+        "x0": 578,
+        "y0": 258,
+        "x1": 622,
+        "y1": 302
+      },
+      "pixelCrop": {
+        "w": 88,
+        "h": 88,
+        "meanR": 255,
+        "meanG": 255,
+        "meanB": 255,
+        "pixelCount": 7744
+      },
+      "classification": {
+        "hasStroke": false,
+        "hasFill": false,
+        "hasClip": false,
+        "hasImage": false,
+        "strokeCount": 0,
+        "meanStrokeWidth": 0,
+        "swBand": 0,
+        "dominantColourBucket": null
+      },
+      "opCount": 0
+    }
+  ],
+  "rawOperationSummary": {
+    "totalRawOperations": 63920,
+    "strokePaths": 63487,
+    "fillPaths": 339,
+    "clips": 47,
+    "images": 0
+  },
+  "colourClusterAnalysis": {
+    "colourClusters": [
+      [
+        "sw0|rgbnone|f0|c0",
+        25
+      ]
+    ],
+    "dominantDoorColourCluster": [
+      {
+        "descriptorKey": "sw0|rgbnone|f0|c0",
+        "count": 25
+      }
+    ],
+    "dominantStrokeWidthBands": [],
+    "repeatedLocalDescriptors": [
+      {
+        "descriptor": "false|false|false|false|0",
+        "regions": [
+          "DT-01",
+          "DT-02",
+          "DT-03",
+          "DT-04",
+          "DT-05",
+          "DT-06",
+          "DT-07",
+          "DT-08",
+          "DT-09",
+          "DT-10",
+          "DT-11",
+          "DT-12",
+          "DT-13",
+          "DT-14",
+          "DT-15",
+          "DT-16",
+          "DT-17",
+          "DT-18",
+          "DT-19",
+          "DT-20",
+          "DT-21",
+          "DT-22",
+          "DT-23",
+          "DT-24",
+          "DT-25"
+        ],
+        "count": 25
+      }
+    ],
+    "descriptorRecurrence": [
+      25
+    ],
+    "visuallySupportedRegions": 1,
+    "unresolvedRegions": 24
+  },
+  "doorCandidatePrePass": {
+    "inspectionRegions": 25,
+    "rawGraphicalCandidates": 0,
+    "repeatedDescriptorCandidates": 0,
+    "hostResolvedCandidates": 0,
+    "accepted": 0,
+    "review": 0,
+    "rejected": 0,
+    "unresolvedRegions": 24,
+    "recommendedPrePass": "colour-stroke-cluster:sw0|rgbnone|f0|c0"
+  },
+  "doorReadiness": "VISION_QUALITY_NOT_REACHED",
+  "deterministicHash": "4bc751d7ab429a6ac9c823a3411b6300d0c0ccac5e6dac8a4425ca1dbf12557f"
+}

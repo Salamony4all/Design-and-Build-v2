@@ -1,0 +1,14 @@
+packages:
+  # Active application(s). apps/editor is deliberately EXCLUDED: it is the
+  # FROZEN preservation source (Pascal 0.6.0 workspace stack) and it declares
+  # "pascal-vector-extractor-initial": "workspace:*", a package that now lives
+  # under archive/. Archive directories must not become active workspaces, and
+  # the frozen app must not be modified, so it is excluded from installs.
+  # The clean app has zero imports from apps/editor (verified).
+  - "apps/*"
+  - "!apps/editor"
+  - "packages/*"
+  - "tooling/*"
+  # pascal-vector-extractor-initial removed: the referenced path does not exist
+  # at the repository root (it is archived) and no ACTIVE package depends on it.
+  - "pascal-vector-extractor"

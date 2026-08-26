@@ -1,0 +1,16 @@
+{
+  "generatedAt": "2026-07-29T00:00:00.000Z",
+  "failures": [
+    {
+      "testFile": "packages/deterministic-engine/src/test-auto-build.test.ts",
+      "testName": "filters noise layers and scale envelopes in raw vector streams",
+      "expected": "[0, -0.01, 0]",
+      "actual": "[0, 0.002, 0.9]",
+      "errorSignature": "position Y and Z mismatch: expected [0,-0.01,0] got [0,0.002,0.9]",
+      "firstObservedDate": "2026-07-29",
+      "baselineCheckpoint": "cs4.1-precheck",
+      "relevantDependencyHash": "NONE — deterministic-engine not edited in CS4/4.1",
+      "classification": "VERIFIED_PRE_EXISTING_BASELINE_FAILURE"
+    }
+  ]
+}

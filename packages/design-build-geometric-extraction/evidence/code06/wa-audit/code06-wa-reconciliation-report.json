@@ -1,0 +1,259 @@
+{
+  "generatedAt": "2026-07-29T11:08:19.837Z",
+  "waReferenceCount": 24,
+  "physicalAssemblyCount": 122,
+  "totalPanelCount": 0,
+  "referencesMatchedToAssemblies": 20,
+  "assembliesWithMultipleReferences": [
+    "as_v2_fr10_ddd872dc81e7",
+    "as_v2_fr13_f98d4436553f",
+    "as_v2_fr48_b686aed9b28b",
+    "as_v2_fr55_44b330338916",
+    "as_v2_fr66_e90be21d10d9"
+  ],
+  "referencesWithoutAssembly": [
+    {
+      "id": "wa-1-wa-01",
+      "unit": 1,
+      "coords": {
+        "x": -129,
+        "y": -219
+      }
+    },
+    {
+      "id": "wa-1-wa-02",
+      "unit": 1,
+      "coords": {
+        "x": -22,
+        "y": -219
+      }
+    },
+    {
+      "id": "wa-2-wa-01",
+      "unit": 2,
+      "coords": {
+        "x": -133.2,
+        "y": 265.55999999999995
+      }
+    },
+    {
+      "id": "wa-2-wa-02",
+      "unit": 2,
+      "coords": {
+        "x": -26.19999999999999,
+        "y": 265.55999999999995
+      }
+    }
+  ],
+  "assembliesWithoutReference": [
+    "as_v2_fr0_7f2042d97eea",
+    "as_v2_fr0_d6faa1defd61",
+    "as_v2_fr0_164167afe09a",
+    "as_v2_fr0_fcd7343e1e1e",
+    "as_v2_fr1_c8f5ab4500ef",
+    "as_v2_fr1_d3840533d288",
+    "as_v2_fr1_e7564e62d162",
+    "as_v2_fr2_40317537ee5e",
+    "as_v2_fr2_f05ae859c8e8",
+    "as_v2_fr2_1d28734ad89c",
+    "as_v2_fr2_5c27e994e2dd",
+    "as_v2_fr4_5ced31a5fe34",
+    "as_v2_fr5_b9147b687913",
+    "as_v2_fr6_a911df9d0e6a",
+    "as_v2_fr7_f9579b884e9f",
+    "as_v2_fr9_82d18234ed78",
+    "as_v2_fr11_ed478d9c9fdf",
+    "as_v2_fr12_6985bb8b8414",
+    "as_v2_fr14_f2c6bd4be974",
+    "as_v2_fr14_d231fd354cfb",
+    "as_v2_fr15_a59fb18d068c",
+    "as_v2_fr15_9f51d48b4b07",
+    "as_v2_fr16_628b4e5a143a",
+    "as_v2_fr16_8284d77890c0",
+    "as_v2_fr17_cfe0c7300898",
+    "as_v2_fr17_9eecefaba257",
+    "as_v2_fr18_0e4470c804e7",
+    "as_v2_fr18_76d63ee40f23",
+    "as_v2_fr19_09f946fc8198",
+    "as_v2_fr19_3ef788715c31",
+    "as_v2_fr20_746d51cd6c66",
+    "as_v2_fr20_6449b9701b90",
+    "as_v2_fr21_74005f29c74c",
+    "as_v2_fr21_a999d30e3f3c",
+    "as_v2_fr21_437f36b31625",
+    "as_v2_fr21_e42605e151b1",
+    "as_v2_fr21_3f1a6999f6a2",
+    "as_v2_fr21_700cbce64b37",
+    "as_v2_fr22_3e0e78292702",
+    "as_v2_fr22_b3f851d73560",
+    "as_v2_fr23_53fe1f99fb7a",
+    "as_v2_fr23_06ed7580a2d3",
+    "as_v2_fr23_802dd90da6bd",
+    "as_v2_fr26_d7880938faaa",
+    "as_v2_fr27_c1859bb71948",
+    "as_v2_fr31_b1c307b0d267",
+    "as_v2_fr32_50717a6cc89b",
+    "as_v2_fr33_649f92d56408",
+    "as_v2_fr34_866eb7a30a54",
+    "as_v2_fr35_6aa0f1bdaf58",
+    "as_v2_fr35_d356d8836f60",
+    "as_v2_fr36_076209436142",
+    "as_v2_fr36_30348869f276",
+    "as_v2_fr37_5374cbf16ee3",
+    "as_v2_fr37_570b25da1b1a",
+    "as_v2_fr38_de26f788b801",
+    "as_v2_fr38_93acd8b29a28",
+    "as_v2_fr39_9f0ef2ab55cf",
+    "as_v2_fr39_a1a1fbe077e7",
+    "as_v2_fr40_2476aab4bec7",
+    "as_v2_fr40_ffcffbe4460e",
+    "as_v2_fr41_657e238e9bcd",
+    "as_v2_fr41_e596e8373b30",
+    "as_v2_fr42_25573b76926e",
+    "as_v2_fr42_7ff54bd76070",
+    "as_v2_fr43_484024f841bf",
+    "as_v2_fr43_02e6a517d6b8",
+    "as_v2_fr46_0316809851b4",
+    "as_v2_fr47_31cd65bd41b7",
+    "as_v2_fr47_5c99926d6069",
+    "as_v2_fr48_d990898f7ddc",
+    "as_v2_fr49_fe87926a3c63",
+    "as_v2_fr49_0d10c9d34245",
+    "as_v2_fr50_55bbbe2b1ef7",
+    "as_v2_fr50_02b70a32ecfa",
+    "as_v2_fr51_9d649e19c40e",
+    "as_v2_fr51_b7611441f73f",
+    "as_v2_fr52_421ad1b5e2e1",
+    "as_v2_fr52_567203452006",
+    "as_v2_fr53_7874dcc6ea67",
+    "as_v2_fr53_8095c9c23d48",
+    "as_v2_fr54_f681f7fc3ce5",
+    "as_v2_fr55_0c25470630c1",
+    "as_v2_fr56_63edd7831bda",
+    "as_v2_fr57_7851fab1d8ca",
+    "as_v2_fr57_52ffd61e14b9",
+    "as_v2_fr58_b1878c8203cd",
+    "as_v2_fr58_553057df4fbe",
+    "as_v2_fr59_9265ab1c7fdb",
+    "as_v2_fr59_daf5b035a223",
+    "as_v2_fr60_45508b4a9125",
+    "as_v2_fr60_7000f505a5ef",
+    "as_v2_fr61_f2266cf502f0",
+    "as_v2_fr61_129d22bed607",
+    "as_v2_fr62_9234243ac6a1",
+    "as_v2_fr62_55ac5232c3da",
+    "as_v2_fr63_6f865a9fd2e3",
+    "as_v2_fr63_ea62a38c591b",
+    "as_v2_fr64_026556493bca",
+    "as_v2_fr64_f7be5429e93c",
+    "as_v2_fr65_80dec132c856",
+    "as_v2_fr65_9a6d7b9d05dc",
+    "as_v2_fr67_20796888da82",
+    "as_v2_fr67_a7df8637e769",
+    "as_v2_fr67_30f972f00cee",
+    "as_v2_fr68_5aba5a63d689",
+    "as_v2_fr69_faf71c7db400"
+  ],
+  "matches": [
+    {
+      "waId": "wa-1-wa-03",
+      "assemblyId": "as_v2_fr1_6cd3b90c675a",
+      "distancePx": 10.68
+    },
+    {
+      "waId": "wa-1-wa-04",
+      "assemblyId": "as_v2_fr13_f98d4436553f",
+      "distancePx": 6.3
+    },
+    {
+      "waId": "wa-1-wa-05",
+      "assemblyId": "as_v2_fr10_ddd872dc81e7",
+      "distancePx": 15.34
+    },
+    {
+      "waId": "wa-1-wa-06",
+      "assemblyId": "as_v2_fr48_b686aed9b28b",
+      "distancePx": 17.74
+    },
+    {
+      "waId": "wa-2-wa-03",
+      "assemblyId": "as_v2_fr0_2fc48e7c701e",
+      "distancePx": 35.05
+    },
+    {
+      "waId": "wa-2-wa-04",
+      "assemblyId": "as_v2_fr13_f98d4436553f",
+      "distancePx": 10.5
+    },
+    {
+      "waId": "wa-2-wa-05",
+      "assemblyId": "as_v2_fr10_ddd872dc81e7",
+      "distancePx": 19.54
+    },
+    {
+      "waId": "wa-2-wa-06",
+      "assemblyId": "as_v2_fr48_b686aed9b28b",
+      "distancePx": 21.94
+    },
+    {
+      "waId": "wa-3-wa-01",
+      "assemblyId": "as_v2_fr3_2639aab4d938",
+      "distancePx": 39.09
+    },
+    {
+      "waId": "wa-3-wa-02",
+      "assemblyId": "as_v2_fr66_e90be21d10d9",
+      "distancePx": 0.07
+    },
+    {
+      "waId": "wa-3-wa-03",
+      "assemblyId": "as_v2_fr24_50bc5c457a06",
+      "distancePx": 39.83
+    },
+    {
+      "waId": "wa-3-wa-04",
+      "assemblyId": "as_v2_fr55_44b330338916",
+      "distancePx": 22.39
+    },
+    {
+      "waId": "wa-3-wa-05",
+      "assemblyId": "as_v2_fr54_631e3c1f8e52",
+      "distancePx": 20.09
+    },
+    {
+      "waId": "wa-3-wa-06",
+      "assemblyId": "as_v2_fr25_86f175cef533",
+      "distancePx": 13.97
+    },
+    {
+      "waId": "wa-4-wa-01",
+      "assemblyId": "as_v2_fr1_7d689c02f063",
+      "distancePx": 35.19
+    },
+    {
+      "waId": "wa-4-wa-02",
+      "assemblyId": "as_v2_fr66_e90be21d10d9",
+      "distancePx": 31.15
+    },
+    {
+      "waId": "wa-4-wa-03",
+      "assemblyId": "as_v2_fr28_9e9c46d3b51c",
+      "distancePx": 48.11
+    },
+    {
+      "waId": "wa-4-wa-04",
+      "assemblyId": "as_v2_fr55_44b330338916",
+      "distancePx": 44.59
+    },
+    {
+      "waId": "wa-4-wa-05",
+      "assemblyId": "as_v2_fr22_3a3a01708af1",
+      "distancePx": 37.15
+    },
+    {
+      "waId": "wa-4-wa-06",
+      "assemblyId": "as_v2_fr30_9cac9942413d",
+      "distancePx": 26.23
+    }
+  ]
+}

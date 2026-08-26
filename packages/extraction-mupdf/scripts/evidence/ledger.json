@@ -1,0 +1,483 @@
+{
+  "pageBounds": [
+    0,
+    0,
+    2383.919921875,
+    1683.719970703125
+  ],
+  "width": 2383.919921875,
+  "height": 1683.719970703125,
+  "annotations": [
+    {
+      "id": "anno-txt-0",
+      "text": "DT",
+      "centre": [
+        641.4053344726562,
+        577.7207641601562
+      ]
+    },
+    {
+      "id": "anno-txt-1",
+      "text": "DT",
+      "centre": [
+        641.4053344726562,
+        951.8822021484375
+      ]
+    },
+    {
+      "id": "anno-txt-2",
+      "text": "DT",
+      "centre": [
+        694.322509765625,
+        776.2015991210938
+      ]
+    },
+    {
+      "id": "anno-txt-3",
+      "text": "DT",
+      "centre": [
+        570.4829711914062,
+        644.9222412109375
+      ]
+    },
+    {
+      "id": "anno-txt-4",
+      "text": "DT",
+      "centre": [
+        550.6819458007812,
+        699.6444091796875
+      ]
+    },
+    {
+      "id": "anno-txt-5",
+      "text": "DT",
+      "centre": [
+        480.72430419921875,
+        784.600830078125
+      ]
+    },
+    {
+      "id": "anno-txt-6",
+      "text": "DT",
+      "centre": [
+        480.72430419921875,
+        841.3619995117188
+      ]
+    },
+    {
+      "id": "anno-txt-7",
+      "text": "DT",
+      "centre": [
+        480.72430419921875,
+        898.0038452148438
+      ]
+    },
+    {
+      "id": "anno-txt-8",
+      "text": "DT",
+      "centre": [
+        400.4431457519531,
+        898.0038452148438
+      ]
+    },
+    {
+      "id": "anno-txt-9",
+      "text": "DT",
+      "centre": [
+        400.4431457519531,
+        841.3619995117188
+      ]
+    },
+    {
+      "id": "anno-txt-10",
+      "text": "DT",
+      "centre": [
+        400.4431457519531,
+        784.600830078125
+      ]
+    },
+    {
+      "id": "anno-txt-11",
+      "text": "DT",
+      "centre": [
+        400.4431457519531,
+        727.963134765625
+      ]
+    },
+    {
+      "id": "anno-txt-12",
+      "text": "DT",
+      "centre": [
+        1423.6885986328125,
+        948.6435546875
+      ]
+    },
+    {
+      "id": "anno-txt-13",
+      "text": "DT",
+      "centre": [
+        1419.007080078125,
+        574.0027465820312
+      ]
+    },
+    {
+      "id": "anno-txt-14",
+      "text": "DT",
+      "centre": [
+        1367.0482177734375,
+        776.2015991210938
+      ]
+    },
+    {
+      "id": "anno-txt-15",
+      "text": "DT",
+      "centre": [
+        1494.606689453125,
+        644.2020874023438
+      ]
+    },
+    {
+      "id": "anno-txt-16",
+      "text": "DT",
+      "centre": [
+        1514.40771484375,
+        700.4817504882812
+      ]
+    },
+    {
+      "id": "anno-txt-17",
+      "text": "DT",
+      "centre": [
+        1585.330078125,
+        784.600830078125
+      ]
+    },
+    {
+      "id": "anno-txt-18",
+      "text": "DT",
+      "centre": [
+        1585.330078125,
+        841.3619995117188
+      ]
+    },
+    {
+      "id": "anno-txt-19",
+      "text": "DT",
+      "centre": [
+        1585.330078125,
+        898.0038452148438
+      ]
+    },
+    {
+      "id": "anno-txt-20",
+      "text": "DT",
+      "centre": [
+        1665.48828125,
+        898.0038452148438
+      ]
+    },
+    {
+      "id": "anno-txt-21",
+      "text": "DT",
+      "centre": [
+        1665.48828125,
+        841.3619995117188
+      ]
+    },
+    {
+      "id": "anno-txt-22",
+      "text": "DT",
+      "centre": [
+        1665.48828125,
+        727.963134765625
+      ]
+    },
+    {
+      "id": "anno-txt-23",
+      "text": "DT",
+      "centre": [
+        1069.44775390625,
+        655.96337890625
+      ]
+    },
+    {
+      "id": "anno-txt-24",
+      "text": "DT",
+      "centre": [
+        1665.48828125,
+        784.600830078125
+      ]
+    }
+  ],
+  "accepted": [
+    {
+      "id": "door-095",
+      "wall": "fr4",
+      "evidenceMode": "ANNOTATION_ASSISTED_GEOMETRY_VERIFIED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 301.5600128173828,
+        "to": 356.03997802734375,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-117",
+      "wall": "fr6",
+      "evidenceMode": "ANNOTATION_ASSISTED_GEOMETRY_VERIFIED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 301.5600128173828,
+        "to": 356.03997802734375,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-052",
+      "wall": "fr25",
+      "evidenceMode": "ANNOTATION_ASSISTED_GEOMETRY_VERIFIED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 273.2399597167969,
+        "to": 327.5999450683594,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-067",
+      "wall": "fr27",
+      "evidenceMode": "ANNOTATION_ASSISTED_GEOMETRY_VERIFIED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 273.2399597167969,
+        "to": 327.5999450683594,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-127",
+      "wall": "fr9",
+      "evidenceMode": "ANNOTATION_ASSISTED_GEOMETRY_VERIFIED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 142.9199981689453,
+        "to": 197.280029296875,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-110",
+      "wall": "fr5",
+      "evidenceMode": "ANNOTATION_ASSISTED_GEOMETRY_VERIFIED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 6.839996337890625,
+        "to": 55.56001281738281,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-104",
+      "wall": "fr42",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 5.6399688720703125,
+        "to": 46.31996154785156,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-013",
+      "wall": "fr15",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 0,
+        "to": 40.67999267578125,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-015",
+      "wall": "fr16",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 0,
+        "to": 40.67999267578125,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-017",
+      "wall": "fr17",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 0,
+        "to": 40.67999267578125,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-029",
+      "wall": "fr20",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 44.399986267089844,
+        "to": 85.08000183105469,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-019",
+      "wall": "fr18",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 44.399986267089844,
+        "to": 85.08000183105469,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-020",
+      "wall": "fr19",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 44.399986267089844,
+        "to": 85.08000183105469,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-012",
+      "wall": "fr14",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 31.199981689453125,
+        "to": 85.08000183105469,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-079",
+      "wall": "fr30",
+      "evidenceMode": "ANNOTATION_ASSISTED_GEOMETRY_VERIFIED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 142.9199981689453,
+        "to": 197.280029296875,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-107",
+      "wall": "fr43",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 5.6399688720703125,
+        "to": 46.31996154785156,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-082",
+      "wall": "fr36",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 55.800018310546875,
+        "to": 96.36007690429688,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-084",
+      "wall": "fr37",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 55.800018310546875,
+        "to": 96.36007690429688,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-086",
+      "wall": "fr38",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 55.800018310546875,
+        "to": 96.36007690429688,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-102",
+      "wall": "fr41",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 0,
+        "to": 40.56005859375,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-087",
+      "wall": "fr39",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 0,
+        "to": 40.56005859375,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-080",
+      "wall": "fr35",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 0,
+        "to": 40.56005859375,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-124",
+      "wall": "fr67",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 0,
+        "to": 59.6400146484375,
+        "unit": "mupdf-point"
+      }
+    },
+    {
+      "id": "door-101",
+      "wall": "fr40",
+      "evidenceMode": "ANNOTATION_ASSISTED_REVIEW_REQUIRED",
+      "hostStatus": "UNIQUE_HOST",
+      "interval": {
+        "from": 0,
+        "to": 40.56005859375,
+        "unit": "mupdf-point"
+      }
+    }
+  ],
+  "reviewCount": 104,
+  "matchedCount": 24,
+  "missedDoors": [
+    "DR-16"
+  ]
+}

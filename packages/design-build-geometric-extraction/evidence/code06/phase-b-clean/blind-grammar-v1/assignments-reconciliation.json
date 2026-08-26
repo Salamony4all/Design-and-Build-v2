@@ -1,0 +1,851 @@
+{
+  "uniqueEligibleSourceSegments": 15134,
+  "wallCorridorAssignmentRecords": 22880,
+  "uniqueSegmentWallPairs": 22880,
+  "duplicateSegmentWallPairs": 0,
+  "featurePairCombinations": 12094,
+  "uniqueDerivedFeatures": 22880,
+  "duplicateDerivedFeatures": 0,
+  "segmentDetails": [
+    {
+      "segmentId": "p0_op14_s0_seg3",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op14_s4_seg3",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr18"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op14_s5_seg3",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op14_s6_seg3",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr20"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op42_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op43_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op44_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op45_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op46_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op47_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op48_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op49_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op50_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op51_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op52_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op53_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op54_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op55_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op56_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op57_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op58_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op59_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op60_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op61_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op62_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op63_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op64_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op65_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op66_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op67_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op68_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op69_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op70_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op71_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op72_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op73_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op74_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op75_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op76_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op77_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op78_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op79_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op80_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op81_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op82_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op83_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op84_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op85_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op86_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op87_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op88_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op89_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op90_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op91_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op92_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op93_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op94_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op95_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op96_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op97_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op98_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op99_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op100_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op101_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op102_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op103_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr6"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op104_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op105_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op106_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op107_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op108_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op109_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op110_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op111_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op112_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op113_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op114_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op115_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op116_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op117_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op118_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op119_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op120_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op121_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op122_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr14"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op123_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op124_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op125_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op126_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op127_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op128_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op129_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op130_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op131_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op132_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op133_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op134_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op135_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op136_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0",
+        "fr19"
+      ],
+      "assignmentCount": 2,
+      "duplicateAssignmentsPerWall": 0
+    },
+    {
+      "segmentId": "p0_op137_s0_seg0",
+      "assignedPhysicalWallIds": [
+        "fr0"
+      ],
+      "assignmentCount": 1,
+      "duplicateAssignmentsPerWall": 0
+    }
+  ]
+}

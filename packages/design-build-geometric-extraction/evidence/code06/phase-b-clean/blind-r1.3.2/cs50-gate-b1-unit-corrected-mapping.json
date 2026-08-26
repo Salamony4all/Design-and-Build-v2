@@ -1,0 +1,994 @@
+{
+  "schemaVersion": "cs50-gate-b1.v1",
+  "previousArtifact": "cs50-gate-b-mapping.json",
+  "previousArtifactHash": "f920fc435d0e0497ab20307c1e15f48bcf369ab8d7046c2d781b29b3fd660479",
+  "source": {
+    "manifestPath": "evidence/code06/phase-b-clean/blind-r1.3.2/blind-review-manifest.json",
+    "manifestCanonicalHash": "b3e5115f061e2e1d7608ef56c167d5bbe4bd994956549d2c644536ccf97872fd",
+    "canonicalPdfPath": "apps/design-build-editor/public/CODE_06.pdf",
+    "canonicalPdfSha256": "6414a5f8ef7bc7034364c05db17291f5319ad4931c4c43d0a6c3a659fbf407b9",
+    "pageIndex": 0,
+    "pageBoundsPt": [
+      0,
+      0,
+      2383.919921875,
+      1683.719970703125
+    ],
+    "phaseALineageSourcePdfSha256": "6414a5f8ef7bc7034364c05db17291f5319ad4931c4c43d0a6c3a659fbf407b9",
+    "wallFixtureSourcePdfSha256": "6414a5f8ef7bc7034364c05db17291f5319ad4931c4c43d0a6c3a659fbf407b9",
+    "sameCanonicalPage": true,
+    "coordinateFrameSource": "packages/coordinate-frame/src/index.ts",
+    "coordinateFrameFormulas": {
+      "pascalXFormula": "nx = (pdfX - pageBoundsPt[0]) / (pageBoundsPt[2] - pageBoundsPt[0]); pascalX = nx * pageWidthM",
+      "pascalZFormula": "nz = (pdfY - pageBoundsPt[1]) / (pageBoundsPt[3] - pageBoundsPt[1]); pascalZ = nz * pageHeightM",
+      "pdfXFormula": "nx = pascalX / pageWidthM; pdfX = pageBoundsPt[0] + nx * (pageBoundsPt[2] - pageBoundsPt[0])",
+      "pdfYFormula": "nz = pascalZ / pageHeightM; pdfY = pageBoundsPt[1] + nz * (pageBoundsPt[3] - pageBoundsPt[1])",
+      "pdfOrigin": "pageBoundsPt bottom-left",
+      "pascalOrigin": "PDF page bottom-left mapped to (0,0) Pascal world",
+      "zAxisMirrored": false,
+      "pageBoundsHandling": "direct crop; no padding; no extra mirror"
+    },
+    "coordinateAdapterSource": "packages/design-build-geometric-extraction/src/window/coordinate-adapter.ts",
+    "coordinateAdapterHash": "e1a98b203b01c668837f85d1700d5c73f3c1b86e08a1d6e2d015b6ad3ebc191d",
+    "wallFixturePath": "apps/design-build-editor/tests/fixtures/code06-pure-mupdf-golden.json",
+    "wallFixtureHash": "e4b8320451bbafdf103f96b74ad419a55448c86e2a80c6e952a94af4f1eeeabf",
+    "rawWindowOutputPath": "evidence/code06/phase-b-clean/blind-r1.3.1/code06-automatic-window-output.json",
+    "rawWindowOutputHash": "b812477affcbbfb7acd7bf289e98455a0196f0cf1cf5d07f801c8d417521ff34",
+    "intervalOriginRule": "WALL_ENDPOINT_A",
+    "intervalPositiveDirectionRule": "Stage A wall axis unit vector from A to B; reversed in Pascal world if dot(pascalDir, stageADir) < 0",
+    "sourceCodePath": "packages/design-build-geometric-extraction/src/window/automatic-detector-clean.ts",
+    "sourceLineRange": "135-144"
+  },
+  "summary": {
+    "frozenRegionCount": 25,
+    "validatedMappings": 19,
+    "sourceIdentityFailures": 0,
+    "runtimeWallMappingFailures": 0,
+    "unknownIntervalOrigins": 0,
+    "reversedDirections": [],
+    "outsideFiniteWall": [],
+    "invalidWidths": [
+      "AR-07",
+      "AR-08",
+      "AR-09",
+      "AR-10",
+      "AR-14",
+      "AR-22"
+    ],
+    "roundTripFailures": 0,
+    "physicalCalibrationFailures": 0,
+    "maximumWidthM": 1.984903197126658,
+    "minimumWidthM": 0.09872005319042636,
+    "maximumRoundTripError": 0,
+    "meanRoundTripError": 0,
+    "maximumPhysicalCalibrationError": null,
+    "violatingRegionIds": []
+  },
+  "mappings": [
+    {
+      "anonymousRegionId": "AR-01",
+      "openingRegionId": "or_r1.3.1_18",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.4
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr57",
+      "pascalWallNodeId": "wall_d3a0aee5",
+      "projectEndpointA": {
+        "x": 9.277184881724025,
+        "z": 18.30664494773231
+      },
+      "projectEndpointB": {
+        "x": 9.277184881724025,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.984903197126658,
+        "width": 1.984903197126658
+      },
+      "intervalCentreMeters": 0.992451598563329,
+      "pascalWorldCentre": {
+        "x": 9.277184881724025,
+        "y": 0,
+        "z": 19.299096546295637
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-02",
+      "openingRegionId": "or_r1.3.1_19",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.4
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr59",
+      "pascalWallNodeId": "wall_9638d34f",
+      "projectEndpointA": {
+        "x": 13.04771481624293,
+        "z": 18.30664494773231
+      },
+      "projectEndpointB": {
+        "x": 13.04771481624293,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.984903197126658,
+        "width": 1.984903197126658
+      },
+      "intervalCentreMeters": 0.992451598563329,
+      "pascalWorldCentre": {
+        "x": 13.04771481624293,
+        "y": 0,
+        "z": 19.299096546295637
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-03",
+      "openingRegionId": "or_r1.3.1_8",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 96.36,
+        "end": 102.12
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr37",
+      "pascalWallNodeId": "wall_9ddfb582",
+      "projectEndpointA": {
+        "x": 26.097529853825108,
+        "z": 14.386342855567529
+      },
+      "projectEndpointB": {
+        "x": 27.78429205263824,
+        "z": 14.386342855567529
+      },
+      "wallLocalIntervalMeters": {
+        "start": 1.6866426108917527,
+        "end": 1.7874630907458051,
+        "width": 0.1008204798540524
+      },
+      "intervalCentreMeters": 0.0504102399270262,
+      "pascalWorldCentre": {
+        "x": 27.834582704643886,
+        "y": 0,
+        "z": 14.386342855567529
+      },
+      "planRotationRadians": 0,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-04",
+      "openingRegionId": "or_r1.3.1_22",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.4
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr62",
+      "pascalWallNodeId": "wall_be60a004",
+      "projectEndpointA": {
+        "x": 27.041738404927788,
+        "z": 18.30664494773231
+      },
+      "projectEndpointB": {
+        "x": 27.041738404927788,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.984903197126658,
+        "width": 1.984903197126658
+      },
+      "intervalCentreMeters": 0.992451598563329,
+      "pascalWorldCentre": {
+        "x": 27.041738404927788,
+        "y": 0,
+        "z": 19.299096546295637
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-05",
+      "openingRegionId": "or_r1.3.1_12",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.28
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr47",
+      "pascalWallNodeId": "wall_b0e0ec20",
+      "projectEndpointA": {
+        "x": 9.277184881724025,
+        "z": 6.796730344099782
+      },
+      "projectEndpointB": {
+        "x": 9.277184881724025,
+        "z": 8.779459760176767
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.9828027704630318,
+        "width": 1.9828027704630318
+      },
+      "intervalCentreMeters": 0.9914013852315159,
+      "pascalWorldCentre": {
+        "x": 9.277184881724025,
+        "y": 0,
+        "z": 7.7881317293312975
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-06",
+      "openingRegionId": "or_r1.3.1_17",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.28
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr55",
+      "pascalWallNodeId": "wall_56bd7723",
+      "projectEndpointA": {
+        "x": 21.38489279150079,
+        "z": 6.796730344099782
+      },
+      "projectEndpointB": {
+        "x": 21.38489279150079,
+        "z": 8.779459760176767
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.9828027704630318,
+        "width": 1.9828027704630318
+      },
+      "intervalCentreMeters": 0.9914013852315159,
+      "pascalWorldCentre": {
+        "x": 21.38489279150079,
+        "y": 0,
+        "z": 7.7881317293312975
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-07",
+      "openingRegionId": "or_r1.3.1_3",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 85.08,
+        "end": 90.72
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr14",
+      "pascalWallNodeId": "wall_b8d05227",
+      "projectEndpointA": {
+        "x": 5.556018161730879,
+        "z": 12.401512240934446
+      },
+      "projectEndpointB": {
+        "x": 7.0453250985249065,
+        "z": 12.401512240934446
+      },
+      "wallLocalIntervalMeters": {
+        "start": 1.4892025045108999,
+        "end": 1.5879225577013263,
+        "width": 0.09872005319042643
+      },
+      "intervalCentreMeters": 0.04936002659521321,
+      "pascalWorldCentre": {
+        "x": 7.094580692836992,
+        "y": 0,
+        "z": 12.401512240934446
+      },
+      "planRotationRadians": 0,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "WIDTH_TOO_SMALL",
+      "directionReversed": false,
+      "mappingStatus": "WIDTH_TOO_SMALL"
+    },
+    {
+      "anonymousRegionId": "AR-08",
+      "openingRegionId": "or_r1.3.1_5",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 85.08,
+        "end": 90.72
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr20",
+      "pascalWallNodeId": "wall_718b1325",
+      "projectEndpointA": {
+        "x": 5.556018161730879,
+        "z": 15.378757561969323
+      },
+      "projectEndpointB": {
+        "x": 7.0453250985249065,
+        "z": 15.378757561969323
+      },
+      "wallLocalIntervalMeters": {
+        "start": 1.4892025045108999,
+        "end": 1.5879225577013263,
+        "width": 0.09872005319042643
+      },
+      "intervalCentreMeters": 0.04936002659521321,
+      "pascalWorldCentre": {
+        "x": 7.094580692836992,
+        "y": 0,
+        "z": 15.378757561969323
+      },
+      "planRotationRadians": 0,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "WIDTH_TOO_SMALL",
+      "directionReversed": false,
+      "mappingStatus": "WIDTH_TOO_SMALL"
+    },
+    {
+      "anonymousRegionId": "AR-09",
+      "openingRegionId": "or_r1.3.1_11",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": -5.64,
+        "end": 0
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr41",
+      "pascalWallNodeId": "wall_7cdaff87",
+      "projectEndpointA": {
+        "x": 29.27359818812691,
+        "z": 15.378757561969323
+      },
+      "projectEndpointB": {
+        "x": 30.76290432361558,
+        "z": 15.378757561969323
+      },
+      "wallLocalIntervalMeters": {
+        "start": -0.09872005319042636,
+        "end": 0,
+        "width": 0.09872005319042636
+      },
+      "intervalCentreMeters": 0.04936002659521318,
+      "pascalWorldCentre": {
+        "x": 29.224238161531698,
+        "y": 0,
+        "z": 15.378757561969323
+      },
+      "planRotationRadians": 0,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "WIDTH_TOO_SMALL",
+      "directionReversed": false,
+      "mappingStatus": "WIDTH_TOO_SMALL"
+    },
+    {
+      "anonymousRegionId": "AR-10",
+      "openingRegionId": "or_r1.3.1_10",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": -5.64,
+        "end": 0
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr39",
+      "pascalWallNodeId": "wall_7c0347bf",
+      "projectEndpointA": {
+        "x": 29.27359818812691,
+        "z": 14.386342855567529
+      },
+      "projectEndpointB": {
+        "x": 30.76290432361558,
+        "z": 14.386342855567529
+      },
+      "wallLocalIntervalMeters": {
+        "start": -0.09872005319042636,
+        "end": 0,
+        "width": 0.09872005319042636
+      },
+      "intervalCentreMeters": 0.04936002659521318,
+      "pascalWorldCentre": {
+        "x": 29.224238161531698,
+        "y": 0,
+        "z": 14.386342855567529
+      },
+      "planRotationRadians": 0,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "WIDTH_TOO_SMALL",
+      "directionReversed": false,
+      "mappingStatus": "WIDTH_TOO_SMALL"
+    },
+    {
+      "anonymousRegionId": "AR-11",
+      "openingRegionId": "or_r1.3.1_15",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.28
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr51",
+      "pascalWallNodeId": "wall_4102c4c5",
+      "projectEndpointA": {
+        "x": 28.92595346184396,
+        "z": 6.796730344099782
+      },
+      "projectEndpointB": {
+        "x": 28.92595346184396,
+        "z": 8.779459760176767
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.9828027704630318,
+        "width": 1.9828027704630318
+      },
+      "intervalCentreMeters": 0.9914013852315159,
+      "pascalWorldCentre": {
+        "x": 28.92595346184396,
+        "y": 0,
+        "z": 7.7881317293312975
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-12",
+      "openingRegionId": "or_r1.3.1_16",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.28
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr52",
+      "pascalWallNodeId": "wall_4422bb7d",
+      "projectEndpointA": {
+        "x": 27.041738404927788,
+        "z": 6.796730344099782
+      },
+      "projectEndpointB": {
+        "x": 27.041738404927788,
+        "z": 8.779459760176767
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.9828027704630318,
+        "width": 1.9828027704630318
+      },
+      "intervalCentreMeters": 0.9914013852315159,
+      "pascalWorldCentre": {
+        "x": 27.041738404927788,
+        "y": 0,
+        "z": 7.7881317293312975
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-13",
+      "openingRegionId": "or_r1.3.1_2",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 487.44,
+        "end": 544.2
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr0",
+      "pascalWallNodeId": "wall_f337a341",
+      "projectEndpointA": {
+        "x": 5.457291131700344,
+        "z": 6.796730344099782
+      },
+      "projectEndpointB": {
+        "x": 5.457291131700344,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 8.53193310764919,
+        "end": 9.525434919544331,
+        "width": 0.9935018118951415
+      },
+      "intervalCentreMeters": 0.49675090594757076,
+      "pascalWorldCentre": {
+        "x": 5.457291131700344,
+        "y": 0,
+        "z": 15.825414357696541
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-14",
+      "openingRegionId": "or_r1.3.1_7",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": -5.64,
+        "end": 0
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr35",
+      "pascalWallNodeId": "wall_b37961e0",
+      "projectEndpointA": {
+        "x": 29.27359818812691,
+        "z": 12.401512240934446
+      },
+      "projectEndpointB": {
+        "x": 30.76290432361558,
+        "z": 12.401512240934446
+      },
+      "wallLocalIntervalMeters": {
+        "start": -0.09872005319042636,
+        "end": 0,
+        "width": 0.09872005319042636
+      },
+      "intervalCentreMeters": 0.04936002659521318,
+      "pascalWorldCentre": {
+        "x": 29.224238161531698,
+        "y": 0,
+        "z": 12.401512240934446
+      },
+      "planRotationRadians": 0,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "WIDTH_TOO_SMALL",
+      "directionReversed": false,
+      "mappingStatus": "WIDTH_TOO_SMALL"
+    },
+    {
+      "anonymousRegionId": "AR-15",
+      "openingRegionId": "or_r1.3.1_6",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 490.08,
+        "end": 544.2
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr21",
+      "pascalWallNodeId": "wall_43725ded",
+      "projectEndpointA": {
+        "x": 30.861631553972458,
+        "z": 6.796730344099782
+      },
+      "projectEndpointB": {
+        "x": 30.861631553972458,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 8.578142494248963,
+        "end": 9.525434919544331,
+        "width": 0.9472924252953678
+      },
+      "intervalCentreMeters": 0.4736462126476839,
+      "pascalWorldCentre": {
+        "x": 30.861631553972458,
+        "y": 0,
+        "z": 15.84851905099643
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-16",
+      "openingRegionId": "or_r1.3.1_24",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.4
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr64",
+      "pascalWallNodeId": "wall_692579c0",
+      "projectEndpointA": {
+        "x": 23.271208069756202,
+        "z": 18.30664494773231
+      },
+      "projectEndpointB": {
+        "x": 23.271208069756202,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.984903197126658,
+        "width": 1.984903197126658
+      },
+      "intervalCentreMeters": 0.992451598563329,
+      "pascalWorldCentre": {
+        "x": 23.271208069756202,
+        "y": 0,
+        "z": 19.299096546295637
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-17",
+      "openingRegionId": "or_r1.3.1_14",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.28
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr50",
+      "pascalWallNodeId": "wall_6d461724",
+      "projectEndpointA": {
+        "x": 14.934030495151022,
+        "z": 6.796730344099782
+      },
+      "projectEndpointB": {
+        "x": 14.934030495151022,
+        "z": 8.779459760176767
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.9828027704630318,
+        "width": 1.9828027704630318
+      },
+      "intervalCentreMeters": 0.9914013852315159,
+      "pascalWorldCentre": {
+        "x": 14.934030495151022,
+        "y": 0,
+        "z": 7.7881317293312975
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-18",
+      "openingRegionId": "or_r1.3.1_20",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.4
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr60",
+      "pascalWallNodeId": "wall_b1c5d900",
+      "projectEndpointA": {
+        "x": 14.934030495151022,
+        "z": 18.30664494773231
+      },
+      "projectEndpointB": {
+        "x": 14.934030495151022,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.984903197126658,
+        "width": 1.984903197126658
+      },
+      "intervalCentreMeters": 0.992451598563329,
+      "pascalWorldCentre": {
+        "x": 14.934030495151022,
+        "y": 0,
+        "z": 19.299096546295637
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-19",
+      "openingRegionId": "or_r1.3.1_1",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 323.04,
+        "end": 379.8
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr0",
+      "pascalWallNodeId": "wall_f337a341",
+      "projectEndpointA": {
+        "x": 5.457291131700344,
+        "z": 6.796730344099782
+      },
+      "projectEndpointB": {
+        "x": 5.457291131700344,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 5.654348578481442,
+        "end": 6.647850390376584,
+        "width": 0.9935018118951424
+      },
+      "intervalCentreMeters": 0.4967509059475712,
+      "pascalWorldCentre": {
+        "x": 5.457291131700344,
+        "y": 0,
+        "z": 12.947829828528796
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-20",
+      "openingRegionId": "or_r1.3.1_21",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.4
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr61",
+      "pascalWallNodeId": "wall_19b8fa39",
+      "projectEndpointA": {
+        "x": 28.92595346184396,
+        "z": 18.30664494773231
+      },
+      "projectEndpointB": {
+        "x": 28.92595346184396,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.984903197126658,
+        "width": 1.984903197126658
+      },
+      "intervalCentreMeters": 0.992451598563329,
+      "pascalWorldCentre": {
+        "x": 28.92595346184396,
+        "y": 0,
+        "z": 19.299096546295637
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-21",
+      "openingRegionId": "or_r1.3.1_13",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.28
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr49",
+      "pascalWallNodeId": "wall_5cb14d78",
+      "projectEndpointA": {
+        "x": 13.04771481624293,
+        "z": 6.796730344099782
+      },
+      "projectEndpointB": {
+        "x": 13.04771481624293,
+        "z": 8.779459760176767
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.9828027704630318,
+        "width": 1.9828027704630318
+      },
+      "intervalCentreMeters": 0.9914013852315159,
+      "pascalWorldCentre": {
+        "x": 13.04771481624293,
+        "y": 0,
+        "z": 7.7881317293312975
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-22",
+      "openingRegionId": "or_r1.3.1_4",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 85.08,
+        "end": 90.72
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr18",
+      "pascalWallNodeId": "wall_2fef9a57",
+      "projectEndpointA": {
+        "x": 5.556018161730879,
+        "z": 14.386342855567529
+      },
+      "projectEndpointB": {
+        "x": 7.0453250985249065,
+        "z": 14.386342855567529
+      },
+      "wallLocalIntervalMeters": {
+        "start": 1.4892025045108999,
+        "end": 1.5879225577013263,
+        "width": 0.09872005319042643
+      },
+      "intervalCentreMeters": 0.04936002659521321,
+      "pascalWorldCentre": {
+        "x": 7.094580692836992,
+        "y": 0,
+        "z": 14.386342855567529
+      },
+      "planRotationRadians": 0,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "WIDTH_TOO_SMALL",
+      "directionReversed": false,
+      "mappingStatus": "WIDTH_TOO_SMALL"
+    },
+    {
+      "anonymousRegionId": "AR-23",
+      "openingRegionId": "or_r1.3.1_25",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.4
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr65",
+      "pascalWallNodeId": "wall_b2e656e4",
+      "projectEndpointA": {
+        "x": 21.38489279150079,
+        "z": 18.30664494773231
+      },
+      "projectEndpointB": {
+        "x": 21.38489279150079,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.984903197126658,
+        "width": 1.984903197126658
+      },
+      "intervalCentreMeters": 0.992451598563329,
+      "pascalWorldCentre": {
+        "x": 21.38489279150079,
+        "y": 0,
+        "z": 19.299096546295637
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-24",
+      "openingRegionId": "or_r1.3.1_23",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 0,
+        "end": 113.4
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr63",
+      "pascalWallNodeId": "wall_16c17b5e",
+      "projectEndpointA": {
+        "x": 25.155422325367017,
+        "z": 18.30664494773231
+      },
+      "projectEndpointB": {
+        "x": 25.155422325367017,
+        "z": 20.291474360535908
+      },
+      "wallLocalIntervalMeters": {
+        "start": 0,
+        "end": 1.984903197126658,
+        "width": 1.984903197126658
+      },
+      "intervalCentreMeters": 0.992451598563329,
+      "pascalWorldCentre": {
+        "x": 25.155422325367017,
+        "y": 0,
+        "z": 19.299096546295637
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-25",
+      "openingRegionId": "or_r1.3.1_9",
+      "sourceCoordinateSpace": "WALL_LOCAL_PARAMETRIC_UNITS",
+      "sourceInterval": {
+        "start": 96.36,
+        "end": 102.12
+      },
+      "sourceIntervalUnit": "stage_a_transformed_wall_local_parametric",
+      "coordinateTransformId": "CODE06_STAGE_A_UNITS_TO_PASCAL_VIA_WALL_AXIS",
+      "selectedPhysicalWallId": "fr38",
+      "pascalWallNodeId": "wall_c889e9d3",
+      "projectEndpointA": {
+        "x": 26.097529853825108,
+        "z": 15.378757561969323
+      },
+      "projectEndpointB": {
+        "x": 27.78429205263824,
+        "z": 15.378757561969323
+      },
+      "wallLocalIntervalMeters": {
+        "start": 1.6866426108917527,
+        "end": 1.7874630907458051,
+        "width": 0.1008204798540524
+      },
+      "intervalCentreMeters": 0.0504102399270262,
+      "pascalWorldCentre": {
+        "x": 27.834582704643886,
+        "y": 0,
+        "z": 15.378757561969323
+      },
+      "planRotationRadians": 0,
+      "mathematicalRoundTripError": 0,
+      "physicalSanityStatus": "PHYSICALLY_PLAUSIBLE",
+      "directionReversed": false,
+      "mappingStatus": "VALIDATED_MAPPING"
+    }
+  ]
+}

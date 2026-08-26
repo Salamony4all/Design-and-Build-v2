@@ -1,0 +1,175 @@
+{
+  "frozenAt": "2026-07-28",
+  "changeSet": 3,
+  "note": "Legacy AI implementation freeze. Read-only preservation. Env-var NAMES only; no secrets.",
+  "environmentVariableNames": [
+    "GEMINI_API_KEY",
+    "FUSION_MODEL",
+    "FUSION_MODEL_FALLBACK",
+    "COMFYUI_API_URL"
+  ],
+  "files": {
+    "gemini-pipeline": {
+      "path": "apps/editor/src/lib/orchestration/gemini-pipeline.ts",
+      "sha256": "c588b7969eeaa702f530b14756ac0b3709e69133259b450c660432491a2de5d3",
+      "bytes": 11550,
+      "lines": 289
+    },
+    "ChatOrchestrator": {
+      "path": "apps/editor/src/lib/orchestration/ChatOrchestrator.ts",
+      "sha256": "32353ebf2ea8d06dc05d609115204af251e44256cf5c4f085652d5cc9ad4ebf2",
+      "bytes": 20604,
+      "lines": 528
+    },
+    "PromptCompiler": {
+      "path": "apps/editor/src/lib/orchestration/PromptCompiler.ts",
+      "sha256": "1736bd582c1b7f35e9300dc35725167ee67b3574923fb6807ab44dc27179f46b",
+      "bytes": 7209,
+      "lines": 153
+    },
+    "llm-client": {
+      "path": "apps/editor/src/integrations/ai/llm-client.ts",
+      "sha256": "6deadd11ae7b8f63e086253313e673c4cea26e4589f918d0c2349b104d461647",
+      "bytes": 3791,
+      "lines": 109
+    },
+    "providers": {
+      "path": "apps/editor/src/integrations/ai/providers.ts",
+      "sha256": "31474a584c10194505ec4f86fffe9f10b1ed14ba36f6305c0b6dd2a9a54858d4",
+      "bytes": 1702,
+      "lines": 55
+    },
+    "image-gen": {
+      "path": "apps/editor/src/integrations/ai/image-gen.ts",
+      "sha256": "3bcefd3ecd35562effde7be539a7b74e4f1325989748d8881fae312739216f9b",
+      "bytes": 2989,
+      "lines": 69
+    },
+    "api-extract": {
+      "path": "apps/editor/src/app/api/extract/route.ts",
+      "sha256": "d63b7c3b3eea6a0abcdc2d6e1add1e6edc9dea340635165d9e71a86488f27f9e",
+      "bytes": 2641,
+      "lines": 89
+    },
+    "api-chat": {
+      "path": "apps/editor/src/app/api/chat/route.ts",
+      "sha256": "e96dd274d64dc48a700f265ed0d998b2d02f504c206a202a7a977293cf478f9c",
+      "bytes": 2493,
+      "lines": 76
+    },
+    "api-models": {
+      "path": "apps/editor/src/app/api/models/route.ts",
+      "sha256": "4551507c5f7292aabbaa89ae16278ac674f168f4f21b695d02fe662d24e04d38",
+      "bytes": 2314,
+      "lines": 70
+    },
+    "api-render": {
+      "path": "apps/editor/src/app/api/render/route.ts",
+      "sha256": "17c92ee97abf874918ce0285a8b3476e7d3efecf43806d2bbe427975a5efdccd",
+      "bytes": 7710,
+      "lines": 226
+    },
+    "api-fusion": {
+      "path": "apps/editor/src/app/api/fusion/route.ts",
+      "sha256": "09a17746c124c1a7c36d9e0dd7cc66328b1f2fbebcd872e132eed5965efc9934",
+      "bytes": 8622,
+      "lines": 185
+    },
+    "ChatBox": {
+      "path": "apps/editor/src/components/ChatBox.tsx",
+      "sha256": "9f721cfe6244f5e3527a8672253cc01cf1eed9b1ea7458c0148c2fabb5e7836d",
+      "bytes": 76243,
+      "lines": 1780
+    },
+    "ModelSelector": {
+      "path": "apps/editor/src/components/ModelSelector.tsx",
+      "sha256": "1015f8a48f92222be53ab2f435a2af8ce6329e3afec66ca89362b05c8e1d4490",
+      "bytes": 20731,
+      "lines": 493
+    },
+    "RenderConfigSelector": {
+      "path": "apps/editor/src/components/RenderConfigSelector.tsx",
+      "sha256": "2f8243dd38b5410101e96c928daac8e279400e09f5320662cf5b90d4c7d69e53",
+      "bytes": 12873,
+      "lines": 302
+    },
+    "UploadPanel": {
+      "path": "apps/editor/src/components/UploadPanel.tsx",
+      "sha256": "188d78a57deb65a30f16fad08bfdd5f4fceaab4c3970b5213571b08087f3c6a2",
+      "bytes": 15370,
+      "lines": 382
+    },
+    "ai-to-scene-bridge": {
+      "path": "apps/editor/src/lib/scene/ai-to-scene-bridge.ts",
+      "sha256": "3a46238ad9f8ad0e8d346ed82872a4068b6e3cb350cf46c83a4bea0da4eaf4a5",
+      "bytes": 37180,
+      "lines": 843
+    },
+    "pdf-to-image": {
+      "path": "apps/editor/src/lib/parse/pdf-to-image.ts",
+      "sha256": "dc6a01031f4e4ba1395a7455fd229756246ea442c046f57334936dad9a09b29a",
+      "bytes": 1139,
+      "lines": 33
+    },
+    "json-repair": {
+      "path": "apps/editor/src/lib/fusion/json-repair.ts",
+      "sha256": "d4675be9e4092e1f52fcf5c701f6d819cd269b2dfc1c72271b9d6e7ea706ec92",
+      "bytes": 3295,
+      "lines": 92
+    },
+    "vision-discriminator": {
+      "path": "apps/editor/src/lib/fusion/vision-discriminator.ts",
+      "sha256": "2f8ba5dad2f8173d3d30dd345785a580c14e8db8a39a8211b3d42a85aff4ce6f",
+      "bytes": 8668,
+      "lines": 218
+    },
+    "verify-t2": {
+      "path": "apps/editor/src/lib/fusion/verify-t2.ts",
+      "sha256": "d9c096dd60c3525d1397ba66eb01ff008435e524a4b0ebe9b87f698fe133bf7d",
+      "bytes": 4642,
+      "lines": 90
+    },
+    "verify-t3": {
+      "path": "apps/editor/src/lib/fusion/verify-t3.ts",
+      "sha256": "1c40260a08fcd59fc33b12240445e39dc2b38f5086a596641eee12d481a591d8",
+      "bytes": 3476,
+      "lines": 69
+    },
+    "fusion-types": {
+      "path": "apps/editor/src/lib/fusion/fusion-types.ts",
+      "sha256": "7af4a71411363acf16094477ec5623be0bdf34475323db1cc512ea558a7d5fe5",
+      "bytes": 2375,
+      "lines": 113
+    },
+    "fusion-commit": {
+      "path": "apps/editor/src/lib/fusion/fusion-commit.ts",
+      "sha256": "e69e6ae22e2a8cd5ff758e5ccb0cf3c2c2729df8c0cdf6878b7559c4f8ef8af8",
+      "bytes": 10370,
+      "lines": 212
+    },
+    "scene-builder": {
+      "path": "apps/editor/src/integrations/pascal/scene-builder.ts",
+      "sha256": "75c97bcc1d711b145c3a034c74c183ba6fe1cb0a7a64b9ee74b08d44a5927d02",
+      "bytes": 10203,
+      "lines": 276
+    },
+    "export-suite": {
+      "path": "apps/editor/src/integrations/export/export-suite.ts",
+      "sha256": "d84f9d6d828d382f438d19885bd6d0893060f3f42dd4dac810cf655b32af5b64",
+      "bytes": 2317,
+      "lines": 59
+    },
+    "use-fusion-progressive-import": {
+      "path": "apps/editor/src/hooks/use-fusion-progressive-import.ts",
+      "sha256": "df69afd2c3791ea93e631e97c73f11d604e45581594090309caa0d37c48d276e",
+      "bytes": 14365,
+      "lines": 334
+    },
+    "use-pascal-progressive-import": {
+      "path": "apps/editor/src/hooks/use-pascal-progressive-import.ts",
+      "sha256": "02570f6cfab38ab3216b5b4411f318abf8f43c84da46abd2dd9adea1590900b4",
+      "bytes": 2406,
+      "lines": 86
+    }
+  }
+}

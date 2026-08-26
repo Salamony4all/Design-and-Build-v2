@@ -1,0 +1,645 @@
+{
+  "determinism": {
+    "run1Hash": "ef1e638d1f2b5bd546f2259be72bcba3ace41c136a7e3e128ff980371e7a9ede",
+    "run2Hash": "ef1e638d1f2b5bd546f2259be72bcba3ace41c136a7e3e128ff980371e7a9ede",
+    "determinismMatches": true
+  },
+  "calibrationMatrix": [
+    {
+      "fixtureId": "win-1",
+      "expectedRole": "POSITIVE_VISIBLE_WINDOW",
+      "geometricRegionRediscovered": true,
+      "automaticCandidateIds": [
+        "c_v2_fr6_d1475cf10ad8"
+      ],
+      "survivedHostGate": true,
+      "survivedIntervalGate": true,
+      "survivedTopologyGate": true,
+      "includedInDeduplicatedHypotheses": true,
+      "automaticRecommendation": "PROMOTE",
+      "finalCalibrationOutcome": "SUCCESS"
+    },
+    {
+      "fixtureId": "win-2",
+      "expectedRole": "POSITIVE_VISIBLE_WINDOW",
+      "geometricRegionRediscovered": true,
+      "automaticCandidateIds": [
+        "c_v2_fr6_d1475cf10ad8"
+      ],
+      "survivedHostGate": true,
+      "survivedIntervalGate": true,
+      "survivedTopologyGate": true,
+      "includedInDeduplicatedHypotheses": true,
+      "automaticRecommendation": "PROMOTE",
+      "finalCalibrationOutcome": "SUCCESS"
+    },
+    {
+      "fixtureId": "win-3",
+      "expectedRole": "PROBABLE_WINDOW",
+      "geometricRegionRediscovered": true,
+      "automaticCandidateIds": [
+        "c_v2_fr46_7e674a10e316"
+      ],
+      "survivedHostGate": true,
+      "survivedIntervalGate": true,
+      "survivedTopologyGate": true,
+      "includedInDeduplicatedHypotheses": true,
+      "automaticRecommendation": "PROMOTE",
+      "finalCalibrationOutcome": "SUCCESS"
+    },
+    {
+      "fixtureId": "win-4",
+      "expectedRole": "WEAK_PROBABLE_WINDOW",
+      "geometricRegionRediscovered": true,
+      "automaticCandidateIds": [
+        "c_v2_fr1_15e7f8bc392f"
+      ],
+      "survivedHostGate": true,
+      "survivedIntervalGate": true,
+      "survivedTopologyGate": true,
+      "includedInDeduplicatedHypotheses": true,
+      "automaticRecommendation": "PROMOTE",
+      "finalCalibrationOutcome": "SUCCESS"
+    },
+    {
+      "fixtureId": "win-5",
+      "expectedRole": "UNHOSTED_UNRESOLVED",
+      "geometricRegionRediscovered": true,
+      "automaticCandidateIds": [
+        "c_v2_fr1_d64011fd7648"
+      ],
+      "survivedHostGate": true,
+      "survivedIntervalGate": true,
+      "survivedTopologyGate": true,
+      "includedInDeduplicatedHypotheses": true,
+      "automaticRecommendation": "PROMOTE",
+      "finalCalibrationOutcome": "SUCCESS"
+    },
+    {
+      "fixtureId": "win-6",
+      "expectedRole": "HARD_NEGATIVE_NOT_A_WINDOW",
+      "geometricRegionRediscovered": true,
+      "automaticCandidateIds": [
+        "c_v2_fr48_227e1520af3d"
+      ],
+      "survivedHostGate": true,
+      "survivedIntervalGate": true,
+      "survivedTopologyGate": true,
+      "includedInDeduplicatedHypotheses": true,
+      "automaticRecommendation": "REJECT",
+      "finalCalibrationOutcome": "FALSE_POSITIVE_REJECTED"
+    }
+  ],
+  "funnel": {
+    "generated": 126,
+    "uniqueHostPassed": 126,
+    "ambiguousHost": 0,
+    "unhosted": 0,
+    "finiteIntervalPassed": 126,
+    "intervalFailed": 0,
+    "topologyPassed": 126,
+    "topologyFailed": 0,
+    "doorConflict": 23,
+    "annotationConflict": 0,
+    "hatchConflict": 0,
+    "deduplicatedPhysicalHypotheses": 126,
+    "automaticAcceptRecommendations": 103,
+    "automaticReviewRecommendations": 0,
+    "automaticRejectRecommendations": 23
+  },
+  "clusterSizeDistribution": {
+    "singletonClusters": 122,
+    "size2Clusters": 0,
+    "size3Clusters": 0,
+    "size4PlusClusters": 0,
+    "maximumClusterSize": 1,
+    "candidatesMerged": 0,
+    "candidatesRemaining": 126
+  },
+  "consolidation": {
+    "candidateHypotheses": 126,
+    "deduplicatedDetectorHypotheses": 126,
+    "consolidatedPhysicalOpeningHypotheses": 66,
+    "provenPanelCount": 0,
+    "unresolvedPanelCount": 122
+  },
+  "hostWallDistribution": {
+    "wallsWithNoHypotheses": 0,
+    "wallsWithOneHypothesis": 29,
+    "wallsWithMultipleHypotheses": 41,
+    "maximumHypothesesOnOneWall": 6,
+    "hypothesisCountByPhysicalWallId": [
+      {
+        "wallId": "fr0",
+        "count": 5
+      },
+      {
+        "wallId": "fr1",
+        "count": 5
+      },
+      {
+        "wallId": "fr2",
+        "count": 4
+      },
+      {
+        "wallId": "fr3",
+        "count": 1
+      },
+      {
+        "wallId": "fr4",
+        "count": 1
+      },
+      {
+        "wallId": "fr5",
+        "count": 1
+      },
+      {
+        "wallId": "fr6",
+        "count": 1
+      },
+      {
+        "wallId": "fr7",
+        "count": 1
+      },
+      {
+        "wallId": "fr8",
+        "count": 1
+      },
+      {
+        "wallId": "fr9",
+        "count": 1
+      },
+      {
+        "wallId": "fr10",
+        "count": 1
+      },
+      {
+        "wallId": "fr11",
+        "count": 1
+      },
+      {
+        "wallId": "fr12",
+        "count": 1
+      },
+      {
+        "wallId": "fr13",
+        "count": 1
+      },
+      {
+        "wallId": "fr14",
+        "count": 2
+      },
+      {
+        "wallId": "fr15",
+        "count": 2
+      },
+      {
+        "wallId": "fr16",
+        "count": 2
+      },
+      {
+        "wallId": "fr17",
+        "count": 2
+      },
+      {
+        "wallId": "fr18",
+        "count": 2
+      },
+      {
+        "wallId": "fr19",
+        "count": 2
+      },
+      {
+        "wallId": "fr20",
+        "count": 2
+      },
+      {
+        "wallId": "fr21",
+        "count": 6
+      },
+      {
+        "wallId": "fr22",
+        "count": 3
+      },
+      {
+        "wallId": "fr23",
+        "count": 3
+      },
+      {
+        "wallId": "fr24",
+        "count": 1
+      },
+      {
+        "wallId": "fr25",
+        "count": 1
+      },
+      {
+        "wallId": "fr26",
+        "count": 1
+      },
+      {
+        "wallId": "fr27",
+        "count": 1
+      },
+      {
+        "wallId": "fr28",
+        "count": 1
+      },
+      {
+        "wallId": "fr29",
+        "count": 1
+      },
+      {
+        "wallId": "fr30",
+        "count": 1
+      },
+      {
+        "wallId": "fr31",
+        "count": 1
+      },
+      {
+        "wallId": "fr32",
+        "count": 1
+      },
+      {
+        "wallId": "fr33",
+        "count": 1
+      },
+      {
+        "wallId": "fr34",
+        "count": 1
+      },
+      {
+        "wallId": "fr35",
+        "count": 2
+      },
+      {
+        "wallId": "fr36",
+        "count": 2
+      },
+      {
+        "wallId": "fr37",
+        "count": 2
+      },
+      {
+        "wallId": "fr38",
+        "count": 2
+      },
+      {
+        "wallId": "fr39",
+        "count": 2
+      },
+      {
+        "wallId": "fr40",
+        "count": 2
+      },
+      {
+        "wallId": "fr41",
+        "count": 2
+      },
+      {
+        "wallId": "fr42",
+        "count": 2
+      },
+      {
+        "wallId": "fr43",
+        "count": 2
+      },
+      {
+        "wallId": "fr44",
+        "count": 1
+      },
+      {
+        "wallId": "fr45",
+        "count": 1
+      },
+      {
+        "wallId": "fr46",
+        "count": 1
+      },
+      {
+        "wallId": "fr47",
+        "count": 2
+      },
+      {
+        "wallId": "fr48",
+        "count": 2
+      },
+      {
+        "wallId": "fr49",
+        "count": 2
+      },
+      {
+        "wallId": "fr50",
+        "count": 2
+      },
+      {
+        "wallId": "fr51",
+        "count": 2
+      },
+      {
+        "wallId": "fr52",
+        "count": 2
+      },
+      {
+        "wallId": "fr53",
+        "count": 2
+      },
+      {
+        "wallId": "fr54",
+        "count": 2
+      },
+      {
+        "wallId": "fr55",
+        "count": 2
+      },
+      {
+        "wallId": "fr56",
+        "count": 1
+      },
+      {
+        "wallId": "fr57",
+        "count": 2
+      },
+      {
+        "wallId": "fr58",
+        "count": 2
+      },
+      {
+        "wallId": "fr59",
+        "count": 2
+      },
+      {
+        "wallId": "fr60",
+        "count": 2
+      },
+      {
+        "wallId": "fr61",
+        "count": 2
+      },
+      {
+        "wallId": "fr62",
+        "count": 2
+      },
+      {
+        "wallId": "fr63",
+        "count": 2
+      },
+      {
+        "wallId": "fr64",
+        "count": 2
+      },
+      {
+        "wallId": "fr65",
+        "count": 2
+      },
+      {
+        "wallId": "fr66",
+        "count": 1
+      },
+      {
+        "wallId": "fr67",
+        "count": 3
+      },
+      {
+        "wallId": "fr68",
+        "count": 1
+      },
+      {
+        "wallId": "fr69",
+        "count": 1
+      }
+    ]
+  },
+  "waPostAuditDistribution": {
+    "waReferences": 24,
+    "referencesMatched": 20,
+    "referencesUnmatched": 4,
+    "waDistributionReport": [
+      {
+        "waReferenceId": "wa-1-wa-01",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "NO_AUTOMATIC_HYPOTHESIS"
+      },
+      {
+        "waReferenceId": "wa-1-wa-02",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "NO_AUTOMATIC_HYPOTHESIS"
+      },
+      {
+        "waReferenceId": "wa-1-wa-03",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-1-wa-04",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-1-wa-05",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-1-wa-06",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-2-wa-01",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "NO_AUTOMATIC_HYPOTHESIS"
+      },
+      {
+        "waReferenceId": "wa-2-wa-02",
+        "nearbyHypothesisIds": [
+          "as_v2_fr0_2fc48e7c701e"
+        ],
+        "nearestDistance": 81.36,
+        "relationshipAssessment": "NO_AUTOMATIC_HYPOTHESIS"
+      },
+      {
+        "waReferenceId": "wa-2-wa-03",
+        "nearbyHypothesisIds": [
+          "as_v2_fr0_2fc48e7c701e"
+        ],
+        "nearestDistance": 35.05,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-2-wa-04",
+        "nearbyHypothesisIds": [
+          "as_v2_fr0_2fc48e7c701e"
+        ],
+        "nearestDistance": 85.33,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-2-wa-05",
+        "nearbyHypothesisIds": [
+          "as_v2_fr10_ddd872dc81e7"
+        ],
+        "nearestDistance": 80.88,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-2-wa-06",
+        "nearbyHypothesisIds": [
+          "as_v2_fr6_a911df9d0e6a"
+        ],
+        "nearestDistance": 62.84,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-3-wa-01",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-3-wa-02",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-3-wa-03",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-3-wa-04",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-3-wa-05",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-3-wa-06",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-4-wa-01",
+        "nearbyHypothesisIds": [
+          "as_v2_fr7_f9579b884e9f"
+        ],
+        "nearestDistance": 61.68,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-4-wa-02",
+        "nearbyHypothesisIds": [
+          "as_v2_fr7_f9579b884e9f",
+          "as_v2_fr66_e90be21d10d9",
+          "as_v2_fr69_faf71c7db400"
+        ],
+        "nearestDistance": 31.15,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-4-wa-03",
+        "nearbyHypothesisIds": [
+          "as_v2_fr28_9e9c46d3b51c",
+          "as_v2_fr66_e90be21d10d9"
+        ],
+        "nearestDistance": 48.11,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-4-wa-04",
+        "nearbyHypothesisIds": [
+          "as_v2_fr28_9e9c46d3b51c"
+        ],
+        "nearestDistance": 84.46,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-4-wa-05",
+        "nearbyHypothesisIds": [],
+        "nearestDistance": null,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      },
+      {
+        "waReferenceId": "wa-4-wa-06",
+        "nearbyHypothesisIds": [
+          "as_v2_fr27_c1859bb71948"
+        ],
+        "nearestDistance": 62.04,
+        "relationshipAssessment": "ONE_TO_ONE_POSSIBLE"
+      }
+    ]
+  },
+  "falsePositiveAudit": {
+    "closeupsGenerated": 126,
+    "closeupsReviewed": 126,
+    "visibleWindows": 103,
+    "likelyWindows": 0,
+    "notWindows": 23,
+    "unresolved": 0,
+    "reviewCoverage": 1
+  },
+  "falseNegativeAudit": [
+    {
+      "waRegionId": "wa-1-wa-01",
+      "classification": "NO_SOURCE_FEATURES",
+      "nearestHypothesis": null
+    },
+    {
+      "waRegionId": "wa-1-wa-02",
+      "classification": "NO_SOURCE_FEATURES",
+      "nearestHypothesis": null
+    },
+    {
+      "waRegionId": "wa-2-wa-01",
+      "classification": "NO_SOURCE_FEATURES",
+      "nearestHypothesis": null
+    },
+    {
+      "waRegionId": "wa-2-wa-02",
+      "classification": "NO_SOURCE_FEATURES",
+      "nearestHypothesis": null
+    }
+  ],
+  "panelCountAudit": {
+    "hypothesesWithProvenPanelCount": 0,
+    "hypothesesWithUnresolvedPanelCount": 122,
+    "totalProvenPanels": 0,
+    "panelCountEvidenceByType": {
+      "PROVEN_FROM_INTERNAL_DIVIDERS": 0,
+      "UNRESOLVED": 122
+    }
+  },
+  "wallParity": {
+    "acceptedWallCount": 70,
+    "uniquePhysicalWallIds": 70,
+    "geometryHash": "8c825b31b7758856",
+    "evidenceHash": "8c2491f14db76203",
+    "missingPhysicalWallIds": [],
+    "unexpectedPhysicalWallIds": [],
+    "changedEndpoints": [],
+    "changedThicknesses": [],
+    "roiDelta": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "scaleDelta": 0
+  }
+}

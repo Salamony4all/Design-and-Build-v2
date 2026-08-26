@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="755.5199890136719 182.8599853515625 45.6400146484375 219.7600146484375" width="300" height="200">
+  <!-- Background -->
+  <rect x="755.5199890136719" y="182.8599853515625" width="45.6400146484375" height="219.7600146484375" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <!-- Host Wall centerline representation -->
+  <text x="775.5199890136719" y="197.8599853515625" font-size="7" font-family="monospace" fill="#666">Candidate from a singleton cluster (fr66)</text>
+  <text x="775.5199890136719" y="392.62" font-size="6" font-family="monospace" fill="#999">ID: c_v3-clean_fr66_20a28b27e49c</text>
+  <!-- Candidate Box -->
+  <rect x="775.5199890136719" y="202.8599853515625" width="5.6400146484375" height="179.7600146484375" fill="none" stroke="#0066ff" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="779.5199890136719" y="214.8599853515625" font-size="6" font-family="monospace" fill="#0066ff">Interval: [0.0, 174.1]</text>
+</svg>

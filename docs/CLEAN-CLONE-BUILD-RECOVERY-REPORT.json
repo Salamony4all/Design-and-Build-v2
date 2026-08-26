@@ -1,0 +1,145 @@
+{
+  "checkpoint": "CLEAN CLONE BUILD RECOVERY - MuPDF route bundling + repository normalization",
+  "date": "2026-07-31",
+  "repositoryRoot": "C:\\Users\\Mohamad60025\\Desktop\\Design And Build - Clean",
+  "packageManager": "pnpm@10.32.1",
+  "nodeVersion": "v24.10.0",
+  "nextVersion": "15.5.22",
+
+  "status": "PASSED",
+
+  "rootCause": {
+    "initialHypothesis": "mupdf version drift (declared ^1.25.0, resolved 1.28.0)",
+    "hypothesisOutcome": "DISPROVEN",
+    "disproofEvidence": "The original repository whose build was verified green locks the SAME mupdf 1.28.0 and emitted a 52KB mupdf route with 0 WASM inlines and 0 .pnpm paths. Identical version builds green under npm and failed under pnpm.",
+    "actualRootCause": [
+      "mupdf 1.28.0 is an ESM package (type:module) that boots WASM via top-level await. Webpack bundling produced a CJS interop shim -> ERR_REQUIRE_ASYNC_MODULE, surfacing as 'TypeError: a is not a function'.",
+      "The app reached mupdf only through workspace package design-build-extraction-mupdf, which is in transpilePackages. Next transpiled it and followed the 'mupdf' import edge, overriding serverExternalPackages and inlining the WASM bootstrap plus a machine-specific .pnpm file:// URL into the route chunk, which was then evaluated during page-data collection.",
+      "Phantom dependency: /api/extraction/ai imports 'mupdf' directly but the app never declared it. Under npm's flat node_modules it resolved via hoisting; under pnpm's isolated store it did not."
+    ]
+  },
+
+  "mupdfVersion": {
+    "declaredBefore": "^1.25.0",
+    "resolvedBefore": "1.28.0",
+    "pinnedNow": "1.28.0",
+    "pinnedExactly": true,
+    "reason": "1.28.0 is the version used by the last verified green build (original repository package-lock.json + successful .next/BUILD_ID). 1.25.x was never validated by any green build, so downgrading would have been an unjustified change. Caret removed so future installs cannot drift.",
+    "lockfileSpecifier": "1.28.0",
+    "lockfileVersion": "1.28.0"
+  },
+
+  "fixesApplied": [
+    "packages/extraction-mupdf/package.json: mupdf pinned exactly to 1.28.0",
+    "apps/design-build-editor/package.json: mupdf 1.28.0 declared as a direct dependency (resolves the pnpm phantom dependency so the externalized module has a real resolution)",
+    "apps/design-build-editor/src/app/api/extraction/mupdf/route.ts: handler-time dynamic import of the extractor; runtime = 'nodejs'; dynamic = 'force-dynamic'",
+    "apps/design-build-editor/next.config.mjs: documented boundary; serverExternalPackages: ['mupdf'] retained; design-build-extraction-mupdf deliberately kept transpiled (it ships raw TS with extensionless relative imports Node cannot resolve natively)"
+  ],
+
+  "prohibitionsRespected": {
+    "hardcodedPnpmOrNodeModulesOrUserPaths": false,
+    "manuallyCopiedWasm": false,
+    "patchedGeneratedNextOutput": false,
+    "disabledPageDataCollection": false,
+    "importedFsOrPathIntoClientCode": false,
+    "modifiedOriginalSourceRepository": false,
+    "modifiedFrozenAppsEditor": false
+  },
+
+  "buildVerification": {
+    "command": "pnpm --filter design-build-editor build",
+    "exitCode": 0,
+    "pagesGenerated": "11/11",
+    "collectingPageData": "passed (previous failure point)",
+    "frozenLockfileInstall": "pnpm install --frozen-lockfile exit 0 over 21 workspace projects"
+  },
+
+  "emittedBundleVerification": {
+    "route": ".next/server/app/api/extraction/mupdf/route.js",
+    "bytesBefore": 141000,
+    "bytesAfter": 9126,
+    "wasmBootstrapOccurrences": 0,
+    "hardcodedPnpmOrUserPaths": 0,
+    "runtimeExternalImports": 1,
+    "externalForm": "import(\"mupdf\")",
+    "emittedMupdfWasmAssets": "NONE",
+    "note": "The only machine path anywhere in the route is Next's own generated resolvedPagePath metadata string, which is present in every emitted route including those of the known-green original build."
+  },
+
+  "runtimeVerification": {
+    "mode": "real production server (next start -p 3003), real HTTP POST, no mocks",
+    "endpoint": "POST /api/extraction/mupdf",
+    "document": "test drawings and png/CODE_06 1 page.pdf (622128 bytes)",
+    "httpStatus": 200,
+    "responseBytes": 166495,
+    "acceptedWallCount": 70,
+    "geometryHash": "8c825b31b7758856",
+    "evidenceHash": "8c2491f14db76203",
+    "candidateHash": "8a3361ed",
+    "scaleMmPerPt": 17.50355553021744,
+    "scaleSource": "dim-text",
+    "junctionCount": 20,
+    "vectorOperationCount": 127711,
+    "baselineMatch": "EXACT - 70 walls, geometryHash and evidenceHash match the required CODE-06 parity baseline"
+  },
+
+  "testVerification": {
+    "extractionMupdfTests": "24/24 passed (5 files)",
+    "lineageStoreHash": "d2a0c395c6fcc8c3",
+    "extractionMupdfTypecheck": 0,
+    "appTypecheck": 0
+  },
+
+  "repositoryNormalization": {
+    "gitInitialized": true,
+    "secretsCommitted": false,
+    "envExcluded": ".env contains a live API key and is git-ignored",
+    "debrisRemoved": [
+      "src/ (44-file duplicate of apps/design-build-editor/src)",
+      "tsconfig.json, next.config.mjs, next-env.d.ts (orphaned root duplicates)",
+      "pagechunk.js (56 MB)", "c6_multipart.bin", "c6_json_body.json",
+      "out_get.json", "ai_post_result.json", "tsconfig.tsbuildinfo", "nul",
+      "legacy-migration-robocopy.log", "pnpm-install.out.log", "pnpm-install.err.log",
+      "build_multipart.cjs", "test_attach.mjs", "package-lock.json (stale npm lockfile)"
+    ],
+    "approxBytesReclaimed": "~59 MB",
+    "workspaceMembership": {
+      "authoritativeFile": "pnpm-workspace.yaml",
+      "npmWorkspacesArrayRemoved": true,
+      "phantomMemberRemoved": "pascal-vector-extractor-initial (path exists only under archive/)",
+      "frozenAppExcluded": "apps/editor excluded rather than modified (frozen preservation source; sole consumer of the phantom member)",
+      "activeProjects": 21
+    }
+  },
+
+  "remainingWarnings": [
+    {
+      "warning": "unmet peer lucide-react@^1: found 0.460.0 (@pascal-app/nodes 0.1.1)",
+      "classification": "PRE-EXISTING / BENIGN",
+      "affectsBuild": false,
+      "affectsMupdfRoute": false
+    },
+    {
+      "warning": "unmet peer vite@^6||^7||^8 for vitest 4.1.10 (packages/deterministic-engine): found 5.4.21",
+      "classification": "PRE-EXISTING / BENIGN - test tooling only",
+      "affectsBuild": false,
+      "affectsMupdfRoute": false
+    },
+    {
+      "warning": "deprecated subdependency node-domexception@1.0.0",
+      "classification": "PRE-EXISTING / BENIGN",
+      "affectsBuild": false,
+      "affectsMupdfRoute": false
+    }
+  ],
+  "newWarningsIntroducedByThisCheckpoint": 0,
+
+  "commits": [
+    { "hash": "1ea7836", "title": "chore: baseline clean clone with ignore rules" },
+    { "hash": "c298215", "title": "fix(mupdf): keep MuPDF a request-time server dependency; pin 1.28.0" },
+    { "hash": "0ba4d7e", "title": "chore: remove verified migration debris from repository root" },
+    { "hash": "6fe9072", "title": "chore: normalize workspace membership on pnpm" }
+  ],
+
+  "scopeDiscipline": "No window, door, FF&E, render, export, or UI work was performed. Work stopped at the build + CODE-06 parity gate as instructed."
+}

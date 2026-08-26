@@ -1,0 +1,8 @@
+{
+  "profileId": "CODE-06-AUDIT-v1",
+  "drawingName": "CODE_06 1 page.pdf",
+  "expectedDoors": 25,
+  "expectedWindows": 24,
+  "expectedRoomsTarget": 11,
+  "expectedScaleDenominator": 50
+}

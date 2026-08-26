@@ -1,0 +1,3 @@
+import {describe,it,expect} from "vitest";import {topologicalHash,traceBoundedLoops,matrixColumnMajor} from "../src/index.js";
+const rect=[{x:0,y:0},{x:2,y:0},{x:2,y:1},{x:0,y:1}];
+describe("determinism",()=>{it("is rotation, scale, cyclic and mirror invariant",()=>{const variants=[rect,rect.slice(1).concat(rect.slice(0,1)),rect.map(p=>({x:-3*p.y+7,y:3*p.x-4})),[...rect].reverse()];expect(new Set(variants.map(topologicalHash)).size).toBe(1);});it("emits a column-major affine matrix",()=>expect(matrixColumnMajor(2,3,4,0)).toEqual([1,0,0,0,0,1,0,0,0,0,1,0,2,3,4,1]));it("traces a bounded face",()=>{const s=rect.map((a,i)=>({id:String(i),layer:"A-WALL",a,b:rect[(i+1)%4]!,source:"LINE" as const}));expect(traceBoundedLoops(s)).toHaveLength(1);});});

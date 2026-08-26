@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2026-07-28T15:30:32.254Z",
+  "document": "CODE_06.pdf",
+  "scaleMmPerPt": 5.14,
+  "vectorCount": 127711,
+  "diagnostics": {
+    "rootDrawingOperations": 63826,
+    "decomposedSubpaths": 63885,
+    "fillRootOperations": 339,
+    "fillSubpaths": 398,
+    "strokeRootOperations": 63487,
+    "strokeSubpaths": 63487,
+    "transformedPathCount": 63826,
+    "nonIdentityTransformCount": 63826,
+    "invalidBoundsCount": 0,
+    "zeroAreaSubpathCount": 100270
+  },
+  "componentCount": 5,
+  "rootPrimitiveCount": 63826,
+  "groupDiagnostics": {
+    "totalGroups": 5,
+    "giantBlobGroups": 2,
+    "maxGroupPrimitiveCount": 36243,
+    "note": "CODE-06 furniture is embedded in a connected linework mesh; proximity grouping merges the drawing into a few giant blobs. Pure-primitive recurrence does not reconstruct 24 discrete beds. AI/geometric reconciliation (§11) is the source-backed path for bed proposals."
+  },
+  "recurrenceClusterCount": 1,
+  "familyCount": 0,
+  "acceptedBedFamilies": 0,
+  "acceptedBedInstances": 0,
+  "oracleExpectedBeds": 24,
+  "bedMatch": false,
+  "reconciliation": {
+    "confirmed": 0,
+    "conflict": 0,
+    "geometricOnly": 0,
+    "aiOnly": 0
+  },
+  "families": [],
+  "workspace": {
+    "byProductType": [],
+    "byFamily": [],
+    "byCategory": [],
+    "byScope": []
+  }
+}

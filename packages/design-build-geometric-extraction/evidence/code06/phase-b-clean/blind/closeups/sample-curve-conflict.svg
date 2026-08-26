@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="399.65999999999997 511.1200256347656 472.4799633789063 51.39996337890625" width="300" height="200">
+  <!-- Background -->
+  <rect x="399.65999999999997" y="511.1200256347656" width="472.4799633789063" height="51.39996337890625" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <!-- Host Wall centerline representation -->
+  <text x="419.65999999999997" y="526.1200256347656" font-size="7" font-family="monospace" fill="#666">Candidate with curve conflict/rejected (fr8)</text>
+  <text x="419.65999999999997" y="552.5199890136719" font-size="6" font-family="monospace" fill="#999">ID: c_v3-clean_fr8_3baca20b604a</text>
+  <!-- Candidate Box -->
+  <rect x="419.65999999999997" y="531.1200256347656" width="432.4799633789063" height="11.39996337890625" fill="none" stroke="#0066ff" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="423.65999999999997" y="543.1200256347656" font-size="6" font-family="monospace" fill="#0066ff">Interval: [-12.8, 408.2]</text>
+</svg>

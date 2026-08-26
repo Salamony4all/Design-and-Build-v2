@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 440" font-family="monospace" font-size="10">
+<rect width="640" height="440" fill="#f8fafc"/>
+<rect x="0" y="0" width="640" height="26" fill="#0891b2" opacity="0.9"/>
+<text x="8" y="17" fill="white" font-size="11" font-weight="bold">win-provisional-4 | obs:LIKELY_WINDOW | verdict:REVIEW</text>
+<rect x="0" y="26" width="640" height="16" fill="#16a34a" opacity="0.18"/>
+<text x="8" y="39" fill="#16a34a" font-size="9" font-weight="bold">lineageStatus: RETROACTIVE_SEGMENT_ASSOCIATION | precision: ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS</text>
+<text x="8" y="52" fill="#2563eb" font-size="8">candidate (instrument): [420,140,470,170]</text>
+<rect x="10" y="55" width="200" height="120" fill="none" stroke="#2563eb" stroke-width="2"/>
+<line x1="60.2" y1="-103.7" x2="60.2" y2="349.4" stroke="#16a34a" stroke-width="1.5" opacity="0.85"/>
+<rect x="10" y="180" width="46" height="6" fill="none" stroke="#ea580c" stroke-width="1.5"/>
+<text x="10" y="200" fill="#ea580c" font-size="8">interval:422-468 contained(tol10):true</text>
+<text x="10" y="214" fill="#16a34a" font-size="8">host:physicalWall:4150 overlapFrac:0.92</text>
+<rect x="224" y="48" width="406" height="384" fill="white" stroke="#e2e8f0" rx="3"/>
+<text x="232" y="64" font-weight="bold">Source Evidence</text>
+<text x="232" y="76">ops matched: 1</text>
+<text x="232" y="88">ops w/ seg hits: 1</text>
+<text x="232" y="100">drawable segs: 1</text>
+<text x="232" y="112">feature records: 1</text>
+<text x="232" y="128" font-weight="bold">Topology: WALL_GAP_WITH_GLAZING</text>
+<text x="232" y="140">confidence: LOW</text>
+
+<text x="232" y="152">gapWidth: N/Apx  doorLike: 0</text>
+
+<text x="232" y="172" font-weight="bold">Verdicts</text>
+<text x="232" y="184">extractionVerdict: REVIEW</text>
+<text x="232" y="196">promotionEligible: false</text>
+<text x="232" y="208">sourceBackedAccepted: false</text>
+<text x="232" y="220">manualOverride: true</text>
+<line x1="232" y1="236" x2="252" y2="236" stroke="#16a34a" stroke-width="2"/>
+<text x="256" y="240" fill="#16a34a">L/Z segments (retroactive)</text>
+<line x1="232" y1="250" x2="252" y2="250" stroke="#f59e0b" stroke-width="2"/>
+<text x="256" y="254" fill="#f59e0b">Curves (neutral, not glazing)</text>
+<rect x="232" y="262" width="18" height="6" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+<text x="254" y="270" fill="#2563eb">Candidate bounds</text>
+</svg>

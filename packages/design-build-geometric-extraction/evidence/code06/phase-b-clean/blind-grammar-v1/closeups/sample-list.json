@@ -1,0 +1,80 @@
+[
+  {
+    "type": "retained-high-evidence-1",
+    "candidateId": "c_v3-grammar-v1_fr0_56fe5fb9b0cd",
+    "wallId": "fr0",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-retained-high-evidence-1.svg"
+  },
+  {
+    "type": "retained-high-evidence-2",
+    "candidateId": "c_v3-grammar-v1_fr0_068b9b3f9282",
+    "wallId": "fr0",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-retained-high-evidence-2.svg"
+  },
+  {
+    "type": "retained-high-evidence-3",
+    "candidateId": "c_v3-grammar-v1_fr0_76fcf78e54ce",
+    "wallId": "fr0",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-retained-high-evidence-3.svg"
+  },
+  {
+    "type": "retained-high-evidence-4",
+    "candidateId": "c_v3-grammar-v1_fr0_eb2bed3d97f6",
+    "wallId": "fr0",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-retained-high-evidence-4.svg"
+  },
+  {
+    "type": "retained-high-evidence-5",
+    "candidateId": "c_v3-grammar-v1_fr1_acf5906f7c9c",
+    "wallId": "fr1",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-retained-high-evidence-5.svg"
+  },
+  {
+    "type": "rejected-continuous-face-1",
+    "candidateId": "c_v3-grammar-v1_fr0_72ef8b3033e7",
+    "wallId": "fr0",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-rejected-continuous-face-1.svg"
+  },
+  {
+    "type": "rejected-continuous-face-2",
+    "candidateId": "c_v3-grammar-v1_fr3_9e379d99a94e",
+    "wallId": "fr3",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-rejected-continuous-face-2.svg"
+  },
+  {
+    "type": "rejected-continuous-face-3",
+    "candidateId": "c_v3-grammar-v1_fr5_2ea35b8ad860",
+    "wallId": "fr5",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-rejected-continuous-face-3.svg"
+  },
+  {
+    "type": "rejected-hatch-pattern-1",
+    "candidateId": "c_v3-grammar-v1_fr12_feb81a39ad1a",
+    "wallId": "fr12",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-rejected-hatch-pattern-1.svg"
+  },
+  {
+    "type": "rejected-hatch-pattern-2",
+    "candidateId": "c_v3-grammar-v1_fr33_3b01a447b86a",
+    "wallId": "fr33",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-rejected-hatch-pattern-2.svg"
+  },
+  {
+    "type": "rejected-invalid-interval-1",
+    "candidateId": "c_v3-grammar-v1_fr0_72ef8b3033e7",
+    "wallId": "fr0",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-rejected-invalid-interval-1.svg"
+  },
+  {
+    "type": "rejected-invalid-interval-2",
+    "candidateId": "c_v3-grammar-v1_fr1_acf5906f7c9c",
+    "wallId": "fr1",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-rejected-invalid-interval-2.svg"
+  },
+  {
+    "type": "rejected-invalid-interval-3",
+    "candidateId": "c_v3-grammar-v1_fr2_f424a07b3c0c",
+    "wallId": "fr2",
+    "svgPath": "evidence/code06/phase-b-clean/blind-grammar-v1/closeups/sample-rejected-invalid-interval-3.svg"
+  }
+]

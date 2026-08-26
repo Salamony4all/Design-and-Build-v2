@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="15.71998718261716 851.3200073242188 269.560029296875 51.280029296875" width="300" height="200">
+  <rect x="15.71998718261716" y="851.3200073242188" width="269.560029296875" height="51.280029296875" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <text x="35.71998718261716" y="866.3200073242188" font-size="7" font-family="monospace" fill="#222" font-weight="bold">Rejected Invalid Finite Interval: c_v3-grammar-v1_fr2_f424a07b3c0c</text>
+  <text x="35.71998718261716" y="892.6000366210938" font-size="6" font-family="monospace" fill="#999">ID: c_v3-grammar-v1_fr2_f424a07b3c0c | Wall: fr2</text>
+  <rect x="35.71998718261716" y="871.3200073242188" width="229.56002929687497" height="11.280029296875" fill="none" stroke="#00cc00" stroke-width="2" stroke-dasharray="none"/>
+  <text x="39.71998718261716" y="883.3200073242188" font-size="6" font-family="monospace" fill="#00cc00">Verdict: ACCEPTED | Width: 218.3pt</text>
+</svg>

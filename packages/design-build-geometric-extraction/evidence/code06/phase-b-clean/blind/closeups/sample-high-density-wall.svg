@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="1478.3999633789062 45.99999267578124 51.280029296875 399.8800292968751" width="300" height="200">
+  <!-- Background -->
+  <rect x="1478.3999633789062" y="45.99999267578124" width="51.280029296875" height="399.8800292968751" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <!-- Host Wall centerline representation -->
+  <text x="1498.3999633789062" y="60.99999267578124" font-size="7" font-family="monospace" fill="#666">Candidate from high-density wall (fr21)</text>
+  <text x="1498.3999633789062" y="435.8800219726563" font-size="6" font-family="monospace" fill="#999">ID: c_v3-clean_fr21_34125ef4e2e8</text>
+  <!-- Candidate Box -->
+  <rect x="1498.3999633789062" y="65.99999267578124" width="11.280029296875" height="359.8800292968751" fill="none" stroke="#0066ff" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="1502.3999633789062" y="77.99999267578124" font-size="6" font-family="monospace" fill="#0066ff">Interval: [-28.7, 319.9]</text>
+</svg>

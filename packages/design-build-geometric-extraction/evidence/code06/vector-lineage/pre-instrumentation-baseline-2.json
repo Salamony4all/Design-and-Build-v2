@@ -1,0 +1,39 @@
+{
+  "sourcePdfSha256": "d3656ea9c21b2d716298df363403328e945c711200424564c489cf3cb161a09d",
+  "pageIndex": 0,
+  "vectorOperationCount": 127711,
+  "normalizedPrimitiveCount": 1117,
+  "operationOrderHash": "c82491f14db76203",
+  "primitiveGeometryHash": "8c825b31b7758856",
+  "wallCandidateHash": "8c825b31b7758856",
+  "acceptedWallGeometryHash": "8c825b31b7758856",
+  "evidenceHash": "8c2491f14db76203",
+  "acceptedWallCount": 70,
+  "uniquePhysicalWallIds": 70,
+  "roi": [
+    306.12000274658203,
+    376.9199981689453,
+    1768.6799926757812,
+    1170.6000366210938
+  ],
+  "scale": 17.50355553021744,
+  "thicknessBands": [
+    {
+      "center": 5.66,
+      "min": 5.64,
+      "max": 5.76,
+      "frequency": 49,
+      "totalSupportedLength": 0,
+      "confidence": 1
+    },
+    {
+      "center": 11.32,
+      "min": 11.28,
+      "max": 11.4,
+      "frequency": 21,
+      "totalSupportedLength": 0,
+      "confidence": 1
+    }
+  ],
+  "genuinelyFloatingCount": 0
+}

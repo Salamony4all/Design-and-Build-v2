@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-07-29T06:50:22.432Z",
+  "descriptor": "sw0 | rgbnone | f0 | c0",
+  "fields": [
+    {
+      "field": "sw0",
+      "rawValue": "sw0",
+      "normalizedValue": "strokeWidth = 0 (hairline / sub-pixel)",
+      "valuePresentInSource": true,
+      "defaultApplied": false,
+      "meaning": "Stroke width recorded as 0 — hairline rendering, consistent across all 25 DT regions"
+    },
+    {
+      "field": "rgbnone",
+      "rawValue": "rgbnone",
+      "normalizedValue": "no explicit RGB colour object attached",
+      "valuePresentInSource": false,
+      "defaultApplied": true,
+      "meaning": "No explicit colour was assigned in the stroke path record. The rendering engine applies its default ink colour (black). rgbnone means \"no colour object was present\", NOT \"colour data was discarded\""
+    },
+    {
+      "field": "f0",
+      "rawValue": "f0",
+      "normalizedValue": "fill = none / no fill recorded",
+      "valuePresentInSource": false,
+      "defaultApplied": true,
+      "meaning": "No fill operation is present in the PDF operator stream. All strokes are unfilled. This is the known door drawing convention in CODE_06"
+    },
+    {
+      "field": "c0",
+      "rawValue": "c0",
+      "normalizedValue": "clipping group = none (no clipping active)",
+      "valuePresentInSource": true,
+      "defaultApplied": false,
+      "meaning": "No clipping path is active. Strokes render in page coordinate space directly"
+    }
+  ],
+  "overallConclusion": "The sw0|rgbnone|f0|c0 descriptor captures a uniform stroke-only door convention. rgbnone means \"no colour object attached — default black ink used\", NOT \"colour was missing from rendering\". The convention is identical across all 25 DT regions — a deliberate stylized drawing convention, not a capture bug or normalization fallback.",
+  "deterministicHash": "f9856f0c1010"
+}

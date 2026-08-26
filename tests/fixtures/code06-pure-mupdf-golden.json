@@ -1,0 +1,3164 @@
+{
+  "meta": {
+    "capturedAt": "2026-07-27T20:52:26.470Z",
+    "source": "apps/editor/src/lib/fusion/mupdf-wall/mupdf-pure.ts (authoritative legacy pure MuPDF)",
+    "sourceSha256": "242ed435c9b326ad009b4d523c25e9e6ade0ab4413e17dbc1ff1ff70a0f9bcec",
+    "sourcePdf": "CODE_06.pdf",
+    "sourcePdfSha256": "4559ff86f22d3d1db17a5562cba455ed18f70a2f1f0e28d240ed791b62d07eca",
+    "sourcePdfBytes": 3645780
+  },
+  "pageBoundsMupdf": [
+    0,
+    0,
+    2383.919921875,
+    1683.719970703125
+  ],
+  "activeBuildingRegionMupdf": [
+    306.12000274658203,
+    376.9199981689453,
+    1768.6799926757812,
+    1170.6000366210938
+  ],
+  "activeBuildingRegionSource": [
+    306.12000274658203,
+    376.9199981689453,
+    1768.6799926757812,
+    1170.6000366210938
+  ],
+  "scaleMmPerPt": 17.50355553021744,
+  "scaleSource": "dim-text",
+  "acceptedWallCount": 70,
+  "reviewCount": 749,
+  "rejectedCount": 277,
+  "genuinelyFloatingAcceptedPhysicalWalls": 0,
+  "floatingAccepted": 0,
+  "thicknessBands": [
+    {
+      "center": 5.66,
+      "min": 5.64,
+      "max": 5.76,
+      "frequency": 49,
+      "totalSupportedLength": 0,
+      "confidence": 1
+    },
+    {
+      "center": 11.32,
+      "min": 11.28,
+      "max": 11.4,
+      "frequency": 21,
+      "totalSupportedLength": 0,
+      "confidence": 1
+    }
+  ],
+  "junctionCount": 20,
+  "candidateHash": "8a3361ed",
+  "vectorOperationCount": 127711,
+  "timings": {
+    "pdfLoad": 18,
+    "vectorCollection": 2082,
+    "subpathNormalization": 0,
+    "roiDerivation": 9,
+    "thicknessInference": 37,
+    "candidateGeneration": 928,
+    "filledClassification": 4,
+    "candidateFusion": 6,
+    "connectivity": 3,
+    "connectivityAnalysis": 13,
+    "classification": 1,
+    "overlayGeneration": 0,
+    "total": 3351
+  },
+  "acceptedGeometryHash": "e8251102f0a8377f",
+  "accepted": [
+    {
+      "physicalWallId": "fr0",
+      "a": {
+        "x": 311.76000595092773,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 311.76000595092773,
+        "y": 1159.3200073242188
+      },
+      "thickness": 11.280006408691406,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v0"
+      ],
+      "sourceSubpathIds": [
+        "v0:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": true,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr1",
+      "a": {
+        "x": 340.0800018310547,
+        "y": 382.62000274658203
+      },
+      "b": {
+        "x": 963.719970703125,
+        "y": 382.62000274658203
+      },
+      "thickness": 11.400009155273438,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v1"
+      ],
+      "sourceSubpathIds": [
+        "v1:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": true,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr2",
+      "a": {
+        "x": 340.0800018310547,
+        "y": 1164.9600219726562
+      },
+      "b": {
+        "x": 963.719970703125,
+        "y": 1164.9600219726562
+      },
+      "thickness": 11.280029296875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v2"
+      ],
+      "sourceSubpathIds": [
+        "v2:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": true,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr3",
+      "a": {
+        "x": 969.3599853515625,
+        "y": 943.8000183105469
+      },
+      "b": {
+        "x": 969.3599853515625,
+        "y": 1136.6400146484375
+      },
+      "thickness": 11.280029296875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v3"
+      ],
+      "sourceSubpathIds": [
+        "v3:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr4",
+      "a": {
+        "x": 317.40000915527344,
+        "y": 938.1600036621094
+      },
+      "b": {
+        "x": 946.6799926757812,
+        "y": 938.1600036621094
+      },
+      "thickness": 11.280029296875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v4"
+      ],
+      "sourceSubpathIds": [
+        "v4:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr5",
+      "a": {
+        "x": 592.379997253418,
+        "y": 615
+      },
+      "b": {
+        "x": 592.379997253418,
+        "y": 705.7200164794922
+      },
+      "thickness": 5.6399688720703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v5"
+      ],
+      "sourceSubpathIds": [
+        "v5:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr6",
+      "a": {
+        "x": 317.40000915527344,
+        "y": 609.3600082397461
+      },
+      "b": {
+        "x": 946.6799926757812,
+        "y": 609.3600082397461
+      },
+      "thickness": 11.279983520507812,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v6"
+      ],
+      "sourceSubpathIds": [
+        "v6:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr7",
+      "a": {
+        "x": 969.3599853515625,
+        "y": 411
+      },
+      "b": {
+        "x": 969.3599853515625,
+        "y": 819.1200256347656
+      },
+      "thickness": 11.280029296875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v7"
+      ],
+      "sourceSubpathIds": [
+        "v7:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr8",
+      "a": {
+        "x": 697.1999816894531,
+        "y": 824.8200073242188
+      },
+      "b": {
+        "x": 975,
+        "y": 824.8200073242188
+      },
+      "thickness": 11.39996337890625,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v8"
+      ],
+      "sourceSubpathIds": [
+        "v8:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr9",
+      "a": {
+        "x": 702.8999862670898,
+        "y": 615
+      },
+      "b": {
+        "x": 702.8999862670898,
+        "y": 819.1200256347656
+      },
+      "thickness": 11.400009155273438,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v9"
+      ],
+      "sourceSubpathIds": [
+        "v9:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr10",
+      "a": {
+        "x": 524.3399963378906,
+        "y": 615
+      },
+      "b": {
+        "x": 524.3399963378906,
+        "y": 649.0800018310547
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 0.88,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v10"
+      ],
+      "sourceSubpathIds": [
+        "v10:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr11",
+      "a": {
+        "x": 481.8000183105469,
+        "y": 708.5400009155273
+      },
+      "b": {
+        "x": 583.8000183105469,
+        "y": 708.5400009155273
+      },
+      "thickness": 5.6399688720703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v11"
+      ],
+      "sourceSubpathIds": [
+        "v11:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr12",
+      "a": {
+        "x": 484.62000274658203,
+        "y": 711.3599853515625
+      },
+      "b": {
+        "x": 484.62000274658203,
+        "y": 932.5199890136719
+      },
+      "thickness": 5.6399688720703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v12"
+      ],
+      "sourceSubpathIds": [
+        "v12:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr13",
+      "a": {
+        "x": 405.2999954223633,
+        "y": 705.7200164794922
+      },
+      "b": {
+        "x": 405.2999954223633,
+        "y": 932.5199890136719
+      },
+      "thickness": 5.6399688720703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v13"
+      ],
+      "sourceSubpathIds": [
+        "v13:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr14",
+      "a": {
+        "x": 317.40000915527344,
+        "y": 708.5400009155273
+      },
+      "b": {
+        "x": 402.4800109863281,
+        "y": 708.5400009155273
+      },
+      "thickness": 5.6399688720703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr15",
+      "a": {
+        "x": 487.4399871826172,
+        "y": 765.3000183105469
+      },
+      "b": {
+        "x": 583.8000183105469,
+        "y": 765.3000183105469
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr16",
+      "a": {
+        "x": 487.4399871826172,
+        "y": 821.9400329589844
+      },
+      "b": {
+        "x": 583.8000183105469,
+        "y": 821.9400329589844
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr17",
+      "a": {
+        "x": 487.4399871826172,
+        "y": 878.6400146484375
+      },
+      "b": {
+        "x": 583.8000183105469,
+        "y": 878.6400146484375
+      },
+      "thickness": 5.75994873046875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr18",
+      "a": {
+        "x": 317.40000915527344,
+        "y": 821.9400329589844
+      },
+      "b": {
+        "x": 402.4800109863281,
+        "y": 821.9400329589844
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr19",
+      "a": {
+        "x": 317.40000915527344,
+        "y": 765.3000183105469
+      },
+      "b": {
+        "x": 402.4800109863281,
+        "y": 765.3000183105469
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr20",
+      "a": {
+        "x": 317.40000915527344,
+        "y": 878.6400146484375
+      },
+      "b": {
+        "x": 402.4800109863281,
+        "y": 878.6400146484375
+      },
+      "thickness": 5.75994873046875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr21",
+      "a": {
+        "x": 1763.0399780273438,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 1763.0399780273438,
+        "y": 1159.3200073242188
+      },
+      "thickness": 11.280029296875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v15"
+      ],
+      "sourceSubpathIds": [
+        "v15:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": true,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr22",
+      "a": {
+        "x": 1111.0799560546875,
+        "y": 382.62000274658203
+      },
+      "b": {
+        "x": 1734.719970703125,
+        "y": 382.62000274658203
+      },
+      "thickness": 11.400009155273438,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v16"
+      ],
+      "sourceSubpathIds": [
+        "v16:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": true,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr23",
+      "a": {
+        "x": 1111.0799560546875,
+        "y": 1164.9600219726562
+      },
+      "b": {
+        "x": 1734.719970703125,
+        "y": 1164.9600219726562
+      },
+      "thickness": 11.280029296875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v17"
+      ],
+      "sourceSubpathIds": [
+        "v17:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": true,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr24",
+      "a": {
+        "x": 1105.4399871826172,
+        "y": 943.8000183105469
+      },
+      "b": {
+        "x": 1105.4399871826172,
+        "y": 1136.6400146484375
+      },
+      "thickness": 11.279937744140625,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v18"
+      ],
+      "sourceSubpathIds": [
+        "v18:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr25",
+      "a": {
+        "x": 1128.1200256347656,
+        "y": 938.1600036621094
+      },
+      "b": {
+        "x": 1757.3999633789062,
+        "y": 938.1600036621094
+      },
+      "thickness": 11.280029296875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v19"
+      ],
+      "sourceSubpathIds": [
+        "v19:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr26",
+      "a": {
+        "x": 1482.4199981689453,
+        "y": 615
+      },
+      "b": {
+        "x": 1482.4199981689453,
+        "y": 705.7200164794922
+      },
+      "thickness": 5.639923095703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v20"
+      ],
+      "sourceSubpathIds": [
+        "v20:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr27",
+      "a": {
+        "x": 1128.1200256347656,
+        "y": 609.3600082397461
+      },
+      "b": {
+        "x": 1757.3999633789062,
+        "y": 609.3600082397461
+      },
+      "thickness": 11.279983520507812,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v21"
+      ],
+      "sourceSubpathIds": [
+        "v21:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr28",
+      "a": {
+        "x": 1105.4399871826172,
+        "y": 411
+      },
+      "b": {
+        "x": 1105.4399871826172,
+        "y": 819.1200256347656
+      },
+      "thickness": 11.279937744140625,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v22"
+      ],
+      "sourceSubpathIds": [
+        "v22:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr29",
+      "a": {
+        "x": 1099.8000183105469,
+        "y": 824.8200073242188
+      },
+      "b": {
+        "x": 1377.4800109863281,
+        "y": 824.8200073242188
+      },
+      "thickness": 11.39996337890625,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v23"
+      ],
+      "sourceSubpathIds": [
+        "v23:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr30",
+      "a": {
+        "x": 1371.8399963378906,
+        "y": 615
+      },
+      "b": {
+        "x": 1371.8399963378906,
+        "y": 819.1200256347656
+      },
+      "thickness": 11.280029296875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v24"
+      ],
+      "sourceSubpathIds": [
+        "v24:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr31",
+      "a": {
+        "x": 1550.4600219726562,
+        "y": 615
+      },
+      "b": {
+        "x": 1550.4600219726562,
+        "y": 649.0800018310547
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 0.88,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v25"
+      ],
+      "sourceSubpathIds": [
+        "v25:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr32",
+      "a": {
+        "x": 1490.8799743652344,
+        "y": 708.5400009155273
+      },
+      "b": {
+        "x": 1593,
+        "y": 708.5400009155273
+      },
+      "thickness": 5.6399688720703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v26"
+      ],
+      "sourceSubpathIds": [
+        "v26:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr33",
+      "a": {
+        "x": 1590.1200256347656,
+        "y": 711.3599853515625
+      },
+      "b": {
+        "x": 1590.1200256347656,
+        "y": 932.5199890136719
+      },
+      "thickness": 5.75994873046875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v27"
+      ],
+      "sourceSubpathIds": [
+        "v27:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr34",
+      "a": {
+        "x": 1669.5,
+        "y": 705.7200164794922
+      },
+      "b": {
+        "x": 1669.5,
+        "y": 932.5199890136719
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v28"
+      ],
+      "sourceSubpathIds": [
+        "v28:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr35",
+      "a": {
+        "x": 1672.3200073242188,
+        "y": 708.5400009155273
+      },
+      "b": {
+        "x": 1757.3999633789062,
+        "y": 708.5400009155273
+      },
+      "thickness": 5.6399688720703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr36",
+      "a": {
+        "x": 1490.8799743652344,
+        "y": 765.3000183105469
+      },
+      "b": {
+        "x": 1587.2400512695312,
+        "y": 765.3000183105469
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr37",
+      "a": {
+        "x": 1490.8799743652344,
+        "y": 821.9400329589844
+      },
+      "b": {
+        "x": 1587.2400512695312,
+        "y": 821.9400329589844
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr38",
+      "a": {
+        "x": 1490.8799743652344,
+        "y": 878.6400146484375
+      },
+      "b": {
+        "x": 1587.2400512695312,
+        "y": 878.6400146484375
+      },
+      "thickness": 5.75994873046875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr39",
+      "a": {
+        "x": 1672.3200073242188,
+        "y": 821.9400329589844
+      },
+      "b": {
+        "x": 1757.3999633789062,
+        "y": 821.9400329589844
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr40",
+      "a": {
+        "x": 1672.3200073242188,
+        "y": 765.3000183105469
+      },
+      "b": {
+        "x": 1757.3999633789062,
+        "y": 765.3000183105469
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr41",
+      "a": {
+        "x": 1672.3200073242188,
+        "y": 878.6400146484375
+      },
+      "b": {
+        "x": 1757.3999633789062,
+        "y": 878.6400146484375
+      },
+      "thickness": 5.75994873046875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr42",
+      "a": {
+        "x": 589.5,
+        "y": 705.7200164794922
+      },
+      "b": {
+        "x": 589.5,
+        "y": 932.5199890136719
+      },
+      "thickness": 11.39996337890625,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr43",
+      "a": {
+        "x": 1485.240005493164,
+        "y": 705.7200164794922
+      },
+      "b": {
+        "x": 1485.240005493164,
+        "y": 932.5199890136719
+      },
+      "thickness": 11.279937744140625,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr44",
+      "a": {
+        "x": 345.7799949645996,
+        "y": 615
+      },
+      "b": {
+        "x": 345.7799949645996,
+        "y": 705.7200164794922
+      },
+      "thickness": 5.639991760253906,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr45",
+      "a": {
+        "x": 1729.0200805664062,
+        "y": 615
+      },
+      "b": {
+        "x": 1729.0200805664062,
+        "y": 705.7200164794922
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr46",
+      "a": {
+        "x": 422.2800064086914,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 422.2800064086914,
+        "y": 501.59999084472656
+      },
+      "thickness": 5.7599945068359375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr47",
+      "a": {
+        "x": 529.9800109863281,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 529.9800109863281,
+        "y": 501.59999084472656
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr48",
+      "a": {
+        "x": 637.7400054931641,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 637.7400054931641,
+        "y": 501.59999084472656
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr49",
+      "a": {
+        "x": 745.379997253418,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 745.379997253418,
+        "y": 501.59999084472656
+      },
+      "thickness": 5.6399688720703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr50",
+      "a": {
+        "x": 853.1400146484375,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 853.1400146484375,
+        "y": 501.59999084472656
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr51",
+      "a": {
+        "x": 1652.4600219726562,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 1652.4600219726562,
+        "y": 501.59999084472656
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr52",
+      "a": {
+        "x": 1544.8200073242188,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 1544.8200073242188,
+        "y": 501.59999084472656
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr53",
+      "a": {
+        "x": 1437.0599670410156,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 1437.0599670410156,
+        "y": 501.59999084472656
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr54",
+      "a": {
+        "x": 1329.3599853515625,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 1329.3599853515625,
+        "y": 501.59999084472656
+      },
+      "thickness": 5.75994873046875,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr55",
+      "a": {
+        "x": 1221.6600036621094,
+        "y": 388.32000732421875
+      },
+      "b": {
+        "x": 1221.6600036621094,
+        "y": 501.59999084472656
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr56",
+      "a": {
+        "x": 422.2800064086914,
+        "y": 1045.9200439453125
+      },
+      "b": {
+        "x": 422.2800064086914,
+        "y": 1159.3200073242188
+      },
+      "thickness": 5.7599945068359375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr57",
+      "a": {
+        "x": 529.9800109863281,
+        "y": 1045.9200439453125
+      },
+      "b": {
+        "x": 529.9800109863281,
+        "y": 1159.3200073242188
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr58",
+      "a": {
+        "x": 637.7400054931641,
+        "y": 1045.9200439453125
+      },
+      "b": {
+        "x": 637.7400054931641,
+        "y": 1159.3200073242188
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr59",
+      "a": {
+        "x": 745.379997253418,
+        "y": 1045.9200439453125
+      },
+      "b": {
+        "x": 745.379997253418,
+        "y": 1159.3200073242188
+      },
+      "thickness": 5.6399688720703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr60",
+      "a": {
+        "x": 853.1400146484375,
+        "y": 1045.9200439453125
+      },
+      "b": {
+        "x": 853.1400146484375,
+        "y": 1159.3200073242188
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr61",
+      "a": {
+        "x": 1652.4600219726562,
+        "y": 1045.9200439453125
+      },
+      "b": {
+        "x": 1652.4600219726562,
+        "y": 1159.3200073242188
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr62",
+      "a": {
+        "x": 1544.8200073242188,
+        "y": 1045.9200439453125
+      },
+      "b": {
+        "x": 1544.8200073242188,
+        "y": 1159.3200073242188
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr63",
+      "a": {
+        "x": 1437.0599670410156,
+        "y": 1045.9200439453125
+      },
+      "b": {
+        "x": 1437.0599670410156,
+        "y": 1159.3200073242188
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr64",
+      "a": {
+        "x": 1329.4199981689453,
+        "y": 1045.9200439453125
+      },
+      "b": {
+        "x": 1329.4199981689453,
+        "y": 1159.3200073242188
+      },
+      "thickness": 5.639923095703125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr65",
+      "a": {
+        "x": 1221.6600036621094,
+        "y": 1045.9200439453125
+      },
+      "b": {
+        "x": 1221.6600036621094,
+        "y": 1159.3200073242188
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s2",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr66",
+      "a": {
+        "x": 1037.3399963378906,
+        "y": 493.67999267578125
+      },
+      "b": {
+        "x": 1037.3399963378906,
+        "y": 667.8000183105469
+      },
+      "thickness": 5.6400146484375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v33"
+      ],
+      "sourceSubpathIds": [
+        "v33:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr67",
+      "a": {
+        "x": 1040.1600036621094,
+        "y": 664.9199981689453
+      },
+      "b": {
+        "x": 1099.8000183105469,
+        "y": 664.9199981689453
+      },
+      "thickness": 5.760040283203125,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v34"
+      ],
+      "sourceSubpathIds": [
+        "v34:s0"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr68",
+      "a": {
+        "x": 975,
+        "y": 434.2199935913086
+      },
+      "b": {
+        "x": 1099.8000183105469,
+        "y": 434.2199935913086
+      },
+      "thickness": 11.400009155273438,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v35"
+      ],
+      "sourceSubpathIds": [
+        "v35:s0",
+        "v35:s1"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    },
+    {
+      "physicalWallId": "fr69",
+      "a": {
+        "x": 975,
+        "y": 496.5599899291992
+      },
+      "b": {
+        "x": 1034.5199890136719,
+        "y": 496.5599899291992
+      },
+      "thickness": 5.7599945068359375,
+      "confidence": 1,
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v35"
+      ],
+      "sourceSubpathIds": [
+        "v35:s0",
+        "v35:s1"
+      ],
+      "sourceStrokeIds": [],
+      "perimeterContribution": false,
+      "approvalState": "accepted"
+    }
+  ],
+  "review": [
+    {
+      "physicalWallId": "m:pf500+pf501",
+      "a": {
+        "x": 586.6800155639648,
+        "y": 403.74000549316406
+      },
+      "b": {
+        "x": 586.6800155639648,
+        "y": 477.3599853515625
+      },
+      "thickness": 5.76,
+      "confidence": 1,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf502+pf503",
+      "a": {
+        "x": 586.6800155639648,
+        "y": 433.5
+      },
+      "b": {
+        "x": 586.6800155639648,
+        "y": 507.12000274658203
+      },
+      "thickness": 9.11,
+      "confidence": 1,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf970+pf971",
+      "a": {
+        "x": 1488.0599670410156,
+        "y": 403.74000549316406
+      },
+      "b": {
+        "x": 1488.0599670410156,
+        "y": 477.3599853515625
+      },
+      "thickness": 5.64,
+      "confidence": 1,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf972+pf973",
+      "a": {
+        "x": 1488.0599670410156,
+        "y": 433.5
+      },
+      "b": {
+        "x": 1488.0599670410156,
+        "y": 507.12000274658203
+      },
+      "thickness": 9.02,
+      "confidence": 1,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf982+pf983",
+      "a": {
+        "x": 401.3399963378906,
+        "y": 385.439998626709
+      },
+      "b": {
+        "x": 401.3399963378906,
+        "y": 461.2799835205078
+      },
+      "thickness": 6.36,
+      "confidence": 1,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf1034+pf1035+pf1036+pf1037",
+      "a": {
+        "x": 973.0800018310547,
+        "y": 615.2400054931641
+      },
+      "b": {
+        "x": 1019.8799743652344,
+        "y": 615.2400054931641
+      },
+      "thickness": 13.47,
+      "confidence": 0.88,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf1038+pf1039+pf1040+pf1041",
+      "a": {
+        "x": 973.0800018310547,
+        "y": 635.6399917602539
+      },
+      "b": {
+        "x": 1019.8799743652344,
+        "y": 635.6399917602539
+      },
+      "thickness": 4.03,
+      "confidence": 0.88,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf1042+pf1043+pf1044+pf1045",
+      "a": {
+        "x": 824.0400238037109,
+        "y": 637.6799926757812
+      },
+      "b": {
+        "x": 970.2599945068359,
+        "y": 637.6799926757812
+      },
+      "thickness": 6.09,
+      "confidence": 1,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf1046+pf1047",
+      "a": {
+        "x": 586.6800155639648,
+        "y": 949.3200073242188
+      },
+      "b": {
+        "x": 586.6800155639648,
+        "y": 982.3800201416016
+      },
+      "thickness": 9.11,
+      "confidence": 0.88,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf1050+pf1051",
+      "a": {
+        "x": 586.6800155639648,
+        "y": 1059.9000091552734
+      },
+      "b": {
+        "x": 586.6800155639648,
+        "y": 1133.6400146484375
+      },
+      "thickness": 5.76,
+      "confidence": 1,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf1058+pf1059",
+      "a": {
+        "x": 401.09999084472656,
+        "y": 1086.240005493164
+      },
+      "b": {
+        "x": 401.09999084472656,
+        "y": 1162.1400146484375
+      },
+      "thickness": 5.88,
+      "confidence": 1,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf1060+pf1061",
+      "a": {
+        "x": 341.5200004577637,
+        "y": 1127.5800018310547
+      },
+      "b": {
+        "x": 411.6600036621094,
+        "y": 1127.5800018310547
+      },
+      "thickness": 9.48,
+      "confidence": 1,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf1062+pf1063",
+      "a": {
+        "x": 1488.0599670410156,
+        "y": 949.3200073242188
+      },
+      "b": {
+        "x": 1488.0599670410156,
+        "y": 982.3800201416016
+      },
+      "thickness": 9.02,
+      "confidence": 0.88,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf1066+pf1067",
+      "a": {
+        "x": 1488.0599670410156,
+        "y": 1059.9000091552734
+      },
+      "b": {
+        "x": 1488.0599670410156,
+        "y": 1133.6400146484375
+      },
+      "thickness": 5.64,
+      "confidence": 1,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "m:pf1112+pf1113",
+      "a": {
+        "x": 994.8000183105469,
+        "y": 607.9199981689453
+      },
+      "b": {
+        "x": 1041.5999908447266,
+        "y": 607.9199981689453
+      },
+      "thickness": 8.66,
+      "confidence": 0.88,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1173",
+      "a": {
+        "x": 672.2400054931641,
+        "y": 943.8000183105469
+      },
+      "b": {
+        "x": 672.2400054931641,
+        "y": 995.7600402832031
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1174",
+      "a": {
+        "x": 672.2400054931641,
+        "y": 943.8000183105469
+      },
+      "b": {
+        "x": 672.2400054931641,
+        "y": 995.7600402832031
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1175",
+      "a": {
+        "x": 669.7200164794922,
+        "y": 943.8000183105469
+      },
+      "b": {
+        "x": 669.7200164794922,
+        "y": 995.7600402832031
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1176",
+      "a": {
+        "x": 669.7200164794922,
+        "y": 943.8000183105469
+      },
+      "b": {
+        "x": 669.7200164794922,
+        "y": 995.7600402832031
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1177",
+      "a": {
+        "x": 669.7200164794922,
+        "y": 551.7599945068359
+      },
+      "b": {
+        "x": 669.7200164794922,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1178",
+      "a": {
+        "x": 669.7200164794922,
+        "y": 551.7599945068359
+      },
+      "b": {
+        "x": 669.7200164794922,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1179",
+      "a": {
+        "x": 672.2400054931641,
+        "y": 551.7599945068359
+      },
+      "b": {
+        "x": 672.2400054931641,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1180",
+      "a": {
+        "x": 672.2400054931641,
+        "y": 551.7599945068359
+      },
+      "b": {
+        "x": 672.2400054931641,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1188",
+      "a": {
+        "x": 573.3599853515625,
+        "y": 711.3599853515625
+      },
+      "b": {
+        "x": 573.3599853515625,
+        "y": 752.0399780273438
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1189",
+      "a": {
+        "x": 573.3599853515625,
+        "y": 711.3599853515625
+      },
+      "b": {
+        "x": 573.3599853515625,
+        "y": 752.0399780273438
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1204",
+      "a": {
+        "x": 742.5600128173828,
+        "y": 571.6799926757812
+      },
+      "b": {
+        "x": 742.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1205",
+      "a": {
+        "x": 742.5600128173828,
+        "y": 571.6799926757812
+      },
+      "b": {
+        "x": 742.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1206",
+      "a": {
+        "x": 691.5600128173828,
+        "y": 571.6799926757812
+      },
+      "b": {
+        "x": 691.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1207",
+      "a": {
+        "x": 691.5600128173828,
+        "y": 571.6799926757812
+      },
+      "b": {
+        "x": 691.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1210",
+      "a": {
+        "x": 742.5600128173828,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 742.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1211",
+      "a": {
+        "x": 742.5600128173828,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 742.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1214",
+      "a": {
+        "x": 691.5600128173828,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 691.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1215",
+      "a": {
+        "x": 691.5600128173828,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 691.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1218",
+      "a": {
+        "x": 691.5600128173828,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 691.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1219",
+      "a": {
+        "x": 691.5600128173828,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 691.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1222",
+      "a": {
+        "x": 742.5600128173828,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 742.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1223",
+      "a": {
+        "x": 742.5600128173828,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 742.5600128173828,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1224",
+      "a": {
+        "x": 850.3200073242188,
+        "y": 571.6799926757812
+      },
+      "b": {
+        "x": 850.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1225",
+      "a": {
+        "x": 850.3200073242188,
+        "y": 571.6799926757812
+      },
+      "b": {
+        "x": 850.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1226",
+      "a": {
+        "x": 799.3200073242188,
+        "y": 571.6799926757812
+      },
+      "b": {
+        "x": 799.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1227",
+      "a": {
+        "x": 799.3200073242188,
+        "y": 571.6799926757812
+      },
+      "b": {
+        "x": 799.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1228",
+      "a": {
+        "x": 850.3200073242188,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 850.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1229",
+      "a": {
+        "x": 850.3200073242188,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 850.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1232",
+      "a": {
+        "x": 799.3200073242188,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 799.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1233",
+      "a": {
+        "x": 799.3200073242188,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 799.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1236",
+      "a": {
+        "x": 799.3200073242188,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 799.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1237",
+      "a": {
+        "x": 799.3200073242188,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 799.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1238",
+      "a": {
+        "x": 850.3200073242188,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 850.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1239",
+      "a": {
+        "x": 850.3200073242188,
+        "y": 569.6400146484375
+      },
+      "b": {
+        "x": 850.3200073242188,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.4,
+      "reason": "review"
+    },
+    {
+      "physicalWallId": "sl1240",
+      "a": {
+        "x": 912.719970703125,
+        "y": 571.6799926757812
+      },
+      "b": {
+        "x": 912.719970703125,
+        "y": 603.7200164794922
+      },
+      "thickness": 1.2799999713897705,
+      "confidence": 0.55,
+      "reason": "review"
+    }
+  ],
+  "provenance": {
+    "totalNormalizedPrimitives": 1096,
+    "ownedByAcceptedWalls": 0,
+    "ownedByOpeningEvidence": 0,
+    "ownedByJunctionEvidence": 0,
+    "rejectedNonWalls": 277,
+    "unresolvedWallLikePrimitives": 749,
+    "unclassifiedPrimitives": 0
+  },
+  "rejectionByReason": {
+    "no-structural-relation-after-evidence-passes": 277
+  },
+  "orientation": {
+    "acceptedHorizontalWalls": 29,
+    "acceptedVerticalWalls": 41,
+    "acceptedOtherAngleWalls": 0,
+    "acceptedHorizontalLength": 7274,
+    "acceptedVerticalLength": 7373.6,
+    "shortAcceptedWalls": 0,
+    "mediumAcceptedWalls": 22,
+    "longAcceptedWalls": 48,
+    "acceptedJunctionPartitions": 24,
+    "acceptedPerimeterWalls": 6,
+    "reviewWalls": 749,
+    "rejectedWalls": 277,
+    "floatingAcceptedWalls": 2
+  },
+  "openingLedger": [],
+  "originalCaptureAcceptedGeometryHash": "b29614f60d1d1bf4",
+  "canonicalAcceptedGeometryHash": "8c825b31b7758856",
+  "canonicalAcceptedEvidenceHash": "8c2491f14db76203",
+  "canonicalHashSpec": "canonical-hash.ts v2: recursive sorted-key JSON, 3dp, sha256/16; geometry=endpoints+thickness+orientationClass+order; evidence=geometry+verdict+evidenceTypes+sourceIds+connectivityClass+floatingClass+perimeterContribution+logicalWallRunId+isFragmentOfOpening+positive/negativeEvidence (all sorted/normalized)"
+}

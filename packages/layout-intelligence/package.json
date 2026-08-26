@@ -1,0 +1,21 @@
+{
+  "name": "@pascal-app/layout-intelligence",
+  "version": "0.1.0",
+  "description": "Pascal Layout Intelligence Engine",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
+  "peerDependencies": {
+    "@pascal-app/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@pascal-app/core": "workspace:*",
+    "@pascal/typescript-config": "workspace:*",
+    "@types/node": "^22.19.12",
+    "typescript": "5.9.3"
+  }
+}

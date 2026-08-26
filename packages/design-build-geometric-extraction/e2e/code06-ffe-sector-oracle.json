@@ -1,0 +1,33 @@
+{
+  "oracleOnly": true,
+  "detectorInput": false,
+  "sector": "accommodation",
+  "spaceType": "six-bed-unit",
+  "anchors": [
+    {
+      "unit": 1,
+      "x": 618.5595092773438,
+      "y": 534.9377746582031,
+      "expectedBeds": 6
+    },
+    {
+      "unit": 2,
+      "x": 614.3590087890625,
+      "y": 1019.5000915527344,
+      "expectedBeds": 6
+    },
+    {
+      "unit": 3,
+      "x": 1418.8300170898438,
+      "y": 526.7794494628906,
+      "expectedBeds": 6
+    },
+    {
+      "unit": 4,
+      "x": 1396.6296997070312,
+      "y": 1024.8993225097656,
+      "expectedBeds": 6
+    }
+  ],
+  "expectedBedInstances": 24
+}

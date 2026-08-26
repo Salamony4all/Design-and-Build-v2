@@ -1,0 +1,93 @@
+# ---------------------------------------------------------------------------
+# Dependencies
+# ---------------------------------------------------------------------------
+node_modules/
+.pnpm-store/
+
+# ---------------------------------------------------------------------------
+# Build / generated output  (never commit generated files)
+# ---------------------------------------------------------------------------
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# ---------------------------------------------------------------------------
+# Caches
+# ---------------------------------------------------------------------------
+.turbo/
+.cache/
+.eslintcache
+.vitest/
+coverage/
+
+# ---------------------------------------------------------------------------
+# Local environment / secrets
+# ---------------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ---------------------------------------------------------------------------
+# Logs
+# ---------------------------------------------------------------------------
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+pnpm-install.out.log
+pnpm-install.err.log
+legacy-migration-robocopy.log
+
+# ---------------------------------------------------------------------------
+# Migration / scratch debris (destination-only, not source)
+# ---------------------------------------------------------------------------
+pagechunk.js
+nul
+c6_multipart.bin
+c6_json_body.json
+c6_*.bin
+c6_*.json
+out_get.json
+ai_post_result.json
+tmp/
+.data/
+
+# ---------------------------------------------------------------------------
+# Archive: frozen preservation material, contains an embedded git repo
+# (archive/pdf2json/.git). Not active source; excluded from this repository.
+# ---------------------------------------------------------------------------
+archive/
+
+# ---------------------------------------------------------------------------
+# Generated / reproducible extraction output
+# packages/extraction-mupdf/extraction-results/ is REGENERATED deterministically
+# by packages/extraction-mupdf/scripts/gen-secondary-fixture.mts from the
+# canonical CODE_06 PDF. Do not commit it; run the generator before the
+# columns/furniture real-fixture tests. Permanent regression manifests and
+# accepted evidence under evidence/ and the repo-root extraction-results/
+# remain tracked.
+# ---------------------------------------------------------------------------
+packages/extraction-mupdf/extraction-results/
+c6_multipart.bin
+c6_json_body.json
+
+# ---------------------------------------------------------------------------
+# Local temporary scripts / debug probes (not source) — root-level only.
+# Package-level scripts/ (calibration harnesses) are tracked and KEPT.
+# ---------------------------------------------------------------------------
+/scripts/
+*.dbg.*
+
+# ---------------------------------------------------------------------------
+# OS / editor
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

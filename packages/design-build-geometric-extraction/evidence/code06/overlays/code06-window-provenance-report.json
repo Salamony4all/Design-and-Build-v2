@@ -1,0 +1,123 @@
+{
+  "generatedAt": "2026-07-29T07:36:14.127Z",
+  "bridgeHash": "41d75c3f2728",
+  "funnel": {
+    "candidatesProcessed": 6,
+    "retroactiveSegmentAssociation": [
+      "win-provisional-1",
+      "win-provisional-2",
+      "win-provisional-3",
+      "win-provisional-4",
+      "win-provisional-5",
+      "win-provisional-6"
+    ],
+    "partialSourceLineage": [],
+    "spatialSourceAssociation": [],
+    "noSourceLineage": [],
+    "sourceBackedAccepted": 0,
+    "automaticPromotionBlockedByManualAuditBounds": true,
+    "highConfidenceReview": 2,
+    "likelyReview": 2,
+    "unresolvedReview": 1,
+    "rejected": 1
+  },
+  "duplicateComparison": {
+    "totalPairs": 15,
+    "duplicatePairs": [],
+    "excludedFromDuplicateMerging": 9,
+    "noDuplicateReason": "All hosted candidates (win-1..4) have distinct physicalWallIds"
+  },
+  "perCandidateSummary": [
+    {
+      "candidateId": "win-provisional-1",
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "drawableSegmentHitCount": 9,
+      "topologyConfidence": "HIGH",
+      "reviewerObservation": "VISIBLE_WINDOW",
+      "extractionVerdict": "REVIEW",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false,
+      "physicalWallId": "physicalWall:4073",
+      "hostIntervalContained": true
+    },
+    {
+      "candidateId": "win-provisional-2",
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "drawableSegmentHitCount": 22,
+      "topologyConfidence": "HIGH",
+      "reviewerObservation": "VISIBLE_WINDOW",
+      "extractionVerdict": "REVIEW",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false,
+      "physicalWallId": "physicalWall:4119",
+      "hostIntervalContained": true
+    },
+    {
+      "candidateId": "win-provisional-3",
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "drawableSegmentHitCount": 19,
+      "topologyConfidence": "LOW",
+      "reviewerObservation": "LIKELY_WINDOW",
+      "extractionVerdict": "REVIEW",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false,
+      "physicalWallId": "physicalWall:3980",
+      "hostIntervalContained": true
+    },
+    {
+      "candidateId": "win-provisional-4",
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "drawableSegmentHitCount": 1,
+      "topologyConfidence": "LOW",
+      "reviewerObservation": "LIKELY_WINDOW",
+      "extractionVerdict": "REVIEW",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false,
+      "physicalWallId": "physicalWall:4150",
+      "hostIntervalContained": true
+    },
+    {
+      "candidateId": "win-provisional-5",
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "drawableSegmentHitCount": 49,
+      "topologyConfidence": "LOW",
+      "reviewerObservation": "UNRESOLVED",
+      "extractionVerdict": "REVIEW",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false,
+      "physicalWallId": null,
+      "hostIntervalContained": null
+    },
+    {
+      "candidateId": "win-provisional-6",
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "SOME_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "drawableSegmentHitCount": 8,
+      "topologyConfidence": "LOW",
+      "reviewerObservation": "NOT_A_WINDOW",
+      "extractionVerdict": "REJECTED",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false,
+      "physicalWallId": null,
+      "hostIntervalContained": null
+    }
+  ],
+  "appErrorClarification": {
+    "appWithErrors": "apps/editor",
+    "isCleanProductionApp": false,
+    "isFrozenLegacyApp": true,
+    "errorFiles": [
+      "src/v10/upgrade/v10-6-18.ts",
+      "../../pascal-vector-extractor/src/ffeCatalog.ts",
+      "../../pascal-vector-extractor/src/pdfFfePipeline.ts"
+    ],
+    "currentChangeSetDependencyImpact": "NONE — Stage B modifies only tools/connect-window-lineage.mjs (plain JS, no TS)",
+    "baselineClassification": "PRE_EXISTING_FAILURES — present before Stage A; not introduced by Stage A or Stage B",
+    "cleanProductionApp": "apps/design-build-editor"
+  }
+}

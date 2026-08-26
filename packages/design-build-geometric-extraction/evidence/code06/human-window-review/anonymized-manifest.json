@@ -1,0 +1,1391 @@
+{
+  "shuffleHash": "e6255d97d7fa75b846502a25b31124b79657913ed9cd0a1a78c7c0b2aaefa934",
+  "manifest": [
+    {
+      "auditId": 1,
+      "anonymousReviewId": "rev_042749816370",
+      "hypothesisId": "op_fr61_0",
+      "physicalWallId": "fr61",
+      "finiteInterval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-58-closeup.svg",
+      "fullPageLocation": {
+        "x": 62.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 2,
+      "anonymousReviewId": "rev_0edbe3d173c6",
+      "hypothesisId": "op_fr15_0",
+      "physicalWallId": "fr15",
+      "finiteInterval": {
+        "start": -84.96,
+        "end": 96.36
+      },
+      "widthMm": 3173.74,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-15-closeup.svg",
+      "fullPageLocation": {
+        "x": 5.7,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 3,
+      "anonymousReviewId": "rev_101338fbc286",
+      "hypothesisId": "op_fr68_0",
+      "physicalWallId": "fr68",
+      "finiteInterval": {
+        "start": -5.64,
+        "end": 130.44
+      },
+      "widthMm": 2381.88,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-65-closeup.svg",
+      "fullPageLocation": {
+        "x": 62.4,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 4,
+      "anonymousReviewId": "rev_15647aa15716",
+      "hypothesisId": "op_fr18_0",
+      "physicalWallId": "fr18",
+      "finiteInterval": {
+        "start": 0,
+        "end": 90.72
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-18-closeup.svg",
+      "fullPageLocation": {
+        "x": 45.4,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 5,
+      "anonymousReviewId": "rev_1573b811ddb1",
+      "hypothesisId": "op_fr16_0",
+      "physicalWallId": "fr16",
+      "finiteInterval": {
+        "start": -5.64,
+        "end": 96.36
+      },
+      "widthMm": 1785.36,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-16-closeup.svg",
+      "fullPageLocation": {
+        "x": 45.4,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 6,
+      "anonymousReviewId": "rev_16f989d517bf",
+      "hypothesisId": "op_fr58_0",
+      "physicalWallId": "fr58",
+      "finiteInterval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-55-closeup.svg",
+      "fullPageLocation": {
+        "x": 62.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 7,
+      "anonymousReviewId": "rev_1e55e82424af",
+      "hypothesisId": "op_fr65_0",
+      "physicalWallId": "fr65",
+      "finiteInterval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-62-closeup.svg",
+      "fullPageLocation": {
+        "x": 62.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 8,
+      "anonymousReviewId": "rev_23830a1adfd4",
+      "hypothesisId": "op_fr11_0",
+      "physicalWallId": "fr11",
+      "finiteInterval": {
+        "start": 0,
+        "end": 102
+      },
+      "widthMm": 1785.36,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-11-closeup.svg",
+      "fullPageLocation": {
+        "x": 51,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 9,
+      "anonymousReviewId": "rev_24098d747ec7",
+      "hypothesisId": "op_fr21_0",
+      "physicalWallId": "fr21",
+      "finiteInterval": {
+        "start": -28.68,
+        "end": 782.28
+      },
+      "widthMm": 14194.68,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-21-closeup.svg",
+      "fullPageLocation": {
+        "x": 376.8,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 10,
+      "anonymousReviewId": "rev_268746b14fd7",
+      "hypothesisId": "op_fr30_0",
+      "physicalWallId": "fr30",
+      "finiteInterval": {
+        "start": -11.28,
+        "end": 221.16
+      },
+      "widthMm": 4068.53,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-29-closeup.svg",
+      "fullPageLocation": {
+        "x": 104.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 11,
+      "anonymousReviewId": "rev_29b9428e3f2c",
+      "hypothesisId": "op_fr43_0",
+      "physicalWallId": "fr43",
+      "finiteInterval": {
+        "start": -90.72,
+        "end": 240.72
+      },
+      "widthMm": 5801.38,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-42-closeup.svg",
+      "fullPageLocation": {
+        "x": 75,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 12,
+      "anonymousReviewId": "rev_35d366c95201",
+      "hypothesisId": "op_fr19_0",
+      "physicalWallId": "fr19",
+      "finiteInterval": {
+        "start": 0,
+        "end": 170.04
+      },
+      "widthMm": 2976.3,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-19-closeup.svg",
+      "fullPageLocation": {
+        "x": 85,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 13,
+      "anonymousReviewId": "rev_3ec729264d4f",
+      "hypothesisId": "op_fr46_0",
+      "physicalWallId": "fr46",
+      "finiteInterval": {
+        "start": -11.4,
+        "end": 119.04
+      },
+      "widthMm": 2283.16,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-43-closeup.svg",
+      "fullPageLocation": {
+        "x": 53.8,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 14,
+      "anonymousReviewId": "rev_409c4eee8384",
+      "hypothesisId": "op_fr0_0",
+      "physicalWallId": "fr0",
+      "finiteInterval": {
+        "start": -28.68,
+        "end": 782.28
+      },
+      "widthMm": 14194.68,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-1-closeup.svg",
+      "fullPageLocation": {
+        "x": 376.8,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 15,
+      "anonymousReviewId": "rev_44a9d98a634a",
+      "hypothesisId": "op_fr37_0",
+      "physicalWallId": "fr37",
+      "finiteInterval": {
+        "start": 0,
+        "end": 102.12
+      },
+      "widthMm": 1787.46,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-36-closeup.svg",
+      "fullPageLocation": {
+        "x": 51.1,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 16,
+      "anonymousReviewId": "rev_476a55b5e4f1",
+      "hypothesisId": "op_fr13_0",
+      "physicalWallId": "fr13",
+      "finiteInterval": {
+        "start": 0,
+        "end": 226.8
+      },
+      "widthMm": 3969.81,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-13-closeup.svg",
+      "fullPageLocation": {
+        "x": 113.4,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 17,
+      "anonymousReviewId": "rev_49b2d232ab9c",
+      "hypothesisId": "op_fr52_0",
+      "physicalWallId": "fr52",
+      "finiteInterval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-49-closeup.svg",
+      "fullPageLocation": {
+        "x": 50.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 18,
+      "anonymousReviewId": "rev_4b1c513d5151",
+      "hypothesisId": "op_fr40_0",
+      "physicalWallId": "fr40",
+      "finiteInterval": {
+        "start": -85.08,
+        "end": 85.08
+      },
+      "widthMm": 2978.41,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-39-closeup.svg",
+      "fullPageLocation": {
+        "x": 0,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 19,
+      "anonymousReviewId": "rev_54387bb45b8e",
+      "hypothesisId": "op_fr63_0",
+      "physicalWallId": "fr63",
+      "finiteInterval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-60-closeup.svg",
+      "fullPageLocation": {
+        "x": 62.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 20,
+      "anonymousReviewId": "rev_5459f519ce24",
+      "hypothesisId": "op_fr9_0",
+      "physicalWallId": "fr9",
+      "finiteInterval": {
+        "start": -11.28,
+        "end": 221.16
+      },
+      "widthMm": 4068.53,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-9-closeup.svg",
+      "fullPageLocation": {
+        "x": 104.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 21,
+      "anonymousReviewId": "rev_55c9b76f22b3",
+      "hypothesisId": "op_fr62_0",
+      "physicalWallId": "fr62",
+      "finiteInterval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-59-closeup.svg",
+      "fullPageLocation": {
+        "x": 62.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 22,
+      "anonymousReviewId": "rev_5b5d638d3c97",
+      "hypothesisId": "op_fr24_0",
+      "physicalWallId": "fr24",
+      "finiteInterval": {
+        "start": -11.28,
+        "end": 226.8
+      },
+      "widthMm": 4167.25,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-24-closeup.svg",
+      "fullPageLocation": {
+        "x": 107.8,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 23,
+      "anonymousReviewId": "rev_60ca1b807dd6",
+      "hypothesisId": "op_fr55_0",
+      "physicalWallId": "fr55",
+      "finiteInterval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-52-closeup.svg",
+      "fullPageLocation": {
+        "x": 50.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 24,
+      "anonymousReviewId": "rev_617bd4afc347",
+      "hypothesisId": "op_fr57_0",
+      "physicalWallId": "fr57",
+      "finiteInterval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-54-closeup.svg",
+      "fullPageLocation": {
+        "x": 62.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 25,
+      "anonymousReviewId": "rev_6c56877d935a",
+      "hypothesisId": "op_fr34_0",
+      "physicalWallId": "fr34",
+      "finiteInterval": {
+        "start": 0,
+        "end": 226.8
+      },
+      "widthMm": 3969.81,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-33-closeup.svg",
+      "fullPageLocation": {
+        "x": 113.4,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 26,
+      "anonymousReviewId": "rev_76b4b61de75e",
+      "hypothesisId": "op_fr33_0",
+      "physicalWallId": "fr33",
+      "finiteInterval": {
+        "start": 0,
+        "end": 221.16
+      },
+      "widthMm": 3871.09,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-32-closeup.svg",
+      "fullPageLocation": {
+        "x": 110.6,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 27,
+      "anonymousReviewId": "rev_7c7dc0a24185",
+      "hypothesisId": "op_fr35_0",
+      "physicalWallId": "fr35",
+      "finiteInterval": {
+        "start": -5.64,
+        "end": 85.08
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-34-closeup.svg",
+      "fullPageLocation": {
+        "x": 39.7,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 28,
+      "anonymousReviewId": "rev_8338d2141367",
+      "hypothesisId": "op_fr3_0",
+      "physicalWallId": "fr3",
+      "finiteInterval": {
+        "start": -119.04,
+        "end": 321.24
+      },
+      "widthMm": 7706.47,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-4-closeup.svg",
+      "fullPageLocation": {
+        "x": 101.1,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 29,
+      "anonymousReviewId": "rev_834b43417e27",
+      "hypothesisId": "op_fr4_0",
+      "physicalWallId": "fr4",
+      "finiteInterval": {
+        "start": -17.04,
+        "end": 671.64
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-5-closeup.svg",
+      "fullPageLocation": {
+        "x": 327.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 30,
+      "anonymousReviewId": "rev_84e63c7e62be",
+      "hypothesisId": "op_fr27_0",
+      "physicalWallId": "fr27",
+      "finiteInterval": {
+        "start": -28.32,
+        "end": 640.56
+      },
+      "widthMm": 11707.78,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-27-closeup.svg",
+      "fullPageLocation": {
+        "x": 306.1,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 31,
+      "anonymousReviewId": "rev_85c46b4ac956",
+      "hypothesisId": "op_fr69_0",
+      "physicalWallId": "fr69",
+      "finiteInterval": {
+        "start": -5.64,
+        "end": 65.16
+      },
+      "widthMm": 1239.25,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-66-closeup.svg",
+      "fullPageLocation": {
+        "x": 29.8,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 32,
+      "anonymousReviewId": "rev_85d407af6334",
+      "hypothesisId": "op_fr6_0",
+      "physicalWallId": "fr6",
+      "finiteInterval": {
+        "start": -17.04,
+        "end": 671.64
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-7-closeup.svg",
+      "fullPageLocation": {
+        "x": 327.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 33,
+      "anonymousReviewId": "rev_86afc08a1f69",
+      "hypothesisId": "op_fr14_0",
+      "physicalWallId": "fr14",
+      "finiteInterval": {
+        "start": 0,
+        "end": 90.72
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-14-closeup.svg",
+      "fullPageLocation": {
+        "x": 45.4,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 34,
+      "anonymousReviewId": "rev_8e14512dfe86",
+      "hypothesisId": "op_fr17_0",
+      "physicalWallId": "fr17",
+      "finiteInterval": {
+        "start": -5.64,
+        "end": 96.36
+      },
+      "widthMm": 1785.36,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-17-closeup.svg",
+      "fullPageLocation": {
+        "x": 45.4,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 35,
+      "anonymousReviewId": "rev_90b5b4b5ac63",
+      "hypothesisId": "op_fr26_0",
+      "physicalWallId": "fr26",
+      "finiteInterval": {
+        "start": -17.28,
+        "end": 317.52
+      },
+      "widthMm": 5860.19,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-26-closeup.svg",
+      "fullPageLocation": {
+        "x": 150.1,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 36,
+      "anonymousReviewId": "rev_9b77fdb8c449",
+      "hypothesisId": "op_fr53_0",
+      "physicalWallId": "fr53",
+      "finiteInterval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-50-closeup.svg",
+      "fullPageLocation": {
+        "x": 50.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 37,
+      "anonymousReviewId": "rev_9d70e2a34a68",
+      "hypothesisId": "op_fr49_0",
+      "physicalWallId": "fr49",
+      "finiteInterval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-46-closeup.svg",
+      "fullPageLocation": {
+        "x": 50.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 38,
+      "anonymousReviewId": "rev_9eff845fdb3d",
+      "hypothesisId": "op_fr28_0",
+      "physicalWallId": "fr28",
+      "finiteInterval": {
+        "start": -34.08,
+        "end": 419.52
+      },
+      "widthMm": 7939.61,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-28-closeup.svg",
+      "fullPageLocation": {
+        "x": 192.7,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 39,
+      "anonymousReviewId": "rev_a6a68b3209bc",
+      "hypothesisId": "op_fr20_0",
+      "physicalWallId": "fr20",
+      "finiteInterval": {
+        "start": -145.08,
+        "end": 90.72
+      },
+      "widthMm": 4127.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-20-closeup.svg",
+      "fullPageLocation": {
+        "x": -27.2,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 40,
+      "anonymousReviewId": "rev_a8af6d605626",
+      "hypothesisId": "op_fr60_0",
+      "physicalWallId": "fr60",
+      "finiteInterval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-57-closeup.svg",
+      "fullPageLocation": {
+        "x": 62.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 41,
+      "anonymousReviewId": "rev_ad70ba4de617",
+      "hypothesisId": "op_fr12_0",
+      "physicalWallId": "fr12",
+      "finiteInterval": {
+        "start": 0,
+        "end": 221.16
+      },
+      "widthMm": 3871.09,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-12-closeup.svg",
+      "fullPageLocation": {
+        "x": 110.6,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 42,
+      "anonymousReviewId": "rev_afe2a7bc0595",
+      "hypothesisId": "op_fr64_0",
+      "physicalWallId": "fr64",
+      "finiteInterval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-61-closeup.svg",
+      "fullPageLocation": {
+        "x": 62.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 43,
+      "anonymousReviewId": "rev_b1e16e34c8ef",
+      "hypothesisId": "op_fr2_0",
+      "physicalWallId": "fr2",
+      "finiteInterval": {
+        "start": -39.72,
+        "end": 648.96
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-3-closeup.svg",
+      "fullPageLocation": {
+        "x": 304.6,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 44,
+      "anonymousReviewId": "rev_b4edd3d73e76",
+      "hypothesisId": "op_fr32_0",
+      "physicalWallId": "fr32",
+      "finiteInterval": {
+        "start": 0,
+        "end": 102.12
+      },
+      "widthMm": 1787.46,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-31-closeup.svg",
+      "fullPageLocation": {
+        "x": 51.1,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 45,
+      "anonymousReviewId": "rev_b5fa7064719d",
+      "hypothesisId": "op_fr47_0",
+      "physicalWallId": "fr47",
+      "finiteInterval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-44-closeup.svg",
+      "fullPageLocation": {
+        "x": 50.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 46,
+      "anonymousReviewId": "rev_b7a35c7ff11e",
+      "hypothesisId": "op_fr66_0",
+      "physicalWallId": "fr66",
+      "finiteInterval": {
+        "start": 0,
+        "end": 174.12
+      },
+      "widthMm": 3047.72,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-63-closeup.svg",
+      "fullPageLocation": {
+        "x": 87.1,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 47,
+      "anonymousReviewId": "rev_bac76d92d421",
+      "hypothesisId": "op_fr1_0",
+      "physicalWallId": "fr1",
+      "finiteInterval": {
+        "start": -39.72,
+        "end": 648.96
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-2-closeup.svg",
+      "fullPageLocation": {
+        "x": 304.6,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 48,
+      "anonymousReviewId": "rev_bb279c90571a",
+      "hypothesisId": "op_fr67_0",
+      "physicalWallId": "fr67",
+      "finiteInterval": {
+        "start": -65.16,
+        "end": 331.68
+      },
+      "widthMm": 6946.11,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-64-closeup.svg",
+      "fullPageLocation": {
+        "x": 133.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 49,
+      "anonymousReviewId": "rev_bb2c1cf5ceec",
+      "hypothesisId": "op_fr56_0",
+      "physicalWallId": "fr56",
+      "finiteInterval": {
+        "start": -5.76,
+        "end": 124.68
+      },
+      "widthMm": 2283.16,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-53-closeup.svg",
+      "fullPageLocation": {
+        "x": 59.5,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 50,
+      "anonymousReviewId": "rev_bd577787bd19",
+      "hypothesisId": "op_fr36_0",
+      "physicalWallId": "fr36",
+      "finiteInterval": {
+        "start": 0,
+        "end": 181.44
+      },
+      "widthMm": 3175.85,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-35-closeup.svg",
+      "fullPageLocation": {
+        "x": 90.7,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 51,
+      "anonymousReviewId": "rev_c1da93ebfb4a",
+      "hypothesisId": "op_fr22_0",
+      "physicalWallId": "fr22",
+      "finiteInterval": {
+        "start": -36.96,
+        "end": 657.6
+      },
+      "widthMm": 12157.27,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-22-closeup.svg",
+      "fullPageLocation": {
+        "x": 310.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 52,
+      "anonymousReviewId": "rev_c2ef09efb881",
+      "hypothesisId": "op_fr39_0",
+      "physicalWallId": "fr39",
+      "finiteInterval": {
+        "start": -5.64,
+        "end": 85.08
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-38-closeup.svg",
+      "fullPageLocation": {
+        "x": 39.7,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 53,
+      "anonymousReviewId": "rev_c3747649cdf5",
+      "hypothesisId": "op_fr23_0",
+      "physicalWallId": "fr23",
+      "finiteInterval": {
+        "start": -36.96,
+        "end": 657.6
+      },
+      "widthMm": 12157.27,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-23-closeup.svg",
+      "fullPageLocation": {
+        "x": 310.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 54,
+      "anonymousReviewId": "rev_c690cf7e0ccf",
+      "hypothesisId": "op_fr5_0",
+      "physicalWallId": "fr5",
+      "finiteInterval": {
+        "start": -17.28,
+        "end": 317.52
+      },
+      "widthMm": 5860.19,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-6-closeup.svg",
+      "fullPageLocation": {
+        "x": 150.1,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 55,
+      "anonymousReviewId": "rev_c6ac3a3bd3d2",
+      "hypothesisId": "op_fr25_0",
+      "physicalWallId": "fr25",
+      "finiteInterval": {
+        "start": -28.32,
+        "end": 640.56
+      },
+      "widthMm": 11707.78,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-25-closeup.svg",
+      "fullPageLocation": {
+        "x": 306.1,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 56,
+      "anonymousReviewId": "rev_c9194f8a2a06",
+      "hypothesisId": "op_fr42_0",
+      "physicalWallId": "fr42",
+      "finiteInterval": {
+        "start": -90.72,
+        "end": 240.72
+      },
+      "widthMm": 5801.38,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-41-closeup.svg",
+      "fullPageLocation": {
+        "x": 75,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 57,
+      "anonymousReviewId": "rev_d0eb30a0b430",
+      "hypothesisId": "op_fr7_0",
+      "physicalWallId": "fr7",
+      "finiteInterval": {
+        "start": -217.44,
+        "end": 527.16
+      },
+      "widthMm": 13033.15,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-8-closeup.svg",
+      "fullPageLocation": {
+        "x": 154.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 58,
+      "anonymousReviewId": "rev_d30bea0c6604",
+      "hypothesisId": "op_fr10_0",
+      "physicalWallId": "fr10",
+      "finiteInterval": {
+        "start": 0,
+        "end": 34.08
+      },
+      "widthMm": 596.52,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-10-closeup.svg",
+      "fullPageLocation": {
+        "x": 17,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 59,
+      "anonymousReviewId": "rev_d42fcd25f318",
+      "hypothesisId": "op_fr54_0",
+      "physicalWallId": "fr54",
+      "finiteInterval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-51-closeup.svg",
+      "fullPageLocation": {
+        "x": 50.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 60,
+      "anonymousReviewId": "rev_d5a2ad3d3e31",
+      "hypothesisId": "op_fr31_0",
+      "physicalWallId": "fr31",
+      "finiteInterval": {
+        "start": 0,
+        "end": 34.08
+      },
+      "widthMm": 596.52,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-30-closeup.svg",
+      "fullPageLocation": {
+        "x": 17,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 61,
+      "anonymousReviewId": "rev_dd26590b8106",
+      "hypothesisId": "op_fr38_0",
+      "physicalWallId": "fr38",
+      "finiteInterval": {
+        "start": 0,
+        "end": 102.12
+      },
+      "widthMm": 1787.46,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-37-closeup.svg",
+      "fullPageLocation": {
+        "x": 51.1,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 62,
+      "anonymousReviewId": "rev_e25a66310ca5",
+      "hypothesisId": "op_fr48_0",
+      "physicalWallId": "fr48",
+      "finiteInterval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-45-closeup.svg",
+      "fullPageLocation": {
+        "x": 50.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "NOT_A_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 63,
+      "anonymousReviewId": "rev_f3d988f00dcb",
+      "hypothesisId": "op_fr41_0",
+      "physicalWallId": "fr41",
+      "finiteInterval": {
+        "start": -5.64,
+        "end": 205.56
+      },
+      "widthMm": 3696.75,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-40-closeup.svg",
+      "fullPageLocation": {
+        "x": 100,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 64,
+      "anonymousReviewId": "rev_f7ddddb701ab",
+      "hypothesisId": "op_fr50_0",
+      "physicalWallId": "fr50",
+      "finiteInterval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-47-closeup.svg",
+      "fullPageLocation": {
+        "x": 50.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 65,
+      "anonymousReviewId": "rev_fc47365cd7a9",
+      "hypothesisId": "op_fr59_0",
+      "physicalWallId": "fr59",
+      "finiteInterval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-56-closeup.svg",
+      "fullPageLocation": {
+        "x": 62.3,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    },
+    {
+      "auditId": 66,
+      "anonymousReviewId": "rev_fca51ea07b0f",
+      "hypothesisId": "op_fr51_0",
+      "physicalWallId": "fr51",
+      "finiteInterval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-48-closeup.svg",
+      "fullPageLocation": {
+        "x": 50.9,
+        "y": 500
+      },
+      "sourceSegmentIds": [],
+      "modelVerdict": "CONFIRMED_PHYSICAL_WINDOW",
+      "humanVerdict": null,
+      "humanNotes": "",
+      "reviewedAt": null
+    }
+  ]
+}

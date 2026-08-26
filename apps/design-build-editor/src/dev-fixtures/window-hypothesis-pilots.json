@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "window-hypothesis-pilots/v1",
+  "sourceArtifactHash": "bf59724a54e4b3e15d01c4e5011cdf6b394bbda388cfd2f87ab20e8fee9972d7",
+  "generatedAt": "2026-07-30T12:49:35.598929+00:00",
+  "pilots": [
+    {
+      "anonymousRegionId": "AR-23",
+      "openingRegionId": "or_r1.3.1_25",
+      "physicalWallId": "fr65",
+      "intervalStartM": 0,
+      "intervalEndM": 1.984903197126658,
+      "widthM": 1.984903197126658,
+      "worldStart": {
+        "x": 21.38489279150079,
+        "z": 18.30664494773231
+      },
+      "worldEnd": {
+        "x": 21.38489279150079,
+        "z": 20.291474360535908
+      },
+      "worldCentre": {
+        "x": 21.38489279150079,
+        "z": 19.299096546295637
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-05",
+      "openingRegionId": "or_r1.3.1_12",
+      "physicalWallId": "fr47",
+      "intervalStartM": 0,
+      "intervalEndM": 1.9828027704630318,
+      "widthM": 1.9828027704630318,
+      "worldStart": {
+        "x": 9.277184881724025,
+        "z": 6.796730344099782
+      },
+      "worldEnd": {
+        "x": 9.277184881724025,
+        "z": 8.779459760176767
+      },
+      "worldCentre": {
+        "x": 9.277184881724025,
+        "z": 7.7881317293312975
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mappingStatus": "VALIDATED_MAPPING"
+    },
+    {
+      "anonymousRegionId": "AR-15",
+      "openingRegionId": "or_r1.3.1_6",
+      "physicalWallId": "fr21",
+      "intervalStartM": 8.578142494248963,
+      "intervalEndM": 9.525434919544331,
+      "widthM": 0.9472924252953678,
+      "worldStart": {
+        "x": 30.861631553972458,
+        "z": 6.796730344099782
+      },
+      "worldEnd": {
+        "x": 30.861631553972458,
+        "z": 20.291474360535908
+      },
+      "worldCentre": {
+        "x": 30.861631553972458,
+        "z": 15.84851905099643
+      },
+      "planRotationRadians": 1.5707963267948966,
+      "mappingStatus": "VALIDATED_MAPPING"
+    }
+  ],
+  "validation": {
+    "recordCount": 3,
+    "duplicateRegionIds": [],
+    "invalidWidths": [],
+    "invalidIntervals": [],
+    "invalidMappingStatuses": [],
+    "WAFieldsPresent": false,
+    "sourceHashMatches": true
+  }
+}

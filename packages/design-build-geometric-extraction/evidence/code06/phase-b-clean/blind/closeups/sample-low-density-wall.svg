@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="684.719970703125 511.1200036621094 51.280029296875 491.560029296875" width="300" height="200">
+  <!-- Background -->
+  <rect x="684.719970703125" y="511.1200036621094" width="51.280029296875" height="491.560029296875" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+  <!-- Host Wall centerline representation -->
+  <text x="704.719970703125" y="526.1200036621094" font-size="7" font-family="monospace" fill="#666">Candidate from low-density wall (fr3)</text>
+  <text x="704.719970703125" y="992.6800329589844" font-size="6" font-family="monospace" fill="#999">ID: c_v3-clean_fr3_cf39d81e6fb3</text>
+  <!-- Candidate Box -->
+  <rect x="704.719970703125" y="531.1200036621094" width="11.280029296875" height="451.560029296875" fill="none" stroke="#0066ff" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="708.719970703125" y="543.1200036621094" font-size="6" font-family="monospace" fill="#0066ff">Interval: [-119.0, 321.2]</text>
+</svg>

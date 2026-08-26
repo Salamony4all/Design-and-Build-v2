@@ -1,0 +1,3229 @@
+{
+  "exportedAt": "2026-07-30T08:51:36.648Z",
+  "source": "Live event log from window.__code06 getStatus() -> progressiveEventLog in apps/design-build-editor/src/app/page.tsx",
+  "fallback": false,
+  "sceneNodeCount": 75,
+  "wallNodeCount": 70,
+  "walls": [
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr0",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.09552199836828015,
+        0,
+        0.23706994763074404
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.2362060012577592,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr0",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr0",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.09552199836828015,
+          0.11896694700186443
+        ],
+        "end": [
+          0.09552199836828015,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.09552199836828015,
+          0.11896694700186443
+        ],
+        "end": [
+          0.09552199836828015,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr1",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.1997395055037575,
+        0,
+        0.11722067555123603
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.19108075106455108,
+      "height": 3,
+      "thickness": 0.1995,
+      "sourcePhysicalWallId": "fr1",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr1",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.10419912997148197,
+          0.11722067555123603
+        ],
+        "end": [
+          0.29527988103603303,
+          0.11722067555123603
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.10419912997148197,
+          0.11722067555123603
+        ],
+        "end": [
+          0.29527988103603303,
+          0.11722067555123603
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr2",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.1997395055037575,
+        0,
+        0.3569008410055933
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.19108075106455108,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr2",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr2",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.10419912997148197,
+          0.3569008410055933
+        ],
+        "end": [
+          0.29527988103603303,
+          0.3569008410055933
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.10419912997148197,
+          0.3569008410055933
+        ],
+        "end": [
+          0.29527988103603303,
+          0.3569008410055933
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr3",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.2970079585949291,
+        0,
+        0.31868509795188227
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.05907907187747602,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr3",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr3",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.2970079585949291,
+          0.28914556201314423
+        ],
+        "end": [
+          0.2970079585949291,
+          0.34822463389062025
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.2970079585949291,
+          0.28914556201314423
+        ],
+        "end": [
+          0.2970079585949291,
+          0.34822463389062025
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr4",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.19365448673247665,
+        0,
+        0.28741766926717455
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.19280882862344717,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr4",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr4",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.28741766926717455
+        ],
+        "end": [
+          0.29005890104420023,
+          0.28741766926717455
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.28741766926717455
+        ],
+        "end": [
+          0.29005890104420023,
+          0.28741766926717455
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr5",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.18150282284748717,
+        0,
+        0.20230998305687592
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.027793271500206024,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr5",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr5",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.18150282284748717,
+          0.18841334730677292
+        ],
+        "end": [
+          0.18150282284748717,
+          0.21620661880697895
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.18150282284748717,
+          0.18841334730677292
+        ],
+        "end": [
+          0.18150282284748717,
+          0.21620661880697895
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr6",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.19365448673247665,
+        0,
+        0.18668546157289964
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.19280882862344717,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr6",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr6",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.18668546157289964
+        ],
+        "end": [
+          0.29005890104420023,
+          0.18668546157289964
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.18668546157289964
+        ],
+        "end": [
+          0.29005890104420023,
+          0.18668546157289964
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_smqmzwoy",
+      "nodeType": "wall",
+      "nodeName": "Wall fr7",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.2970079585949291,
+        0,
+        0.188431733023528
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.12503294330532053,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr7",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr7",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.2970079585949291,
+          0.12591526137086775
+        ],
+        "end": [
+          0.2970079585949291,
+          0.2509482046761883
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.2970079585949291,
+          0.12591526137086775
+        ],
+        "end": [
+          0.2970079585949291,
+          0.2509482046761883
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr8",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.256177638044311,
+        0,
+        0.2526944691147203
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.08511679621902857,
+      "height": 3,
+      "thickness": 0.1995,
+      "sourcePhysicalWallId": "fr8",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr8",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.2136192399347967,
+          0.2526944691147203
+        ],
+        "end": [
+          0.29873603615382527,
+          0.2526944691147203
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.2136192399347967,
+          0.2526944691147203
+        ],
+        "end": [
+          0.29873603615382527,
+          0.2526944691147203
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr9",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.21536569816411144,
+        0,
+        0.21968077599148061
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.06253485736941536,
+      "height": 3,
+      "thickness": 0.1995,
+      "sourcePhysicalWallId": "fr9",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr9",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.21536569816411144,
+          0.18841334730677292
+        ],
+        "end": [
+          0.21536569816411144,
+          0.2509482046761883
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.21536569816411144,
+          0.18841334730677292
+        ],
+        "end": [
+          0.21536569816411144,
+          0.2509482046761883
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr10",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.16065564318245407,
+        0,
+        0.19363377594190295
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.010440857270260062,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr10",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr10",
+        "confidence": 0.88,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.16065564318245407,
+          0.18841334730677292
+        ],
+        "end": [
+          0.16065564318245407,
+          0.19885420457703298
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.16065564318245407,
+          0.18841334730677292
+        ],
+        "end": [
+          0.16065564318245407,
+          0.19885420457703298
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr11",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.16324775952079826,
+        0,
+        0.21707055816786736
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.0312523853207079,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr11",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr11",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.1476215668604443,
+          0.21707055816786736
+        ],
+        "end": [
+          0.1788739521811522,
+          0.21707055816786736
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.1476215668604443,
+          0.21707055816786736
+        ],
+        "end": [
+          0.1788739521811522,
+          0.21707055816786736
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr12",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.148485598627046,
+        0,
+        0.25181213702498034
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.06775527899244912,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr12",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr12",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.148485598627046,
+          0.2179344975287558
+        ],
+        "end": [
+          0.148485598627046,
+          0.2856897765212049
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.148485598627046,
+          0.2179344975287558
+        ],
+        "end": [
+          0.148485598627046,
+          0.2856897765212049
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr13",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.12418227085706701,
+        0,
+        0.25094819766409193
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.06948315771422597,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr13",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr13",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.12418227085706701,
+          0.21620661880697895
+        ],
+        "end": [
+          0.12418227085706701,
+          0.2856897765212049
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.12418227085706701,
+          0.21620661880697895
+        ],
+        "end": [
+          0.12418227085706701,
+          0.2856897765212049
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr14",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.11028415575560921,
+        0,
+        0.21707055816786736
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.026068166669712303,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr14",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr14",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.21707055816786736
+        ],
+        "end": [
+          0.12331823909046535,
+          0.21707055816786736
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.21707055816786736
+        ],
+        "end": [
+          0.12331823909046535,
+          0.21707055816786736
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_067cy7tu",
+      "nodeType": "wall",
+      "nodeName": "Wall fr15",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.16411179128739994,
+        0,
+        0.2344597368192272
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.029524321787504554,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr15",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr15",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.14934963039364765,
+          0.2344597368192272
+        ],
+        "end": [
+          0.1788739521811522,
+          0.2344597368192272
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.14934963039364765,
+          0.2344597368192272
+        ],
+        "end": [
+          0.1788739521811522,
+          0.2344597368192272
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr16",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.16411179128739994,
+        0,
+        0.25181215104917315
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.029524321787504554,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr16",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr16",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.14934963039364765,
+          0.25181215104917315
+        ],
+        "end": [
+          0.1788739521811522,
+          0.25181215104917315
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.14934963039364765,
+          0.25181215104917315
+        ],
+        "end": [
+          0.1788739521811522,
+          0.25181215104917315
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr17",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.16411179128739994,
+        0,
+        0.2691829369716814
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.029524321787504554,
+      "height": 3,
+      "thickness": 0.1008,
+      "sourcePhysicalWallId": "fr17",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr17",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.14934963039364765,
+          0.2691829369716814
+        ],
+        "end": [
+          0.1788739521811522,
+          0.2691829369716814
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.14934963039364765,
+          0.2691829369716814
+        ],
+        "end": [
+          0.1788739521811522,
+          0.2691829369716814
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr18",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.11028415575560921,
+        0,
+        0.25181215104917315
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.026068166669712303,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr18",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr18",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.25181215104917315
+        ],
+        "end": [
+          0.12331823909046535,
+          0.25181215104917315
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.25181215104917315
+        ],
+        "end": [
+          0.12331823909046535,
+          0.25181215104917315
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr19",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.11028415575560921,
+        0,
+        0.2344597368192272
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.026068166669712303,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr19",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr19",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.2344597368192272
+        ],
+        "end": [
+          0.12331823909046535,
+          0.2344597368192272
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.2344597368192272
+        ],
+        "end": [
+          0.12331823909046535,
+          0.2344597368192272
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_2u6sx10c",
+      "nodeType": "wall",
+      "nodeName": "Wall fr20",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.11028415575560921,
+        0,
+        0.2691829369716814
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.026068166669712303,
+      "height": 3,
+      "thickness": 0.1008,
+      "sourcePhysicalWallId": "fr20",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr20",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.2691829369716814
+        ],
+        "end": [
+          0.12331823909046535,
+          0.2691829369716814
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.09725007242075305,
+          0.2691829369716814
+        ],
+        "end": [
+          0.12331823909046535,
+          0.2691829369716814
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr21",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.5401882816580676,
+        0,
+        0.23706994763074404
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.2362060012577592,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr21",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr21",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.5401882816580676,
+          0.11896694700186443
+        ],
+        "end": [
+          0.5401882816580676,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.5401882816580676,
+          0.11896694700186443
+        ],
+        "end": [
+          0.5401882816580676,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr22",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4359707640033206,
+        0,
+        0.11722067555123603
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.1910807650902439,
+      "height": 3,
+      "thickness": 0.1995,
+      "sourcePhysicalWallId": "fr22",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr22",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.34043038145819865,
+          0.11722067555123603
+        ],
+        "end": [
+          0.5315111465484426,
+          0.11722067555123603
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.34043038145819865,
+          0.11722067555123603
+        ],
+        "end": [
+          0.5315111465484426,
+          0.11722067555123603
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr23",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4359707640033206,
+        0,
+        0.3569008410055933
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.1910807650902439,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr23",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr23",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.34043038145819865,
+          0.3569008410055933
+        ],
+        "end": [
+          0.5315111465484426,
+          0.3569008410055933
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.34043038145819865,
+          0.3569008410055933
+        ],
+        "end": [
+          0.5315111465484426,
+          0.3569008410055933
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr24",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.3387023179249954,
+        0,
+        0.31868509795188227
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.05907907187747602,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr24",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr24",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.3387023179249954,
+          0.28914556201314423
+        ],
+        "end": [
+          0.3387023179249954,
+          0.34822463389062025
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.3387023179249954,
+          0.28914556201314423
+        ],
+        "end": [
+          0.3387023179249954,
+          0.34822463389062025
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr25",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4420557968002943,
+        0,
+        0.28741766926717455
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.1928088145977544,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr25",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr25",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.3456513895014171,
+          0.28741766926717455
+        ],
+        "end": [
+          0.5384602040991715,
+          0.28741766926717455
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.3456513895014171,
+          0.28741766926717455
+        ],
+        "end": [
+          0.5384602040991715,
+          0.28741766926717455
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr26",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4542074606852838,
+        0,
+        0.20230998305687592
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.027793271500206024,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr26",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr26",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.4542074606852838,
+          0.18841334730677292
+        ],
+        "end": [
+          0.4542074606852838,
+          0.21620661880697895
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.4542074606852838,
+          0.18841334730677292
+        ],
+        "end": [
+          0.4542074606852838,
+          0.21620661880697895
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_djlowvrh",
+      "nodeType": "wall",
+      "nodeName": "Wall fr27",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4420557968002943,
+        0,
+        0.18668546157289964
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.1928088145977544,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr27",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr27",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.3456513895014171,
+          0.18668546157289964
+        ],
+        "end": [
+          0.5384602040991715,
+          0.18668546157289964
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.3456513895014171,
+          0.18668546157289964
+        ],
+        "end": [
+          0.5384602040991715,
+          0.18668546157289964
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr28",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.3387023179249954,
+        0,
+        0.188431733023528
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.12503294330532053,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr28",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr28",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.3387023179249954,
+          0.12591526137086775
+        ],
+        "end": [
+          0.3387023179249954,
+          0.2509482046761883
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.3387023179249954,
+          0.12591526137086775
+        ],
+        "end": [
+          0.3387023179249954,
+          0.2509482046761883
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_wrb0f4zq",
+      "nodeType": "wall",
+      "nodeName": "Wall fr29",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.37951426481804135,
+        0,
+        0.2526944691147203
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.08508002085249866,
+      "height": 3,
+      "thickness": 0.1995,
+      "sourcePhysicalWallId": "fr29",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr29",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.336974254391792,
+          0.2526944691147203
+        ],
+        "end": [
+          0.4220542752442907,
+          0.2526944691147203
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.336974254391792,
+          0.2526944691147203
+        ],
+        "end": [
+          0.4220542752442907,
+          0.2526944691147203
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr30",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4203261976853945,
+        0,
+        0.21968077599148061
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.06253485736941536,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr30",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr30",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.4203261976853945,
+          0.18841334730677292
+        ],
+        "end": [
+          0.4203261976853945,
+          0.2509482046761883
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.4203261976853945,
+          0.18841334730677292
+        ],
+        "end": [
+          0.4203261976853945,
+          0.2509482046761883
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr31",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4750546473631633,
+        0,
+        0.19363377594190295
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.010440857270260062,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr31",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr31",
+        "confidence": 0.88,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.4750546473631633,
+          0.18841334730677292
+        ],
+        "end": [
+          0.4750546473631633,
+          0.19885420457703298
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.4750546473631633,
+          0.18841334730677292
+        ],
+        "end": [
+          0.4750546473631633,
+          0.19885420457703298
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr32",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4724441433415541,
+        0,
+        0.21707055816786736
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.03128916068723786,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr32",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr32",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.45679956299793517,
+          0.21707055816786736
+        ],
+        "end": [
+          0.48808872368517303,
+          0.21707055816786736
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.45679956299793517,
+          0.21707055816786736
+        ],
+        "end": [
+          0.48808872368517303,
+          0.21707055816786736
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_ssop2wa3",
+      "nodeType": "wall",
+      "nodeName": "Wall fr33",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4872063112481527,
+        0,
+        0.25181213702498034
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.06775527899244912,
+      "height": 3,
+      "thickness": 0.1008,
+      "sourcePhysicalWallId": "fr33",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr33",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.4872063112481527,
+          0.2179344975287558
+        ],
+        "end": [
+          0.4872063112481527,
+          0.2856897765212049
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.4872063112481527,
+          0.2179344975287558
+        ],
+        "end": [
+          0.4872063112481527,
+          0.2856897765212049
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr34",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.5115280126757039,
+        0,
+        0.25094819766409193
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.06948315771422597,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr34",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr34",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.5115280126757039,
+          0.21620661880697895
+        ],
+        "end": [
+          0.5115280126757039,
+          0.2856897765212049
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.5115280126757039,
+          0.21620661880697895
+        ],
+        "end": [
+          0.5115280126757039,
+          0.2856897765212049
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr35",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.5254261277771617,
+        0,
+        0.21707055816786736
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.026068152644019515,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr35",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr35",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.512392051455152,
+          0.21707055816786736
+        ],
+        "end": [
+          0.5384602040991715,
+          0.21707055816786736
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.512392051455152,
+          0.21707055816786736
+        ],
+        "end": [
+          0.5384602040991715,
+          0.21707055816786736
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr36",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.47156173090453385,
+        0,
+        0.2344597368192272
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.029524335813197355,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr36",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr36",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.45679956299793517,
+          0.2344597368192272
+        ],
+        "end": [
+          0.4863238988111325,
+          0.2344597368192272
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.45679956299793517,
+          0.2344597368192272
+        ],
+        "end": [
+          0.4863238988111325,
+          0.2344597368192272
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr37",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.47156173090453385,
+        0,
+        0.25181215104917315
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.029524335813197355,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr37",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr37",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.45679956299793517,
+          0.25181215104917315
+        ],
+        "end": [
+          0.4863238988111325,
+          0.25181215104917315
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.45679956299793517,
+          0.25181215104917315
+        ],
+        "end": [
+          0.4863238988111325,
+          0.25181215104917315
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr38",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.47156173090453385,
+        0,
+        0.2691829369716814
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.029524335813197355,
+      "height": 3,
+      "thickness": 0.1008,
+      "sourcePhysicalWallId": "fr38",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr38",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.45679956299793517,
+          0.2691829369716814
+        ],
+        "end": [
+          0.4863238988111325,
+          0.2691829369716814
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.45679956299793517,
+          0.2691829369716814
+        ],
+        "end": [
+          0.4863238988111325,
+          0.2691829369716814
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr39",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.5254261277771617,
+        0,
+        0.25181215104917315
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.026068152644019515,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr39",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr39",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.512392051455152,
+          0.25181215104917315
+        ],
+        "end": [
+          0.5384602040991715,
+          0.25181215104917315
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.512392051455152,
+          0.25181215104917315
+        ],
+        "end": [
+          0.5384602040991715,
+          0.25181215104917315
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr40",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.5254261277771617,
+        0,
+        0.2344597368192272
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.026068152644019515,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr40",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr40",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.512392051455152,
+          0.2344597368192272
+        ],
+        "end": [
+          0.5384602040991715,
+          0.2344597368192272
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.512392051455152,
+          0.2344597368192272
+        ],
+        "end": [
+          0.5384602040991715,
+          0.2344597368192272
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_1lmkjvbe",
+      "nodeType": "wall",
+      "nodeName": "Wall fr41",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.5254261277771617,
+        0,
+        0.2691829369716814
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.026068152644019515,
+      "height": 3,
+      "thickness": 0.1008,
+      "sourcePhysicalWallId": "fr41",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr41",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.512392051455152,
+          0.2691829369716814
+        ],
+        "end": [
+          0.5384602040991715,
+          0.2691829369716814
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.512392051455152,
+          0.2691829369716814
+        ],
+        "end": [
+          0.5384602040991715,
+          0.2691829369716814
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr42",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.1806204033976205,
+        0,
+        0.25094819766409193
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.06948315771422597,
+      "height": 3,
+      "thickness": 0.1995,
+      "sourcePhysicalWallId": "fr42",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr42",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.1806204033976205,
+          0.21620661880697895
+        ],
+        "end": [
+          0.1806204033976205,
+          0.2856897765212049
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.1806204033976205,
+          0.21620661880697895
+        ],
+        "end": [
+          0.1806204033976205,
+          0.2856897765212049
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_vv8x8v79",
+      "nodeType": "wall",
+      "nodeName": "Wall fr43",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4550714994647318,
+        0,
+        0.25094819766409193
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.06948315771422597,
+      "height": 3,
+      "thickness": 0.1974,
+      "sourcePhysicalWallId": "fr43",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr43",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.4550714994647318,
+          0.21620661880697895
+        ],
+        "end": [
+          0.4550714994647318,
+          0.2856897765212049
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.4550714994647318,
+          0.21620661880697895
+        ],
+        "end": [
+          0.4550714994647318,
+          0.2856897765212049
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr44",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.1059455846943735,
+        0,
+        0.20230998305687592
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.027793271500206024,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr44",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr44",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.1059455846943735,
+          0.18841334730677292
+        ],
+        "end": [
+          0.1059455846943735,
+          0.21620661880697895
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.1059455846943735,
+          0.18841334730677292
+        ],
+        "end": [
+          0.1059455846943735,
+          0.21620661880697895
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr45",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.5297647233833598,
+        0,
+        0.20230998305687592
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.027793271500206024,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr45",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr45",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.5297647233833598,
+          0.18841334730677292
+        ],
+        "end": [
+          0.5297647233833598,
+          0.21620661880697895
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.5297647233833598,
+          0.18841334730677292
+        ],
+        "end": [
+          0.5297647233833598,
+          0.21620661880697895
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr46",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.1293848771913276,
+        0,
+        0.136319354219714
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03470481443569913,
+      "height": 3,
+      "thickness": 0.1008,
+      "sourcePhysicalWallId": "fr46",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr46",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.1293848771913276,
+          0.11896694700186443
+        ],
+        "end": [
+          0.1293848771913276,
+          0.15367176143756356
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.1293848771913276,
+          0.11896694700186443
+        ],
+        "end": [
+          0.1293848771913276,
+          0.15367176143756356
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr47",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.16238372074135018,
+        0,
+        0.136319354219714
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03470481443569913,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr47",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr47",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.16238372074135018,
+          0.11896694700186443
+        ],
+        "end": [
+          0.16238372074135018,
+          0.15367176143756356
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.16238372074135018,
+          0.11896694700186443
+        ],
+        "end": [
+          0.16238372074135018,
+          0.15367176143756356
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr48",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.1954009449617914,
+        0,
+        0.136319354219714
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03470481443569913,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr48",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr48",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.1954009449617914,
+          0.11896694700186443
+        ],
+        "end": [
+          0.1954009449617914,
+          0.15367176143756356
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.1954009449617914,
+          0.11896694700186443
+        ],
+        "end": [
+          0.1954009449617914,
+          0.15367176143756356
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr49",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.22838140082854896,
+        0,
+        0.136319354219714
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03470481443569913,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr49",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr49",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.22838140082854896,
+          0.11896694700186443
+        ],
+        "end": [
+          0.22838140082854896,
+          0.15367176143756356
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.22838140082854896,
+          0.11896694700186443
+        ],
+        "end": [
+          0.22838140082854896,
+          0.15367176143756356
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr50",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.26139863206183656,
+        0,
+        0.136319354219714
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03470481443569913,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr50",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr50",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.26139863206183656,
+          0.11896694700186443
+        ],
+        "end": [
+          0.26139863206183656,
+          0.15367176143756356
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.26139863206183656,
+          0.11896694700186443
+        ],
+        "end": [
+          0.26139863206183656,
+          0.15367176143756356
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_gmhbhbnl",
+      "nodeType": "wall",
+      "nodeName": "Wall fr51",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.5063070326838711,
+        0,
+        0.136319354219714
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03470481443569913,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr51",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr51",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.5063070326838711,
+          0.11896694700186443
+        ],
+        "end": [
+          0.5063070326838711,
+          0.15367176143756356
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.5063070326838711,
+          0.11896694700186443
+        ],
+        "end": [
+          0.5063070326838711,
+          0.15367176143756356
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr52",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.47332656980426707,
+        0,
+        0.136319354219714
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03470481443569913,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr52",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr52",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.47332656980426707,
+          0.11896694700186443
+        ],
+        "end": [
+          0.47332656980426707,
+          0.15367176143756356
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.47332656980426707,
+          0.11896694700186443
+        ],
+        "end": [
+          0.47332656980426707,
+          0.15367176143756356
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr53",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4403093315581331,
+        0,
+        0.136319354219714
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03470481443569913,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr53",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr53",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.4403093315581331,
+          0.11896694700186443
+        ],
+        "end": [
+          0.4403093315581331,
+          0.15367176143756356
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.4403093315581331,
+          0.11896694700186443
+        ],
+        "end": [
+          0.4403093315581331,
+          0.15367176143756356
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr54",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.40731049502095695,
+        0,
+        0.136319354219714
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03470481443569913,
+      "height": 3,
+      "thickness": 0.1008,
+      "sourcePhysicalWallId": "fr54",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr54",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.40731049502095695,
+          0.11896694700186443
+        ],
+        "end": [
+          0.40731049502095695,
+          0.15367176143756356
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.40731049502095695,
+          0.11896694700186443
+        ],
+        "end": [
+          0.40731049502095695,
+          0.15367176143756356
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr55",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.37431165848378073,
+        0,
+        0.136319354219714
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03470481443569913,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr55",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr55",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.37431165848378073,
+          0.11896694700186443
+        ],
+        "end": [
+          0.37431165848378073,
+          0.15367176143756356
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.37431165848378073,
+          0.11896694700186443
+        ],
+        "end": [
+          0.37431165848378073,
+          0.15367176143756356
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr56",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.1293848771913276,
+        0,
+        0.33780216233711535
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03474157184501658,
+      "height": 3,
+      "thickness": 0.1008,
+      "sourcePhysicalWallId": "fr56",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr56",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.1293848771913276,
+          0.32043137641460706
+        ],
+        "end": [
+          0.1293848771913276,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.1293848771913276,
+          0.32043137641460706
+        ],
+        "end": [
+          0.1293848771913276,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_7wibn2h4",
+      "nodeType": "wall",
+      "nodeName": "Wall fr57",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.16238372074135018,
+        0,
+        0.33780216233711535
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03474157184501658,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr57",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr57",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.16238372074135018,
+          0.32043137641460706
+        ],
+        "end": [
+          0.16238372074135018,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.16238372074135018,
+          0.32043137641460706
+        ],
+        "end": [
+          0.16238372074135018,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr58",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.1954009449617914,
+        0,
+        0.33780216233711535
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03474157184501658,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr58",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr58",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.1954009449617914,
+          0.32043137641460706
+        ],
+        "end": [
+          0.1954009449617914,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.1954009449617914,
+          0.32043137641460706
+        ],
+        "end": [
+          0.1954009449617914,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr59",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.22838140082854896,
+        0,
+        0.33780216233711535
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03474157184501658,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr59",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr59",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.22838140082854896,
+          0.32043137641460706
+        ],
+        "end": [
+          0.22838140082854896,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.22838140082854896,
+          0.32043137641460706
+        ],
+        "end": [
+          0.22838140082854896,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr60",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.26139863206183656,
+        0,
+        0.33780216233711535
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03474157184501658,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr60",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr60",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.26139863206183656,
+          0.32043137641460706
+        ],
+        "end": [
+          0.26139863206183656,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.26139863206183656,
+          0.32043137641460706
+        ],
+        "end": [
+          0.26139863206183656,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr61",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.5063070326838711,
+        0,
+        0.33780216233711535
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03474157184501658,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr61",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr61",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.5063070326838711,
+          0.32043137641460706
+        ],
+        "end": [
+          0.5063070326838711,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.5063070326838711,
+          0.32043137641460706
+        ],
+        "end": [
+          0.5063070326838711,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr62",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.47332656980426707,
+        0,
+        0.33780216233711535
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03474157184501658,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr62",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr62",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.47332656980426707,
+          0.32043137641460706
+        ],
+        "end": [
+          0.47332656980426707,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.47332656980426707,
+          0.32043137641460706
+        ],
+        "end": [
+          0.47332656980426707,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_nve2hhuk",
+      "nodeType": "wall",
+      "nodeName": "Wall fr63",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4403093315581331,
+        0,
+        0.33780216233711535
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03474157184501658,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr63",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr63",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.4403093315581331,
+          0.32043137641460706
+        ],
+        "end": [
+          0.4403093315581331,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.4403093315581331,
+          0.32043137641460706
+        ],
+        "end": [
+          0.4403093315581331,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr64",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.4073288827042219,
+        0,
+        0.33780216233711535
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03474157184501658,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr64",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr64",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.4073288827042219,
+          0.32043137641460706
+        ],
+        "end": [
+          0.4073288827042219,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.4073288827042219,
+          0.32043137641460706
+        ],
+        "end": [
+          0.4073288827042219,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr65",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.37431165848378073,
+        0,
+        0.33780216233711535
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.03474157184501658,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr65",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr65",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.37431165848378073,
+          0.32043137641460706
+        ],
+        "end": [
+          0.37431165848378073,
+          0.35517294825962364
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.37431165848378073,
+          0.32043137641460706
+        ],
+        "end": [
+          0.37431165848378073,
+          0.35517294825962364
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr66",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.3178367575895436,
+        0,
+        0.1779173469104402
+      ],
+      "rotation": [
+        0,
+        -1.5707963267948966,
+        0
+      ],
+      "length": 0.05334396237884115,
+      "height": 3,
+      "thickness": 0.0987,
+      "sourcePhysicalWallId": "fr66",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr66",
+        "confidence": 1,
+        "orientationRadians": 1.5707963267948966
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.3178367575895436,
+          0.15124536572101963
+        ],
+        "end": [
+          0.3178367575895436,
+          0.20458932809986077
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.3178367575895436,
+          0.15124536572101963
+        ],
+        "end": [
+          0.3178367575895436,
+          0.20458932809986077
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": null,
+      "nodeType": "wall",
+      "nodeName": "Wall fr67",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.3278375253803919,
+        0,
+        0.20370699601012082
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.018273458022800282,
+      "height": 3,
+      "thickness": 0.1008,
+      "sourcePhysicalWallId": "fr67",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr67",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.31870079636899173,
+          0.20370699601012082
+        ],
+        "end": [
+          0.336974254391792,
+          0.20370699601012082
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.31870079636899173,
+          0.20370699601012082
+        ],
+        "end": [
+          0.336974254391792,
+          0.20370699601012082
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_k6j44qwu",
+      "nodeType": "wall",
+      "nodeName": "Wall fr68",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.31785514527280867,
+        0,
+        0.13302901213018525
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.03823821823796675,
+      "height": 3,
+      "thickness": 0.1995,
+      "sourcePhysicalWallId": "fr68",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr68",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.29873603615382527,
+          0.13302901213018525
+        ],
+        "end": [
+          0.336974254391792,
+          0.13302901213018525
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.29873603615382527,
+          0.13302901213018525
+        ],
+        "end": [
+          0.336974254391792,
+          0.13302901213018525
+        ]
+      }
+    },
+    {
+      "PascalWallNodeId": "wall_m38tti5p",
+      "nodeType": "wall",
+      "nodeName": "Wall fr69",
+      "parentId": "level_id",
+      "childIds": [],
+      "position": [
+        0.30785437748196043,
+        0,
+        0.1521276907986632
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "length": 0.01823668265627032,
+      "height": 3,
+      "thickness": 0.1008,
+      "sourcePhysicalWallId": "fr69",
+      "sourceWallMetadata": {
+        "physicalWallId": "fr69",
+        "confidence": 1,
+        "orientationRadians": 0
+      },
+      "sourceEndpoints": {
+        "start": [
+          0.29873603615382527,
+          0.1521276907986632
+        ],
+        "end": [
+          0.3169727188100956,
+          0.1521276907986632
+        ]
+      },
+      "PascalWorldEndpoints": {
+        "start": [
+          0.29873603615382527,
+          0.1521276907986632
+        ],
+        "end": [
+          0.3169727188100956,
+          0.1521276907986632
+        ]
+      }
+    }
+  ]
+}

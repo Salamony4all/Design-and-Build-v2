@@ -1,0 +1,29 @@
+{
+  "acceptedWallCountBefore": 70,
+  "acceptedWallCountAfter": 70,
+  "missingPhysicalWallIds": [],
+  "unexpectedPhysicalWallIds": [],
+  "changedEndpoints": [],
+  "maximumEndpointDelta": 0,
+  "changedThicknesses": [],
+  "maximumThicknessDelta": 0,
+  "changedConfidence": [],
+  "changedVerdicts": [],
+  "changedEvidence": [],
+  "roiDelta": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "scaleDelta": 0,
+  "thicknessBandChanges": false,
+  "genuinelyFloatingBefore": 0,
+  "genuinelyFloatingAfter": 0,
+  "behavioralGeometryHashBefore": "8c825b31b7758856",
+  "behavioralGeometryHashAfter": "8c825b31b7758856",
+  "behavioralEvidenceHashBefore": "8c2491f14db76203",
+  "behavioralEvidenceHashAfter": "8c2491f14db76203",
+  "lineageHashRun1": "d2a0c395c6fcc8c344fe208e2ab885ba5447d370d51305cbe4902dda756ba832",
+  "lineageHashRun2": "d2a0c395c6fcc8c344fe208e2ab885ba5447d370d51305cbe4902dda756ba832"
+}

@@ -1,0 +1,1397 @@
+{
+  "golden": "golden-b-png-floorplan",
+  "capturedAt": "2026-07-28T09:40:28.861Z",
+  "legacyPipeline": "apps/editor/src/lib/orchestration/gemini-pipeline.ts",
+  "legacyPipelineSha256": "c588b7969eeaa702f530b14756ac0b3709e69133259b450c660432491a2de5d3",
+  "provider": {
+    "id": "google",
+    "type": "google",
+    "transport": "@google/genai generateContent",
+    "credentialRef": "GEMINI_API_KEY (env name only)",
+    "selection": {
+      "historicalLegacyDefault": "gemini-2.0-flash",
+      "historicalDefaultStatus": "unavailable (404 from live API)",
+      "selectedParityProvider": "google",
+      "selectedParityModel": "gemini-2.5-flash",
+      "providerSelectionSource": "active dynamic configuration (models.list discovery -> explicit selection)",
+      "promptsChanged": false,
+      "passOrderChanged": false
+    }
+  },
+  "model": "gemini-2.5-flash",
+  "modelParameters": {
+    "temperature": "provider-default (legacy sets none)",
+    "maxTokens": "provider-default (Google path)",
+    "responseFormat": "raw text -> parseAIResponse"
+  },
+  "input": {
+    "kind": "png",
+    "sourceFile": "a90427fd-576a-4da8-8cff-dd3bb71f29e6.png",
+    "sourceSha256": "8af944bc058a58dc5f5f58311c5ed991d554ed927de35c4c651d6b1fe50d9801",
+    "imageMimeType": "image/png",
+    "imageSha256": "8af944bc058a58dc5f5f58311c5ed991d554ed927de35c4c651d6b1fe50d9801",
+    "imageBytes": 91672,
+    "pagePreparation": null
+  },
+  "attachmentOrdering": [
+    "<primary image only — legacy runBimPipeline sends images[0] to every pass>"
+  ],
+  "passSequence": [
+    "shell||core",
+    "fitout||ffe(wallsContext)"
+  ],
+  "wallsContextSize": 9,
+  "passes": [
+    {
+      "passId": "shell",
+      "order": 1,
+      "model": "gemini-2.5-flash",
+      "promptSha256": "df28450e16010f5797c5b482a314e55d4691213307c0487f471118d04c28aa76",
+      "promptLength": 3110,
+      "tolerated": true,
+      "status": "completed",
+      "durationMs": 24555,
+      "parsed": {
+        "projectInfo": {
+          "name": "Design & Build BIM",
+          "estimatedArea": "m2"
+        },
+        "walls": [],
+        "openings": [],
+        "furniture": [],
+        "floors": [
+          {
+            "boundary": [
+              [
+                0,
+                0
+              ],
+              [
+                10.9,
+                0
+              ],
+              [
+                10.9,
+                3.8
+              ],
+              [
+                0,
+                3.8
+              ]
+            ],
+            "level": 0,
+            "material": "parquet"
+          }
+        ],
+        "ceilings": [
+          {
+            "boundary": [
+              [
+                0,
+                0
+              ],
+              [
+                10.9,
+                0
+              ],
+              [
+                10.9,
+                3.8
+              ],
+              [
+                0,
+                3.8
+              ]
+            ],
+            "level": 0,
+            "height": 2.8
+          }
+        ],
+        "zones": [
+          {
+            "name": "6 Bed Unit",
+            "boundary": [
+              [
+                0,
+                0
+              ],
+              [
+                10.9,
+                0
+              ],
+              [
+                10.9,
+                3.8
+              ],
+              [
+                0,
+                3.8
+              ]
+            ],
+            "color": "#E0F2F1"
+          },
+          {
+            "name": "Corridor & Locker Area",
+            "boundary": [
+              [
+                0,
+                0
+              ],
+              [
+                10.9,
+                0
+              ],
+              [
+                10.9,
+                1.8
+              ],
+              [
+                0,
+                1.8
+              ]
+            ],
+            "color": "#C8E6C9"
+          },
+          {
+            "name": "Bed Space 1",
+            "boundary": [
+              [
+                0,
+                1.8
+              ],
+              [
+                1.8,
+                1.8
+              ],
+              [
+                1.8,
+                3.8
+              ],
+              [
+                0,
+                3.8
+              ]
+            ],
+            "color": "#B2DFDB"
+          },
+          {
+            "name": "Bed Space 2",
+            "boundary": [
+              [
+                1.8,
+                1.8
+              ],
+              [
+                3.6,
+                1.8
+              ],
+              [
+                3.6,
+                3.8
+              ],
+              [
+                1.8,
+                3.8
+              ]
+            ],
+            "color": "#B2DFDB"
+          },
+          {
+            "name": "Bed Space 3",
+            "boundary": [
+              [
+                3.6,
+                1.8
+              ],
+              [
+                5.4,
+                1.8
+              ],
+              [
+                5.4,
+                3.8
+              ],
+              [
+                3.6,
+                3.8
+              ]
+            ],
+            "color": "#B2DFDB"
+          },
+          {
+            "name": "Bed Space 4",
+            "boundary": [
+              [
+                5.4,
+                1.8
+              ],
+              [
+                7.2,
+                1.8
+              ],
+              [
+                7.2,
+                3.8
+              ],
+              [
+                5.4,
+                3.8
+              ]
+            ],
+            "color": "#B2DFDB"
+          },
+          {
+            "name": "Bed Space 5",
+            "boundary": [
+              [
+                7.2,
+                1.8
+              ],
+              [
+                9,
+                1.8
+              ],
+              [
+                9,
+                3.8
+              ],
+              [
+                7.2,
+                3.8
+              ]
+            ],
+            "color": "#B2DFDB"
+          },
+          {
+            "name": "Bed Space 6",
+            "boundary": [
+              [
+                9,
+                1.8
+              ],
+              [
+                10.9,
+                1.8
+              ],
+              [
+                10.9,
+                3.8
+              ],
+              [
+                9,
+                3.8
+              ]
+            ],
+            "color": "#B2DFDB"
+          }
+        ]
+      },
+      "parsedSha256": "dbd5f79301c3ed5a85de46097712e49c496742443cb55f0b0d70e6b1f2afa6d8"
+    },
+    {
+      "passId": "core",
+      "order": 2,
+      "model": "gemini-2.5-flash",
+      "promptSha256": "449c868a0f22456a5a1eaef64a851e0464d8c1f962726e47f3ca3dd8ddafb30d",
+      "promptLength": 2928,
+      "tolerated": false,
+      "status": "completed",
+      "durationMs": 63010,
+      "parsed": {
+        "walls": [
+          {
+            "id": "w1",
+            "start": [
+              0.1,
+              0.1
+            ],
+            "end": [
+              0.1,
+              2.3
+            ],
+            "thickness": 0.2,
+            "height": 2.8,
+            "material": "white-plaster"
+          },
+          {
+            "id": "w2",
+            "start": [
+              0.1,
+              2.3
+            ],
+            "end": [
+              11.2,
+              2.3
+            ],
+            "thickness": 0.2,
+            "height": 2.8,
+            "material": "white-plaster"
+          },
+          {
+            "id": "w3",
+            "start": [
+              11.2,
+              2.3
+            ],
+            "end": [
+              11.2,
+              0.1
+            ],
+            "thickness": 0.2,
+            "height": 2.8,
+            "material": "white-plaster"
+          },
+          {
+            "id": "w4",
+            "start": [
+              11.2,
+              0.1
+            ],
+            "end": [
+              0.1,
+              0.1
+            ],
+            "thickness": 0.2,
+            "height": 2.8,
+            "material": "white-plaster"
+          },
+          {
+            "id": "p1",
+            "start": [
+              2.05,
+              0.2
+            ],
+            "end": [
+              2.05,
+              2.2
+            ],
+            "thickness": 0.1,
+            "height": 2.8,
+            "material": "white-plaster"
+          },
+          {
+            "id": "p2",
+            "start": [
+              3.85,
+              0.2
+            ],
+            "end": [
+              3.85,
+              2.2
+            ],
+            "thickness": 0.1,
+            "height": 2.8,
+            "material": "white-plaster"
+          },
+          {
+            "id": "p3",
+            "start": [
+              5.65,
+              0.2
+            ],
+            "end": [
+              5.65,
+              2.2
+            ],
+            "thickness": 0.1,
+            "height": 2.8,
+            "material": "white-plaster"
+          },
+          {
+            "id": "p4",
+            "start": [
+              7.45,
+              0.2
+            ],
+            "end": [
+              7.45,
+              2.2
+            ],
+            "thickness": 0.1,
+            "height": 2.8,
+            "material": "white-plaster"
+          },
+          {
+            "id": "p5",
+            "start": [
+              9.25,
+              0.2
+            ],
+            "end": [
+              9.25,
+              2.2
+            ],
+            "thickness": 0.1,
+            "height": 2.8,
+            "material": "white-plaster"
+          }
+        ],
+        "openings": [
+          {
+            "id": "d1",
+            "type": "door",
+            "pos": [
+              0.65,
+              0.2
+            ],
+            "width": 0.9,
+            "height": 2.1,
+            "elevation": 0
+          },
+          {
+            "id": "d2",
+            "type": "door",
+            "pos": [
+              2.45,
+              0.2
+            ],
+            "width": 0.9,
+            "height": 2.1,
+            "elevation": 0
+          },
+          {
+            "id": "d3",
+            "type": "door",
+            "pos": [
+              4.25,
+              0.2
+            ],
+            "width": 0.9,
+            "height": 2.1,
+            "elevation": 0
+          },
+          {
+            "id": "d4",
+            "type": "door",
+            "pos": [
+              6.05,
+              0.2
+            ],
+            "width": 0.9,
+            "height": 2.1,
+            "elevation": 0
+          },
+          {
+            "id": "d5",
+            "type": "door",
+            "pos": [
+              7.85,
+              0.2
+            ],
+            "width": 0.9,
+            "height": 2.1,
+            "elevation": 0
+          },
+          {
+            "id": "d6",
+            "type": "door",
+            "pos": [
+              9.7,
+              0.2
+            ],
+            "width": 0.9,
+            "height": 2.1,
+            "elevation": 0
+          }
+        ],
+        "furniture": [],
+        "floors": [],
+        "ceilings": [],
+        "zones": []
+      },
+      "parsedSha256": "e0e5393ce57e79f7552830441c796550cad573e3d2c0a114b49e6bded4c1aefe"
+    },
+    {
+      "passId": "fitout",
+      "order": 3,
+      "model": "gemini-2.5-flash",
+      "promptSha256": "c6443667bcca00416200b7557446b86a466d06c312d94136504d3eb6e6180c41",
+      "promptLength": 3931,
+      "tolerated": true,
+      "status": "completed",
+      "durationMs": 38431,
+      "parsed": {
+        "walls": [],
+        "openings": [],
+        "furniture": [
+          {
+            "type": "closet",
+            "pos": [
+              1.2,
+              0.4
+            ],
+            "rotation": 0,
+            "width": 1.8,
+            "depth": 0.6
+          },
+          {
+            "type": "closet",
+            "pos": [
+              3,
+              0.4
+            ],
+            "rotation": 0,
+            "width": 1.8,
+            "depth": 0.6
+          },
+          {
+            "type": "closet",
+            "pos": [
+              4.8,
+              0.4
+            ],
+            "rotation": 0,
+            "width": 1.8,
+            "depth": 0.6
+          },
+          {
+            "type": "closet",
+            "pos": [
+              6.6,
+              0.4
+            ],
+            "rotation": 0,
+            "width": 1.8,
+            "depth": 0.6
+          },
+          {
+            "type": "closet",
+            "pos": [
+              8.4,
+              0.4
+            ],
+            "rotation": 0,
+            "width": 1.8,
+            "depth": 0.6
+          },
+          {
+            "type": "closet",
+            "pos": [
+              10.25,
+              0.4
+            ],
+            "rotation": 0,
+            "width": 1.9,
+            "depth": 0.6
+          }
+        ],
+        "floors": [],
+        "ceilings": [],
+        "zones": []
+      },
+      "parsedSha256": "5145a3b910702f89e624ecc4904579e65424b6683444c630bc036f28c65c6e2e"
+    },
+    {
+      "passId": "ffe",
+      "order": 4,
+      "model": "gemini-2.5-flash",
+      "promptSha256": "340a6df047c794165f4f74f5c308a8c4129e534b62edf183a772c5c4f2274e3d",
+      "promptLength": 3970,
+      "tolerated": true,
+      "status": "completed",
+      "durationMs": 64401,
+      "parsed": {
+        "walls": [],
+        "openings": [],
+        "furniture": [
+          {
+            "type": "single-bed",
+            "pos": [
+              1.1,
+              1.2
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 2
+          },
+          {
+            "type": "closet",
+            "pos": [
+              1.1,
+              0.5
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 0.6
+          },
+          {
+            "type": "single-bed",
+            "pos": [
+              2.95,
+              1.2
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 2
+          },
+          {
+            "type": "closet",
+            "pos": [
+              2.95,
+              0.5
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 0.6
+          },
+          {
+            "type": "single-bed",
+            "pos": [
+              4.75,
+              1.2
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 2
+          },
+          {
+            "type": "closet",
+            "pos": [
+              4.75,
+              0.5
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 0.6
+          },
+          {
+            "type": "single-bed",
+            "pos": [
+              6.55,
+              1.2
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 2
+          },
+          {
+            "type": "closet",
+            "pos": [
+              6.55,
+              0.5
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 0.6
+          },
+          {
+            "type": "single-bed",
+            "pos": [
+              8.35,
+              1.2
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 2
+          },
+          {
+            "type": "closet",
+            "pos": [
+              8.35,
+              0.5
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 0.6
+          },
+          {
+            "type": "single-bed",
+            "pos": [
+              10.2,
+              1.2
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 2
+          },
+          {
+            "type": "closet",
+            "pos": [
+              10.2,
+              0.5
+            ],
+            "rotation": 0,
+            "width": 0.9,
+            "depth": 0.6
+          }
+        ],
+        "floors": [],
+        "ceilings": [],
+        "zones": []
+      },
+      "parsedSha256": "a8b4665f4548357e2a290e835b487859120f52fa66ca8b4c242777a2ed08a69d"
+    }
+  ],
+  "totalDurationMs": 127429,
+  "resultCounts": {
+    "shell": {
+      "walls": 0,
+      "openings": 0,
+      "furniture": 0,
+      "floors": 1,
+      "ceilings": 1,
+      "zones": 8
+    },
+    "core": {
+      "walls": 9,
+      "openings": 6,
+      "furniture": 0,
+      "floors": 0,
+      "ceilings": 0,
+      "zones": 0
+    },
+    "fitout": {
+      "walls": 0,
+      "openings": 0,
+      "furniture": 6,
+      "floors": 0,
+      "ceilings": 0,
+      "zones": 0
+    },
+    "ffe": {
+      "walls": 0,
+      "openings": 0,
+      "furniture": 12,
+      "floors": 0,
+      "ceilings": 0,
+      "zones": 0
+    }
+  },
+  "finalAiResult": {
+    "shell": {
+      "projectInfo": {
+        "name": "Design & Build BIM",
+        "estimatedArea": "m2"
+      },
+      "walls": [],
+      "openings": [],
+      "furniture": [],
+      "floors": [
+        {
+          "boundary": [
+            [
+              0,
+              0
+            ],
+            [
+              10.9,
+              0
+            ],
+            [
+              10.9,
+              3.8
+            ],
+            [
+              0,
+              3.8
+            ]
+          ],
+          "level": 0,
+          "material": "parquet"
+        }
+      ],
+      "ceilings": [
+        {
+          "boundary": [
+            [
+              0,
+              0
+            ],
+            [
+              10.9,
+              0
+            ],
+            [
+              10.9,
+              3.8
+            ],
+            [
+              0,
+              3.8
+            ]
+          ],
+          "level": 0,
+          "height": 2.8
+        }
+      ],
+      "zones": [
+        {
+          "name": "6 Bed Unit",
+          "boundary": [
+            [
+              0,
+              0
+            ],
+            [
+              10.9,
+              0
+            ],
+            [
+              10.9,
+              3.8
+            ],
+            [
+              0,
+              3.8
+            ]
+          ],
+          "color": "#E0F2F1"
+        },
+        {
+          "name": "Corridor & Locker Area",
+          "boundary": [
+            [
+              0,
+              0
+            ],
+            [
+              10.9,
+              0
+            ],
+            [
+              10.9,
+              1.8
+            ],
+            [
+              0,
+              1.8
+            ]
+          ],
+          "color": "#C8E6C9"
+        },
+        {
+          "name": "Bed Space 1",
+          "boundary": [
+            [
+              0,
+              1.8
+            ],
+            [
+              1.8,
+              1.8
+            ],
+            [
+              1.8,
+              3.8
+            ],
+            [
+              0,
+              3.8
+            ]
+          ],
+          "color": "#B2DFDB"
+        },
+        {
+          "name": "Bed Space 2",
+          "boundary": [
+            [
+              1.8,
+              1.8
+            ],
+            [
+              3.6,
+              1.8
+            ],
+            [
+              3.6,
+              3.8
+            ],
+            [
+              1.8,
+              3.8
+            ]
+          ],
+          "color": "#B2DFDB"
+        },
+        {
+          "name": "Bed Space 3",
+          "boundary": [
+            [
+              3.6,
+              1.8
+            ],
+            [
+              5.4,
+              1.8
+            ],
+            [
+              5.4,
+              3.8
+            ],
+            [
+              3.6,
+              3.8
+            ]
+          ],
+          "color": "#B2DFDB"
+        },
+        {
+          "name": "Bed Space 4",
+          "boundary": [
+            [
+              5.4,
+              1.8
+            ],
+            [
+              7.2,
+              1.8
+            ],
+            [
+              7.2,
+              3.8
+            ],
+            [
+              5.4,
+              3.8
+            ]
+          ],
+          "color": "#B2DFDB"
+        },
+        {
+          "name": "Bed Space 5",
+          "boundary": [
+            [
+              7.2,
+              1.8
+            ],
+            [
+              9,
+              1.8
+            ],
+            [
+              9,
+              3.8
+            ],
+            [
+              7.2,
+              3.8
+            ]
+          ],
+          "color": "#B2DFDB"
+        },
+        {
+          "name": "Bed Space 6",
+          "boundary": [
+            [
+              9,
+              1.8
+            ],
+            [
+              10.9,
+              1.8
+            ],
+            [
+              10.9,
+              3.8
+            ],
+            [
+              9,
+              3.8
+            ]
+          ],
+          "color": "#B2DFDB"
+        }
+      ]
+    },
+    "core": {
+      "walls": [
+        {
+          "id": "w1",
+          "start": [
+            0.1,
+            0.1
+          ],
+          "end": [
+            0.1,
+            2.3
+          ],
+          "thickness": 0.2,
+          "height": 2.8,
+          "material": "white-plaster"
+        },
+        {
+          "id": "w2",
+          "start": [
+            0.1,
+            2.3
+          ],
+          "end": [
+            11.2,
+            2.3
+          ],
+          "thickness": 0.2,
+          "height": 2.8,
+          "material": "white-plaster"
+        },
+        {
+          "id": "w3",
+          "start": [
+            11.2,
+            2.3
+          ],
+          "end": [
+            11.2,
+            0.1
+          ],
+          "thickness": 0.2,
+          "height": 2.8,
+          "material": "white-plaster"
+        },
+        {
+          "id": "w4",
+          "start": [
+            11.2,
+            0.1
+          ],
+          "end": [
+            0.1,
+            0.1
+          ],
+          "thickness": 0.2,
+          "height": 2.8,
+          "material": "white-plaster"
+        },
+        {
+          "id": "p1",
+          "start": [
+            2.05,
+            0.2
+          ],
+          "end": [
+            2.05,
+            2.2
+          ],
+          "thickness": 0.1,
+          "height": 2.8,
+          "material": "white-plaster"
+        },
+        {
+          "id": "p2",
+          "start": [
+            3.85,
+            0.2
+          ],
+          "end": [
+            3.85,
+            2.2
+          ],
+          "thickness": 0.1,
+          "height": 2.8,
+          "material": "white-plaster"
+        },
+        {
+          "id": "p3",
+          "start": [
+            5.65,
+            0.2
+          ],
+          "end": [
+            5.65,
+            2.2
+          ],
+          "thickness": 0.1,
+          "height": 2.8,
+          "material": "white-plaster"
+        },
+        {
+          "id": "p4",
+          "start": [
+            7.45,
+            0.2
+          ],
+          "end": [
+            7.45,
+            2.2
+          ],
+          "thickness": 0.1,
+          "height": 2.8,
+          "material": "white-plaster"
+        },
+        {
+          "id": "p5",
+          "start": [
+            9.25,
+            0.2
+          ],
+          "end": [
+            9.25,
+            2.2
+          ],
+          "thickness": 0.1,
+          "height": 2.8,
+          "material": "white-plaster"
+        }
+      ],
+      "openings": [
+        {
+          "id": "d1",
+          "type": "door",
+          "pos": [
+            0.65,
+            0.2
+          ],
+          "width": 0.9,
+          "height": 2.1,
+          "elevation": 0
+        },
+        {
+          "id": "d2",
+          "type": "door",
+          "pos": [
+            2.45,
+            0.2
+          ],
+          "width": 0.9,
+          "height": 2.1,
+          "elevation": 0
+        },
+        {
+          "id": "d3",
+          "type": "door",
+          "pos": [
+            4.25,
+            0.2
+          ],
+          "width": 0.9,
+          "height": 2.1,
+          "elevation": 0
+        },
+        {
+          "id": "d4",
+          "type": "door",
+          "pos": [
+            6.05,
+            0.2
+          ],
+          "width": 0.9,
+          "height": 2.1,
+          "elevation": 0
+        },
+        {
+          "id": "d5",
+          "type": "door",
+          "pos": [
+            7.85,
+            0.2
+          ],
+          "width": 0.9,
+          "height": 2.1,
+          "elevation": 0
+        },
+        {
+          "id": "d6",
+          "type": "door",
+          "pos": [
+            9.7,
+            0.2
+          ],
+          "width": 0.9,
+          "height": 2.1,
+          "elevation": 0
+        }
+      ],
+      "furniture": [],
+      "floors": [],
+      "ceilings": [],
+      "zones": []
+    },
+    "fitout": {
+      "walls": [],
+      "openings": [],
+      "furniture": [
+        {
+          "type": "closet",
+          "pos": [
+            1.2,
+            0.4
+          ],
+          "rotation": 0,
+          "width": 1.8,
+          "depth": 0.6
+        },
+        {
+          "type": "closet",
+          "pos": [
+            3,
+            0.4
+          ],
+          "rotation": 0,
+          "width": 1.8,
+          "depth": 0.6
+        },
+        {
+          "type": "closet",
+          "pos": [
+            4.8,
+            0.4
+          ],
+          "rotation": 0,
+          "width": 1.8,
+          "depth": 0.6
+        },
+        {
+          "type": "closet",
+          "pos": [
+            6.6,
+            0.4
+          ],
+          "rotation": 0,
+          "width": 1.8,
+          "depth": 0.6
+        },
+        {
+          "type": "closet",
+          "pos": [
+            8.4,
+            0.4
+          ],
+          "rotation": 0,
+          "width": 1.8,
+          "depth": 0.6
+        },
+        {
+          "type": "closet",
+          "pos": [
+            10.25,
+            0.4
+          ],
+          "rotation": 0,
+          "width": 1.9,
+          "depth": 0.6
+        }
+      ],
+      "floors": [],
+      "ceilings": [],
+      "zones": []
+    },
+    "ffe": {
+      "walls": [],
+      "openings": [],
+      "furniture": [
+        {
+          "type": "single-bed",
+          "pos": [
+            1.1,
+            1.2
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 2
+        },
+        {
+          "type": "closet",
+          "pos": [
+            1.1,
+            0.5
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 0.6
+        },
+        {
+          "type": "single-bed",
+          "pos": [
+            2.95,
+            1.2
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 2
+        },
+        {
+          "type": "closet",
+          "pos": [
+            2.95,
+            0.5
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 0.6
+        },
+        {
+          "type": "single-bed",
+          "pos": [
+            4.75,
+            1.2
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 2
+        },
+        {
+          "type": "closet",
+          "pos": [
+            4.75,
+            0.5
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 0.6
+        },
+        {
+          "type": "single-bed",
+          "pos": [
+            6.55,
+            1.2
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 2
+        },
+        {
+          "type": "closet",
+          "pos": [
+            6.55,
+            0.5
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 0.6
+        },
+        {
+          "type": "single-bed",
+          "pos": [
+            8.35,
+            1.2
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 2
+        },
+        {
+          "type": "closet",
+          "pos": [
+            8.35,
+            0.5
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 0.6
+        },
+        {
+          "type": "single-bed",
+          "pos": [
+            10.2,
+            1.2
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 2
+        },
+        {
+          "type": "closet",
+          "pos": [
+            10.2,
+            0.5
+          ],
+          "rotation": 0,
+          "width": 0.9,
+          "depth": 0.6
+        }
+      ],
+      "floors": [],
+      "ceilings": [],
+      "zones": []
+    }
+  }
+}

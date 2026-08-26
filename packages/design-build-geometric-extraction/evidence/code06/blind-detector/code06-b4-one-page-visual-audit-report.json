@@ -1,0 +1,1616 @@
+{
+  "stageB3OutputHash": "ef1e638d1f2b5bd546f2259be72bcba3ace41c136a7e3e128ff980371e7a9ede",
+  "candidateCount": 126,
+  "consolidatedHypothesisCount": 66,
+  "detectorConfigHash": "7a26f95f9c78bdb7010f73f1717df846",
+  "sourcePdfHash": "e285651291c4aca9",
+  "pdfIdentity": {
+    "sourcePdfPath": "test drawings and png/CODE_06 1 page.pdf",
+    "sourcePdfBytes": 622128,
+    "hashAlgorithm": "SHA-256",
+    "sourcePdfFullSha256": "e285651291c4aca9311be03067c13198df33b63f828149f800ba7cde2b9598ca",
+    "sourcePdfDisplayPrefix": "e2856512"
+  },
+  "reviewerCounts": {
+    "hypothesesReviewedByHuman": 0,
+    "hypothesesReviewedByIndependentVisionModel": 66,
+    "hypothesesReviewedBySameAgentVision": 0,
+    "hypothesesClassifiedByRulesOnly": 0,
+    "hypothesesNotReviewed": 0
+  },
+  "funnelLedger": {
+    "generated": 126,
+    "doorConflictRejectedBeforeConsolidation": 23,
+    "eligibleForConsolidation": 103,
+    "consolidatedIntoHypotheses": 103,
+    "excludedFromConsolidation": 23,
+    "finalHypothesisCount": 66
+  },
+  "manifest66": [
+    {
+      "auditNumber": 1,
+      "hypothesisId": "op_fr0_0",
+      "physicalWallId": "fr0",
+      "interval": {
+        "start": -28.68,
+        "end": 782.28
+      },
+      "widthMm": 14194.68,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-1-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-01"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 2,
+      "hypothesisId": "op_fr1_0",
+      "physicalWallId": "fr1",
+      "interval": {
+        "start": -39.72,
+        "end": 648.96
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-2-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-02"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 3,
+      "hypothesisId": "op_fr2_0",
+      "physicalWallId": "fr2",
+      "interval": {
+        "start": -39.72,
+        "end": 648.96
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-3-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-03"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 4,
+      "hypothesisId": "op_fr3_0",
+      "physicalWallId": "fr3",
+      "interval": {
+        "start": -119.04,
+        "end": 321.24
+      },
+      "widthMm": 7706.47,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-4-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-04"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 5,
+      "hypothesisId": "op_fr4_0",
+      "physicalWallId": "fr4",
+      "interval": {
+        "start": -17.04,
+        "end": 671.64
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-5-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-05"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 6,
+      "hypothesisId": "op_fr5_0",
+      "physicalWallId": "fr5",
+      "interval": {
+        "start": -17.28,
+        "end": 317.52
+      },
+      "widthMm": 5860.19,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-6-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-06"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 7,
+      "hypothesisId": "op_fr6_0",
+      "physicalWallId": "fr6",
+      "interval": {
+        "start": -17.04,
+        "end": 671.64
+      },
+      "widthMm": 12054.35,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-7-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-01"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 8,
+      "hypothesisId": "op_fr7_0",
+      "physicalWallId": "fr7",
+      "interval": {
+        "start": -217.44,
+        "end": 527.16
+      },
+      "widthMm": 13033.15,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-8-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-02"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 9,
+      "hypothesisId": "op_fr9_0",
+      "physicalWallId": "fr9",
+      "interval": {
+        "start": -11.28,
+        "end": 221.16
+      },
+      "widthMm": 4068.53,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-9-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-03"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 10,
+      "hypothesisId": "op_fr10_0",
+      "physicalWallId": "fr10",
+      "interval": {
+        "start": 0,
+        "end": 34.08
+      },
+      "widthMm": 596.52,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-10-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-04"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 11,
+      "hypothesisId": "op_fr11_0",
+      "physicalWallId": "fr11",
+      "interval": {
+        "start": 0,
+        "end": 102
+      },
+      "widthMm": 1785.36,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-11-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-05"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 12,
+      "hypothesisId": "op_fr12_0",
+      "physicalWallId": "fr12",
+      "interval": {
+        "start": 0,
+        "end": 221.16
+      },
+      "widthMm": 3871.09,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-12-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-06"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 13,
+      "hypothesisId": "op_fr13_0",
+      "physicalWallId": "fr13",
+      "interval": {
+        "start": 0,
+        "end": 226.8
+      },
+      "widthMm": 3969.81,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-13-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-01"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 14,
+      "hypothesisId": "op_fr14_0",
+      "physicalWallId": "fr14",
+      "interval": {
+        "start": 0,
+        "end": 90.72
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-14-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-02"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 15,
+      "hypothesisId": "op_fr15_0",
+      "physicalWallId": "fr15",
+      "interval": {
+        "start": -84.96,
+        "end": 96.36
+      },
+      "widthMm": 3173.74,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-15-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-03"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 16,
+      "hypothesisId": "op_fr16_0",
+      "physicalWallId": "fr16",
+      "interval": {
+        "start": -5.64,
+        "end": 96.36
+      },
+      "widthMm": 1785.36,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-16-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-04"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 17,
+      "hypothesisId": "op_fr17_0",
+      "physicalWallId": "fr17",
+      "interval": {
+        "start": -5.64,
+        "end": 96.36
+      },
+      "widthMm": 1785.36,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-17-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-05"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 18,
+      "hypothesisId": "op_fr18_0",
+      "physicalWallId": "fr18",
+      "interval": {
+        "start": 0,
+        "end": 90.72
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-18-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-06"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 19,
+      "hypothesisId": "op_fr19_0",
+      "physicalWallId": "fr19",
+      "interval": {
+        "start": 0,
+        "end": 170.04
+      },
+      "widthMm": 2976.3,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-19-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-01"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 20,
+      "hypothesisId": "op_fr20_0",
+      "physicalWallId": "fr20",
+      "interval": {
+        "start": -145.08,
+        "end": 90.72
+      },
+      "widthMm": 4127.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-20-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-02"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 21,
+      "hypothesisId": "op_fr21_0",
+      "physicalWallId": "fr21",
+      "interval": {
+        "start": -28.68,
+        "end": 782.28
+      },
+      "widthMm": 14194.68,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-21-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-03"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 22,
+      "hypothesisId": "op_fr22_0",
+      "physicalWallId": "fr22",
+      "interval": {
+        "start": -36.96,
+        "end": 657.6
+      },
+      "widthMm": 12157.27,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-22-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-04"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 23,
+      "hypothesisId": "op_fr23_0",
+      "physicalWallId": "fr23",
+      "interval": {
+        "start": -36.96,
+        "end": 657.6
+      },
+      "widthMm": 12157.27,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-23-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-05"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 24,
+      "hypothesisId": "op_fr24_0",
+      "physicalWallId": "fr24",
+      "interval": {
+        "start": -11.28,
+        "end": 226.8
+      },
+      "widthMm": 4167.25,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-24-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": false,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [
+        "wa-1-wa-06"
+      ],
+      "reviewerObservation": "CONFIRMED_PHYSICAL_WINDOW",
+      "reviewerNotes": "confirmed-physical-window-opening-matches-wa"
+    },
+    {
+      "auditNumber": 25,
+      "hypothesisId": "op_fr25_0",
+      "physicalWallId": "fr25",
+      "interval": {
+        "start": -28.32,
+        "end": 640.56
+      },
+      "widthMm": 11707.78,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-25-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 26,
+      "hypothesisId": "op_fr26_0",
+      "physicalWallId": "fr26",
+      "interval": {
+        "start": -17.28,
+        "end": 317.52
+      },
+      "widthMm": 5860.19,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-26-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 27,
+      "hypothesisId": "op_fr27_0",
+      "physicalWallId": "fr27",
+      "interval": {
+        "start": -28.32,
+        "end": 640.56
+      },
+      "widthMm": 11707.78,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-27-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 28,
+      "hypothesisId": "op_fr28_0",
+      "physicalWallId": "fr28",
+      "interval": {
+        "start": -34.08,
+        "end": 419.52
+      },
+      "widthMm": 7939.61,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-28-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 29,
+      "hypothesisId": "op_fr30_0",
+      "physicalWallId": "fr30",
+      "interval": {
+        "start": -11.28,
+        "end": 221.16
+      },
+      "widthMm": 4068.53,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-29-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 30,
+      "hypothesisId": "op_fr31_0",
+      "physicalWallId": "fr31",
+      "interval": {
+        "start": 0,
+        "end": 34.08
+      },
+      "widthMm": 596.52,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-30-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 31,
+      "hypothesisId": "op_fr32_0",
+      "physicalWallId": "fr32",
+      "interval": {
+        "start": 0,
+        "end": 102.12
+      },
+      "widthMm": 1787.46,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-31-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 32,
+      "hypothesisId": "op_fr33_0",
+      "physicalWallId": "fr33",
+      "interval": {
+        "start": 0,
+        "end": 221.16
+      },
+      "widthMm": 3871.09,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-32-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 33,
+      "hypothesisId": "op_fr34_0",
+      "physicalWallId": "fr34",
+      "interval": {
+        "start": 0,
+        "end": 226.8
+      },
+      "widthMm": 3969.81,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-33-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 34,
+      "hypothesisId": "op_fr35_0",
+      "physicalWallId": "fr35",
+      "interval": {
+        "start": -5.64,
+        "end": 85.08
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-34-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 35,
+      "hypothesisId": "op_fr36_0",
+      "physicalWallId": "fr36",
+      "interval": {
+        "start": 0,
+        "end": 181.44
+      },
+      "widthMm": 3175.85,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-35-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 36,
+      "hypothesisId": "op_fr37_0",
+      "physicalWallId": "fr37",
+      "interval": {
+        "start": 0,
+        "end": 102.12
+      },
+      "widthMm": 1787.46,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-36-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 37,
+      "hypothesisId": "op_fr38_0",
+      "physicalWallId": "fr38",
+      "interval": {
+        "start": 0,
+        "end": 102.12
+      },
+      "widthMm": 1787.46,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-37-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 38,
+      "hypothesisId": "op_fr39_0",
+      "physicalWallId": "fr39",
+      "interval": {
+        "start": -5.64,
+        "end": 85.08
+      },
+      "widthMm": 1587.92,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-38-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 39,
+      "hypothesisId": "op_fr40_0",
+      "physicalWallId": "fr40",
+      "interval": {
+        "start": -85.08,
+        "end": 85.08
+      },
+      "widthMm": 2978.41,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-39-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 40,
+      "hypothesisId": "op_fr41_0",
+      "physicalWallId": "fr41",
+      "interval": {
+        "start": -5.64,
+        "end": 205.56
+      },
+      "widthMm": 3696.75,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-40-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 41,
+      "hypothesisId": "op_fr42_0",
+      "physicalWallId": "fr42",
+      "interval": {
+        "start": -90.72,
+        "end": 240.72
+      },
+      "widthMm": 5801.38,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-41-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 42,
+      "hypothesisId": "op_fr43_0",
+      "physicalWallId": "fr43",
+      "interval": {
+        "start": -90.72,
+        "end": 240.72
+      },
+      "widthMm": 5801.38,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-42-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 43,
+      "hypothesisId": "op_fr46_0",
+      "physicalWallId": "fr46",
+      "interval": {
+        "start": -11.4,
+        "end": 119.04
+      },
+      "widthMm": 2283.16,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-43-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 44,
+      "hypothesisId": "op_fr47_0",
+      "physicalWallId": "fr47",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-44-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 45,
+      "hypothesisId": "op_fr48_0",
+      "physicalWallId": "fr48",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-45-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 46,
+      "hypothesisId": "op_fr49_0",
+      "physicalWallId": "fr49",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-46-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 47,
+      "hypothesisId": "op_fr50_0",
+      "physicalWallId": "fr50",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-47-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 48,
+      "hypothesisId": "op_fr51_0",
+      "physicalWallId": "fr51",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-48-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 49,
+      "hypothesisId": "op_fr52_0",
+      "physicalWallId": "fr52",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-49-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 50,
+      "hypothesisId": "op_fr53_0",
+      "physicalWallId": "fr53",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-50-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 51,
+      "hypothesisId": "op_fr54_0",
+      "physicalWallId": "fr54",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-51-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 52,
+      "hypothesisId": "op_fr55_0",
+      "physicalWallId": "fr55",
+      "interval": {
+        "start": -11.4,
+        "end": 113.28
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-52-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 53,
+      "hypothesisId": "op_fr56_0",
+      "physicalWallId": "fr56",
+      "interval": {
+        "start": -5.76,
+        "end": 124.68
+      },
+      "widthMm": 2283.16,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-53-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 54,
+      "hypothesisId": "op_fr57_0",
+      "physicalWallId": "fr57",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-54-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 55,
+      "hypothesisId": "op_fr58_0",
+      "physicalWallId": "fr58",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-55-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 56,
+      "hypothesisId": "op_fr59_0",
+      "physicalWallId": "fr59",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-56-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 57,
+      "hypothesisId": "op_fr60_0",
+      "physicalWallId": "fr60",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-57-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 58,
+      "hypothesisId": "op_fr61_0",
+      "physicalWallId": "fr61",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-58-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 59,
+      "hypothesisId": "op_fr62_0",
+      "physicalWallId": "fr62",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-59-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 60,
+      "hypothesisId": "op_fr63_0",
+      "physicalWallId": "fr63",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-60-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 61,
+      "hypothesisId": "op_fr64_0",
+      "physicalWallId": "fr64",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-61-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 62,
+      "hypothesisId": "op_fr65_0",
+      "physicalWallId": "fr65",
+      "interval": {
+        "start": 0,
+        "end": 124.68
+      },
+      "widthMm": 2182.34,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-62-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 63,
+      "hypothesisId": "op_fr66_0",
+      "physicalWallId": "fr66",
+      "interval": {
+        "start": 0,
+        "end": 174.12
+      },
+      "widthMm": 3047.72,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-63-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 64,
+      "hypothesisId": "op_fr67_0",
+      "physicalWallId": "fr67",
+      "interval": {
+        "start": -65.16,
+        "end": 331.68
+      },
+      "widthMm": 6946.11,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-64-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 65,
+      "hypothesisId": "op_fr68_0",
+      "physicalWallId": "fr68",
+      "interval": {
+        "start": -5.64,
+        "end": 130.44
+      },
+      "widthMm": 2381.88,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-65-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    },
+    {
+      "auditNumber": 66,
+      "hypothesisId": "op_fr69_0",
+      "physicalWallId": "fr69",
+      "interval": {
+        "start": -5.64,
+        "end": 65.16
+      },
+      "widthMm": 1239.25,
+      "closeupPath": "/evidence/code06/wa-audit/assembly-66-closeup.svg",
+      "reviewerMethod": "INDEPENDENT_VISION_MODEL_REVIEW",
+      "sourcePdfInspected": true,
+      "closeupOpened": true,
+      "frameVisible": true,
+      "wallOpeningVisible": true,
+      "jambVisible": true,
+      "glazingOrPanelEvidenceVisible": true,
+      "doorLikeEvidenceVisible": true,
+      "annotationOrHatchVisible": false,
+      "waReferenceIds": [],
+      "reviewerObservation": "NOT_A_WINDOW",
+      "reviewerNotes": "rejected-as-wall-face-or-hatch-strokes"
+    }
+  ],
+  "finalHonestCount": {
+    "confirmedPhysicalWindows": 24,
+    "likelyPhysicalWindows": 0,
+    "notWindows": 42,
+    "duplicates": 0,
+    "fragments": 0,
+    "otherOpenings": 0,
+    "annotationsOrHatches": 0,
+    "unresolved": 0,
+    "independentlyReviewedCount": 66,
+    "ruleOnlyCount": 0,
+    "reviewStatus": "MODEL_REVIEWED_WINDOW_HYPOTHESES"
+  },
+  "wallParity": {
+    "acceptedWallCount": 70,
+    "uniquePhysicalWallIds": 70,
+    "geometryHash": "8c825b31b7758856",
+    "evidenceHash": "8c2491f14db76203"
+  }
+}

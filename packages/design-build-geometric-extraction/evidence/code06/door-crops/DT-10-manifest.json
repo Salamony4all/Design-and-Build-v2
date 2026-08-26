@@ -1,0 +1,26 @@
+{
+  "regionId": "DT-10",
+  "pdfBounds": {
+    "x0": 578,
+    "y0": 93,
+    "x1": 622,
+    "y1": 137
+  },
+  "pixelBounds": {
+    "x0": 2312,
+    "y0": 775,
+    "w": 176,
+    "h": 176
+  },
+  "scale": 4,
+  "pageWidth": 728.92,
+  "pageHeight": 330.72,
+  "transform": [
+    4,
+    0,
+    0,
+    4,
+    0,
+    0
+  ]
+}

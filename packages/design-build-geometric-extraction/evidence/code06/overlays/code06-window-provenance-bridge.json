@@ -1,0 +1,5091 @@
+{
+  "generatedAt": "2026-07-29T07:36:14.127Z",
+  "stageBVersion": "FINAL_CORRECTION_v2",
+  "provenanceCanonicalHash": "40e1e78c04cd",
+  "bridgeHash": "41d75c3f2728",
+  "coordinateSpaces": {
+    "stageA": {
+      "ctm": [
+        0.75,
+        0,
+        0,
+        0.75,
+        0,
+        0
+      ]
+    },
+    "instrumentVectorOps": {
+      "ctm": [
+        0.75,
+        0,
+        0,
+        0.75,
+        -259,
+        -288
+      ]
+    },
+    "conversion": "instrument=stageA-[259,288]"
+  },
+  "topologyTolerances": {
+    "overlapTolerance": 5,
+    "zeroLengthThreshold": 0.5,
+    "largeEnvelopeWidth": 600,
+    "largeEnvelopeHeight": 300,
+    "parallelAngleMaxDeg": 5,
+    "parallelSpacingMinPx": 2,
+    "parallelSpacingMaxPx": 50,
+    "frameLineMinLengthPx": 3,
+    "gapEdgeMinLengthPx": 2,
+    "curveNeutralDefault": true
+  },
+  "appErrorClarification": {
+    "appWithErrors": "apps/editor",
+    "isCleanProductionApp": false,
+    "isFrozenLegacyApp": true,
+    "errorFiles": [
+      "src/v10/upgrade/v10-6-18.ts",
+      "../../pascal-vector-extractor/src/ffeCatalog.ts",
+      "../../pascal-vector-extractor/src/pdfFfePipeline.ts"
+    ],
+    "currentChangeSetDependencyImpact": "NONE — Stage B modifies only tools/connect-window-lineage.mjs (plain JS, no TS)",
+    "baselineClassification": "PRE_EXISTING_FAILURES — present before Stage A; not introduced by Stage A or Stage B",
+    "cleanProductionApp": "apps/design-build-editor"
+  },
+  "candidateBoundsDerivation": [
+    {
+      "priorBounds": [
+        210,
+        115,
+        255,
+        185
+      ],
+      "correctedBounds": [
+        210,
+        280,
+        255,
+        310
+      ],
+      "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+      "manualOverride": true,
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "automaticPromotionAllowed": false,
+      "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+      "derivationMethod": "handover-document-coordinates"
+    },
+    {
+      "priorBounds": [
+        305,
+        195,
+        350,
+        265
+      ],
+      "correctedBounds": [
+        305,
+        275,
+        350,
+        305
+      ],
+      "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+      "manualOverride": true,
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "automaticPromotionAllowed": false,
+      "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+      "derivationMethod": "handover-document-coordinates"
+    },
+    {
+      "priorBounds": [
+        157,
+        75,
+        213,
+        145
+      ],
+      "correctedBounds": [
+        160,
+        200,
+        210,
+        230
+      ],
+      "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+      "manualOverride": true,
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "automaticPromotionAllowed": false,
+      "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+      "derivationMethod": "handover-document-coordinates"
+    },
+    {
+      "priorBounds": [
+        417,
+        155,
+        473,
+        225
+      ],
+      "correctedBounds": [
+        420,
+        140,
+        470,
+        170
+      ],
+      "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+      "manualOverride": true,
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "automaticPromotionAllowed": false,
+      "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+      "derivationMethod": "handover-document-coordinates"
+    },
+    {
+      "priorBounds": [
+        0,
+        0,
+        55,
+        55
+      ],
+      "correctedBounds": [
+        500,
+        100,
+        560,
+        140
+      ],
+      "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+      "manualOverride": true,
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "automaticPromotionAllowed": false,
+      "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+      "derivationMethod": "handover-document-coordinates"
+    },
+    {
+      "priorBounds": [
+        0,
+        0,
+        105,
+        35
+      ],
+      "correctedBounds": [
+        350,
+        180,
+        400,
+        220
+      ],
+      "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+      "manualOverride": true,
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "automaticPromotionAllowed": false,
+      "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+      "derivationMethod": "handover-document-coordinates"
+    }
+  ],
+  "candidates": [
+    {
+      "candidateId": "win-provisional-1",
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "manualOverride": true,
+      "automaticPromotionAllowed": false,
+      "boundsCoordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE",
+      "candidateBoundsInstrument": [
+        210,
+        280,
+        255,
+        310
+      ],
+      "candidateBoundsStageA": [
+        469,
+        568,
+        514,
+        598
+      ],
+      "boundsDerivation": {
+        "priorBounds": [
+          210,
+          115,
+          255,
+          185
+        ],
+        "correctedBounds": [
+          210,
+          280,
+          255,
+          310
+        ],
+        "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+        "manualOverride": true,
+        "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+        "automaticPromotionAllowed": false,
+        "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+        "derivationMethod": "handover-document-coordinates"
+      },
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "overlappingOperationCount": 9,
+      "opsWithSegmentHits": 9,
+      "subpathLevelOnlyOps": 0,
+      "drawableSegmentHitCount": 9,
+      "operationAliasMap": [
+        {
+          "stageBOperationId": "op-6252-36c96257",
+          "stageACanonicalOperationId": "p0_op6252",
+          "operationIndex": 6252,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=374.16px"
+        },
+        {
+          "stageBOperationId": "op-6272-90cc7edf",
+          "stageACanonicalOperationId": "p0_op6272",
+          "operationIndex": 6272,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=478.80px"
+        },
+        {
+          "stageBOperationId": "op-6275-77b63a70",
+          "stageACanonicalOperationId": "p0_op6275",
+          "operationIndex": 6275,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=487.56px"
+        },
+        {
+          "stageBOperationId": "op-6276-b5277edd",
+          "stageACanonicalOperationId": "p0_op6276",
+          "operationIndex": 6276,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=487.56px"
+        },
+        {
+          "stageBOperationId": "op-6278-2b7c6e91",
+          "stageACanonicalOperationId": "p0_op6278",
+          "operationIndex": 6278,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=538.56px"
+        },
+        {
+          "stageBOperationId": "op-6281-c9bbeb27",
+          "stageACanonicalOperationId": "p0_op6281",
+          "operationIndex": 6281,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=487.56px"
+        },
+        {
+          "stageBOperationId": "op-26899-0302d025",
+          "stageACanonicalOperationId": "p0_op26899",
+          "operationIndex": 26899,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=208.44px"
+        },
+        {
+          "stageBOperationId": "op-26900-b0341f15",
+          "stageACanonicalOperationId": "p0_op26900",
+          "operationIndex": 26900,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=206.28px"
+        },
+        {
+          "stageBOperationId": "op-26901-0f340fdd",
+          "stageACanonicalOperationId": "p0_op26901",
+          "operationIndex": 26901,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=206.28px"
+        }
+      ],
+      "featureBridge": [
+        {
+          "featureId": "f-p0_op6252_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6252"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6252_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6252_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6252_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              476.1600036621094,
+              571.6799926757812,
+              476.1600036621094,
+              603.7200164794922
+            ],
+            "instrumentTransformedBounds": [
+              217.16000366210938,
+              283.67999267578125,
+              217.16000366210938,
+              315.7200164794922
+            ],
+            "lengthPx": 32.04
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6272_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6272"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6272_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6272_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6272_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              476.1600036621094,
+              544.1999816894531,
+              476.1600036621094,
+              569.6400146484375
+            ],
+            "instrumentTransformedBounds": [
+              217.16000366210938,
+              256.1999816894531,
+              217.16000366210938,
+              281.6400146484375
+            ],
+            "lengthPx": 25.44
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6275_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6275"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6275_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6275_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6275_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              476.1600036621094,
+              569.6400146484375,
+              476.1600036621094,
+              603.7200164794922
+            ],
+            "instrumentTransformedBounds": [
+              217.16000366210938,
+              281.6400146484375,
+              217.16000366210938,
+              315.7200164794922
+            ],
+            "lengthPx": 34.08
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6276_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6276"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6276_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6276_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6276_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              425.1600036621094,
+              569.6400146484375,
+              476.1600036621094,
+              569.6400146484375
+            ],
+            "instrumentTransformedBounds": [
+              166.16000366210938,
+              281.6400146484375,
+              217.16000366210938,
+              281.6400146484375
+            ],
+            "lengthPx": 51
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6278_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6278"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6278_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6278_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6278_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              425.1600036621094,
+              569.6400146484375,
+              476.1600036621094,
+              569.6400146484375
+            ],
+            "instrumentTransformedBounds": [
+              166.16000366210938,
+              281.6400146484375,
+              217.16000366210938,
+              281.6400146484375
+            ],
+            "lengthPx": 51
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6281_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6281"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6281_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6281_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6281_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              476.1600036621094,
+              569.6400146484375,
+              476.1600036621094,
+              603.7200164794922
+            ],
+            "instrumentTransformedBounds": [
+              217.16000366210938,
+              281.6400146484375,
+              217.16000366210938,
+              315.7200164794922
+            ],
+            "lengthPx": 34.08
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26899_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26899"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26899_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26899_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26899_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              505.4399871826172,
+              594.5999908447266,
+              513.9600219726562,
+              594.5999908447266
+            ],
+            "instrumentTransformedBounds": [
+              246.4399871826172,
+              306.59999084472656,
+              254.96002197265625,
+              306.59999084472656
+            ],
+            "lengthPx": 8.52
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26900_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26900"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26900_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26900_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26900_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              488.5199890136719,
+              594.5999908447266,
+              497.03997802734375,
+              594.5999908447266
+            ],
+            "instrumentTransformedBounds": [
+              229.51998901367188,
+              306.59999084472656,
+              238.03997802734375,
+              306.59999084472656
+            ],
+            "lengthPx": 8.52
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26901_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26901"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26901_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26901_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26901_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              471.4800109863281,
+              594.5999908447266,
+              480,
+              594.5999908447266
+            ],
+            "instrumentTransformedBounds": [
+              212.48001098632812,
+              306.59999084472656,
+              221,
+              306.59999084472656
+            ],
+            "lengthPx": 8.52
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        }
+      ],
+      "featureBridgeFullCount": 9,
+      "topologyClass": "PARALLEL_FRAME_LINES",
+      "topologyMetrics": {
+        "frameSegmentIds": [
+          "p0_op6252_s0_seg0",
+          "p0_op6272_s0_seg0",
+          "p0_op6275_s0_seg0",
+          "p0_op6276_s0_seg0",
+          "p0_op6278_s0_seg0",
+          "p0_op6281_s0_seg0",
+          "p0_op26899_s0_seg0",
+          "p0_op26900_s0_seg0",
+          "p0_op26901_s0_seg0"
+        ],
+        "qualifyingLineCount": 9,
+        "parallelPairCount": 10,
+        "parallelPairs": [
+          {
+            "segA": "p0_op6252_s0_seg0",
+            "segB": "p0_op6272_s0_seg0",
+            "angleDiffDeg": 0,
+            "spacingPx": 30.78,
+            "lenA": 32.04,
+            "lenB": 25.44
+          },
+          {
+            "segA": "p0_op6272_s0_seg0",
+            "segB": "p0_op6275_s0_seg0",
+            "angleDiffDeg": 0,
+            "spacingPx": 29.76,
+            "lenA": 25.44,
+            "lenB": 34.08
+          },
+          {
+            "segA": "p0_op6272_s0_seg0",
+            "segB": "p0_op6281_s0_seg0",
+            "angleDiffDeg": 0,
+            "spacingPx": 29.76,
+            "lenA": 25.44,
+            "lenB": 34.08
+          },
+          {
+            "segA": "p0_op6276_s0_seg0",
+            "segB": "p0_op26900_s0_seg0",
+            "angleDiffDeg": 0,
+            "spacingPx": 48.96,
+            "lenA": 51,
+            "lenB": 8.52
+          },
+          {
+            "segA": "p0_op6276_s0_seg0",
+            "segB": "p0_op26901_s0_seg0",
+            "angleDiffDeg": 0,
+            "spacingPx": 35.384,
+            "lenA": 51,
+            "lenB": 8.52
+          }
+        ],
+        "maximumAngleDifferenceDegrees": 0,
+        "averageSpacingPx": 32.691,
+        "tolerances": {
+          "angleMaxDeg": 5,
+          "spacingMinPx": 2,
+          "spacingMaxPx": 50,
+          "frameLineMinLengthPx": 3
+        },
+        "alignmentToHostWall": "REQUIRES_WALL_GEOMETRY",
+        "topologyConfidence": "HIGH",
+        "curveSegmentCount": 0,
+        "note": "Curves retained as CURVE_SEGMENT (neutral). Not classified as glazing without geometric evidence."
+      },
+      "physicalWallId": "physicalWall:4073",
+      "finiteWallInterval": {
+        "start": 215.3,
+        "end": 247.1
+      },
+      "hostIntervalValidation": {
+        "hasHost": true,
+        "hasInterval": true,
+        "intervalStart": 215.3,
+        "intervalEnd": 247.1,
+        "candidateXRange": [
+          210,
+          255
+        ],
+        "overlapFraction": 0.707,
+        "containedWithTolerance10px": true,
+        "verdict": "INTERVAL_LARGELY_CONTAINS_CANDIDATE"
+      },
+      "reviewerObservation": "VISIBLE_WINDOW",
+      "extractionVerdict": "REVIEW",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false
+    },
+    {
+      "candidateId": "win-provisional-2",
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "manualOverride": true,
+      "automaticPromotionAllowed": false,
+      "boundsCoordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE",
+      "candidateBoundsInstrument": [
+        305,
+        275,
+        350,
+        305
+      ],
+      "candidateBoundsStageA": [
+        564,
+        563,
+        609,
+        593
+      ],
+      "boundsDerivation": {
+        "priorBounds": [
+          305,
+          195,
+          350,
+          265
+        ],
+        "correctedBounds": [
+          305,
+          275,
+          350,
+          305
+        ],
+        "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+        "manualOverride": true,
+        "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+        "automaticPromotionAllowed": false,
+        "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+        "derivationMethod": "handover-document-coordinates"
+      },
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "overlappingOperationCount": 22,
+      "opsWithSegmentHits": 22,
+      "subpathLevelOnlyOps": 0,
+      "drawableSegmentHitCount": 22,
+      "operationAliasMap": [
+        {
+          "stageBOperationId": "op-6222-ecf35c8a",
+          "stageACanonicalOperationId": "p0_op6222",
+          "operationIndex": 6222,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=158.76px"
+        },
+        {
+          "stageBOperationId": "op-6234-0fe3dc57",
+          "stageACanonicalOperationId": "p0_op6234",
+          "operationIndex": 6234,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=263.28px"
+        },
+        {
+          "stageBOperationId": "op-6235-dfaf8600",
+          "stageACanonicalOperationId": "p0_op6235",
+          "operationIndex": 6235,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=263.28px"
+        },
+        {
+          "stageBOperationId": "op-6242-fe69e098",
+          "stageACanonicalOperationId": "p0_op6242",
+          "operationIndex": 6242,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=253.80px"
+        },
+        {
+          "stageBOperationId": "op-6245-e3c9d2c1",
+          "stageACanonicalOperationId": "p0_op6245",
+          "operationIndex": 6245,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=266.52px"
+        },
+        {
+          "stageBOperationId": "op-6246-8b320c87",
+          "stageACanonicalOperationId": "p0_op6246",
+          "operationIndex": 6246,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=317.52px"
+        },
+        {
+          "stageBOperationId": "op-6248-73207036",
+          "stageACanonicalOperationId": "p0_op6248",
+          "operationIndex": 6248,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=266.52px"
+        },
+        {
+          "stageBOperationId": "op-6251-5594c20f",
+          "stageACanonicalOperationId": "p0_op6251",
+          "operationIndex": 6251,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=215.52px"
+        },
+        {
+          "stageBOperationId": "op-26057-d864421e",
+          "stageACanonicalOperationId": "p0_op26057",
+          "operationIndex": 26057,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=626.76px"
+        },
+        {
+          "stageBOperationId": "op-26058-260689d4",
+          "stageACanonicalOperationId": "p0_op26058",
+          "operationIndex": 26058,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=371.76px"
+        },
+        {
+          "stageBOperationId": "op-26059-5b736835",
+          "stageACanonicalOperationId": "p0_op26059",
+          "operationIndex": 26059,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=360.48px"
+        },
+        {
+          "stageBOperationId": "op-26894-f884d043",
+          "stageACanonicalOperationId": "p0_op26894",
+          "operationIndex": 26894,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=278.64px"
+        },
+        {
+          "stageBOperationId": "op-26895-2437750c",
+          "stageACanonicalOperationId": "p0_op26895",
+          "operationIndex": 26895,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=264.60px"
+        },
+        {
+          "stageBOperationId": "op-26896-6b06e81b",
+          "stageACanonicalOperationId": "p0_op26896",
+          "operationIndex": 26896,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=247.68px"
+        },
+        {
+          "stageBOperationId": "op-26935-ab3aee21",
+          "stageACanonicalOperationId": "p0_op26935",
+          "operationIndex": 26935,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=357.24px"
+        },
+        {
+          "stageBOperationId": "op-26936-8ab757d4",
+          "stageACanonicalOperationId": "p0_op26936",
+          "operationIndex": 26936,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=358.44px"
+        },
+        {
+          "stageBOperationId": "op-26937-35f0ea8a",
+          "stageACanonicalOperationId": "p0_op26937",
+          "operationIndex": 26937,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=358.92px"
+        },
+        {
+          "stageBOperationId": "op-27146-b3d32607",
+          "stageACanonicalOperationId": "p0_op27146",
+          "operationIndex": 27146,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=1167.84px"
+        },
+        {
+          "stageBOperationId": "op-27151-0e2ebda7",
+          "stageACanonicalOperationId": "p0_op27151",
+          "operationIndex": 27151,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=60.96px"
+        },
+        {
+          "stageBOperationId": "op-27152-b97a0fa3",
+          "stageACanonicalOperationId": "p0_op27152",
+          "operationIndex": 27152,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=58.80px"
+        },
+        {
+          "stageBOperationId": "op-27153-f708c5df",
+          "stageACanonicalOperationId": "p0_op27153",
+          "operationIndex": 27153,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=378.48px"
+        },
+        {
+          "stageBOperationId": "op-27154-b22d7d86",
+          "stageACanonicalOperationId": "p0_op27154",
+          "operationIndex": 27154,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=368.64px"
+        }
+      ],
+      "featureBridge": [
+        {
+          "featureId": "f-p0_op6222_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6222"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6222_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6222_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6222_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              583.8000183105469,
+              571.6799926757812,
+              583.8000183105469,
+              603.7200164794922
+            ],
+            "instrumentTransformedBounds": [
+              324.8000183105469,
+              283.67999267578125,
+              324.8000183105469,
+              315.7200164794922
+            ],
+            "lengthPx": 32.04
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6234_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6234"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6234_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6234_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6234_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              558.7200164794922,
+              561,
+              559.9199981689453,
+              565.1999816894531
+            ],
+            "instrumentTransformedBounds": [
+              299.7200164794922,
+              273,
+              300.9199981689453,
+              277.1999816894531
+            ],
+            "lengthPx": 4.368
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6235_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6235"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6235_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6235_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6235_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              559.9199981689453,
+              556.9199981689453,
+              561.7200164794922,
+              561
+            ],
+            "instrumentTransformedBounds": [
+              300.9199981689453,
+              268.9199981689453,
+              302.7200164794922,
+              273
+            ],
+            "lengthPx": 4.459
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6242_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6242"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6242_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6242_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6242_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              583.8000183105469,
+              544.1999816894531,
+              583.8000183105469,
+              569.6400146484375
+            ],
+            "instrumentTransformedBounds": [
+              324.8000183105469,
+              256.1999816894531,
+              324.8000183105469,
+              281.6400146484375
+            ],
+            "lengthPx": 25.44
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6245_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6245"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6245_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6245_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6245_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              583.8000183105469,
+              569.6400146484375,
+              583.8000183105469,
+              603.7200164794922
+            ],
+            "instrumentTransformedBounds": [
+              324.8000183105469,
+              281.6400146484375,
+              324.8000183105469,
+              315.7200164794922
+            ],
+            "lengthPx": 34.08
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6246_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6246"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6246_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6246_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6246_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              532.8000183105469,
+              569.6400146484375,
+              583.8000183105469,
+              569.6400146484375
+            ],
+            "instrumentTransformedBounds": [
+              273.8000183105469,
+              281.6400146484375,
+              324.8000183105469,
+              281.6400146484375
+            ],
+            "lengthPx": 51
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6248_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6248"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6248_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6248_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6248_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              532.8000183105469,
+              569.6400146484375,
+              583.8000183105469,
+              569.6400146484375
+            ],
+            "instrumentTransformedBounds": [
+              273.8000183105469,
+              281.6400146484375,
+              324.8000183105469,
+              281.6400146484375
+            ],
+            "lengthPx": 51
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6251_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6251"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6251_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6251_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6251_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              583.8000183105469,
+              569.6400146484375,
+              583.8000183105469,
+              603.7200164794922
+            ],
+            "instrumentTransformedBounds": [
+              324.8000183105469,
+              281.6400146484375,
+              324.8000183105469,
+              315.7200164794922
+            ],
+            "lengthPx": 34.08
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26057_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26057"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26057_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26057_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26057_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              589.5600128173828,
+              538.1999816894531,
+              589.5600128173828,
+              572.2799835205078
+            ],
+            "instrumentTransformedBounds": [
+              330.5600128173828,
+              250.19998168945312,
+              330.5600128173828,
+              284.2799835205078
+            ],
+            "lengthPx": 34.08
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26058_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26058"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26058_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26058_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26058_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              589.5600128173828,
+              580.6799926757812,
+              589.5600128173828,
+              589.1999816894531
+            ],
+            "instrumentTransformedBounds": [
+              330.5600128173828,
+              292.67999267578125,
+              330.5600128173828,
+              301.1999816894531
+            ],
+            "lengthPx": 8.52
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26059_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26059"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26059_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26059_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26059_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              589.5600128173828,
+              597.7200164794922,
+              589.5600128173828,
+              631.8000183105469
+            ],
+            "instrumentTransformedBounds": [
+              330.5600128173828,
+              309.7200164794922,
+              330.5600128173828,
+              343.8000183105469
+            ],
+            "lengthPx": 34.08
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26894_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26894"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26894_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26894_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26894_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              590.5199890136719,
+              594.5999908447266,
+              598.1999816894531,
+              594.5999908447266
+            ],
+            "instrumentTransformedBounds": [
+              331.5199890136719,
+              306.59999084472656,
+              339.1999816894531,
+              306.59999084472656
+            ],
+            "lengthPx": 7.68
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26895_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26895"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26895_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26895_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26895_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              573.4800109863281,
+              594.5999908447266,
+              582,
+              594.5999908447266
+            ],
+            "instrumentTransformedBounds": [
+              314.4800109863281,
+              306.59999084472656,
+              323,
+              306.59999084472656
+            ],
+            "lengthPx": 8.52
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26896_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26896"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26896_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26896_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26896_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              556.5600128173828,
+              594.5999908447266,
+              565.0800018310547,
+              594.5999908447266
+            ],
+            "instrumentTransformedBounds": [
+              297.5600128173828,
+              306.59999084472656,
+              306.0800018310547,
+              306.59999084472656
+            ],
+            "lengthPx": 8.52
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26935_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26935"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26935_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26935_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26935_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              603.2400054931641,
+              596.2799835205078,
+              605.0399780273438,
+              598.0800018310547
+            ],
+            "instrumentTransformedBounds": [
+              344.24000549316406,
+              308.2799835205078,
+              346.03997802734375,
+              310.0800018310547
+            ],
+            "lengthPx": 2.546
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26936_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26936"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26936_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26936_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26936_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              600.8399963378906,
+              595.0800018310547,
+              603.2400054931641,
+              596.2799835205078
+            ],
+            "instrumentTransformedBounds": [
+              341.8399963378906,
+              307.0800018310547,
+              344.24000549316406,
+              308.2799835205078
+            ],
+            "lengthPx": 2.683
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26937_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26937"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26937_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26937_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26937_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              598.1999816894531,
+              594.5999908447266,
+              600.8399963378906,
+              595.0800018310547
+            ],
+            "instrumentTransformedBounds": [
+              339.1999816894531,
+              306.59999084472656,
+              341.8399963378906,
+              307.0800018310547
+            ],
+            "lengthPx": 2.683
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op27146_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op27146"
+          ],
+          "sourceSubpathIds": [
+            "p0_op27146_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op27146_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op27146_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              589.5600128173828,
+              591.7200164794922,
+              623.5199890136719,
+              591.7200164794922
+            ],
+            "instrumentTransformedBounds": [
+              330.5600128173828,
+              303.7200164794922,
+              364.5199890136719,
+              303.7200164794922
+            ],
+            "lengthPx": 33.96
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op27151_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op27151"
+          ],
+          "sourceSubpathIds": [
+            "p0_op27151_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op27151_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op27151_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              593.0399780273438,
+              591.7200164794922,
+              595.1999816894531,
+              593.8800201416016
+            ],
+            "instrumentTransformedBounds": [
+              334.03997802734375,
+              303.7200164794922,
+              336.1999816894531,
+              305.88002014160156
+            ],
+            "lengthPx": 3.055
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op27152_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op27152"
+          ],
+          "sourceSubpathIds": [
+            "p0_op27152_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op27152_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op27152_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              595.1999816894531,
+              589.6799926757812,
+              597.3599853515625,
+              591.7200164794922
+            ],
+            "instrumentTransformedBounds": [
+              336.1999816894531,
+              301.67999267578125,
+              338.3599853515625,
+              303.7200164794922
+            ],
+            "lengthPx": 2.971
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        }
+      ],
+      "featureBridgeFullCount": 22,
+      "topologyClass": "PARALLEL_FRAME_LINES",
+      "topologyMetrics": {
+        "frameSegmentIds": [
+          "p0_op6222_s0_seg0",
+          "p0_op6234_s0_seg0",
+          "p0_op6235_s0_seg0",
+          "p0_op6242_s0_seg0",
+          "p0_op6245_s0_seg0",
+          "p0_op6246_s0_seg0",
+          "p0_op6248_s0_seg0",
+          "p0_op6251_s0_seg0",
+          "p0_op26057_s0_seg0",
+          "p0_op26058_s0_seg0",
+          "p0_op26059_s0_seg0",
+          "p0_op26894_s0_seg0",
+          "p0_op26895_s0_seg0",
+          "p0_op26896_s0_seg0",
+          "p0_op27146_s0_seg0",
+          "p0_op27151_s0_seg0",
+          "p0_op27153_s0_seg0",
+          "p0_op27154_s0_seg0"
+        ],
+        "qualifyingLineCount": 18,
+        "parallelPairCount": 43,
+        "parallelPairs": [
+          {
+            "segA": "p0_op6222_s0_seg0",
+            "segB": "p0_op6242_s0_seg0",
+            "angleDiffDeg": 0,
+            "spacingPx": 30.78,
+            "lenA": 32.04,
+            "lenB": 25.44
+          },
+          {
+            "segA": "p0_op6222_s0_seg0",
+            "segB": "p0_op26057_s0_seg0",
+            "angleDiffDeg": 0,
+            "spacingPx": 32.967,
+            "lenA": 32.04,
+            "lenB": 34.08
+          },
+          {
+            "segA": "p0_op6222_s0_seg0",
+            "segB": "p0_op26058_s0_seg0",
+            "angleDiffDeg": 0,
+            "spacingPx": 6.387,
+            "lenA": 32.04,
+            "lenB": 8.52
+          },
+          {
+            "segA": "p0_op6222_s0_seg0",
+            "segB": "p0_op26059_s0_seg0",
+            "angleDiffDeg": 0,
+            "spacingPx": 27.666,
+            "lenA": 32.04,
+            "lenB": 34.08
+          },
+          {
+            "segA": "p0_op6222_s0_seg0",
+            "segB": "p0_op27153_s0_seg0",
+            "angleDiffDeg": 0,
+            "spacingPx": 11.463,
+            "lenA": 32.04,
+            "lenB": 5.64
+          }
+        ],
+        "maximumAngleDifferenceDegrees": 0,
+        "averageSpacingPx": 24.056,
+        "tolerances": {
+          "angleMaxDeg": 5,
+          "spacingMinPx": 2,
+          "spacingMaxPx": 50,
+          "frameLineMinLengthPx": 3
+        },
+        "alignmentToHostWall": "REQUIRES_WALL_GEOMETRY",
+        "topologyConfidence": "HIGH",
+        "curveSegmentCount": 0,
+        "note": "Curves retained as CURVE_SEGMENT (neutral). Not classified as glazing without geometric evidence."
+      },
+      "physicalWallId": "physicalWall:4119",
+      "finiteWallInterval": {
+        "start": 310,
+        "end": 341.8
+      },
+      "hostIntervalValidation": {
+        "hasHost": true,
+        "hasInterval": true,
+        "intervalStart": 310,
+        "intervalEnd": 341.8,
+        "candidateXRange": [
+          305,
+          350
+        ],
+        "overlapFraction": 0.707,
+        "containedWithTolerance10px": true,
+        "verdict": "INTERVAL_LARGELY_CONTAINS_CANDIDATE"
+      },
+      "reviewerObservation": "VISIBLE_WINDOW",
+      "extractionVerdict": "REVIEW",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false
+    },
+    {
+      "candidateId": "win-provisional-3",
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "manualOverride": true,
+      "automaticPromotionAllowed": false,
+      "boundsCoordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE",
+      "candidateBoundsInstrument": [
+        160,
+        200,
+        210,
+        230
+      ],
+      "candidateBoundsStageA": [
+        419,
+        488,
+        469,
+        518
+      ],
+      "boundsDerivation": {
+        "priorBounds": [
+          157,
+          75,
+          213,
+          145
+        ],
+        "correctedBounds": [
+          160,
+          200,
+          210,
+          230
+        ],
+        "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+        "manualOverride": true,
+        "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+        "automaticPromotionAllowed": false,
+        "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+        "derivationMethod": "handover-document-coordinates"
+      },
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "overlappingOperationCount": 19,
+      "opsWithSegmentHits": 19,
+      "subpathLevelOnlyOps": 0,
+      "drawableSegmentHitCount": 19,
+      "operationAliasMap": [
+        {
+          "stageBOperationId": "op-3100-54914414",
+          "stageACanonicalOperationId": "p0_op3100",
+          "operationIndex": 3100,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=1072.80px"
+        },
+        {
+          "stageBOperationId": "op-3101-cbb6ec44",
+          "stageACanonicalOperationId": "p0_op3101",
+          "operationIndex": 3101,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "type-mismatch"
+        },
+        {
+          "stageBOperationId": "op-3106-a0bbf786",
+          "stageACanonicalOperationId": "p0_op3106",
+          "operationIndex": 3106,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=1072.80px"
+        },
+        {
+          "stageBOperationId": "op-6320-b5931d3d",
+          "stageACanonicalOperationId": "p0_op6320",
+          "operationIndex": 6320,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=48.60px"
+        },
+        {
+          "stageBOperationId": "op-6322-7b7cdb0c",
+          "stageACanonicalOperationId": "p0_op6322",
+          "operationIndex": 6322,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=165.00px"
+        },
+        {
+          "stageBOperationId": "op-6323-0ed0a26c",
+          "stageACanonicalOperationId": "p0_op6323",
+          "operationIndex": 6323,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=61.56px"
+        },
+        {
+          "stageBOperationId": "op-25000-6ea83a26",
+          "stageACanonicalOperationId": "p0_op25000",
+          "operationIndex": 25000,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=409.56px"
+        },
+        {
+          "stageBOperationId": "op-25001-4b4c29de",
+          "stageACanonicalOperationId": "p0_op25001",
+          "operationIndex": 25001,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=296.28px"
+        },
+        {
+          "stageBOperationId": "op-25002-32a8426c",
+          "stageACanonicalOperationId": "p0_op25002",
+          "operationIndex": 25002,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=401.04px"
+        },
+        {
+          "stageBOperationId": "op-26815-dab37c6f",
+          "stageACanonicalOperationId": "p0_op26815",
+          "operationIndex": 26815,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=678.60px"
+        },
+        {
+          "stageBOperationId": "op-26816-73e01fea",
+          "stageACanonicalOperationId": "p0_op26816",
+          "operationIndex": 26816,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=759.72px"
+        },
+        {
+          "stageBOperationId": "op-26817-ecb329bb",
+          "stageACanonicalOperationId": "p0_op26817",
+          "operationIndex": 26817,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=751.92px"
+        },
+        {
+          "stageBOperationId": "op-26818-8f620ee3",
+          "stageACanonicalOperationId": "p0_op26818",
+          "operationIndex": 26818,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=756.24px"
+        },
+        {
+          "stageBOperationId": "op-26819-e4866383",
+          "stageACanonicalOperationId": "p0_op26819",
+          "operationIndex": 26819,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=754.08px"
+        },
+        {
+          "stageBOperationId": "op-27508-44a21cb3",
+          "stageACanonicalOperationId": "p0_op27508",
+          "operationIndex": 27508,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=555.60px"
+        },
+        {
+          "stageBOperationId": "op-27513-6d6c1bfc",
+          "stageACanonicalOperationId": "p0_op27513",
+          "operationIndex": 27513,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=666.24px"
+        },
+        {
+          "stageBOperationId": "op-27514-847b9a3e",
+          "stageACanonicalOperationId": "p0_op27514",
+          "operationIndex": 27514,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=662.04px"
+        },
+        {
+          "stageBOperationId": "op-27515-5971794d",
+          "stageACanonicalOperationId": "p0_op27515",
+          "operationIndex": 27515,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=669.72px"
+        },
+        {
+          "stageBOperationId": "op-27516-5bba8a92",
+          "stageACanonicalOperationId": "p0_op27516",
+          "operationIndex": 27516,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=664.08px"
+        }
+      ],
+      "featureBridge": [
+        {
+          "featureId": "f-p0_op3100_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3100"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3100_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3100_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3100_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              421.1999816894531,
+              496.8000183105469,
+              422.1600036621094,
+              496.8000183105469
+            ],
+            "instrumentTransformedBounds": [
+              162.19998168945312,
+              208.80001831054688,
+              163.16000366210938,
+              208.80001831054688
+            ],
+            "lengthPx": 0.96
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op3101_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3101"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3101_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3101_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3101_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              421.1999816894531,
+              484.1999816894531,
+              421.67999267578125,
+              485.03997802734375
+            ],
+            "instrumentTransformedBounds": [
+              162.19998168945312,
+              196.19998168945312,
+              162.67999267578125,
+              197.03997802734375
+            ],
+            "lengthPx": 0.967
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op3106_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3106"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3106_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3106_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3106_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              421.4399871826172,
+              495.8399963378906,
+              421.9199981689453,
+              496.67999267578125
+            ],
+            "instrumentTransformedBounds": [
+              162.4399871826172,
+              207.83999633789062,
+              162.9199981689453,
+              208.67999267578125
+            ],
+            "lengthPx": 0.967
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6320_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6320"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6320_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6320_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6320_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              425.1600036621094,
+              501.59999084472656,
+              476.1600036621094,
+              501.59999084472656
+            ],
+            "instrumentTransformedBounds": [
+              166.16000366210938,
+              213.59999084472656,
+              217.16000366210938,
+              213.59999084472656
+            ],
+            "lengthPx": 51
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6322_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6322"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6322_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6322_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6322_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              425.1600036621094,
+              388.32000732421875,
+              425.1600036621094,
+              501.59999084472656
+            ],
+            "instrumentTransformedBounds": [
+              166.16000366210938,
+              100.32000732421875,
+              166.16000366210938,
+              213.59999084472656
+            ],
+            "lengthPx": 113.28
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op6323_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op6323"
+          ],
+          "sourceSubpathIds": [
+            "p0_op6323_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op6323_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op6323_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              425.1600036621094,
+              499.4399871826172,
+              476.1600036621094,
+              499.4399871826172
+            ],
+            "instrumentTransformedBounds": [
+              166.16000366210938,
+              211.4399871826172,
+              217.16000366210938,
+              211.4399871826172
+            ],
+            "lengthPx": 51
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op25000_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op25000"
+          ],
+          "sourceSubpathIds": [
+            "p0_op25000_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op25000_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op25000_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              419.40000915527344,
+              388.32000732421875,
+              419.40000915527344,
+              501.59999084472656
+            ],
+            "instrumentTransformedBounds": [
+              160.40000915527344,
+              100.32000732421875,
+              160.40000915527344,
+              213.59999084472656
+            ],
+            "lengthPx": 113.28
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op25001_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op25001"
+          ],
+          "sourceSubpathIds": [
+            "p0_op25001_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op25001_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op25001_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              419.40000915527344,
+              501.59999084472656,
+              425.1600036621094,
+              501.59999084472656
+            ],
+            "instrumentTransformedBounds": [
+              160.40000915527344,
+              213.59999084472656,
+              166.16000366210938,
+              213.59999084472656
+            ],
+            "lengthPx": 5.76
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op25002_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op25002"
+          ],
+          "sourceSubpathIds": [
+            "p0_op25002_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op25002_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op25002_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              425.1600036621094,
+              388.32000732421875,
+              425.1600036621094,
+              501.59999084472656
+            ],
+            "instrumentTransformedBounds": [
+              166.16000366210938,
+              100.32000732421875,
+              166.16000366210938,
+              213.59999084472656
+            ],
+            "lengthPx": 113.28
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26815_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26815"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26815_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26815_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26815_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              311.75999450683594,
+              517.6799926757812,
+              425.1600036621094,
+              517.6799926757812
+            ],
+            "instrumentTransformedBounds": [
+              52.75999450683594,
+              229.67999267578125,
+              166.16000366210938,
+              229.67999267578125
+            ],
+            "lengthPx": 113.4
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26816_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26816"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26816_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26816_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26816_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              417.3599853515625,
+              517.6799926757812,
+              419.40000915527344,
+              519.7200164794922
+            ],
+            "instrumentTransformedBounds": [
+              158.3599853515625,
+              229.67999267578125,
+              160.40000915527344,
+              231.7200164794922
+            ],
+            "lengthPx": 2.885
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26817_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26817"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26817_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26817_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26817_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              419.40000915527344,
+              515.5199890136719,
+              421.5600128173828,
+              517.6799926757812
+            ],
+            "instrumentTransformedBounds": [
+              160.40000915527344,
+              227.51998901367188,
+              162.5600128173828,
+              229.67999267578125
+            ],
+            "lengthPx": 3.055
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26818_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26818"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26818_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26818_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26818_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              419.40000915527344,
+              517.6799926757812,
+              419.40000915527344,
+              523.3200073242188
+            ],
+            "instrumentTransformedBounds": [
+              160.40000915527344,
+              229.67999267578125,
+              160.40000915527344,
+              235.32000732421875
+            ],
+            "lengthPx": 5.64
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op26819_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op26819"
+          ],
+          "sourceSubpathIds": [
+            "p0_op26819_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op26819_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op26819_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              419.40000915527344,
+              511.9199981689453,
+              419.40000915527344,
+              517.6799926757812
+            ],
+            "instrumentTransformedBounds": [
+              160.40000915527344,
+              223.9199981689453,
+              160.40000915527344,
+              229.67999267578125
+            ],
+            "lengthPx": 5.76
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op27508_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op27508"
+          ],
+          "sourceSubpathIds": [
+            "p0_op27508_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op27508_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op27508_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              419.40000915527344,
+              517.6799926757812,
+              532.8000183105469,
+              517.6799926757812
+            ],
+            "instrumentTransformedBounds": [
+              160.40000915527344,
+              229.67999267578125,
+              273.8000183105469,
+              229.67999267578125
+            ],
+            "lengthPx": 113.4
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op27513_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op27513"
+          ],
+          "sourceSubpathIds": [
+            "p0_op27513_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op27513_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op27513_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              423,
+              517.6799926757812,
+              425.1600036621094,
+              519.7200164794922
+            ],
+            "instrumentTransformedBounds": [
+              164,
+              229.67999267578125,
+              166.16000366210938,
+              231.7200164794922
+            ],
+            "lengthPx": 2.971
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op27514_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op27514"
+          ],
+          "sourceSubpathIds": [
+            "p0_op27514_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op27514_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op27514_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              425.1600036621094,
+              515.5199890136719,
+              427.1999816894531,
+              517.6799926757812
+            ],
+            "instrumentTransformedBounds": [
+              166.16000366210938,
+              227.51998901367188,
+              168.19998168945312,
+              229.67999267578125
+            ],
+            "lengthPx": 2.971
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op27515_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op27515"
+          ],
+          "sourceSubpathIds": [
+            "p0_op27515_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op27515_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op27515_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              425.1600036621094,
+              517.6799926757812,
+              425.1600036621094,
+              523.3200073242188
+            ],
+            "instrumentTransformedBounds": [
+              166.16000366210938,
+              229.67999267578125,
+              166.16000366210938,
+              235.32000732421875
+            ],
+            "lengthPx": 5.64
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op27516_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op27516"
+          ],
+          "sourceSubpathIds": [
+            "p0_op27516_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op27516_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op27516_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              425.1600036621094,
+              511.9199981689453,
+              425.1600036621094,
+              517.6799926757812
+            ],
+            "instrumentTransformedBounds": [
+              166.16000366210938,
+              223.9199981689453,
+              166.16000366210938,
+              229.67999267578125
+            ],
+            "lengthPx": 5.76
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        }
+      ],
+      "featureBridgeFullCount": 19,
+      "topologyClass": "WALL_GAP_WITH_GLAZING",
+      "topologyMetrics": {
+        "leftWallEdgeSegmentIds": [
+          "p0_op6322_s0_seg0",
+          "p0_op25000_s0_seg0",
+          "p0_op25001_s0_seg0",
+          "p0_op25002_s0_seg0",
+          "p0_op26815_s0_seg0",
+          "p0_op26816_s0_seg0",
+          "p0_op26817_s0_seg0",
+          "p0_op26818_s0_seg0",
+          "p0_op26819_s0_seg0",
+          "p0_op27513_s0_seg0",
+          "p0_op27514_s0_seg0",
+          "p0_op27515_s0_seg0",
+          "p0_op27516_s0_seg0"
+        ],
+        "rightWallEdgeSegmentIds": [
+          "p0_op6320_s0_seg0",
+          "p0_op6323_s0_seg0",
+          "p0_op27508_s0_seg0"
+        ],
+        "totalEdgeLineCount": 16,
+        "gapWidth": -7.8,
+        "glazingSegmentIds": [],
+        "doorLikeSegmentIds": [],
+        "curveNeutralDefault": true,
+        "tolerances": {
+          "gapEdgeMinLengthPx": 2
+        },
+        "alignmentToHostWall": "REQUIRES_WALL_GEOMETRY",
+        "topologyConfidence": "LOW",
+        "note": "Curves are neutral (CURVE_SEGMENT). Glazing not inferred without additional geometric/style evidence."
+      },
+      "physicalWallId": "physicalWall:3980",
+      "finiteWallInterval": {
+        "start": 162,
+        "end": 208
+      },
+      "hostIntervalValidation": {
+        "hasHost": true,
+        "hasInterval": true,
+        "intervalStart": 162,
+        "intervalEnd": 208,
+        "candidateXRange": [
+          160,
+          210
+        ],
+        "overlapFraction": 0.92,
+        "containedWithTolerance10px": true,
+        "verdict": "INTERVAL_LARGELY_CONTAINS_CANDIDATE"
+      },
+      "reviewerObservation": "LIKELY_WINDOW",
+      "extractionVerdict": "REVIEW",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false
+    },
+    {
+      "candidateId": "win-provisional-4",
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "manualOverride": true,
+      "automaticPromotionAllowed": false,
+      "boundsCoordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE",
+      "candidateBoundsInstrument": [
+        420,
+        140,
+        470,
+        170
+      ],
+      "candidateBoundsStageA": [
+        679,
+        428,
+        729,
+        458
+      ],
+      "boundsDerivation": {
+        "priorBounds": [
+          417,
+          155,
+          473,
+          225
+        ],
+        "correctedBounds": [
+          420,
+          140,
+          470,
+          170
+        ],
+        "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+        "manualOverride": true,
+        "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+        "automaticPromotionAllowed": false,
+        "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+        "derivationMethod": "handover-document-coordinates"
+      },
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "overlappingOperationCount": 1,
+      "opsWithSegmentHits": 1,
+      "subpathLevelOnlyOps": 0,
+      "drawableSegmentHitCount": 1,
+      "operationAliasMap": [
+        {
+          "stageBOperationId": "op-25818-6ba90315",
+          "stageACanonicalOperationId": "p0_op25818",
+          "operationIndex": 25818,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=473.40px"
+        }
+      ],
+      "featureBridge": [
+        {
+          "featureId": "f-p0_op25818_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op25818"
+          ],
+          "sourceSubpathIds": [
+            "p0_op25818_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op25818_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op25818_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              691.5600128173828,
+              388.32000732421875,
+              691.5600128173828,
+              501.59999084472656
+            ],
+            "instrumentTransformedBounds": [
+              432.5600128173828,
+              100.32000732421875,
+              432.5600128173828,
+              213.59999084472656
+            ],
+            "lengthPx": 113.28
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        }
+      ],
+      "featureBridgeFullCount": 1,
+      "topologyClass": "WALL_GAP_WITH_GLAZING",
+      "topologyMetrics": {
+        "leftWallEdgeSegmentIds": [
+          "p0_op25818_s0_seg0"
+        ],
+        "rightWallEdgeSegmentIds": [],
+        "totalEdgeLineCount": 1,
+        "gapWidth": null,
+        "glazingSegmentIds": [],
+        "doorLikeSegmentIds": [],
+        "curveNeutralDefault": true,
+        "tolerances": {
+          "gapEdgeMinLengthPx": 2
+        },
+        "alignmentToHostWall": "REQUIRES_WALL_GEOMETRY",
+        "topologyConfidence": "LOW",
+        "note": "Curves are neutral (CURVE_SEGMENT). Glazing not inferred without additional geometric/style evidence."
+      },
+      "physicalWallId": "physicalWall:4150",
+      "finiteWallInterval": {
+        "start": 422,
+        "end": 468
+      },
+      "hostIntervalValidation": {
+        "hasHost": true,
+        "hasInterval": true,
+        "intervalStart": 422,
+        "intervalEnd": 468,
+        "candidateXRange": [
+          420,
+          470
+        ],
+        "overlapFraction": 0.92,
+        "containedWithTolerance10px": true,
+        "verdict": "INTERVAL_LARGELY_CONTAINS_CANDIDATE"
+      },
+      "reviewerObservation": "LIKELY_WINDOW",
+      "extractionVerdict": "REVIEW",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false
+    },
+    {
+      "candidateId": "win-provisional-5",
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "manualOverride": true,
+      "automaticPromotionAllowed": false,
+      "boundsCoordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE",
+      "candidateBoundsInstrument": [
+        500,
+        100,
+        560,
+        140
+      ],
+      "candidateBoundsStageA": [
+        759,
+        388,
+        819,
+        428
+      ],
+      "boundsDerivation": {
+        "priorBounds": [
+          0,
+          0,
+          55,
+          55
+        ],
+        "correctedBounds": [
+          500,
+          100,
+          560,
+          140
+        ],
+        "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+        "manualOverride": true,
+        "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+        "automaticPromotionAllowed": false,
+        "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+        "derivationMethod": "handover-document-coordinates"
+      },
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "ALL_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "overlappingOperationCount": 49,
+      "opsWithSegmentHits": 49,
+      "subpathLevelOnlyOps": 0,
+      "drawableSegmentHitCount": 49,
+      "operationAliasMap": [
+        {
+          "stageBOperationId": "op-296-fdf81aef",
+          "stageACanonicalOperationId": "p0_op296",
+          "operationIndex": 296,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=380.88px"
+        },
+        {
+          "stageBOperationId": "op-297-a1baddba",
+          "stageACanonicalOperationId": "p0_op297",
+          "operationIndex": 297,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=380.88px"
+        },
+        {
+          "stageBOperationId": "op-298-ec6aa1e7",
+          "stageACanonicalOperationId": "p0_op298",
+          "operationIndex": 298,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=380.88px"
+        },
+        {
+          "stageBOperationId": "op-299-a4c20ccd",
+          "stageACanonicalOperationId": "p0_op299",
+          "operationIndex": 299,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=380.76px"
+        },
+        {
+          "stageBOperationId": "op-302-31c5c53b",
+          "stageACanonicalOperationId": "p0_op302",
+          "operationIndex": 302,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=379.80px"
+        },
+        {
+          "stageBOperationId": "op-303-606cf350",
+          "stageACanonicalOperationId": "p0_op303",
+          "operationIndex": 303,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=376.92px"
+        },
+        {
+          "stageBOperationId": "op-304-6118cce6",
+          "stageACanonicalOperationId": "p0_op304",
+          "operationIndex": 304,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=376.80px"
+        },
+        {
+          "stageBOperationId": "op-305-b1f0ecd7",
+          "stageACanonicalOperationId": "p0_op305",
+          "operationIndex": 305,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=376.80px"
+        },
+        {
+          "stageBOperationId": "op-306-4f3f1b17",
+          "stageACanonicalOperationId": "p0_op306",
+          "operationIndex": 306,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=376.80px"
+        },
+        {
+          "stageBOperationId": "op-307-4fbbfdf7",
+          "stageACanonicalOperationId": "p0_op307",
+          "operationIndex": 307,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=376.80px"
+        },
+        {
+          "stageBOperationId": "op-308-28455932",
+          "stageACanonicalOperationId": "p0_op308",
+          "operationIndex": 308,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=376.92px"
+        },
+        {
+          "stageBOperationId": "op-309-c21f56ed",
+          "stageACanonicalOperationId": "p0_op309",
+          "operationIndex": 309,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=376.80px"
+        },
+        {
+          "stageBOperationId": "op-310-bb7b711c",
+          "stageACanonicalOperationId": "p0_op310",
+          "operationIndex": 310,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=376.80px"
+        },
+        {
+          "stageBOperationId": "op-311-20f20c4b",
+          "stageACanonicalOperationId": "p0_op311",
+          "operationIndex": 311,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=376.80px"
+        },
+        {
+          "stageBOperationId": "op-3566-c0d1cf63",
+          "stageACanonicalOperationId": "p0_op3566",
+          "operationIndex": 3566,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=325.68px"
+        },
+        {
+          "stageBOperationId": "op-3567-173762a0",
+          "stageACanonicalOperationId": "p0_op3567",
+          "operationIndex": 3567,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=267.36px"
+        },
+        {
+          "stageBOperationId": "op-3570-cadadf1b",
+          "stageACanonicalOperationId": "p0_op3570",
+          "operationIndex": 3570,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=234.00px"
+        },
+        {
+          "stageBOperationId": "op-3573-08d022b6",
+          "stageACanonicalOperationId": "p0_op3573",
+          "operationIndex": 3573,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=257.40px"
+        },
+        {
+          "stageBOperationId": "op-3578-68cff5d0",
+          "stageACanonicalOperationId": "p0_op3578",
+          "operationIndex": 3578,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=300.12px"
+        },
+        {
+          "stageBOperationId": "op-12241-bbf3e9b0",
+          "stageACanonicalOperationId": "p0_op12241",
+          "operationIndex": 12241,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=903.24px"
+        },
+        {
+          "stageBOperationId": "op-12242-67b8f927",
+          "stageACanonicalOperationId": "p0_op12242",
+          "operationIndex": 12242,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=870.84px"
+        },
+        {
+          "stageBOperationId": "op-12243-1bece446",
+          "stageACanonicalOperationId": "p0_op12243",
+          "operationIndex": 12243,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=904.92px"
+        },
+        {
+          "stageBOperationId": "op-12244-c22bc3f2",
+          "stageACanonicalOperationId": "p0_op12244",
+          "operationIndex": 12244,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=904.92px"
+        },
+        {
+          "stageBOperationId": "op-12245-0dfa184f",
+          "stageACanonicalOperationId": "p0_op12245",
+          "operationIndex": 12245,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=872.28px"
+        },
+        {
+          "stageBOperationId": "op-12246-c0c22cdd",
+          "stageACanonicalOperationId": "p0_op12246",
+          "operationIndex": 12246,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=903.48px"
+        },
+        {
+          "stageBOperationId": "op-12247-b42ab54c",
+          "stageACanonicalOperationId": "p0_op12247",
+          "operationIndex": 12247,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=900.60px"
+        },
+        {
+          "stageBOperationId": "op-12248-90f990ee",
+          "stageACanonicalOperationId": "p0_op12248",
+          "operationIndex": 12248,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=167.28px"
+        },
+        {
+          "stageBOperationId": "op-12249-1d15704f",
+          "stageACanonicalOperationId": "p0_op12249",
+          "operationIndex": 12249,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=161.52px"
+        },
+        {
+          "stageBOperationId": "op-12250-fdecbca7",
+          "stageACanonicalOperationId": "p0_op12250",
+          "operationIndex": 12250,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=195.60px"
+        },
+        {
+          "stageBOperationId": "op-12251-74a2c834",
+          "stageACanonicalOperationId": "p0_op12251",
+          "operationIndex": 12251,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=195.60px"
+        },
+        {
+          "stageBOperationId": "op-12252-e4724f03",
+          "stageACanonicalOperationId": "p0_op12252",
+          "operationIndex": 12252,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=167.28px"
+        },
+        {
+          "stageBOperationId": "op-12254-a234b02c",
+          "stageACanonicalOperationId": "p0_op12254",
+          "operationIndex": 12254,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=195.60px"
+        },
+        {
+          "stageBOperationId": "op-12255-48642111",
+          "stageACanonicalOperationId": "p0_op12255",
+          "operationIndex": 12255,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=198.48px"
+        },
+        {
+          "stageBOperationId": "op-12256-362f9ff9",
+          "stageACanonicalOperationId": "p0_op12256",
+          "operationIndex": 12256,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=167.28px"
+        },
+        {
+          "stageBOperationId": "op-12258-8da70b54",
+          "stageACanonicalOperationId": "p0_op12258",
+          "operationIndex": 12258,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=161.52px"
+        },
+        {
+          "stageBOperationId": "op-12259-272f06dc",
+          "stageACanonicalOperationId": "p0_op12259",
+          "operationIndex": 12259,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=164.40px"
+        },
+        {
+          "stageBOperationId": "op-12260-9dab26bd",
+          "stageACanonicalOperationId": "p0_op12260",
+          "operationIndex": 12260,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=164.40px"
+        },
+        {
+          "stageBOperationId": "op-12262-8a55e8d1",
+          "stageACanonicalOperationId": "p0_op12262",
+          "operationIndex": 12262,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=164.40px"
+        },
+        {
+          "stageBOperationId": "op-25803-f4be28ee",
+          "stageACanonicalOperationId": "p0_op25803",
+          "operationIndex": 25803,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=935.52px"
+        },
+        {
+          "stageBOperationId": "op-25806-b143ebbb",
+          "stageACanonicalOperationId": "p0_op25806",
+          "operationIndex": 25806,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=935.52px"
+        },
+        {
+          "stageBOperationId": "op-25807-7916c659",
+          "stageACanonicalOperationId": "p0_op25807",
+          "operationIndex": 25807,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=316.08px"
+        },
+        {
+          "stageBOperationId": "op-25808-3dfc6a7a",
+          "stageACanonicalOperationId": "p0_op25808",
+          "operationIndex": 25808,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=358.56px"
+        },
+        {
+          "stageBOperationId": "op-25809-49474fec",
+          "stageACanonicalOperationId": "p0_op25809",
+          "operationIndex": 25809,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=316.08px"
+        },
+        {
+          "stageBOperationId": "op-25811-34d730c9",
+          "stageACanonicalOperationId": "p0_op25811",
+          "operationIndex": 25811,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=388.32px"
+        },
+        {
+          "stageBOperationId": "op-25812-3a9f38e7",
+          "stageACanonicalOperationId": "p0_op25812",
+          "operationIndex": 25812,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=388.32px"
+        },
+        {
+          "stageBOperationId": "op-25813-60d2d30f",
+          "stageACanonicalOperationId": "p0_op25813",
+          "operationIndex": 25813,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=361.32px"
+        },
+        {
+          "stageBOperationId": "op-25814-2add194f",
+          "stageACanonicalOperationId": "p0_op25814",
+          "operationIndex": 25814,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=318.96px"
+        },
+        {
+          "stageBOperationId": "op-25815-7b10159e",
+          "stageACanonicalOperationId": "p0_op25815",
+          "operationIndex": 25815,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=395.52px"
+        },
+        {
+          "stageBOperationId": "op-25816-dec065ff",
+          "stageACanonicalOperationId": "p0_op25816",
+          "operationIndex": 25816,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=422.40px"
+        }
+      ],
+      "featureBridge": [
+        {
+          "featureId": "f-p0_op296_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op296"
+          ],
+          "sourceSubpathIds": [
+            "p0_op296_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op296_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op296_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              743.6400146484375,
+              376.9199981689453,
+              755.0399780273438,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              484.6400146484375,
+              88.91999816894531,
+              496.03997802734375,
+              100.32000732421875
+            ],
+            "lengthPx": 16.122
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op297_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op297"
+          ],
+          "sourceSubpathIds": [
+            "p0_op297_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op297_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op297_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              747.7200164794922,
+              379.2000045776367,
+              756.7200164794922,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              488.7200164794922,
+              91.20000457763672,
+              497.7200164794922,
+              100.32000732421875
+            ],
+            "lengthPx": 12.813
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op298_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op298"
+          ],
+          "sourceSubpathIds": [
+            "p0_op298_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op298_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op298_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              751.6799926757812,
+              383.1600036621094,
+              756.7200164794922,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              492.67999267578125,
+              95.16000366210938,
+              497.7200164794922,
+              100.32000732421875
+            ],
+            "lengthPx": 7.213
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op299_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op299"
+          ],
+          "sourceSubpathIds": [
+            "p0_op299_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op299_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op299_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              755.6400146484375,
+              387.24000549316406,
+              756.7200164794922,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              496.6400146484375,
+              99.24000549316406,
+              497.7200164794922,
+              100.32000732421875
+            ],
+            "lengthPx": 1.527
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op302_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op302"
+          ],
+          "sourceSubpathIds": [
+            "p0_op302_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op302_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op302_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              790.8000183105469,
+              376.9199981689453,
+              799.0799560546875,
+              385.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              531.8000183105469,
+              88.91999816894531,
+              540.0799560546875,
+              97.32000732421875
+            ],
+            "lengthPx": 11.795
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op303_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op303"
+          ],
+          "sourceSubpathIds": [
+            "p0_op303_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op303_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op303_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              791.7600402832031,
+              376.9199981689453,
+              803.1600036621094,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              532.7600402832031,
+              88.91999816894531,
+              544.1600036621094,
+              100.32000732421875
+            ],
+            "lengthPx": 16.122
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op304_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op304"
+          ],
+          "sourceSubpathIds": [
+            "p0_op304_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op304_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op304_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              795.719970703125,
+              376.9199981689453,
+              807.1200256347656,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              536.719970703125,
+              88.91999816894531,
+              548.1200256347656,
+              100.32000732421875
+            ],
+            "lengthPx": 16.122
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op305_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op305"
+          ],
+          "sourceSubpathIds": [
+            "p0_op305_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op305_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op305_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              799.8000183105469,
+              376.9199981689453,
+              811.0799560546875,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              540.8000183105469,
+              88.91999816894531,
+              552.0799560546875,
+              100.32000732421875
+            ],
+            "lengthPx": 16.037
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op306_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op306"
+          ],
+          "sourceSubpathIds": [
+            "p0_op306_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op306_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op306_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              803.7600402832031,
+              376.9199981689453,
+              815.1600036621094,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              544.7600402832031,
+              88.91999816894531,
+              556.1600036621094,
+              100.32000732421875
+            ],
+            "lengthPx": 16.122
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op307_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op307"
+          ],
+          "sourceSubpathIds": [
+            "p0_op307_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op307_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op307_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              807.8399963378906,
+              376.9199981689453,
+              819.1200256347656,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              548.8399963378906,
+              88.91999816894531,
+              560.1200256347656,
+              100.32000732421875
+            ],
+            "lengthPx": 16.037
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op308_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op308"
+          ],
+          "sourceSubpathIds": [
+            "p0_op308_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op308_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op308_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              811.8000183105469,
+              376.9199981689453,
+              823.1999816894531,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              552.8000183105469,
+              88.91999816894531,
+              564.1999816894531,
+              100.32000732421875
+            ],
+            "lengthPx": 16.122
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op309_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op309"
+          ],
+          "sourceSubpathIds": [
+            "p0_op309_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op309_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op309_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              815.7600402832031,
+              376.9199981689453,
+              827.1600036621094,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              556.7600402832031,
+              88.91999816894531,
+              568.1600036621094,
+              100.32000732421875
+            ],
+            "lengthPx": 16.122
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op310_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op310"
+          ],
+          "sourceSubpathIds": [
+            "p0_op310_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op310_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op310_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              819.8399963378906,
+              376.9199981689453,
+              831.1200256347656,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              560.8399963378906,
+              88.91999816894531,
+              572.1200256347656,
+              100.32000732421875
+            ],
+            "lengthPx": 16.037
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op311_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op311"
+          ],
+          "sourceSubpathIds": [
+            "p0_op311_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op311_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op311_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              823.8000183105469,
+              376.9199981689453,
+              835.1999816894531,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              564.8000183105469,
+              88.91999816894531,
+              576.1999816894531,
+              100.32000732421875
+            ],
+            "lengthPx": 16.122
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op3566_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3566"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3566_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3566_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3566_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              683.0399780273438,
+              388.32000732421875,
+              756.7200164794922,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              424.03997802734375,
+              100.32000732421875,
+              497.7200164794922,
+              100.32000732421875
+            ],
+            "lengthPx": 73.68
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op3567_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3567"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3567_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3567_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3567_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              756.7200164794922,
+              376.9199981689453,
+              756.7200164794922,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              497.7200164794922,
+              88.91999816894531,
+              497.7200164794922,
+              100.32000732421875
+            ],
+            "lengthPx": 11.4
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op3570_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3570"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3570_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3570_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3570_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              790.8000183105469,
+              388.32000732421875,
+              867.2399597167969,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              531.8000183105469,
+              100.32000732421875,
+              608.2399597167969,
+              100.32000732421875
+            ],
+            "lengthPx": 76.44
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op3573_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3573"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3573_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3573_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3573_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              790.8000183105469,
+              376.9199981689453,
+              790.8000183105469,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              531.8000183105469,
+              88.91999816894531,
+              531.8000183105469,
+              100.32000732421875
+            ],
+            "lengthPx": 11.4
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op3578_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3578"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3578_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3578_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3578_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              756.7200164794922,
+              388.32000732421875,
+              790.8000183105469,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              497.7200164794922,
+              100.32000732421875,
+              531.8000183105469,
+              100.32000732421875
+            ],
+            "lengthPx": 34.08
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op12241_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op12241"
+          ],
+          "sourceSubpathIds": [
+            "p0_op12241_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op12241_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op12241_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              756.7200164794922,
+              388.32000732421875,
+              790.8000183105469,
+              388.32000732421875
+            ],
+            "instrumentTransformedBounds": [
+              497.7200164794922,
+              100.32000732421875,
+              531.8000183105469,
+              100.32000732421875
+            ],
+            "lengthPx": 34.08
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        }
+      ],
+      "featureBridgeFullCount": 49,
+      "topologyClass": "SINGLE_FRAME_SYMBOL",
+      "topologyMetrics": {
+        "frameSegmentIds": [
+          "p0_op296_s0_seg0",
+          "p0_op297_s0_seg0",
+          "p0_op298_s0_seg0",
+          "p0_op299_s0_seg0",
+          "p0_op302_s0_seg0",
+          "p0_op303_s0_seg0",
+          "p0_op304_s0_seg0",
+          "p0_op305_s0_seg0",
+          "p0_op306_s0_seg0",
+          "p0_op307_s0_seg0",
+          "p0_op308_s0_seg0",
+          "p0_op309_s0_seg0",
+          "p0_op310_s0_seg0",
+          "p0_op311_s0_seg0",
+          "p0_op3566_s0_seg0",
+          "p0_op3567_s0_seg0",
+          "p0_op3570_s0_seg0",
+          "p0_op3573_s0_seg0",
+          "p0_op3578_s0_seg0",
+          "p0_op12241_s0_seg0",
+          "p0_op12242_s0_seg0",
+          "p0_op12243_s0_seg0",
+          "p0_op12244_s0_seg0",
+          "p0_op12245_s0_seg0",
+          "p0_op12246_s0_seg0",
+          "p0_op12247_s0_seg0",
+          "p0_op12248_s0_seg0",
+          "p0_op12249_s0_seg0",
+          "p0_op12250_s0_seg0",
+          "p0_op12251_s0_seg0",
+          "p0_op12252_s0_seg0",
+          "p0_op12254_s0_seg0",
+          "p0_op12255_s0_seg0",
+          "p0_op12256_s0_seg0",
+          "p0_op12258_s0_seg0",
+          "p0_op12259_s0_seg0",
+          "p0_op12260_s0_seg0",
+          "p0_op12262_s0_seg0",
+          "p0_op25803_s0_seg0",
+          "p0_op25806_s0_seg0",
+          "p0_op25807_s0_seg0",
+          "p0_op25808_s0_seg0",
+          "p0_op25809_s0_seg0",
+          "p0_op25811_s0_seg0",
+          "p0_op25812_s0_seg0",
+          "p0_op25813_s0_seg0",
+          "p0_op25814_s0_seg0",
+          "p0_op25815_s0_seg0",
+          "p0_op25816_s0_seg0"
+        ],
+        "closedOrOpen": "OPEN_OR_NO_CLOSE",
+        "hostRelationship": "FLOATING",
+        "doorLikeSegmentIds": [],
+        "totalLineSegmentCount": 49,
+        "totalCurveSegmentCount": 0,
+        "topologyConfidence": "LOW",
+        "note": "No host wall — cannot confirm as window. Confidence capped at LOW."
+      },
+      "physicalWallId": null,
+      "finiteWallInterval": null,
+      "hostIntervalValidation": {
+        "hasHost": false,
+        "hasInterval": false,
+        "intervalContainment": null
+      },
+      "reviewerObservation": "UNRESOLVED",
+      "extractionVerdict": "REVIEW",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false
+    },
+    {
+      "candidateId": "win-provisional-6",
+      "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+      "manualOverride": true,
+      "automaticPromotionAllowed": false,
+      "boundsCoordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE",
+      "candidateBoundsInstrument": [
+        350,
+        180,
+        400,
+        220
+      ],
+      "candidateBoundsStageA": [
+        609,
+        468,
+        659,
+        508
+      ],
+      "boundsDerivation": {
+        "priorBounds": [
+          0,
+          0,
+          105,
+          35
+        ],
+        "correctedBounds": [
+          350,
+          180,
+          400,
+          220
+        ],
+        "boundsSource": "MANUAL_REVIEW_OVERRIDE",
+        "manualOverride": true,
+        "candidateOrigin": "MANUAL_AUDIT_FIXTURE",
+        "automaticPromotionAllowed": false,
+        "transformApplied": "CTM=[0.75,0,0,0.75,-259,-288]",
+        "derivationMethod": "handover-document-coordinates"
+      },
+      "lineageStatus": "RETROACTIVE_SEGMENT_ASSOCIATION",
+      "associationPrecision": "SOME_OVERLAPPING_OPS_HAVE_SEGMENT_HITS",
+      "overlappingOperationCount": 12,
+      "opsWithSegmentHits": 8,
+      "subpathLevelOnlyOps": 4,
+      "drawableSegmentHitCount": 8,
+      "operationAliasMap": [
+        {
+          "stageBOperationId": "op-3134-9bfab2d7",
+          "stageACanonicalOperationId": "p0_op3134",
+          "operationIndex": 3134,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=859.68px"
+        },
+        {
+          "stageBOperationId": "op-3135-22145b55",
+          "stageACanonicalOperationId": "p0_op3135",
+          "operationIndex": 3135,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "type-mismatch"
+        },
+        {
+          "stageBOperationId": "op-3136-f023b0a1",
+          "stageACanonicalOperationId": "p0_op3136",
+          "operationIndex": 3136,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=854.40px"
+        },
+        {
+          "stageBOperationId": "op-3137-38b66c27",
+          "stageACanonicalOperationId": "p0_op3137",
+          "operationIndex": 3137,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "type-mismatch"
+        },
+        {
+          "stageBOperationId": "op-3138-497a14fa",
+          "stageACanonicalOperationId": "p0_op3138",
+          "operationIndex": 3138,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=857.64px"
+        },
+        {
+          "stageBOperationId": "op-3142-2242cf05",
+          "stageACanonicalOperationId": "p0_op3142",
+          "operationIndex": 3142,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=855.12px"
+        },
+        {
+          "stageBOperationId": "op-3143-441dcf94",
+          "stageACanonicalOperationId": "p0_op3143",
+          "operationIndex": 3143,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "type-mismatch"
+        },
+        {
+          "stageBOperationId": "op-25008-2926ab45",
+          "stageACanonicalOperationId": "p0_op25008",
+          "operationIndex": 25008,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=493.20px"
+        },
+        {
+          "stageBOperationId": "op-25009-cd8f173b",
+          "stageACanonicalOperationId": "p0_op25009",
+          "operationIndex": 25009,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=401.16px"
+        },
+        {
+          "stageBOperationId": "op-25010-dced31ff",
+          "stageACanonicalOperationId": "p0_op25010",
+          "operationIndex": 25010,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=493.20px"
+        },
+        {
+          "stageBOperationId": "op-27521-9b9f642f",
+          "stageACanonicalOperationId": "p0_op27521",
+          "operationIndex": 27521,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=356.28px"
+        },
+        {
+          "stageBOperationId": "op-27534-ae1cbb9d",
+          "stageACanonicalOperationId": "p0_op27534",
+          "operationIndex": 27534,
+          "operationType": "stroke-path",
+          "sameRecord": false,
+          "mappingMethod": "operationIndex-match",
+          "validationMethod": "bounds-mismatch maxDiff=418.44px"
+        }
+      ],
+      "featureBridge": [
+        {
+          "featureId": "f-p0_op3138_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3138"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3138_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3138_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3138_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              636.8399963378906,
+              466.0800018310547,
+              637.3200073242188,
+              466.9199981689453
+            ],
+            "instrumentTransformedBounds": [
+              377.8399963378906,
+              178.0800018310547,
+              378.32000732421875,
+              178.9199981689453
+            ],
+            "lengthPx": 0.967
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op3142_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3142"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3142_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3142_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3142_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              639.4800109863281,
+              475.4399871826172,
+              639.8399963378906,
+              476.1600036621094
+            ],
+            "instrumentTransformedBounds": [
+              380.4800109863281,
+              187.4399871826172,
+              380.8399963378906,
+              188.16000366210938
+            ],
+            "lengthPx": 0.805
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op3143_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op3143"
+          ],
+          "sourceSubpathIds": [
+            "p0_op3143_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op3143_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op3143_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              637.3200073242188,
+              467.5199890136719,
+              637.8000183105469,
+              468.3599853515625
+            ],
+            "instrumentTransformedBounds": [
+              378.32000732421875,
+              179.51998901367188,
+              378.8000183105469,
+              180.3599853515625
+            ],
+            "lengthPx": 0.967
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op25008_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op25008"
+          ],
+          "sourceSubpathIds": [
+            "p0_op25008_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op25008_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op25008_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              634.9199981689453,
+              388.32000732421875,
+              634.9199981689453,
+              501.59999084472656
+            ],
+            "instrumentTransformedBounds": [
+              375.9199981689453,
+              100.32000732421875,
+              375.9199981689453,
+              213.59999084472656
+            ],
+            "lengthPx": 113.28
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op25009_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op25009"
+          ],
+          "sourceSubpathIds": [
+            "p0_op25009_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op25009_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op25009_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              634.9199981689453,
+              501.59999084472656,
+              640.5600128173828,
+              501.59999084472656
+            ],
+            "instrumentTransformedBounds": [
+              375.9199981689453,
+              213.59999084472656,
+              381.5600128173828,
+              213.59999084472656
+            ],
+            "lengthPx": 5.64
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op25010_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op25010"
+          ],
+          "sourceSubpathIds": [
+            "p0_op25010_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op25010_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op25010_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              640.5600128173828,
+              388.32000732421875,
+              640.5600128173828,
+              501.59999084472656
+            ],
+            "instrumentTransformedBounds": [
+              381.5600128173828,
+              100.32000732421875,
+              381.5600128173828,
+              213.59999084472656
+            ],
+            "lengthPx": 113.28
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op27521_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op27521"
+          ],
+          "sourceSubpathIds": [
+            "p0_op27521_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op27521_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op27521_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              634.9199981689453,
+              511.9199981689453,
+              634.9199981689453,
+              517.6799926757812
+            ],
+            "instrumentTransformedBounds": [
+              375.9199981689453,
+              223.9199981689453,
+              375.9199981689453,
+              229.67999267578125
+            ],
+            "lengthPx": 5.76
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        },
+        {
+          "featureId": "f-p0_op27534_s0_seg0",
+          "featureType": "LINE_SEGMENT",
+          "sourceOperationIds": [
+            "p0_op27534"
+          ],
+          "sourceSubpathIds": [
+            "p0_op27534_s0"
+          ],
+          "sourceSegmentIds": [
+            "p0_op27534_s0_seg0"
+          ],
+          "primitiveIds": [
+            "p0_op27534_s0_seg0"
+          ],
+          "featureGeometry": {
+            "commandType": "L",
+            "stageATransformedBounds": [
+              640.5600128173828,
+              511.9199981689453,
+              640.5600128173828,
+              517.6799926757812
+            ],
+            "instrumentTransformedBounds": [
+              381.5600128173828,
+              223.9199981689453,
+              381.5600128173828,
+              229.67999267578125
+            ],
+            "lengthPx": 5.76
+          },
+          "derivationMethod": "retroactive-stage-a-segment-intersection",
+          "derivationParameters": {
+            "tolerancePx": 5,
+            "zeroLengthThresholdPx": 0.5,
+            "coordinateSpace": "INSTRUMENT_VECTOR_OPS_PAGE"
+          }
+        }
+      ],
+      "featureBridgeFullCount": 8,
+      "topologyClass": "WALL_GAP_WITH_GLAZING",
+      "topologyMetrics": {
+        "leftWallEdgeSegmentIds": [],
+        "rightWallEdgeSegmentIds": [
+          "p0_op25008_s0_seg0",
+          "p0_op25009_s0_seg0",
+          "p0_op25010_s0_seg0",
+          "p0_op27521_s0_seg0",
+          "p0_op27534_s0_seg0"
+        ],
+        "totalEdgeLineCount": 5,
+        "gapWidth": null,
+        "glazingSegmentIds": [],
+        "doorLikeSegmentIds": [],
+        "curveNeutralDefault": true,
+        "tolerances": {
+          "gapEdgeMinLengthPx": 2
+        },
+        "alignmentToHostWall": "NO_HOST_WALL",
+        "topologyConfidence": "LOW",
+        "note": "Curves are neutral (CURVE_SEGMENT). Glazing not inferred without additional geometric/style evidence."
+      },
+      "physicalWallId": null,
+      "finiteWallInterval": null,
+      "hostIntervalValidation": {
+        "hasHost": false,
+        "hasInterval": false,
+        "intervalContainment": null
+      },
+      "reviewerObservation": "NOT_A_WINDOW",
+      "extractionVerdict": "REJECTED",
+      "promotionEligible": false,
+      "sourceBackedAccepted": false
+    }
+  ],
+  "funnel": {
+    "candidatesProcessed": 6,
+    "retroactiveSegmentAssociation": [
+      "win-provisional-1",
+      "win-provisional-2",
+      "win-provisional-3",
+      "win-provisional-4",
+      "win-provisional-5",
+      "win-provisional-6"
+    ],
+    "partialSourceLineage": [],
+    "spatialSourceAssociation": [],
+    "noSourceLineage": [],
+    "sourceBackedAccepted": 0,
+    "automaticPromotionBlockedByManualAuditBounds": true,
+    "highConfidenceReview": 2,
+    "likelyReview": 2,
+    "unresolvedReview": 1,
+    "rejected": 1
+  },
+  "duplicateComparison": {
+    "totalPairs": 15,
+    "comparedPairs": [
+      {
+        "pairId": "win-provisional-1:win-provisional-2",
+        "candidateA": "win-provisional-1",
+        "candidateB": "win-provisional-2",
+        "bothHosted": true,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4073",
+        "physicalWallIdB": "physicalWall:4119",
+        "intervalOverlapPx": 0,
+        "centreDistancePx": 95.131,
+        "widthSimilarity": 1,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": true,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": false,
+        "exclusionReason": null
+      },
+      {
+        "pairId": "win-provisional-1:win-provisional-3",
+        "candidateA": "win-provisional-1",
+        "candidateB": "win-provisional-3",
+        "bothHosted": true,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4073",
+        "physicalWallIdB": "physicalWall:3980",
+        "intervalOverlapPx": 0,
+        "centreDistancePx": 93.039,
+        "widthSimilarity": 0.9,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": false,
+        "exclusionReason": null
+      },
+      {
+        "pairId": "win-provisional-1:win-provisional-4",
+        "candidateA": "win-provisional-1",
+        "candidateB": "win-provisional-4",
+        "bothHosted": true,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4073",
+        "physicalWallIdB": "physicalWall:4150",
+        "intervalOverlapPx": 0,
+        "centreDistancePx": 254.472,
+        "widthSimilarity": 0.9,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": false,
+        "exclusionReason": null
+      },
+      {
+        "pairId": "win-provisional-1:win-provisional-5",
+        "candidateA": "win-provisional-1",
+        "candidateB": "win-provisional-5",
+        "bothHosted": false,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4073",
+        "physicalWallIdB": null,
+        "intervalOverlapPx": null,
+        "centreDistancePx": 345.154,
+        "widthSimilarity": 0.75,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": true,
+        "exclusionReason": "At least one candidate is unhosted (physicalWallId=null). Unhosted candidates have no physicalWallId and cannot participate in physical-duplicate merging. They may represent floating symbols or rejected geometries."
+      },
+      {
+        "pairId": "win-provisional-1:win-provisional-6",
+        "candidateA": "win-provisional-1",
+        "candidateB": "win-provisional-6",
+        "bothHosted": false,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4073",
+        "physicalWallIdB": null,
+        "intervalOverlapPx": null,
+        "centreDistancePx": 171.264,
+        "widthSimilarity": 0.9,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": true,
+        "exclusionReason": "At least one candidate is unhosted (physicalWallId=null). Unhosted candidates have no physicalWallId and cannot participate in physical-duplicate merging. They may represent floating symbols or rejected geometries."
+      },
+      {
+        "pairId": "win-provisional-2:win-provisional-3",
+        "candidateA": "win-provisional-2",
+        "candidateB": "win-provisional-3",
+        "bothHosted": true,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4119",
+        "physicalWallIdB": "physicalWall:3980",
+        "intervalOverlapPx": 0,
+        "centreDistancePx": 161.032,
+        "widthSimilarity": 0.9,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": false,
+        "exclusionReason": null
+      },
+      {
+        "pairId": "win-provisional-2:win-provisional-4",
+        "candidateA": "win-provisional-2",
+        "candidateB": "win-provisional-4",
+        "bothHosted": true,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4119",
+        "physicalWallIdB": "physicalWall:4150",
+        "intervalOverlapPx": 0,
+        "centreDistancePx": 178.973,
+        "widthSimilarity": 0.9,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": false,
+        "exclusionReason": null
+      },
+      {
+        "pairId": "win-provisional-2:win-provisional-5",
+        "candidateA": "win-provisional-2",
+        "candidateB": "win-provisional-5",
+        "bothHosted": false,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4119",
+        "physicalWallIdB": null,
+        "intervalOverlapPx": null,
+        "centreDistancePx": 264.398,
+        "widthSimilarity": 0.75,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": true,
+        "exclusionReason": "At least one candidate is unhosted (physicalWallId=null). Unhosted candidates have no physicalWallId and cannot participate in physical-duplicate merging. They may represent floating symbols or rejected geometries."
+      },
+      {
+        "pairId": "win-provisional-2:win-provisional-6",
+        "candidateA": "win-provisional-2",
+        "candidateB": "win-provisional-6",
+        "bothHosted": false,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4119",
+        "physicalWallIdB": null,
+        "intervalOverlapPx": null,
+        "centreDistancePx": 101.766,
+        "widthSimilarity": 0.9,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": true,
+        "exclusionReason": "At least one candidate is unhosted (physicalWallId=null). Unhosted candidates have no physicalWallId and cannot participate in physical-duplicate merging. They may represent floating symbols or rejected geometries."
+      },
+      {
+        "pairId": "win-provisional-3:win-provisional-4",
+        "candidateA": "win-provisional-3",
+        "candidateB": "win-provisional-4",
+        "bothHosted": true,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:3980",
+        "physicalWallIdB": "physicalWall:4150",
+        "intervalOverlapPx": 0,
+        "centreDistancePx": 266.833,
+        "widthSimilarity": 1,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": true,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": false,
+        "exclusionReason": null
+      },
+      {
+        "pairId": "win-provisional-3:win-provisional-5",
+        "candidateA": "win-provisional-3",
+        "candidateB": "win-provisional-5",
+        "bothHosted": false,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:3980",
+        "physicalWallIdB": null,
+        "intervalOverlapPx": null,
+        "centreDistancePx": 357.841,
+        "widthSimilarity": 0.833,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": true,
+        "exclusionReason": "At least one candidate is unhosted (physicalWallId=null). Unhosted candidates have no physicalWallId and cannot participate in physical-duplicate merging. They may represent floating symbols or rejected geometries."
+      },
+      {
+        "pairId": "win-provisional-3:win-provisional-6",
+        "candidateA": "win-provisional-3",
+        "candidateB": "win-provisional-6",
+        "bothHosted": false,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:3980",
+        "physicalWallIdB": null,
+        "intervalOverlapPx": null,
+        "centreDistancePx": 190.591,
+        "widthSimilarity": 1,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": true,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": true,
+        "exclusionReason": "At least one candidate is unhosted (physicalWallId=null). Unhosted candidates have no physicalWallId and cannot participate in physical-duplicate merging. They may represent floating symbols or rejected geometries."
+      },
+      {
+        "pairId": "win-provisional-4:win-provisional-5",
+        "candidateA": "win-provisional-4",
+        "candidateB": "win-provisional-5",
+        "bothHosted": false,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4150",
+        "physicalWallIdB": null,
+        "intervalOverlapPx": null,
+        "centreDistancePx": 91.924,
+        "widthSimilarity": 0.833,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": true,
+        "exclusionReason": "At least one candidate is unhosted (physicalWallId=null). Unhosted candidates have no physicalWallId and cannot participate in physical-duplicate merging. They may represent floating symbols or rejected geometries."
+      },
+      {
+        "pairId": "win-provisional-4:win-provisional-6",
+        "candidateA": "win-provisional-4",
+        "candidateB": "win-provisional-6",
+        "bothHosted": false,
+        "samePhysicalWall": false,
+        "physicalWallIdA": "physicalWall:4150",
+        "physicalWallIdB": null,
+        "intervalOverlapPx": null,
+        "centreDistancePx": 83.217,
+        "widthSimilarity": 1,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": true,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": true,
+        "exclusionReason": "At least one candidate is unhosted (physicalWallId=null). Unhosted candidates have no physicalWallId and cannot participate in physical-duplicate merging. They may represent floating symbols or rejected geometries."
+      },
+      {
+        "pairId": "win-provisional-5:win-provisional-6",
+        "candidateA": "win-provisional-5",
+        "candidateB": "win-provisional-6",
+        "bothHosted": false,
+        "samePhysicalWall": false,
+        "physicalWallIdA": null,
+        "physicalWallIdB": null,
+        "intervalOverlapPx": null,
+        "centreDistancePx": 174.428,
+        "widthSimilarity": 0.833,
+        "sharedSourceSegmentCount": 0,
+        "sameTopologyClass": false,
+        "isDuplicateCandidate": false,
+        "excludedFromDuplicateMerging": true,
+        "exclusionReason": "At least one candidate is unhosted (physicalWallId=null). Unhosted candidates have no physicalWallId and cannot participate in physical-duplicate merging. They may represent floating symbols or rejected geometries."
+      }
+    ],
+    "duplicatePairs": [],
+    "duplicateClusters": [],
+    "excludedFromDuplicateMerging": 9,
+    "excludedPairsReason": "Nine pairs involve win-5 or win-6 (both unhosted). Each of the 2 unhosted candidates forms 5 pairs with the other 5 candidates: (5-1)+(5-1) minus the pair between them = 4+4+1 = 9. These pairs are excluded from physical-duplicate merging because without a physicalWallId the candidates cannot be spatially identified with a wall structure.",
+    "noDuplicateReason": "All hosted candidates (win-1..4) have distinct physicalWallIds"
+  }
+}

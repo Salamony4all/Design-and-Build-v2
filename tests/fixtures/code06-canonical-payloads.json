@@ -1,0 +1,4142 @@
+{
+  "geometryPayload": [
+    {
+      "physicalWallId": "fr0",
+      "a": [
+        311.76,
+        388.32
+      ],
+      "b": [
+        311.76,
+        1159.32
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr1",
+      "a": [
+        340.08,
+        382.62
+      ],
+      "b": [
+        963.72,
+        382.62
+      ],
+      "thickness": 11.4,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr10",
+      "a": [
+        524.34,
+        615
+      ],
+      "b": [
+        524.34,
+        649.08
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr11",
+      "a": [
+        481.8,
+        708.54
+      ],
+      "b": [
+        583.8,
+        708.54
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr12",
+      "a": [
+        484.62,
+        711.36
+      ],
+      "b": [
+        484.62,
+        932.52
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr13",
+      "a": [
+        405.3,
+        705.72
+      ],
+      "b": [
+        405.3,
+        932.52
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr14",
+      "a": [
+        317.4,
+        708.54
+      ],
+      "b": [
+        402.48,
+        708.54
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr15",
+      "a": [
+        487.44,
+        765.3
+      ],
+      "b": [
+        583.8,
+        765.3
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr16",
+      "a": [
+        487.44,
+        821.94
+      ],
+      "b": [
+        583.8,
+        821.94
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr17",
+      "a": [
+        487.44,
+        878.64
+      ],
+      "b": [
+        583.8,
+        878.64
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr18",
+      "a": [
+        317.4,
+        821.94
+      ],
+      "b": [
+        402.48,
+        821.94
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr19",
+      "a": [
+        317.4,
+        765.3
+      ],
+      "b": [
+        402.48,
+        765.3
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr2",
+      "a": [
+        340.08,
+        1164.96
+      ],
+      "b": [
+        963.72,
+        1164.96
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr20",
+      "a": [
+        317.4,
+        878.64
+      ],
+      "b": [
+        402.48,
+        878.64
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr21",
+      "a": [
+        1763.04,
+        388.32
+      ],
+      "b": [
+        1763.04,
+        1159.32
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr22",
+      "a": [
+        1111.08,
+        382.62
+      ],
+      "b": [
+        1734.72,
+        382.62
+      ],
+      "thickness": 11.4,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr23",
+      "a": [
+        1111.08,
+        1164.96
+      ],
+      "b": [
+        1734.72,
+        1164.96
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr24",
+      "a": [
+        1105.44,
+        943.8
+      ],
+      "b": [
+        1105.44,
+        1136.64
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr25",
+      "a": [
+        1128.12,
+        938.16
+      ],
+      "b": [
+        1757.4,
+        938.16
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr26",
+      "a": [
+        1482.42,
+        615
+      ],
+      "b": [
+        1482.42,
+        705.72
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr27",
+      "a": [
+        1128.12,
+        609.36
+      ],
+      "b": [
+        1757.4,
+        609.36
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr28",
+      "a": [
+        1105.44,
+        411
+      ],
+      "b": [
+        1105.44,
+        819.12
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr29",
+      "a": [
+        1099.8,
+        824.82
+      ],
+      "b": [
+        1377.48,
+        824.82
+      ],
+      "thickness": 11.4,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr3",
+      "a": [
+        969.36,
+        943.8
+      ],
+      "b": [
+        969.36,
+        1136.64
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr30",
+      "a": [
+        1371.84,
+        615
+      ],
+      "b": [
+        1371.84,
+        819.12
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr31",
+      "a": [
+        1550.46,
+        615
+      ],
+      "b": [
+        1550.46,
+        649.08
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr32",
+      "a": [
+        1490.88,
+        708.54
+      ],
+      "b": [
+        1593,
+        708.54
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr33",
+      "a": [
+        1590.12,
+        711.36
+      ],
+      "b": [
+        1590.12,
+        932.52
+      ],
+      "thickness": 5.76,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr34",
+      "a": [
+        1669.5,
+        705.72
+      ],
+      "b": [
+        1669.5,
+        932.52
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr35",
+      "a": [
+        1672.32,
+        708.54
+      ],
+      "b": [
+        1757.4,
+        708.54
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr36",
+      "a": [
+        1490.88,
+        765.3
+      ],
+      "b": [
+        1587.24,
+        765.3
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr37",
+      "a": [
+        1490.88,
+        821.94
+      ],
+      "b": [
+        1587.24,
+        821.94
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr38",
+      "a": [
+        1490.88,
+        878.64
+      ],
+      "b": [
+        1587.24,
+        878.64
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr39",
+      "a": [
+        1672.32,
+        821.94
+      ],
+      "b": [
+        1757.4,
+        821.94
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr4",
+      "a": [
+        317.4,
+        938.16
+      ],
+      "b": [
+        946.68,
+        938.16
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr40",
+      "a": [
+        1672.32,
+        765.3
+      ],
+      "b": [
+        1757.4,
+        765.3
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr41",
+      "a": [
+        1672.32,
+        878.64
+      ],
+      "b": [
+        1757.4,
+        878.64
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr42",
+      "a": [
+        589.5,
+        705.72
+      ],
+      "b": [
+        589.5,
+        932.52
+      ],
+      "thickness": 11.4,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr43",
+      "a": [
+        1485.24,
+        705.72
+      ],
+      "b": [
+        1485.24,
+        932.52
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr44",
+      "a": [
+        345.78,
+        615
+      ],
+      "b": [
+        345.78,
+        705.72
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr45",
+      "a": [
+        1729.02,
+        615
+      ],
+      "b": [
+        1729.02,
+        705.72
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr46",
+      "a": [
+        422.28,
+        388.32
+      ],
+      "b": [
+        422.28,
+        501.6
+      ],
+      "thickness": 5.76,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr47",
+      "a": [
+        529.98,
+        388.32
+      ],
+      "b": [
+        529.98,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr48",
+      "a": [
+        637.74,
+        388.32
+      ],
+      "b": [
+        637.74,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr49",
+      "a": [
+        745.38,
+        388.32
+      ],
+      "b": [
+        745.38,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr5",
+      "a": [
+        592.38,
+        615
+      ],
+      "b": [
+        592.38,
+        705.72
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr50",
+      "a": [
+        853.14,
+        388.32
+      ],
+      "b": [
+        853.14,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr51",
+      "a": [
+        1652.46,
+        388.32
+      ],
+      "b": [
+        1652.46,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr52",
+      "a": [
+        1544.82,
+        388.32
+      ],
+      "b": [
+        1544.82,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr53",
+      "a": [
+        1437.06,
+        388.32
+      ],
+      "b": [
+        1437.06,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr54",
+      "a": [
+        1329.36,
+        388.32
+      ],
+      "b": [
+        1329.36,
+        501.6
+      ],
+      "thickness": 5.76,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr55",
+      "a": [
+        1221.66,
+        388.32
+      ],
+      "b": [
+        1221.66,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr56",
+      "a": [
+        422.28,
+        1045.92
+      ],
+      "b": [
+        422.28,
+        1159.32
+      ],
+      "thickness": 5.76,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr57",
+      "a": [
+        529.98,
+        1045.92
+      ],
+      "b": [
+        529.98,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr58",
+      "a": [
+        637.74,
+        1045.92
+      ],
+      "b": [
+        637.74,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr59",
+      "a": [
+        745.38,
+        1045.92
+      ],
+      "b": [
+        745.38,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr6",
+      "a": [
+        317.4,
+        609.36
+      ],
+      "b": [
+        946.68,
+        609.36
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr60",
+      "a": [
+        853.14,
+        1045.92
+      ],
+      "b": [
+        853.14,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr61",
+      "a": [
+        1652.46,
+        1045.92
+      ],
+      "b": [
+        1652.46,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr62",
+      "a": [
+        1544.82,
+        1045.92
+      ],
+      "b": [
+        1544.82,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr63",
+      "a": [
+        1437.06,
+        1045.92
+      ],
+      "b": [
+        1437.06,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr64",
+      "a": [
+        1329.42,
+        1045.92
+      ],
+      "b": [
+        1329.42,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr65",
+      "a": [
+        1221.66,
+        1045.92
+      ],
+      "b": [
+        1221.66,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr66",
+      "a": [
+        1037.34,
+        493.68
+      ],
+      "b": [
+        1037.34,
+        667.8
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr67",
+      "a": [
+        1040.16,
+        664.92
+      ],
+      "b": [
+        1099.8,
+        664.92
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr68",
+      "a": [
+        975,
+        434.22
+      ],
+      "b": [
+        1099.8,
+        434.22
+      ],
+      "thickness": 11.4,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr69",
+      "a": [
+        975,
+        496.56
+      ],
+      "b": [
+        1034.52,
+        496.56
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr7",
+      "a": [
+        969.36,
+        411
+      ],
+      "b": [
+        969.36,
+        819.12
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical"
+    },
+    {
+      "physicalWallId": "fr8",
+      "a": [
+        697.2,
+        824.82
+      ],
+      "b": [
+        975,
+        824.82
+      ],
+      "thickness": 11.4,
+      "orientationClass": "horizontal"
+    },
+    {
+      "physicalWallId": "fr9",
+      "a": [
+        702.9,
+        615
+      ],
+      "b": [
+        702.9,
+        819.12
+      ],
+      "thickness": 11.4,
+      "orientationClass": "vertical"
+    }
+  ],
+  "evidencePayload": [
+    {
+      "physicalWallId": "fr0",
+      "a": [
+        311.76,
+        388.32
+      ],
+      "b": [
+        311.76,
+        1159.32
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v0"
+      ],
+      "sourceSubpathIds": [
+        "v0:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "perimeter-attachment",
+      "floatingClass": "perimeter-termination",
+      "perimeterContribution": true,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "building-perimeter-contribution",
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr1",
+      "a": [
+        340.08,
+        382.62
+      ],
+      "b": [
+        963.72,
+        382.62
+      ],
+      "thickness": 11.4,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v1"
+      ],
+      "sourceSubpathIds": [
+        "v1:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "perimeter-attachment",
+      "floatingClass": "perimeter-termination",
+      "perimeterContribution": true,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "building-perimeter-contribution",
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr10",
+      "a": [
+        524.34,
+        615
+      ],
+      "b": [
+        524.34,
+        649.08
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v10"
+      ],
+      "sourceSubpathIds": [
+        "v10:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr11",
+      "a": [
+        481.8,
+        708.54
+      ],
+      "b": [
+        583.8,
+        708.54
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v11"
+      ],
+      "sourceSubpathIds": [
+        "v11:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "endpoint-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr12",
+      "a": [
+        484.62,
+        711.36
+      ],
+      "b": [
+        484.62,
+        932.52
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v12"
+      ],
+      "sourceSubpathIds": [
+        "v12:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr13",
+      "a": [
+        405.3,
+        705.72
+      ],
+      "b": [
+        405.3,
+        932.52
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v13"
+      ],
+      "sourceSubpathIds": [
+        "v13:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr14",
+      "a": [
+        317.4,
+        708.54
+      ],
+      "b": [
+        402.48,
+        708.54
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr15",
+      "a": [
+        487.44,
+        765.3
+      ],
+      "b": [
+        583.8,
+        765.3
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr16",
+      "a": [
+        487.44,
+        821.94
+      ],
+      "b": [
+        583.8,
+        821.94
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr17",
+      "a": [
+        487.44,
+        878.64
+      ],
+      "b": [
+        583.8,
+        878.64
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr18",
+      "a": [
+        317.4,
+        821.94
+      ],
+      "b": [
+        402.48,
+        821.94
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr19",
+      "a": [
+        317.4,
+        765.3
+      ],
+      "b": [
+        402.48,
+        765.3
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr2",
+      "a": [
+        340.08,
+        1164.96
+      ],
+      "b": [
+        963.72,
+        1164.96
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v2"
+      ],
+      "sourceSubpathIds": [
+        "v2:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "perimeter-attachment",
+      "floatingClass": "perimeter-termination",
+      "perimeterContribution": true,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "building-perimeter-contribution",
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr20",
+      "a": [
+        317.4,
+        878.64
+      ],
+      "b": [
+        402.48,
+        878.64
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v14"
+      ],
+      "sourceSubpathIds": [
+        "v14:s0",
+        "v14:s1",
+        "v14:s2",
+        "v14:s3",
+        "v14:s4",
+        "v14:s5",
+        "v14:s6"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr21",
+      "a": [
+        1763.04,
+        388.32
+      ],
+      "b": [
+        1763.04,
+        1159.32
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v15"
+      ],
+      "sourceSubpathIds": [
+        "v15:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "perimeter-attachment",
+      "floatingClass": "perimeter-termination",
+      "perimeterContribution": true,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "building-perimeter-contribution",
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr22",
+      "a": [
+        1111.08,
+        382.62
+      ],
+      "b": [
+        1734.72,
+        382.62
+      ],
+      "thickness": 11.4,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v16"
+      ],
+      "sourceSubpathIds": [
+        "v16:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "perimeter-attachment",
+      "floatingClass": "perimeter-termination",
+      "perimeterContribution": true,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "building-perimeter-contribution",
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr23",
+      "a": [
+        1111.08,
+        1164.96
+      ],
+      "b": [
+        1734.72,
+        1164.96
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v17"
+      ],
+      "sourceSubpathIds": [
+        "v17:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "perimeter-attachment",
+      "floatingClass": "perimeter-termination",
+      "perimeterContribution": true,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "building-perimeter-contribution",
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr24",
+      "a": [
+        1105.44,
+        943.8
+      ],
+      "b": [
+        1105.44,
+        1136.64
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v18"
+      ],
+      "sourceSubpathIds": [
+        "v18:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "physical-wall",
+      "floatingClass": "valid-finite-partition",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr25",
+      "a": [
+        1128.12,
+        938.16
+      ],
+      "b": [
+        1757.4,
+        938.16
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v19"
+      ],
+      "sourceSubpathIds": [
+        "v19:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr26",
+      "a": [
+        1482.42,
+        615
+      ],
+      "b": [
+        1482.42,
+        705.72
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v20"
+      ],
+      "sourceSubpathIds": [
+        "v20:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr27",
+      "a": [
+        1128.12,
+        609.36
+      ],
+      "b": [
+        1757.4,
+        609.36
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v21"
+      ],
+      "sourceSubpathIds": [
+        "v21:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr28",
+      "a": [
+        1105.44,
+        411
+      ],
+      "b": [
+        1105.44,
+        819.12
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v22"
+      ],
+      "sourceSubpathIds": [
+        "v22:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "endpoint-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr29",
+      "a": [
+        1099.8,
+        824.82
+      ],
+      "b": [
+        1377.48,
+        824.82
+      ],
+      "thickness": 11.4,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v23"
+      ],
+      "sourceSubpathIds": [
+        "v23:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "endpoint-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr3",
+      "a": [
+        969.36,
+        943.8
+      ],
+      "b": [
+        969.36,
+        1136.64
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v3"
+      ],
+      "sourceSubpathIds": [
+        "v3:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "physical-wall",
+      "floatingClass": "valid-finite-partition",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr30",
+      "a": [
+        1371.84,
+        615
+      ],
+      "b": [
+        1371.84,
+        819.12
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v24"
+      ],
+      "sourceSubpathIds": [
+        "v24:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr31",
+      "a": [
+        1550.46,
+        615
+      ],
+      "b": [
+        1550.46,
+        649.08
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v25"
+      ],
+      "sourceSubpathIds": [
+        "v25:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr32",
+      "a": [
+        1490.88,
+        708.54
+      ],
+      "b": [
+        1593,
+        708.54
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v26"
+      ],
+      "sourceSubpathIds": [
+        "v26:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "endpoint-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr33",
+      "a": [
+        1590.12,
+        711.36
+      ],
+      "b": [
+        1590.12,
+        932.52
+      ],
+      "thickness": 5.76,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v27"
+      ],
+      "sourceSubpathIds": [
+        "v27:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr34",
+      "a": [
+        1669.5,
+        705.72
+      ],
+      "b": [
+        1669.5,
+        932.52
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v28"
+      ],
+      "sourceSubpathIds": [
+        "v28:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr35",
+      "a": [
+        1672.32,
+        708.54
+      ],
+      "b": [
+        1757.4,
+        708.54
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr36",
+      "a": [
+        1490.88,
+        765.3
+      ],
+      "b": [
+        1587.24,
+        765.3
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr37",
+      "a": [
+        1490.88,
+        821.94
+      ],
+      "b": [
+        1587.24,
+        821.94
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr38",
+      "a": [
+        1490.88,
+        878.64
+      ],
+      "b": [
+        1587.24,
+        878.64
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr39",
+      "a": [
+        1672.32,
+        821.94
+      ],
+      "b": [
+        1757.4,
+        821.94
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr4",
+      "a": [
+        317.4,
+        938.16
+      ],
+      "b": [
+        946.68,
+        938.16
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v4"
+      ],
+      "sourceSubpathIds": [
+        "v4:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr40",
+      "a": [
+        1672.32,
+        765.3
+      ],
+      "b": [
+        1757.4,
+        765.3
+      ],
+      "thickness": 5.64,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr41",
+      "a": [
+        1672.32,
+        878.64
+      ],
+      "b": [
+        1757.4,
+        878.64
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr42",
+      "a": [
+        589.5,
+        705.72
+      ],
+      "b": [
+        589.5,
+        932.52
+      ],
+      "thickness": 11.4,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v29"
+      ],
+      "sourceSubpathIds": [
+        "v29:s0",
+        "v29:s1",
+        "v29:s2",
+        "v29:s3",
+        "v29:s4",
+        "v29:s5",
+        "v29:s6",
+        "v29:s7"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr43",
+      "a": [
+        1485.24,
+        705.72
+      ],
+      "b": [
+        1485.24,
+        932.52
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr44",
+      "a": [
+        345.78,
+        615
+      ],
+      "b": [
+        345.78,
+        705.72
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr45",
+      "a": [
+        1729.02,
+        615
+      ],
+      "b": [
+        1729.02,
+        705.72
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr46",
+      "a": [
+        422.28,
+        388.32
+      ],
+      "b": [
+        422.28,
+        501.6
+      ],
+      "thickness": 5.76,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr47",
+      "a": [
+        529.98,
+        388.32
+      ],
+      "b": [
+        529.98,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr48",
+      "a": [
+        637.74,
+        388.32
+      ],
+      "b": [
+        637.74,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr49",
+      "a": [
+        745.38,
+        388.32
+      ],
+      "b": [
+        745.38,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr5",
+      "a": [
+        592.38,
+        615
+      ],
+      "b": [
+        592.38,
+        705.72
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v5"
+      ],
+      "sourceSubpathIds": [
+        "v5:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr50",
+      "a": [
+        853.14,
+        388.32
+      ],
+      "b": [
+        853.14,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr51",
+      "a": [
+        1652.46,
+        388.32
+      ],
+      "b": [
+        1652.46,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr52",
+      "a": [
+        1544.82,
+        388.32
+      ],
+      "b": [
+        1544.82,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr53",
+      "a": [
+        1437.06,
+        388.32
+      ],
+      "b": [
+        1437.06,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr54",
+      "a": [
+        1329.36,
+        388.32
+      ],
+      "b": [
+        1329.36,
+        501.6
+      ],
+      "thickness": 5.76,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr55",
+      "a": [
+        1221.66,
+        388.32
+      ],
+      "b": [
+        1221.66,
+        501.6
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr56",
+      "a": [
+        422.28,
+        1045.92
+      ],
+      "b": [
+        422.28,
+        1159.32
+      ],
+      "thickness": 5.76,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr57",
+      "a": [
+        529.98,
+        1045.92
+      ],
+      "b": [
+        529.98,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr58",
+      "a": [
+        637.74,
+        1045.92
+      ],
+      "b": [
+        637.74,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr59",
+      "a": [
+        745.38,
+        1045.92
+      ],
+      "b": [
+        745.38,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr6",
+      "a": [
+        317.4,
+        609.36
+      ],
+      "b": [
+        946.68,
+        609.36
+      ],
+      "thickness": 11.28,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v6"
+      ],
+      "sourceSubpathIds": [
+        "v6:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr60",
+      "a": [
+        853.14,
+        1045.92
+      ],
+      "b": [
+        853.14,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr61",
+      "a": [
+        1652.46,
+        1045.92
+      ],
+      "b": [
+        1652.46,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr62",
+      "a": [
+        1544.82,
+        1045.92
+      ],
+      "b": [
+        1544.82,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr63",
+      "a": [
+        1437.06,
+        1045.92
+      ],
+      "b": [
+        1437.06,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr64",
+      "a": [
+        1329.42,
+        1045.92
+      ],
+      "b": [
+        1329.42,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr65",
+      "a": [
+        1221.66,
+        1045.92
+      ],
+      "b": [
+        1221.66,
+        1159.32
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v30"
+      ],
+      "sourceSubpathIds": [
+        "v30:s0",
+        "v30:s1",
+        "v30:s10",
+        "v30:s11",
+        "v30:s12",
+        "v30:s13",
+        "v30:s14",
+        "v30:s15",
+        "v30:s16",
+        "v30:s17",
+        "v30:s18",
+        "v30:s19",
+        "v30:s2",
+        "v30:s20",
+        "v30:s21",
+        "v30:s22",
+        "v30:s3",
+        "v30:s4",
+        "v30:s5",
+        "v30:s6",
+        "v30:s7",
+        "v30:s8",
+        "v30:s9"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr66",
+      "a": [
+        1037.34,
+        493.68
+      ],
+      "b": [
+        1037.34,
+        667.8
+      ],
+      "thickness": 5.64,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v33"
+      ],
+      "sourceSubpathIds": [
+        "v33:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "endpoint-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr67",
+      "a": [
+        1040.16,
+        664.92
+      ],
+      "b": [
+        1099.8,
+        664.92
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v34"
+      ],
+      "sourceSubpathIds": [
+        "v34:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr68",
+      "a": [
+        975,
+        434.22
+      ],
+      "b": [
+        1099.8,
+        434.22
+      ],
+      "thickness": 11.4,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v35"
+      ],
+      "sourceSubpathIds": [
+        "v35:s0",
+        "v35:s1"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr69",
+      "a": [
+        975,
+        496.56
+      ],
+      "b": [
+        1034.52,
+        496.56
+      ],
+      "thickness": 5.76,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v35"
+      ],
+      "sourceSubpathIds": [
+        "v35:s0",
+        "v35:s1"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "partition-thickness",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr7",
+      "a": [
+        969.36,
+        411
+      ],
+      "b": [
+        969.36,
+        819.12
+      ],
+      "thickness": 11.28,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v7"
+      ],
+      "sourceSubpathIds": [
+        "v7:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "endpoint-connectivity",
+      "floatingClass": "one-end-connected-one-free",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr8",
+      "a": [
+        697.2,
+        824.82
+      ],
+      "b": [
+        975,
+        824.82
+      ],
+      "thickness": 11.4,
+      "orientationClass": "horizontal",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v8"
+      ],
+      "sourceSubpathIds": [
+        "v8:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "endpoint-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    },
+    {
+      "physicalWallId": "fr9",
+      "a": [
+        702.9,
+        615
+      ],
+      "b": [
+        702.9,
+        819.12
+      ],
+      "thickness": 11.4,
+      "orientationClass": "vertical",
+      "verdict": "accepted",
+      "evidenceTypes": [
+        "filled-rect"
+      ],
+      "sourceRootIds": [
+        "v9"
+      ],
+      "sourceSubpathIds": [
+        "v9:s0"
+      ],
+      "sourceStrokeIds": [],
+      "connectivityClass": "t-junction-connectivity",
+      "floatingClass": "two-ends-connected",
+      "perimeterContribution": false,
+      "logicalWallRunId": null,
+      "isFragmentOfOpening": null,
+      "positiveEvidence": [
+        "closed-filled-wall-mass",
+        "closed-filled-wall-mass",
+        "multi-generator-support",
+        "structural-thickness-band",
+        "substantial-physical-length",
+        "valid-junction-role"
+      ],
+      "negativeEvidence": []
+    }
+  ]
+}

@@ -1,0 +1,401 @@
+{
+  "sourceRepository": "https://github.com/pascalorg/editor",
+  "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+  "installedEditorVersion": "0.9.2",
+  "installedNodesVersion": "0.1.1",
+  "sourceLicense": "MIT",
+  "copiedAt": "2026-08-15T21:32:21.305Z",
+  "note": "Exact 39 /icons/*.webp assets required by the mounted @pascal-app/editor@0.9.2 code path, sourced from the official release commit (MIT). Canonical copies in public/pascal-pro/icons/; mirrored into public/icons/ so the Editor hardcoded /icons/*.webp requests resolve with no code change. No placeholders remain.",
+  "assets": [
+    {
+      "name": "appliance.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/appliance.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/appliance.webp",
+      "sourceHashSha256": "ca9fd7293e388b37e3f6010e34026127519f68d52f1d74ee84841dbab608b936",
+      "bytes": 17432
+    },
+    {
+      "name": "bathroom.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/bathroom.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/bathroom.webp",
+      "sourceHashSha256": "82edbfdb2c7e0a8ff0c3c8703429c2eb47f33867b6163f4e3715018847bfb9ab",
+      "bytes": 20950
+    },
+    {
+      "name": "blueprint.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/blueprint.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/blueprint.webp",
+      "sourceHashSha256": "dd264e7ef165e056ab53591164189998615f701d3115c4b6bd315b32bc983ee6",
+      "bytes": 5118
+    },
+    {
+      "name": "building.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/building.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/building.webp",
+      "sourceHashSha256": "ea471e551cd5e651f8decfec87881da1db3ba1a5ef9aab60cf1897f924c300ee",
+      "bytes": 13288
+    },
+    {
+      "name": "ceiling.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/ceiling.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/ceiling.webp",
+      "sourceHashSha256": "5bb0d71420a4b91d1d88afe0677cf5d6cd525552429097a68014ab6a74fc19a9",
+      "bytes": 19320
+    },
+    {
+      "name": "column.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/column.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/column.webp",
+      "sourceHashSha256": "9f86280a30d8019d12fd3d02a5a5497bd336e68420706e890a1ebac19e731edc",
+      "bytes": 6522
+    },
+    {
+      "name": "couch.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/couch.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/couch.webp",
+      "sourceHashSha256": "d41dfe865e9e47ee0ef255c13559d963c85bf28d210cf38d42d37b043d4f8e3c",
+      "bytes": 18764
+    },
+    {
+      "name": "door.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/door.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/door.webp",
+      "sourceHashSha256": "b1f7ff4cd3eb547555de91a021a0e16e8b6e8121c6f2d01385a87a29dd20c91e",
+      "bytes": 10498
+    },
+    {
+      "name": "duct-fitting.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/duct-fitting.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/duct-fitting.webp",
+      "sourceHashSha256": "6618dbe06dfca51a4e3186fd21d7ca53880bbfc7f437f77d5595b65056cedef4",
+      "bytes": 86552
+    },
+    {
+      "name": "duct.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/duct.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/duct.webp",
+      "sourceHashSha256": "22a01063cd9c9ed5bec1fc55350706a78e4a37cab785de2e4bccb1746eda34e3",
+      "bytes": 86040
+    },
+    {
+      "name": "dwv-pipes.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/dwv-pipes.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/dwv-pipes.webp",
+      "sourceHashSha256": "18ad7816eed01053b4b33d4b506a53bcd90a4bb5bc4f1c26ba21033f10dfd560",
+      "bytes": 60012
+    },
+    {
+      "name": "elevator.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/elevator.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/elevator.webp",
+      "sourceHashSha256": "bbf301d1a111e7eee67edce478d88885ffa206b6fd04a4a47e25527be855b1fa",
+      "bytes": 12836
+    },
+    {
+      "name": "fence.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/fence.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/fence.webp",
+      "sourceHashSha256": "c968f13f5771eb40ac591ff376a9c9ec90cc46af8516a51def849e964477931a",
+      "bytes": 19250
+    },
+    {
+      "name": "floor.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/floor.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/floor.webp",
+      "sourceHashSha256": "c4424747e36eb6e7407021df4c875359ee2e23d6fd63bbd5bdd6027f5d3649e2",
+      "bytes": 7510
+    },
+    {
+      "name": "floorplan.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/floorplan.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/floorplan.webp",
+      "sourceHashSha256": "61ee22e5ba9fe8e7170eb6f1a53180d0b90fcd40cdafc3e0616a3273cdc0e5f6",
+      "bytes": 18018
+    },
+    {
+      "name": "HVAC.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/HVAC.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/HVAC.webp",
+      "sourceHashSha256": "0698019d2238d1d9cd6e1248579d40adfc3207f7d62ae82f4ba2987370e8fbe9",
+      "bytes": 144438
+    },
+    {
+      "name": "item.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/item.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/item.webp",
+      "sourceHashSha256": "24e80bfa12a8d651e0842a66cefc817e704b7392934742b3d1672e9b00ba2d01",
+      "bytes": 16436
+    },
+    {
+      "name": "kitchen.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/kitchen.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/kitchen.webp",
+      "sourceHashSha256": "03b0faf46132e5c8312900c312154740ac6ea82fc4742a3cec4731308dae891c",
+      "bytes": 23356
+    },
+    {
+      "name": "level.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/level.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/level.webp",
+      "sourceHashSha256": "fa19bb18956391704a2f496d7005d5de51f185709bbf17d212992c52e2dd0931",
+      "bytes": 19496
+    },
+    {
+      "name": "lineset.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/lineset.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/lineset.webp",
+      "sourceHashSha256": "ade4551ee0c553c9efc9800393c48b1d0e3c80e0af1d339fdaadbbfbe874e259",
+      "bytes": 124956
+    },
+    {
+      "name": "mesh.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/mesh.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/mesh.webp",
+      "sourceHashSha256": "06f349bfea36c2fb0566d40742a7dfcf9051831ee70d6ce74c3d6585d570de51",
+      "bytes": 12954
+    },
+    {
+      "name": "paint.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/paint.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/paint.webp",
+      "sourceHashSha256": "9c81a8cf54bf9ca8fc023bf3f6cf28f380468e3133ffd227335abc49cfe796c9",
+      "bytes": 13418
+    },
+    {
+      "name": "registers.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/registers.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/registers.webp",
+      "sourceHashSha256": "989a5efd9deb806fab69361d5205628d6216dc24d06c2d8a9b7d8b94398c52a1",
+      "bytes": 89082
+    },
+    {
+      "name": "roof.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/roof.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/roof.webp",
+      "sourceHashSha256": "83afe03e0f90b6e9b993431c5d957c4c19912067bd4fb4d75ed5222e2312ce94",
+      "bytes": 12340
+    },
+    {
+      "name": "room.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/room.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/room.webp",
+      "sourceHashSha256": "d5c502d2cb32d936157ba9444ced2ad6ab54bb2dfcc0a451a73b305821550c59",
+      "bytes": 8768
+    },
+    {
+      "name": "rotate.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/rotate.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/rotate.webp",
+      "sourceHashSha256": "f02c42ae7b171489623dde6113a7b547b189c618a0ef47db10efb35e355c384c",
+      "bytes": 15414
+    },
+    {
+      "name": "select.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/select.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/select.webp",
+      "sourceHashSha256": "0de28191bb1308355544d343d45866a95ad829b7c1bd90095fbef3005b7afe0e",
+      "bytes": 13530
+    },
+    {
+      "name": "settings.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/settings.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/settings.webp",
+      "sourceHashSha256": "d91e038a879031cb8ee125b9cb6f4ddf2e029e4738ef61a1834bf0cf81772f03",
+      "bytes": 18200
+    },
+    {
+      "name": "shelf.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/shelf.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/shelf.webp",
+      "sourceHashSha256": "413acbfeff7098bd835c9f2f6e796d1f4ee3bcce60589fb231224a92ee9daba4",
+      "bytes": 49450
+    },
+    {
+      "name": "site-flag.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/site-flag.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/site-flag.webp",
+      "sourceHashSha256": "62ee6295c64aa985fdcc71e9f673c14b8bc5ff69a6491e372dce3ee17b48f13f",
+      "bytes": 20034
+    },
+    {
+      "name": "spawn-point.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/spawn-point.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/spawn-point.webp",
+      "sourceHashSha256": "559b1216031a633baa85b5767cd7c8977c9a77c79e53174807a2cde35ce64190",
+      "bytes": 30886
+    },
+    {
+      "name": "stairs.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/stairs.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/stairs.webp",
+      "sourceHashSha256": "38ac7c362975cb43d2e5b7f52afa684a9f5780bb92a0b17cf981ed66039c62de",
+      "bytes": 11232
+    },
+    {
+      "name": "topview.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/topview.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/topview.webp",
+      "sourceHashSha256": "d1f501cd9efa4f257882d720a9a37866d67a851efe054aa7c5a1ce74ecbcf20a",
+      "bytes": 10820
+    },
+    {
+      "name": "tree.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/tree.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/tree.webp",
+      "sourceHashSha256": "24e80bfa12a8d651e0842a66cefc817e704b7392934742b3d1672e9b00ba2d01",
+      "bytes": 16436
+    },
+    {
+      "name": "wall.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/wall.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/wall.webp",
+      "sourceHashSha256": "43daeb8473abf46c8d2352574505fb66f615c34904ef12fdacc00f53a0ef4c5d",
+      "bytes": 5652
+    },
+    {
+      "name": "wallcut.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/wallcut.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/wallcut.webp",
+      "sourceHashSha256": "11b8c4f483af7ecd0ddf893fe9bad4910cef172ba5a24e71f65e66f69ee4e5a7",
+      "bytes": 15768
+    },
+    {
+      "name": "walllow.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/walllow.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/walllow.webp",
+      "sourceHashSha256": "baa7274435b7b22e7fb89ab13aa34fe8640595537760f540f4420006bc960ce9",
+      "bytes": 11560
+    },
+    {
+      "name": "window.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/window.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/window.webp",
+      "sourceHashSha256": "e527794f37ecb85409c24aaa6a750115079b9d35743118937c40160110eb5a2b",
+      "bytes": 14362
+    },
+    {
+      "name": "zone.webp",
+      "sourceRepository": "https://github.com/pascalorg/editor",
+      "sourceCommit": "99cc537e2538419536be86678a6139047a13af9d",
+      "sourceLicense": "MIT",
+      "sourcePath": "apps/editor/public/icons/zone.webp",
+      "destinationPath": "apps/design-build-editor/public/pascal-pro/icons/zone.webp",
+      "sourceHashSha256": "dc1f926491ec4a1c3245df7a42cc670904f5b7bba3da382f269aa0636c76740d",
+      "bytes": 26142
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "design-build-extraction-mupdf",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:wall-completion": "npx tsx --test src/wall-completion/wall-completion.test.ts",
+    "test:door-pipeline": "vitest run tests/door-pipeline.test.ts"
+  },
+  "dependencies": {
+    "zod": "^3.23.8",
+    "mupdf": "1.28.0",
+    "design-build-extraction-contracts": "workspace:*",
+    "design-build-coordinate-frame": "workspace:*",
+    "design-build-extraction-annotations": "workspace:*",
+    "design-build-extraction-columns": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "2.1.9"
+  }
+}
