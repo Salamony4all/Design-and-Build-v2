@@ -112,11 +112,16 @@ export function installLiveDoors(ctx: LiveDoorInstallerContext, doors: LiveDoorC
   for (const dr of doors) {
     // Resolve the live WallNode by EXACT_RUNTIME_WALL_MAPPING (metadata.physicalWallId).
     let liveId: string | null = null;
+    const targetNorm = dr.wallId.replace(/^(w_|fr|wall_)/i, '');
     for (const [id, node] of Object.entries(ctx.nodes)) {
       if (!isWallLike(node)) continue;
       const meta = ((node as Record<string, unknown>).metadata ?? {}) as Record<string, unknown>;
       const phys = (meta.physicalWallId ?? meta.physical_wall_id ?? id) as string;
-      if (phys === dr.wallId) { liveId = id; break; }
+      const physNorm = phys.replace(/^(w_|fr|wall_)/i, '');
+      if (phys === dr.wallId || id === dr.wallId || (physNorm.length > 0 && physNorm === targetNorm)) {
+        liveId = id;
+        break;
+      }
     }
 
     if (!liveId) {

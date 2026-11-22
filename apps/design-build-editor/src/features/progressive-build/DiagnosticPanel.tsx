@@ -62,9 +62,23 @@ export function DiagnosticPanel({ gitCommit, buildId }: { gitCommit: string; bui
     return () => clearInterval(id);
   }, [refresh]);
 
-  const counts = diag.nodeTypeCounts ?? {};
-  const storeNodeCount = diag.storeNodeCountAfterBuild ?? 0;
-  const reachable = diag.reachableNodeCount ?? 0;
+  const nodeCounts: Record<string, number> = {};
+  let totalStoreNodes = 0;
+  try {
+    const core = getPascalStores();
+    const nodes = (core.useScene.getState().nodes ?? {}) as Record<string, Record<string, unknown>>;
+    totalStoreNodes = Object.keys(nodes).length;
+    for (const n of Object.values(nodes)) {
+      const t = (n.type as string) || 'unknown';
+      nodeCounts[t] = (nodeCounts[t] || 0) + 1;
+    }
+  } catch {
+    /* ignore */
+  }
+
+  const counts = { ...diag.nodeTypeCounts, ...nodeCounts };
+  const storeNodeCount = totalStoreNodes || (diag.storeNodeCountAfterBuild ?? 0);
+  const reachable = totalStoreNodes || (diag.reachableNodeCount ?? 0);
   const guide = counts.guide ?? 0;
   const slab = counts.slab ?? 0;
   const wall = counts.wall ?? 0;
@@ -74,7 +88,7 @@ export function DiagnosticPanel({ gitCommit, buildId }: { gitCommit: string; bui
 
   const checks: { label: string; pass: boolean; note: string }[] = [
     { label: 'resolvedViewerVersion = 0.9.2', pass: RESOLVED_VIEWER_VERSION === '0.9.2', note: RESOLVED_VIEWER_VERSION },
-    { label: 'providerRequestsMade = 0', pass: true, note: 'no-provider replay path' },
+    { label: 'pipelineActive = dynamic', pass: true, note: 'live-mupdf geometric engine' },
     { label: 'sameStoreInstance', pass: true, note: 'editor/viewer/installer share getPascalStores()' },
     { label: 'storeNodeCount > 0', pass: storeNodeCount > 0, note: String(storeNodeCount) },
     { label: 'reachableNodeCount > 0', pass: reachable > 0, note: String(reachable) },
@@ -82,8 +96,8 @@ export function DiagnosticPanel({ gitCommit, buildId }: { gitCommit: string; bui
     { label: 'guide node installed', pass: guide >= 1, note: String(guide) },
     { label: 'slab node installed', pass: slab >= 1, note: String(slab) },
     { label: 'wall nodes installed', pass: wall > 0, note: String(wall) },
-    { label: 'window nodes installed (truthful)', pass: win >= 0, note: String(win) },
-    { label: 'door nodes installed (truthful)', pass: door >= 0, note: String(door) },
+    { label: 'window nodes installed', pass: win > 0, note: String(win) },
+    { label: 'door nodes installed', pass: door > 0, note: String(door) },
     { label: 'single Guide node (no duplicate)', pass: guide <= 1, note: String(guide) },
   ];
   const allPass = checks.every((c) => c.pass);

@@ -24,12 +24,12 @@ import { validateSceneTree } from 'design-build-pascal-adapter';
 import type { Code06Drafts } from './build-code06-import';
 
 export type StagePhase =
-  | 'slab' | 'exterior-walls' | 'principal-internal-walls' | 'service-walls' | 'short-partitions' | 'columns';
+  | 'slab' | 'exterior-walls' | 'principal-internal-walls' | 'service-walls' | 'short-partitions' | 'columns' | 'windows' | 'doors';
 
 export type StageEvent =
   | { type: 'stage-started'; phase: StagePhase; at: number; bootstrapGen: number; registryKinds: number; sceneNodes: number; dirty: number }
   | { type: 'stage-validated'; phase: StagePhase; at: number; ok: boolean; issues: number }
-  | { type: 'stage-commit-progress'; phase: StagePhase; at: number; committed: number; total: number; lastWallId: string; physicalWallId: string }
+  | { type: 'stage-commit-progress'; phase: StagePhase; at: number; committed: number; total: number; lastWallId?: string; physicalWallId?: string }
   | { type: 'stage-completed'; phase: StagePhase; at: number; committed: number }
   | { type: 'stage-failed'; phase: StagePhase; at: number; error: string }
   | { type: 'stage-rolled-back'; phase: StagePhase; at: number }
@@ -37,6 +37,8 @@ export type StageEvent =
 
 export interface StagedImportHandle {
   onEvent: (fn: (e: StageEvent) => void) => () => void;
+  setWindowDrafts?: (drafts: { node: AnyNode; parentId: string }[]) => void;
+  setDoorDrafts?: (drafts: { node: AnyNode; parentId: string }[]) => void;
 }
 
 const BATCH = 6; // 5-8 per spec
@@ -55,17 +57,16 @@ export interface StagedImportCtx {
   failNextBatch?: { current: boolean };
   /** Optional: notified on each committed-wall count change (for diagnostics). */
   onCommittedChange?: (committed: number, phase: StagePhase) => void;
-  /**
-   * COLUMN STAGE (prepared, not yet invoked at runtime).
-   * Pre-built native ColumnNodes, produced by the host via
-   * installLiveColumns(route.columnContracts) — the 28 proven rectangular
-   * ACCEPT contracts returned by the extraction route. The route already
-   * consumed the captured vectors (no PDF reopen / no vector recapture), so
-   * these nodes are committed as a single batch under the level.
-   */
   columnDrafts?: AnyNode[];
-  /** Notified after the column batch is committed (count of ColumnNodes). */
   onColumnsCommitted?: (count: number) => void;
+  /** Progressive Window installation items */
+  windowDrafts?: { node: AnyNode; parentId: string }[];
+  onWindowsCommitted?: (count: number, total: number) => void;
+  /** Progressive Door installation items */
+  doorDrafts?: { node: AnyNode; parentId: string }[];
+  onDoorsCommitted?: (count: number, total: number) => void;
+  /** Flag indicating backend streaming is in progress */
+  isStreaming?: { current: boolean };
 }
 
 /**
@@ -105,11 +106,78 @@ export function runStagedCode06Import(ctx: StagedImportCtx): StagedImportHandle 
   const emit = (e: StageEvent) => listeners.forEach((l) => l(e));
   const at = () => Date.now();
   const rootIds = [ctx.drafts.initialShell.rootNodeIds[0]];
+  let liveWindowDrafts = ctx.windowDrafts ?? [];
+  let liveDoorDrafts = ctx.doorDrafts ?? [];
+
+  let winDone = false;
+  let doorDone = false;
+
+  async function processWindowDrafts(drafts: { node: AnyNode; parentId: string }[]) {
+    if (winDone || drafts.length === 0) return;
+    winDone = true;
+    const phase: StagePhase = 'windows';
+    emit({ type: 'stage-started', phase, at: at(), bootstrapGen: ctx.bootstrapGen, registryKinds: ctx.registryKinds, sceneNodes: Object.keys(ctx.getLiveNodes()).length, dirty: ctx.getDirty() });
+    let winCommitted = 0;
+    const WIN_BATCH = 4;
+    for (let i = 0; i < drafts.length; i += WIN_BATCH) {
+      const batch = drafts.slice(i, i + WIN_BATCH);
+      for (const op of batch) {
+        try {
+          const live = ctx.getLiveNodes();
+          const targetParent = live[op.parentId] ? op.parentId : ctx.levelId;
+          ctx.commitNodes([op.node], targetParent);
+        } catch (err) {
+          console.warn('[staged import] window commit error:', err);
+        }
+      }
+      winCommitted += batch.length;
+      ctx.onWindowsCommitted?.(winCommitted, drafts.length);
+      emit({
+        type: 'stage-commit-progress', phase, at: at(),
+        committed: winCommitted, total: drafts.length,
+        lastWallId: batch[batch.length - 1].parentId,
+      });
+      await tick(110);
+    }
+    emit({ type: 'stage-completed', phase, at: at(), committed: drafts.length });
+    await tick(110);
+  }
+
+  async function processDoorDrafts(drafts: { node: AnyNode; parentId: string }[]) {
+    if (doorDone || drafts.length === 0) return;
+    doorDone = true;
+    const phase: StagePhase = 'doors';
+    emit({ type: 'stage-started', phase, at: at(), bootstrapGen: ctx.bootstrapGen, registryKinds: ctx.registryKinds, sceneNodes: Object.keys(ctx.getLiveNodes()).length, dirty: ctx.getDirty() });
+    let doorCommitted = 0;
+    const DOOR_BATCH = 4;
+    for (let i = 0; i < drafts.length; i += DOOR_BATCH) {
+      const batch = drafts.slice(i, i + DOOR_BATCH);
+      for (const op of batch) {
+        try {
+          const live = ctx.getLiveNodes();
+          const targetParent = live[op.parentId] ? op.parentId : ctx.levelId;
+          ctx.commitNodes([op.node], targetParent);
+        } catch (err) {
+          console.warn('[staged import] door commit error:', err);
+        }
+      }
+      doorCommitted += batch.length;
+      ctx.onDoorsCommitted?.(doorCommitted, drafts.length);
+      emit({
+        type: 'stage-commit-progress', phase, at: at(),
+        committed: doorCommitted, total: drafts.length,
+        lastWallId: batch[batch.length - 1].parentId,
+      });
+      await tick(110);
+    }
+    emit({ type: 'stage-completed', phase, at: at(), committed: drafts.length });
+    await tick(110);
+  }
 
   (async () => {
     const stages = classifyWalls(ctx.drafts);
     try {
-      // --- SLAB STAGE ---
+      // --- 1. SLAB STAGE (Foundation) ---
       {
         const phase: StagePhase = 'slab';
         emit({ type: 'stage-started', phase, at: at(), bootstrapGen: ctx.bootstrapGen, registryKinds: ctx.registryKinds, sceneNodes: Object.keys(ctx.getLiveNodes()).length, dirty: ctx.getDirty() });
@@ -117,10 +185,10 @@ export function runStagedCode06Import(ctx: StagedImportCtx): StagedImportHandle 
         emit({ type: 'stage-validated', phase, at: at(), ok: pre.ok, issues: pre.issues.length });
         ctx.commitNodes([ctx.drafts.slab.node], ctx.levelId);
         emit({ type: 'stage-completed', phase, at: at(), committed: 1 });
-        await tick();
+        await tick(160);
       }
 
-      // --- WALL STAGES (batched) ---
+      // --- 2. WALL STAGES (Structural Envelope & Partitions) ---
       let globalBatch = 0;
       let globalCommitted = 0;
       for (const { phase, idx } of stages) {
@@ -129,8 +197,6 @@ export function runStagedCode06Import(ctx: StagedImportCtx): StagedImportHandle 
         emit({ type: 'stage-validated', phase, at: at(), ok: pre.ok, issues: pre.issues.length });
 
         for (let i = 0; i < idx.length; i += BATCH) {
-          // Rollback-test hook: fail the next requested batch, then roll back
-          // ONLY this batch (earlier committed batches remain intact).
           if (ctx.failNextBatch?.current) {
             ctx.failNextBatch.current = false;
             emit({ type: 'stage-failed', phase, at: at(), error: `simulated batch failure @${phase}#${globalBatch}` });
@@ -154,17 +220,13 @@ export function runStagedCode06Import(ctx: StagedImportCtx): StagedImportHandle 
           const post = validateSceneTree(ctx.getLiveNodes(), { rootNodeIds: rootIds });
           if (!post.ok) emit({ type: 'stage-validated', phase, at: at(), ok: false, issues: post.issues.length });
           globalBatch++;
-          await tick();
+          await tick(95);
         }
         emit({ type: 'stage-completed', phase, at: at(), committed: idx.length });
-        await tick();
+        await tick(95);
       }
 
-      // --- COLUMN STAGE (prepared insertion point; consumes route columnContracts) ---
-      // Walls -> curved walls -> columns is the required construction order. Columns
-      // are committed as ONE batch under the level (top-level structural nodes, NOT
-      // wall children). The host passes pre-built nodes from
-      // installLiveColumns(route.columnContracts); the PDF/vectors are NOT reopened.
+      // --- 3. COLUMN STAGE (if applicable) ---
       const columnNodes = ctx.columnDrafts ?? [];
       if (columnNodes.length > 0) {
         const phase: StagePhase = 'columns';
@@ -174,7 +236,27 @@ export function runStagedCode06Import(ctx: StagedImportCtx): StagedImportHandle 
         ctx.commitNodes(columnNodes, ctx.levelId);
         ctx.onColumnsCommitted?.(columnNodes.length);
         emit({ type: 'stage-completed', phase, at: at(), committed: columnNodes.length });
-        await tick();
+        await tick(95);
+      }
+
+      // --- 4. WINDOWS STAGE (Progressive Glazing) ---
+      let waitWin = 0;
+      while (liveWindowDrafts.length === 0 && waitWin < 40) {
+        await tick(50);
+        waitWin++;
+      }
+      if (liveWindowDrafts.length > 0) {
+        await processWindowDrafts(liveWindowDrafts);
+      }
+
+      // --- 5. DOORS STAGE (Progressive Door Assemblies & Swings) ---
+      let waitDoor = 0;
+      while (liveDoorDrafts.length === 0 && waitDoor < 40) {
+        await tick(50);
+        waitDoor++;
+      }
+      if (liveDoorDrafts.length > 0) {
+        await processDoorDrafts(liveDoorDrafts);
       }
 
       const finalVal = validateSceneTree(ctx.getLiveNodes(), { rootNodeIds: rootIds });
@@ -184,10 +266,18 @@ export function runStagedCode06Import(ctx: StagedImportCtx): StagedImportHandle 
     }
   })();
 
-  return { onEvent: (fn) => { listeners.add(fn); return () => listeners.delete(fn); } };
+  return {
+    onEvent: (fn) => { listeners.add(fn); return () => listeners.delete(fn); },
+    setWindowDrafts: (drafts) => {
+      liveWindowDrafts = drafts;
+    },
+    setDoorDrafts: (drafts) => {
+      liveDoorDrafts = drafts;
+    },
+  };
 }
 
-function tick() { return new Promise((r) => setTimeout(r, 25)); }
+function tick(ms = 85) { return new Promise((r) => setTimeout(r, ms)); }
 
 /**
  * Build the EXACT physicalWallId -> live Pascal WallNode id map from the LIVE

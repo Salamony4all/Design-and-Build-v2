@@ -497,11 +497,16 @@ export function installLiveWindows(
     // neutral accepted-wall id (selectedPhysicalWallId) against the live node's
     // metadata.physicalWallId. Never trust stored runtime ids / WA text.
     let liveId: string | null = null;
+    const targetNorm = win.wallId.replace(/^(w_|fr|wall_)/i, '');
     for (const [id, node] of Object.entries(ctx.nodes)) {
       if (!isWallLike(node)) continue;
       const meta = ((node as Record<string, unknown>).metadata ?? {}) as Record<string, unknown>;
       const phys = (meta.physicalWallId ?? meta.physical_wall_id ?? id) as string;
-      if (phys === win.wallId) { liveId = id; break; }
+      const physNorm = phys.replace(/^(w_|fr|wall_)/i, '');
+      if (phys === win.wallId || id === win.wallId || (physNorm.length > 0 && physNorm === targetNorm)) {
+        liveId = id;
+        break;
+      }
     }
 
     if (!liveId) {

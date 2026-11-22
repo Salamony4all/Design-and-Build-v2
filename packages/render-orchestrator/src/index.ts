@@ -1,11 +1,9 @@
 // design-build-render-orchestrator
 // Nano Banana rendering orchestration, behind a neutral service interface.
-// Preserves (do NOT rewrite during scaffold): intent classification, design
-// change interpretation, camera snapshot, viewport capture, cached conversational
-// context, depth-mask generation, scene-description compilation, provider
-// configuration, photorealistic render request, render-response parsing,
+// Preserves: intent classification, design change interpretation, camera snapshot,
+// viewport capture, cached conversational context, depth-mask generation, scene-description compilation,
+// provider configuration, photorealistic render request, render-response parsing,
 // conversational iteration, PNG preview and download.
-// In the checkpoint this exposes the interface + neutral types only.
 
 import type { ProviderRegistryState } from 'design-build-provider-registry';
 
@@ -39,8 +37,20 @@ export interface RenderResult {
   progress: number; // 0..1
   previewUrl?: string;
   downloadUrl?: string;
+  snapshotUrl?: string;
+  planUrl?: string;
   message?: string;
   providerId: string;
+  /** Human model name, e.g. "Nano Banana 2 Lite". */
+  modelLabel?: string;
+  /** Style preset id used for the render. */
+  styleId?: string;
+  /** 0..1 share of the model's edges found in the render (geometry check). */
+  fidelity?: number;
+  /** MIME type of previewUrl when it is a data URL. */
+  mimeType?: string;
+  /** Transparent PNG of the model's edges, aligned with snapshot and render. */
+  overlayUrl?: string;
 }
 
 export interface RenderService {

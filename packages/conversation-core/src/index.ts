@@ -31,13 +31,13 @@ export type ProgressiveImportEvent =
   | { type: 'import-completed'; walls: number; dirty: number; validationOk: boolean };
 
 export type ChatEvent =
-  | { type: 'message'; role: 'user' | 'assistant'; text: string; id: string }
+  | { type: 'message'; role: 'user' | 'assistant'; text: string; id: string; attachments?: AttachmentRef[]; renderResult?: RenderResult }
   | { type: 'attachment-added'; ref: AttachmentRef }
   | { type: 'extraction-progress'; event: ProgressiveExtractionEvent }
   | { type: 'extraction-complete'; result: ExtractionResult }
   | { type: 'import-progress'; event: ProgressiveImportEvent }
-  | { type: 'render-started'; renderId: string }
-  | { type: 'render-progress'; renderId: string; progress: number; message?: string }
+  | { type: 'render-started'; renderId: string; snapshotUrl?: string }
+  | { type: 'render-progress'; renderId: string; progress: number; message?: string; stage?: string }
   | { type: 'render-complete'; result: RenderResult }
   | { type: 'export-ready'; kind: 'boq' | 'moodboard' | 'scene-json'; url: string }
   | { type: 'error'; message: string }
@@ -61,6 +61,7 @@ export interface MessageModel {
   text: string;
   attachments: AttachmentRef[];
   createdAt: string;
+  renderResult?: RenderResult;
 }
 
 export interface ConversationPort {

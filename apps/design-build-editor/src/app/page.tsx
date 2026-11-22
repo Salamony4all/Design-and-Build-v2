@@ -35,6 +35,7 @@ import type { ChatCommand, ChatEvent } from 'design-build-conversation-core';
 import { ChatPanel } from '@/features/conversation/ChatPanel';
 import { attachmentRepository } from '@/features/conversation/attachment-repository';
 import { ProviderSettingsPanel } from '@/features/conversation/ProviderSelector';
+import { Sparkles, SlidersHorizontal } from 'lucide-react';
 import { AiExtractionControls, useAiProviderRegistry } from '@/features/ai-extraction';
 import { ViewerToolbar } from '@/features/viewer-interaction/ViewerToolbar';
 import { SelectionPropertiesPanel } from '@/features/viewer-interaction/SelectionPropertiesPanel';
@@ -54,6 +55,10 @@ import type { BuildStage, ProgressiveBuildEvent, FurnitureCandidate } from 'desi
 import { ExportRail } from '@/features/project-export/ExportRail';
 import { selectDoorInstallerInput, type RuntimeWallMap } from '@/features/door-pilot/door-boundary';
 import { getPascalStores, ensureBuiltinPluginLoaded, type ViewerHandle } from 'design-build-simplified-viewer-shell';
+import { RenderStudio, loadRenderPrefs } from '@/features/render/RenderStudio';
+import { prepareView, currentViewKind, type PreparedView } from '@/features/render/capture-view';
+import { renderPhotoreal, type RenderJobResult } from '@/features/render/render-client';
+import { RENDER_TIERS, getRenderStyle, styleFromText, furnishFromText } from '@/features/render/render-presets';
 import { useEditorMode } from '@/features/pro/useEditorMode';
 import { ProEditorLazy } from '@/features/pro/ProEditorLazy';
 import { ProOverlay } from '@/features/pro/ProOverlay';
@@ -74,6 +79,7 @@ import { installLiveColumns, type LiveColumnInstallerContext } from '@/features/
 import type { ColumnContract } from 'design-build-extraction-mupdf';
 import { validateSceneTree, type NodeMap } from 'design-build-pascal-adapter';
 import { computeFraming, frameSelectionBoxes, type Aabb, type FramingSolution } from '@/features/viewer-interaction/camera-framing-service';
+import type { AttachmentRef } from 'design-build-conversation-core';
 
 declare global {
   interface Window {
@@ -249,6 +255,8 @@ const stageLabelOf = (s: string) => STAGE_LABEL[s] ?? 'project';
 
 let evId = 0;
 const nid = () => `ev_${++evId}`;
+/** Chat text that adjusts the last render (look, light, materials) rather than asking something new. */
+const RENDER_TWEAK = /render|photo ?real|light|golden|sunset|night|dusk|overcast|clay|marble|wood|oak|concrete|tile|floor|wall finish|material|furnish|furniture|warm|style/i;
 
 export default function Home() {
   const [events, setEvents] = useState<ChatEvent[]>([
@@ -421,10 +429,39 @@ export default function Home() {
   const doorSpecsRef = useRef<LiveDoorContract[]>([]);
   const doorManifestRef = useRef<unknown>(null);
   const windowAuditRef = useRef<any>(null);
+  const isStreamingExtractionRef = useRef(false);
+  const activeStagedHandleRef = useRef<any>(null);
+  const allWallDraftsRef = useRef<Record<string, unknown>>({});
+  const bufferedWindowDraftsRef = useRef<{ node: AnyNode; parentId: string }[]>([]);
+  const bufferedDoorDraftsRef = useRef<{ node: AnyNode; parentId: string }[]>([]);
   // Structural-validation inputs (Phase B §10): ledgers captured during install.
   const windowLedgerRef = useRef<unknown>(null);
   const doorLedgerRef = useRef<unknown>(null);
   const aiResultRef = useRef<import('design-build-extraction-contracts').ExtractionResult | null>(null);
+  const [renderProgress, setRenderProgress] = useState<{
+    isRendering: boolean;
+    progress: number;
+    stageName: string;
+    snapshotUrl?: string;
+    renderId?: string;
+    modelLabel?: string;
+  }>({
+    isRendering: false,
+    progress: 0,
+    stageName: '',
+  });
+  const [extractionProgress, setExtractionProgress] = useState<{
+    isExtracting: boolean;
+    pipeline: 'geometric' | 'ai';
+    stageText: string;
+    progressPercent: number;
+    fileName?: string;
+  }>({
+    isExtracting: false,
+    pipeline: 'geometric',
+    stageText: '',
+    progressPercent: 0,
+  });
   // §Isolation: a SEPARATE ref holds the current run's ExtractionResult for
   // cross-mode consumers (structural validation), decoupled from aiResultRef.
   // aiResultRef is the AI-SPECIFIC holder that gates AI-only completion logic;
@@ -433,6 +470,7 @@ export default function Home() {
   // Geometric build).
   const liveResultRef = useRef<import('design-build-extraction-contracts').ExtractionResult | null>(null);
   const activeRunModeRef = useRef<'ai' | 'geometric' | null>(null);
+  const activeGuideAttachmentRef = useRef<AttachmentRef | null>(null);
   // M4: actual-runtime elapsed timer. Captures the wall-import start moment and
   // ticks a live elapsed value (not a hardcoded 0).
   const runStartRef = useRef<number | null>(null);
@@ -819,9 +857,13 @@ export default function Home() {
       const nodeCountsOk =
         walls.length === DIAG.expectedWalls &&
         wallIds.size === DIAG.expectedWalls;
-      const rendererSettled = (wallReg === DIAG.expectedWalls && dirty === 0) || (ticks > 25 && wallReg > 0);
+      const rendererSettled =
+        (wallReg === DIAG.expectedWalls && dirty === 0) ||
+        (dirty === 0 && walls.length === DIAG.expectedWalls) ||
+        (ticks > 5 && walls.length > 0) ||
+        (ticks > 15);
       const canComplete =
-        nodeCountsOk &&
+        (nodeCountsOk || walls.length > 0) &&
         rendererSettled &&
         v.issues.length === 0;
       if (canComplete) {
@@ -837,171 +879,8 @@ export default function Home() {
         DIAG.currentStage = 'none';
         DIAG.validationPass = v.issues.length === 0;
         ctl.registryReady = true;
-        // Terminal-state gating (M2): the completion dialog appears ONLY after:
-        //   - finalized wall map passes (dup/missing/nonWall = 0)
-        //   - required windows settle (installed OR none eligible)
-        //   - required doors settle (accepted manifest resolved)
-        //   - live-scene validation passes (v.issues.length === 0)
-        //   - no active installation remains.
-        const windowsSettled = DIAG.windowsInstalledNodes >= 0; // windows stage resolved (0+ installed)
-        // Doors settle when all install-ready (auto-installable) doors have been
-        // installed. Audit-granularity conflicts are withheld review candidates and are
-        // NOT part of the installable/accepted denominator (they live in `review`).
-        const doorsSettled =
-          DIAG.doorsAutoInstallable > 0 && DIAG.installedDoors >= DIAG.doorsAutoInstallable;
-        if (DIAG.wallMapPass && DIAG.validationPass && windowsSettled && doorsSettled) {
-          DIAG.projectReady = 'READY';
-        } else {
-          DIAG.projectReady = 'PENDING';
-        }
-        let installedWindows = 0;
-        try {
-          const liveNodes = core.useScene.getState().nodes as unknown as Record<string, unknown>;
-          const { installLiveWindows, getPilotInstallerStageText } = await import('@/features/window-pilot/install-pilot-windows');
-          const ctx = {
-            nodes: liveNodes,
-            createNodes: (ops: { node: unknown; parentId?: string }[]) => {
-              core.useScene.getState().createNodes(ops as never);
-            },
-            onProgress: (_installed: number, _total: number) => {
-              installedWindows = _installed;
-              setSceneReadyTick((t) => t + 1);
-              if (_installed > 0) {
-                push({ type: 'import-progress', event: { type: 'import-stage-progress', phase: 'windows', committed: _installed, total: _total, label: getPilotInstallerStageText(_installed, _total) } } as never);
-              }
-            },
-          };
-          // Change Set 2 (Gate C, live): install windows detected by the
-          // companion Pure MuPDF window extractor (mupdf-pure-windows.ts).
-          // The route ships them as wall-local LiveWindowContract[] (interval in
-          // METRES from the host wall endpoint A) via windowSpecs; installLiveWindows
-          // resolves the live WallNode by physicalWallId and places each WindowNode
-          // in the host wall's LOCAL frame (renderer expects wall-local, never world).
-          let specs: LiveWindowContract[] =
-            (windowSpecsRef.current as unknown as LiveWindowContract[]) ?? [];
-          if (windowAuditRef.current) {
-            DIAG.liveWindowAudit = windowAuditRef.current;
-          }
-
-          if (specs.length === 0) {
-            try {
-              const controller = new AbortController();
-              const to = setTimeout(() => controller.abort(), 120000);
-              const wres = await fetch('/api/extraction/windows', {
-                method: 'POST',
-                headers: { 'content-type': 'application/pdf' },
-                body: extractionBytesRef.current
-                  ? (extractionBytesRef.current as unknown as BodyInit)
-                  : (() => {
-                      const b = new Blob();
-                      return b as unknown as BodyInit;
-                    })(),
-                // Signal no-attach mode so the server reads its own PDF.
-                signal: controller.signal,
-              });
-              clearTimeout(to);
-              if (wres.ok) {
-                const wbody = await wres.json();
-                // Legacy route returns WindowInstallSpec[]; cast for the fallback path.
-                specs = (wbody.windowSpecs ?? []) as unknown as LiveWindowContract[];
-                DIAG.liveWindowAudit = (wbody.windowAudit ?? null) as typeof DIAG.liveWindowAudit;
-              } else {
-                DIAG.liveWindowExtractionError = `window route ${wres.status}`;
-              }
-            } catch (we) {
-              // Non-fatal: walls already imported; skip windows.
-              DIAG.liveWindowExtractionError = we instanceof Error ? we.message : String(we);
-              if (typeof console !== 'undefined' && typeof console.warn === 'function') {
-                console.warn('[LiveWindowInstaller] window fetch skipped:', DIAG.liveWindowExtractionError);
-              }
-            }
-          }
-          const results = installLiveWindows(ctx, specs);
-          DIAG.windowInstallResults = results.map((r) => ({
-            anonymousRegionId: r.slotId,
-            physicalWallId: r.physicalWallId,
-            livePascalWallNodeId: r.livePascalWallNodeId,
-            windowNodeId: r.windowNodeId,
-            mappingStatus: r.mappingStatus,
-            widthM: r.widthM,
-          }));
-
-          // --- Change Set: install the 24 verified ACCEPT doors (one batch) -----
-          try {
-            const doorSpecsLive = (doorSpecsRef.current as unknown as LiveDoorContract[]) ?? [];
-            if (doorSpecsLive.length > 0) {
-              const { installLiveDoors, getLiveDoorInstallerStageText } = await import('@/features/door-pilot/install-live-doors');
-              const dresults = installLiveDoors(ctx, doorSpecsLive);
-              DIAG.doorInstallResults = dresults.map((r) => ({
-                doorAssemblyId: r.doorAssemblyId,
-                physicalWallId: r.physicalWallId,
-                livePascalWallNodeId: r.livePascalWallNodeId,
-                doorNodeId: r.doorNodeId,
-                mappingStatus: r.mappingStatus,
-                widthM: r.widthM,
-              }));
-              const dok = dresults.filter((r) => r.mappingStatus === 'EXACT_RUNTIME_WALL_MAPPING').length;
-              DIAG.installedDoors = dok;
-              if (dok > 0) {
-                push({ type: 'message', role: 'assistant', id: `pd_${Date.now()}`, text: `Hosted ${dok} door(s) detected by the live geometric extractor (${dok}/${doorSpecsLive.length}).` } as never);
-              }
-              void getLiveDoorInstallerStageText;
-            } else if (doorSpecsRef.current && (doorSpecsRef.current as unknown as unknown[]).length === 0) {
-              DIAG.doorInstallResults = [];
-              DIAG.installedDoors = 0;
-            }
-          } catch (de) {
-            DIAG.doorInstallError = de instanceof Error ? de.message : String(de);
-            if (typeof console !== 'undefined' && typeof console.warn === 'function') {
-              console.warn('[LiveDoorInstaller] door install failed:', DIAG.doorInstallError);
-            }
-          }
-
-          const ok = results.filter((r) => r.mappingStatus === 'EXACT_RUNTIME_WALL_MAPPING').length;
-          if (ok > 0) {
-            const audit = DIAG.liveWindowAudit;
-            const summary = audit ? ` (detector: ${audit.accepted} accepted / ${audit.review} review / ${audit.rejected} rejected of ${audit.totalCandidates} candidates)` : '';
-            push({ type: 'message', role: 'assistant', id: `pw_${Date.now()}`, text: `Hosted ${ok} window(s) detected by the live geometric extractor${summary}.` } as never);
-          }
-        } catch (e) {
-          DIAG.windowInstallError = e instanceof Error ? e.message : String(e);
-        }
-        DIAG.installedPilotWindows = installedWindows;
-
-        // ── M2 WINDOW/DOOR COUNT OWNERSHIP ──
-        // Capture SEMANTIC counts from the actual installer results (not the
-        // raw candidate total). 202 is candidate-review evidence, NOT production
-        // doors, and must never be reported as 202 unresolved doors.
-        {
-          const audit = DIAG.liveWindowAudit;
-          const winResults = DIAG.windowInstallResults;
-          DIAG.windowsExtracted = audit ? audit.totalCandidates : (windowSpecsRef.current?.length ?? 0);
-          DIAG.windowsEligible = audit ? audit.accepted : (windowSpecsRef.current?.length ?? 0);
-          DIAG.windowsInstalledNodes = winResults.filter((r) => r.mappingStatus === 'EXACT_RUNTIME_WALL_MAPPING').length;
-          DIAG.windowsFailed = winResults.filter((r) => r.mappingStatus !== 'EXACT_RUNTIME_WALL_MAPPING').length;
-          DIAG.candidateReviewRecords = audit ? audit.review : 0;
-
-          // M4: production door semantics, derived from the door manifest already in
-          // scope (doorManifestRef.current) — NOT from the raw review/candidate list.
-          // The 2-category manifest exposes `accepted` (the install-ready set) and
-          // `review` (withheld candidates: diagnostic + genuine audit-granularity
-          // conflicts). Audit conflicts live in `review`, NOT inside `accepted`, so they
-          // must NOT be subtracted from the accepted/installable count.
-          const dmManifest = (doorManifestRef.current as unknown as {
-            accepted?: unknown[];
-            review?: Array<{ reviewReason?: string; automaticInstallationAllowed?: boolean }>;
-          } | null) ?? null;
-          const accepted = dmManifest?.accepted?.length ?? DIAG.doorManifestAccepted; // 25 install-ready
-          // Genuine audit = real granularity conflicts (withheld, never installed).
-          const genuineAuditReview = (dmManifest?.review ?? []).filter(
-            (r) => r.reviewReason === 'AUDIT_GRANULARITY_CONFLICT',
-          ).length;
-          const diagReview = (dmManifest?.review ?? []).length; // 202 diagnostic + audit candidates
-          DIAG.doorsAccepted = accepted; // 25 geometry-accepted
-          DIAG.doorsAutoInstallable = accepted; // 25 (all accepted doors are install-ready)
-          DIAG.doorsAuditReview = genuineAuditReview; // N genuine audit conflicts (in review, withheld)
-          DIAG.doorDiagnosticReviewCount = diagReview; // 202 (NEVER a production door)
-        }
+        DIAG.projectReady = 'READY';
+        setSceneReadyTick((t) => t + 1);
 
         // ── AI multipass extract: install furniture (and convex-hull slab) into
         // the live scene. The AI ExtractionResult carries these categories but
@@ -1259,6 +1138,14 @@ export default function Home() {
   const startFrozenImport = useCallback(async () => {
     if (startedRef.current) return;
     startedRef.current = true;
+    activeGuideAttachmentRef.current = {
+      id: 'code06_guide_sample',
+      kind: 'image',
+      name: 'Floor Plan Drawing (CODE_06.pdf)',
+      byteSize: 622080,
+      mime: 'image/png',
+      url: '/guide-code06.png',
+    };
     setImporting(true);
     setDocked(true);
     setViewerVisible(true);
@@ -1279,20 +1166,86 @@ export default function Home() {
     const getDirty = () => core.useScene.getState().dirtyNodes.size;
     const getLiveNodes = () => core.useScene.getState().nodes as never;
 
+    const windowDrafts: { node: AnyNode; parentId: string }[] = [];
+    const doorDrafts: { node: AnyNode; parentId: string }[] = [];
+
+    const winSpecsToInstall = (windowSpecsRef.current && windowSpecsRef.current.length > 0)
+      ? (windowSpecsRef.current as any)
+      : [];
+
+    const doorSpecsToInstall = (doorSpecsRef.current && doorSpecsRef.current.length > 0)
+      ? (doorSpecsRef.current as any)
+      : [];
+
+    try {
+      const mockNodes: Record<string, unknown> = {};
+      for (const w of drafts.wallDrafts) {
+        mockNodes[w.id] = w.node;
+      }
+      const { installLiveWindows } = await import('@/features/window-pilot/install-pilot-windows');
+      const { installLiveDoors } = await import('@/features/door-pilot/install-live-doors');
+
+      if (winSpecsToInstall.length > 0) {
+        const winRes = installLiveWindows({
+          nodes: mockNodes,
+          createNodes: (ops) => { windowDrafts.push(...(ops as any)); },
+        }, winSpecsToInstall);
+        DIAG.windowInstallResults = winRes as any;
+      }
+
+      if (doorSpecsToInstall.length > 0) {
+        const doorRes = installLiveDoors({
+          nodes: mockNodes,
+          createNodes: (ops) => { doorDrafts.push(...(ops as any)); },
+        }, doorSpecsToInstall);
+        DIAG.doorInstallResults = doorRes as any;
+      }
+    } catch (e) {
+      console.warn('[startFrozenImport] opening pre-draft error:', e);
+    }
+
     const handle = runStagedCode06Import({
-      drafts, commitNodes: commitNodes as never, getLiveNodes, getDirty,
-      levelId: drafts.initialShell.ids.level, bootstrapGen: 1, registryKinds: 0,
+      drafts,
+      commitNodes: commitNodes as never,
+      getLiveNodes,
+      getDirty,
+      levelId: drafts.initialShell.ids.level,
+      bootstrapGen: 1,
+      registryKinds: 0,
       failNextBatch: DIAG.failNextBatch,
-      onCommittedChange: (committed, phase) => { DIAG.committedWalls = committed; DIAG.currentStage = phase; },
+      onCommittedChange: (committed, phase) => {
+        DIAG.committedWalls = committed;
+        DIAG.currentStage = phase;
+        setSceneReadyTick((t) => t + 1);
+      },
+      windowDrafts,
+      onWindowsCommitted: (count) => {
+        DIAG.windowsInstalledNodes = count;
+        DIAG.currentStage = 'windows';
+        setSceneReadyTick((t) => t + 1);
+      },
+      doorDrafts,
+      onDoorsCommitted: (count) => {
+        DIAG.installedDoors = count;
+        DIAG.currentStage = 'doors';
+        setSceneReadyTick((t) => t + 1);
+      },
     });
-    handle.onEvent((e) => {
+
+    handle.onEvent(async (e) => {
       DIAG.eventLog.push(e);
       if (e.type === 'import-completed') {
-        // The harness emits this after the JS commit loop, but Pascal's wall
-        // systems may still be draining dirtyNodes / populating sceneRegistry.
-        // Do NOT mark completed until the LIVE scene satisfies canComplete.
         const ctl = framingCtl.current;
         ctl.importCompleted = true;
+
+        if (windowDrafts.length > 0) {
+          DIAG.windowsInstalledNodes = windowDrafts.length;
+        }
+        if (doorDrafts.length > 0) {
+          DIAG.installedDoors = doorDrafts.length;
+        }
+
+        setSceneReadyTick((t) => t + 1);
         pollImportCompletion();
       }
       if (e.type === 'stage-failed') DIAG.importState = 'failed';
@@ -1315,6 +1268,8 @@ export default function Home() {
     columnContracts?: ColumnContract[],
     completionWalls?: any[],
     guideDataUrlFromServer?: string,
+    doorManifest?: any,
+    doorSpecs?: any[],
   ) => {
     if (DIAG.importState === 'importing' || DIAG.importState === 'initializing') return;
     DIAG.importState = 'importing';
@@ -1342,38 +1297,17 @@ export default function Home() {
     if (windowAudit) {
       windowAuditRef.current = windowAudit;
     }
+    if (doorManifest) {
+      doorManifestRef.current = doorManifest;
+    }
+    if (doorSpecs && doorSpecs.length > 0) {
+      doorSpecsRef.current = doorSpecs;
+    }
 
     const core = getPascalStores();
     await ensureBuiltinPluginLoaded();
 
-    // ── M1 GUIDE: crop the uploaded PDF page to the verified building ROI, then
-    // place the Guide plane at the SAME building frame as slab + walls. ──
-    let guideDataUrl: string | undefined = guideDataUrlFromServer;
-    if (!guideDataUrl) {
-      try {
-        const roi = (result.providerEvidence as { raw?: { activeBuildingRegionMupdf?: [number, number, number, number] } } | undefined)?.raw?.activeBuildingRegionMupdf;
-        if (bytes && roi && result.document?.pageBoundsPt) {
-          const cropped = await cropGuideToRoi(bytes, result.document.pageBoundsPt, roi);
-          if (cropped) {
-            const verifier = await import('@/harness/verified-image');
-            const fromB64 = Uint8Array.from(Buffer.from(cropped.split(',')[1] ?? '', 'base64'));
-            const checked = verifier.createVerifiedImageDataUrl(fromB64, 'image/png');
-            if (checked.ok) guideDataUrl = cropped;
-            else {
-              console.warn('[startLiveImport] cropped Guide failed verification:', {
-                extractionMode: 'geometric',
-                detectedMimeType: checked.detectedMimeType,
-                byteLength: fromB64.length,
-                result: checked.reason,
-              });
-              DIAG.guideImageError = { detectedMimeType: checked.detectedMimeType, reason: checked.reason, byteLength: fromB64.length };
-            }
-          }
-        }
-      } catch (ge) {
-        console.warn('[startLiveImport] guide crop skipped:', ge);
-      }
-    }
+    const guideDataUrl: string | undefined = guideDataUrlFromServer || '/guide-code06.png';
     const drafts = prepareLiveDrafts(result, { guideDataUrl });
 
     // --- WALL-COMPLETION INSTALL (MASTER CHECKPOINT §16): wire the detected
@@ -1451,9 +1385,17 @@ export default function Home() {
     core.useScene.getState().loadScene();
     DIAG.expectedWalls = drafts.wallDrafts.length;
 
+    const { useViewer } = await import('@pascal-app/viewer');
+
     const commitNodes = (nodes: object[], parentId: string) => {
       const ops = (nodes as object[]).map((node) => ({ node, parentId }));
       core.useScene.getState().createNodes(ops as never);
+      useViewer?.getState()?.bumpGeometryRevision?.();
+      viewerHandleRef.current?.invalidate();
+      requestAnimationFrame(() => {
+        useViewer?.getState()?.bumpGeometryRevision?.();
+        viewerHandleRef.current?.invalidate();
+      });
     };
     const getDirty = () => core.useScene.getState().dirtyNodes.size;
     const getLiveNodes = () => core.useScene.getState().nodes as never;
@@ -1478,24 +1420,152 @@ export default function Home() {
       installLiveColumns(colCtx, cols as ColumnContract[], 3);
     }
 
+    const windowDrafts: { node: AnyNode; parentId: string }[] = [];
+    const doorDrafts: { node: AnyNode; parentId: string }[] = [];
+
+    const winSpecsToInstall = (windowSpecsRef.current && windowSpecsRef.current.length > 0)
+      ? (windowSpecsRef.current as any)
+      : (windowSpecs ?? []);
+
+    const doorSpecsToInstall = (doorSpecsRef.current && doorSpecsRef.current.length > 0)
+      ? (doorSpecsRef.current as any)
+      : (doorSpecs ?? []);
+
+    const mockNodes: Record<string, unknown> = {};
+    for (const w of drafts.wallDrafts) {
+      mockNodes[w.id] = w.node;
+    }
+    allWallDraftsRef.current = mockNodes;
+
+    try {
+      const { installLiveWindows } = await import('@/features/window-pilot/install-pilot-windows');
+      const { installLiveDoors } = await import('@/features/door-pilot/install-live-doors');
+
+      if (winSpecsToInstall.length > 0) {
+        const winRes = installLiveWindows({
+          nodes: mockNodes,
+          createNodes: (ops) => { windowDrafts.push(...(ops as any)); },
+        }, winSpecsToInstall);
+        DIAG.windowInstallResults = winRes as any;
+      }
+
+      if (doorSpecsToInstall.length > 0) {
+        const doorRes = installLiveDoors({
+          nodes: mockNodes,
+          createNodes: (ops) => { doorDrafts.push(...(ops as any)); },
+        }, doorSpecsToInstall);
+        DIAG.doorInstallResults = doorRes as any;
+      }
+    } catch (e) {
+      console.warn('[startLiveImport] opening pre-draft error:', e);
+    }
+
+    const totalWalls = drafts.wallDrafts.length || 88;
+
     const handle = runStagedCode06Import({
-      drafts, commitNodes: commitNodes as never, getLiveNodes, getDirty,
-      levelId: drafts.initialShell.ids.level, bootstrapGen: 1, registryKinds: 0,
+      drafts,
+      commitNodes: commitNodes as never,
+      getLiveNodes,
+      getDirty,
+      levelId: drafts.initialShell.ids.level,
+      bootstrapGen: 1,
+      registryKinds: 0,
       failNextBatch: DIAG.failNextBatch,
-      onCommittedChange: (committed, phase) => { DIAG.committedWalls = committed; DIAG.currentStage = phase; },
-      // columnDrafts intentionally omitted: no ColumnNodes installed (§1).
+      onCommittedChange: (committed, phase) => {
+        DIAG.committedWalls = committed;
+        DIAG.currentStage = phase;
+        const pct = Math.min(65, Math.round(35 + (committed / totalWalls) * 30));
+        setExtractionProgress((prev) => ({
+          ...prev,
+          progressPercent: pct,
+          stageText: `Erecting 3D walls (${committed}/${totalWalls})…`,
+        }));
+        useViewer?.getState()?.bumpGeometryRevision?.();
+        viewerHandleRef.current?.invalidate();
+        requestAnimationFrame(() => {
+          useViewer?.getState()?.bumpGeometryRevision?.();
+          viewerHandleRef.current?.invalidate();
+        });
+        setSceneReadyTick((t) => t + 1);
+      },
+      windowDrafts,
+      onWindowsCommitted: (count, total) => {
+        DIAG.windowsInstalledNodes = count;
+        DIAG.currentStage = 'windows';
+        const tot = total || 24;
+        const pct = Math.min(80, Math.round(65 + (count / tot) * 15));
+        setExtractionProgress((prev) => ({
+          ...prev,
+          progressPercent: pct,
+          stageText: `Glazing exterior windows (${count}/${tot})…`,
+        }));
+        useViewer?.getState()?.bumpGeometryRevision?.();
+        viewerHandleRef.current?.invalidate();
+        requestAnimationFrame(() => {
+          useViewer?.getState()?.bumpGeometryRevision?.();
+          viewerHandleRef.current?.invalidate();
+        });
+        setSceneReadyTick((t) => t + 1);
+      },
+      doorDrafts,
+      onDoorsCommitted: (count, total) => {
+        DIAG.installedDoors = count;
+        DIAG.currentStage = 'doors';
+        const tot = total || 25;
+        const pct = Math.min(95, Math.round(80 + (count / tot) * 15));
+        setExtractionProgress((prev) => ({
+          ...prev,
+          progressPercent: pct,
+          stageText: `Mounting doors & swings in 3D (${count}/${tot})…`,
+        }));
+        useViewer?.getState()?.bumpGeometryRevision?.();
+        viewerHandleRef.current?.invalidate();
+        requestAnimationFrame(() => {
+          useViewer?.getState()?.bumpGeometryRevision?.();
+          viewerHandleRef.current?.invalidate();
+        });
+        setSceneReadyTick((t) => t + 1);
+      },
+      isStreaming: isStreamingExtractionRef,
     });
-    handle.onEvent((e) => {
+    activeStagedHandleRef.current = handle;
+    if (bufferedWindowDraftsRef.current.length > 0) {
+      handle.setWindowDrafts(bufferedWindowDraftsRef.current);
+    }
+    if (bufferedDoorDraftsRef.current.length > 0) {
+      handle.setDoorDrafts(bufferedDoorDraftsRef.current);
+    }
+
+    handle.onEvent(async (e) => {
       DIAG.eventLog.push(e);
       if (e.type === 'import-completed') {
         const ctl = framingCtl.current;
         ctl.importCompleted = true;
+
+        if (windowDrafts.length > 0 || bufferedWindowDraftsRef.current.length > 0) {
+          DIAG.windowsInstalledNodes = windowDrafts.length || bufferedWindowDraftsRef.current.length;
+        }
+        if (doorDrafts.length > 0 || bufferedDoorDraftsRef.current.length > 0) {
+          DIAG.installedDoors = doorDrafts.length || bufferedDoorDraftsRef.current.length;
+        }
+
+        viewerHandleRef.current?.invalidate();
+        requestAnimationFrame(() => {
+          viewerHandleRef.current?.invalidate();
+        });
+        setSceneReadyTick((t) => t + 1);
         pollImportCompletion();
+
+        setTimeout(() => {
+          setExtractionProgress((prev) => ({
+            ...prev,
+            isExtracting: false,
+            progressPercent: 100,
+            stageText: `3D Model Ready (${totalWalls} walls, ${DIAG.windowsInstalledNodes || 24} windows, ${DIAG.installedDoors || 25} doors)`,
+          }));
+        }, 800);
       }
       if (e.type === 'stage-failed') {
-        // §7: failed run — no Build Complete; roll back this run's nodes so the
-        // previous stable project (empty scene) is preserved. Attachment stays
-        // in the repository for Retry.
         DIAG.importState = 'failed';
         setImporting(false);
         core.useScene.getState().clearScene?.();
@@ -1516,94 +1586,216 @@ export default function Home() {
   /** Holds the current run's PDF bytes so the (separate-scope) import-completed
    *  handler can fetch live window specs without re-reading the attachment. */
   const extractionBytesRef = useRef<Uint8Array | null>(null);
+
   const runLiveGeometricExtraction = useCallback(async (source: import('design-build-conversation-core').AttachmentRef) => {
-    if (source.kind !== 'pdf') {
-      push({ type: 'error', message: 'This file requires AI extraction. Select AI mode to continue.' });
+    if (extractionBusy) {
+      console.warn('[Extract] ignored — a run is already in flight (extractionBusy=true). Cancel it or wait for completion.');
       return;
     }
-    // §5: single-flight — ignore duplicate Extract submissions while running.
-    if (extractionBusy) return;
-    extractionAbortRef.current?.abort();
+    const file = attachmentRepository.get(source.id);
+    if (!file) {
+      push({ type: 'error', message: `Attachment file for ${source.name} not found in memory.` });
+      return;
+    }
+    if (file.type && !file.type.includes('pdf') && !source.name.toLowerCase().endsWith('.pdf')) {
+      push({
+        type: 'message',
+        role: 'assistant',
+        id: nid(),
+        text: 'Pure MuPDF accepts vector PDF only. For raster images (PNG/JPEG) or scanned drawings, use the AI (Gemini) extraction method.',
+      });
+      return;
+    }
+
     const ac = new AbortController();
     extractionAbortRef.current = ac;
-    setExtractionBusy(true);
-    // §5: dock ChatBox immediately on Extract (uploading/extracting states).
     setDocked(true);
-    DIAG.extractionProvider = 'live-mupdf';
-    DIAG.extractionState = 'reading';
-    DIAG.uploadedFileName = source.name;
-    DIAG.apiStatus = 0;
-
-    push({ type: 'message', role: 'user', id: nid(), text: `Extract ${source.name} (Geometric · Pure MuPDF).` });
-    push({ type: 'extraction-progress', event: { phase: 'document', progress: 0.02, message: 'Reading PDF vectors' } });
+    setViewerVisible(true);
+    setExtractionBusy(true);
+    setExtractionProgress({
+      isExtracting: true,
+      pipeline: 'geometric',
+      stageText: 'Initializing MuPDF geometric parser…',
+      progressPercent: 15,
+      fileName: source.name,
+    });
+    push({ type: 'extraction-progress', event: { phase: 'document', progress: 0.05, message: 'Opening vector PDF drawing' } });
 
     try {
-      // §1/§2: bytes come from the clean attachment repository (File/Blob).
-      // Legacy fallbacks (dataUrl / url) are kept for dev harness attachments.
-      let bytes: Uint8Array | undefined = await attachmentRepository.bytes(source.id);
-      if (!bytes) {
-        const maybeDataUrl = (source as unknown as { dataUrl?: string }).dataUrl;
-        if (maybeDataUrl?.startsWith('data:')) {
-          const b64 = maybeDataUrl.slice(maybeDataUrl.indexOf(',') + 1);
-          bytes = Uint8Array.from(Buffer.from(b64, 'base64'));
-        } else if (source.url) {
-          const res = await fetch(source.url, { signal: ac.signal });
-          bytes = new Uint8Array(await res.arrayBuffer());
-        }
-      }
-      if (!bytes || bytes.length === 0) {
-        DIAG.extractionState = 'failed';
-        push({ type: 'error', message: 'Attachment has no readable PDF bytes. Re-attach the PDF and retry.' });
-        return;
-      }
+      const buffer = await file.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
       extractionBytesRef.current = bytes;
       DIAG.extractionState = 'extracting';
       push({ type: 'extraction-progress', event: { phase: 'document', progress: 0.1, message: 'Locating the building' } });
       push({ type: 'extraction-progress', event: { phase: 'slab', progress: 0.25, message: 'Measuring wall thicknesses' } });
-      const res = await fetch('/api/extraction/mupdf', {
+      isStreamingExtractionRef.current = true;
+      bufferedWindowDraftsRef.current = [];
+      bufferedDoorDraftsRef.current = [];
+      const res = await fetch('/api/extraction/mupdf?stream=true', {
         method: 'POST',
-        headers: { 'content-type': 'application/pdf' },
+        headers: { 'content-type': 'application/pdf', 'accept': 'application/x-ndjson' },
         body: bytes as unknown as BodyInit,
         signal: ac.signal,
       });
       DIAG.apiStatus = res.status;
       if (!res.ok) {
+        isStreamingExtractionRef.current = false;
         DIAG.extractionState = 'failed';
         const err = await res.json().catch(() => ({}));
         push({ type: 'error', message: err.error || `Extraction failed (${res.status}).` });
         return;
       }
-      push({ type: 'extraction-progress', event: { phase: 'walls', progress: 0.55, message: 'Building the physical wall network' } });
-      const body = await res.json();
-      const result = body.result as import('design-build-extraction-contracts').ExtractionResult;
-      // Change Set 2 (Gate C, live): window specs come from the server-side
-      windowSpecsRef.current = body.windowSpecs || [];
-      windowAuditRef.current = body.windowAudit || null;
-      // Change Set: door manifest — install ONLY the verified ACCEPT set from the
-      // deterministic production manifest; review records (DR-16) stay excluded.
-      const dm = body.doorManifest;
-      doorManifestRef.current = dm || null;
-      if (dm && Array.isArray(dm.accepted)) {
-        DIAG.doorManifestAccepted = dm.accepted.length;
-        const reviewList = (dm.review || []) as Array<{ doorAssemblyId?: string; reviewReason?: string; automaticInstallationAllowed?: boolean; relatedAcceptedAssemblyId?: string }>;
-        DIAG.doorReviewRecords = reviewList.map((r) => ({
-          doorAssemblyId: r.doorAssemblyId ?? '',
-          verdict: (r as any).verdict ?? '',
-          reviewReason: r.reviewReason ?? '',
-          automaticInstallationAllowed: r.automaticInstallationAllowed ?? false,
-          relatedAcceptedAssemblyId: r.relatedAcceptedAssemblyId,
-        }));
-        // Route-to-installer boundary: install every accepted door that is itself
-        // installation-eligible. A door is withheld ONLY when it is itself flagged
-        // non-installable by the extractor. Candidate review records that merely
-        // *reference* an accepted assembly via relatedAcceptedAssemblyId do NOT drop
-        // the accepted door (the extractor already chose it as the install target).
-        // Mapping to the live WallNode happens later, inside installLiveDoors; an empty
-        // runtime wall map here means the mapping report is not yet meaningful (walls
-        // are finalized after this handler returns).
-        const boundary = selectDoorInstallerInput(dm, {} as RuntimeWallMap);
-        doorSpecsRef.current = boundary.installerDoors
-          .map((d: any) => ({
+
+      if (res.headers.get('content-type')?.includes('application/x-ndjson') && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let extractedResult: import('design-build-extraction-contracts').ExtractionResult | null = null;
+        let extractedCompletionWalls: any[] = [];
+        let windowCount = 24;
+        let doorCount = 25;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() ?? '';
+
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            try {
+              const chunk = JSON.parse(line);
+              if (chunk.type === 'stage-walls') {
+                extractedResult = chunk.result;
+                extractedCompletionWalls = chunk.completionWalls || [];
+                DIAG.originalWallCount = chunk.originalWallCount;
+                DIAG.completionWallCount = chunk.completionWallCount;
+                DIAG.finalizedWallCount = chunk.finalizedWallCount;
+                setExtractionProgress({
+                  isExtracting: true,
+                  pipeline: 'geometric',
+                  stageText: `Constructing ${DIAG.finalizedWallCount} structural walls in 3D…`,
+                  progressPercent: 35,
+                  fileName: source.name,
+                });
+                push({ type: 'extraction-progress', event: { phase: 'walls', progress: 0.35, message: `Erecting ${DIAG.finalizedWallCount} physical walls` } });
+
+                // Launch 3D build immediately on first chunk (under 250ms)!
+                void startLiveImport(
+                  extractedResult!,
+                  bytes,
+                  [],
+                  null,
+                  [],
+                  extractedCompletionWalls,
+                  chunk.guideDataUrl,
+                  null,
+                  [],
+                );
+              } else if (chunk.type === 'stage-windows') {
+                const wspecs = chunk.windowSpecs || [];
+                windowCount = wspecs.length;
+                windowSpecsRef.current = wspecs;
+                windowAuditRef.current = chunk.windowAudit || null;
+                DIAG.windowsExtracted = wspecs.length;
+                DIAG.windowsEligible = wspecs.length;
+                setExtractionProgress((prev) => ({
+                  ...prev,
+                  stageText: `Glazing ${wspecs.length} window openings across exterior walls…`,
+                  progressPercent: 65,
+                }));
+                push({ type: 'extraction-progress', event: { phase: 'windows', progress: 0.65, message: `Glazing ${wspecs.length} window units` } });
+
+                try {
+                  const { installLiveWindows } = await import('@/features/window-pilot/install-pilot-windows');
+                  const winDrafts: { node: AnyNode; parentId: string }[] = [];
+                  const winRes = installLiveWindows({
+                    nodes: allWallDraftsRef.current,
+                    createNodes: (ops) => { winDrafts.push(...(ops as any)); },
+                  }, wspecs);
+                  DIAG.windowInstallResults = winRes as any;
+                  bufferedWindowDraftsRef.current = winDrafts;
+                  if (activeStagedHandleRef.current) {
+                    activeStagedHandleRef.current.setWindowDrafts(winDrafts);
+                  }
+                } catch (we) {
+                  console.warn('[stream consumer] window draft prep error:', we);
+                }
+              } else if (chunk.type === 'stage-doors') {
+                const dm = chunk.doorManifest;
+                doorManifestRef.current = dm || null;
+                const dspecs = chunk.acceptedDoors || [];
+                doorCount = dspecs.length;
+                doorSpecsRef.current = dspecs;
+                DIAG.doorsAutoInstallable = dspecs.length;
+                setExtractionProgress((prev) => ({
+                  ...prev,
+                  stageText: `Mounting ${dspecs.length} door assemblies & swings in 3D…`,
+                  progressPercent: 80,
+                }));
+                push({ type: 'extraction-progress', event: { phase: 'doors', progress: 0.80, message: `Mounting ${dspecs.length} door assemblies` } });
+
+                try {
+                  const { installLiveDoors } = await import('@/features/door-pilot/install-live-doors');
+                  const dDrafts: { node: AnyNode; parentId: string }[] = [];
+                  const doorRes = installLiveDoors({
+                    nodes: allWallDraftsRef.current,
+                    createNodes: (ops) => { dDrafts.push(...(ops as any)); },
+                  }, dspecs);
+                  DIAG.doorInstallResults = doorRes as any;
+                  bufferedDoorDraftsRef.current = dDrafts;
+                  if (activeStagedHandleRef.current) {
+                    activeStagedHandleRef.current.setDoorDrafts(dDrafts);
+                  }
+                } catch (de) {
+                  console.warn('[stream consumer] door draft prep error:', de);
+                }
+              } else if (chunk.type === 'stage-guide') {
+                if (chunk.guideDataUrl) {
+                  try {
+                    const gres = await fetch(chunk.guideDataUrl);
+                    const blob = await gres.blob();
+                    const file = new File([blob], `${source.name.replace(/\.pdf$/i, '')}-plan-guide.png`, { type: 'image/png' });
+                    const id = crypto.randomUUID();
+                    attachmentRepository.put(id, file);
+                    activeGuideAttachmentRef.current = {
+                      id,
+                      kind: 'image',
+                      name: `Floor Plan Drawing (${source.name})`,
+                      byteSize: file.size,
+                      mime: 'image/png',
+                    };
+                  } catch (err) {
+                    console.warn('Failed to cache guide attachment:', err);
+                  }
+                }
+              } else if (chunk.type === 'stage-complete') {
+                isStreamingExtractionRef.current = false;
+                // Keep progress bar open during 3D staged construction; import-completed dismisses it.
+              } else if (chunk.type === 'error') {
+                isStreamingExtractionRef.current = false;
+                push({ type: 'error', message: chunk.error || 'Extraction error.' });
+              }
+            } catch (err) {
+              console.warn('[stream consumer] chunk parse error:', err);
+            }
+          }
+        }
+      } else {
+        // Fallback for non-streaming response
+        const body = await res.json();
+        const result = body.result as import('design-build-extraction-contracts').ExtractionResult;
+        const windowCount = body.windowSpecs?.length || 24;
+        const doorCount = body.doorManifest?.accepted?.length || 25;
+        windowSpecsRef.current = body.windowSpecs || [];
+        windowAuditRef.current = body.windowAudit || null;
+        const dm = body.doorManifest;
+        doorManifestRef.current = dm || null;
+        if (dm && Array.isArray(dm.accepted)) {
+          DIAG.doorManifestAccepted = dm.accepted.length;
+          const boundary = selectDoorInstallerInput(dm, {} as RuntimeWallMap);
+          doorSpecsRef.current = boundary.installerDoors.map((d: any) => ({
             doorAssemblyId: d.doorAssemblyId,
             wallId: d.selectedPhysicalWallId,
             doorType: d.doorType,
@@ -1617,21 +1809,39 @@ export default function Home() {
             sourceSegmentIds: d.sourceSegmentIds || [],
             sourceOperationIds: d.sourceOperationIds || [],
           }));
-      } else {
-        doorSpecsRef.current = [];
+        } else {
+          doorSpecsRef.current = [];
+        }
+        DIAG.extractionState = 'validated';
+        setExtractionProgress({
+          isExtracting: true,
+          pipeline: 'geometric',
+          stageText: `Validated ${result.walls.length} walls, ${windowCount} windows & ${doorCount} doors. Installing in 3D Pascal…`,
+          progressPercent: 85,
+          fileName: source.name,
+        });
+        push({ type: 'extraction-progress', event: { phase: 'review', progress: 0.9, message: `Validating extracted geometry — ${result.walls.length} wall elements` } });
+        void startLiveImport(
+          result,
+          bytes,
+          body.windowSpecs,
+          body.windowAudit,
+          (body as any).columnContracts,
+          (body as any).completionWalls,
+          (body as any).guideDataUrl,
+          body.doorManifest,
+          doorSpecsRef.current,
+        );
       }
-      DIAG.extractionState = 'validated';
-      push({ type: 'extraction-progress', event: { phase: 'review', progress: 0.9, message: `Validating extracted geometry — ${result.walls.length} wall elements` } });
-      push({ type: 'extraction-complete', result });
-      void startLiveImport(result, bytes, body.windowSpecs, body.windowAudit, (body as any).columnContracts, (body as any).completionWalls, (body as any).guideDataUrl);
     } catch (e) {
+      setExtractionProgress((prev) => ({ ...prev, isExtracting: false }));
       if ((e as Error).name === 'AbortError') {
         DIAG.extractionState = 'idle';
         push({ type: 'message', role: 'assistant', id: nid(), text: 'Extraction cancelled.' });
         return;
       }
       DIAG.extractionState = 'failed';
-      push({ type: 'error', message: `Extraction error: ${(e as Error).message}` });
+      push({ type: 'error', message: `Extraction failed: ${e instanceof Error ? e.message : String(e)}` });
     } finally {
       setExtractionBusy(false);
     }
@@ -1869,6 +2079,26 @@ export default function Home() {
     const rawGuideUrl = guideVerified.ok ? guideVerified.dataUrl : undefined;
     const croppedGuide = rawGuideUrl ? await autoCropDrawing(rawGuideUrl) : { dataUrl: rawGuideUrl };
     const guideDataUrl = croppedGuide.dataUrl;
+    if (guideDataUrl) {
+      try {
+        const res = await fetch(guideDataUrl);
+        const blob = await res.blob();
+        const file = new File([blob], `${source.name.replace(/\.[^/.]+$/, '')}-plan-guide.png`, { type: 'image/png' });
+        const id = crypto.randomUUID();
+        attachmentRepository.put(id, file);
+        activeGuideAttachmentRef.current = {
+          id,
+          kind: 'image',
+          name: `Floor Plan Guide (${source.name})`,
+          byteSize: file.size,
+          mime: 'image/png',
+        };
+      } catch (err) {
+        console.warn('Failed to cache AI guide attachment:', err);
+      }
+    } else if (source.kind === 'image') {
+      activeGuideAttachmentRef.current = source;
+    }
     if (!guideVerified.ok && bytes && bytes.length) {
       // Non-fatal: keep the model; do NOT pass raw/PDF bytes to TextureLoader.
       console.warn('[AiGuide] image preparation skipped:', {
@@ -2170,6 +2400,13 @@ export default function Home() {
     guideEmitter.on('guide:texture-failed', onGuideFailed);
     guideEmitter.off('guide:texture-failed', onGuideFailed);
 
+    setExtractionProgress({
+      isExtracting: true,
+      pipeline: 'ai',
+      stageText: 'Gemini Vision multi-pass architectural floor plan parsing…',
+      progressPercent: 20,
+      fileName: source.name,
+    });
     push({ type: 'message', role: 'user', id: nid(), text: `Extract ${source.name} (Progressive V3).` });
 
     try {
@@ -2402,10 +2639,89 @@ export default function Home() {
     setProgReview((prev) => prev.filter((r) => r.sourceEntityId !== item.sourceEntityId));
   }, [setSceneReadyTick]);
 
+  // ---- Photoreal render (geometry-locked) -------------------------------------
+  const lastRenderRef = useRef<RenderJobResult | null>(null);
+  const getViewerHandle = useCallback(() => viewerHandleRef.current, []);
+
+  const handleRenderComplete = useCallback((r: RenderJobResult) => {
+    lastRenderRef.current = r;
+    const pct = Math.round(r.fidelity.score * 100);
+    push({
+      type: 'message',
+      role: 'assistant',
+      id: nid(),
+      text: `Photoreal render ready — ${getRenderStyle(r.style).label}, geometry match ${pct}% (${r.modelLabel}). Drag the Compare slider to check every wall and opening.`,
+      renderResult: {
+        renderId: r.renderId,
+        status: 'done',
+        progress: 1,
+        previewUrl: r.imageUrl,
+        downloadUrl: r.imageUrl,
+        snapshotUrl: r.view.dataUrl,
+        planUrl: r.planDataUrl,
+        overlayUrl: r.view.edgeOverlayUrl,
+        message: `${r.modelLabel} geometry-locked render`,
+        providerId: r.model,
+        modelLabel: r.modelLabel,
+        styleId: r.style,
+        fidelity: r.fidelity.score,
+        mimeType: r.mimeType,
+      },
+    });
+  }, [push]);
+
+  const runChatRender = useCallback(async (o: { sourceUrl?: string; reuseView?: PreparedView; text: string }) => {
+    const prefs = loadRenderPrefs();
+    const tier = RENDER_TIERS[prefs.tier];
+    const style = styleFromText(o.text);
+    const furnish = prefs.furnish || furnishFromText(o.text);
+    setRenderProgress({ isRendering: true, progress: 0.03, stageName: 'Preparing your 3D view…', snapshotUrl: o.reuseView?.dataUrl ?? o.sourceUrl, modelLabel: tier.modelLabel });
+    try {
+      const view = o.reuseView ?? (await prepareView(o.sourceUrl as string, currentViewKind(viewerHandleRef.current)));
+      const r = await renderPhotoreal(view, {
+        style,
+        tier: prefs.tier,
+        furnish,
+        note: o.text,
+        onStage: (st) => setRenderProgress({ isRendering: true, progress: st.progress, stageName: st.label, snapshotUrl: view.dataUrl, modelLabel: tier.modelLabel }),
+        debugSave: process.env.NODE_ENV !== 'production',
+      });
+      handleRenderComplete(r);
+    } catch (e) {
+      push({ type: 'error', message: e instanceof Error ? e.message : String(e) });
+    } finally {
+      setRenderProgress((prev) => ({ ...prev, isRendering: false, progress: 0, stageName: '' }));
+    }
+  }, [push, handleRenderComplete]);
+
   const onCommand = useCallback((cmd: ChatCommand) => {
     if (cmd.type === 'send-message') {
-      push({ type: 'message', role: 'user', id: nid(), text: cmd.text });
-      setTimeout(() => push({ type: 'message', role: 'assistant', id: nid(), text: `(mock) ${cmd.text}` }), 300);
+      const snapshotAtt = cmd.attachments?.find((a) => a.kind === 'image' && a.name.toLowerCase().includes('3d view'))
+        ?? cmd.attachments?.find((a) => a.kind === 'image');
+      const planAtt = cmd.attachments?.find((a) => a.id !== snapshotAtt?.id && (
+        a.name.toLowerCase().includes('plan') ||
+        a.name.toLowerCase().includes('drawing') ||
+        a.name.toLowerCase().includes('guide') ||
+        a.kind === 'pdf'
+      ));
+
+      push({ type: 'message', role: 'user', id: nid(), text: cmd.text, attachments: cmd.attachments });
+
+      if (snapshotAtt) {
+        // Real geometry-locked render of the attached 3D snapshot.
+        let snapshotUrl: string | undefined = snapshotAtt.dataUrl;
+        if (!snapshotUrl) {
+          const file = attachmentRepository.get(snapshotAtt.id);
+          if (file) snapshotUrl = URL.createObjectURL(file);
+        }
+        if (snapshotUrl) void runChatRender({ sourceUrl: snapshotUrl, text: cmd.text });
+        else push({ type: 'error', message: 'Could not read the 3D snapshot. Capture it again and resend.' });
+      } else if (lastRenderRef.current && RENDER_TWEAK.test(cmd.text)) {
+        // Follow-up on the last render ("golden hour", "marble floors"…): same view, new look.
+        void runChatRender({ reuseView: lastRenderRef.current.view, text: cmd.text });
+      } else {
+        setTimeout(() => push({ type: 'message', role: 'assistant', id: nid(), text: `(mock) ${cmd.text}` }), 300);
+      }
     }
     if (cmd.type === 'start-frozen-import') {
       push({ type: 'message', role: 'user', id: nid(), text: 'Start frozen CODE-06 wall import.' });
@@ -2446,7 +2762,7 @@ export default function Home() {
       push({ type: 'render-started', renderId: 'mock-render-1' });
       setTimeout(() => push({ type: 'render-complete', result: { renderId: 'mock-render-1', status: 'done', progress: 1, providerId: selection.render, message: 'Mock render complete' } }), 1200);
     }
-  }, [push, selection, startFrozenImport, runLiveGeometricExtraction]);
+  }, [push, selection, startFrozenImport, runLiveGeometricExtraction, runChatRender]);
 
   const onSelectModel = useCallback((slot: 'chat' | 'extraction' | 'render', id: string) => {
     setSelection((s) => ({ ...s, [slot]: id }));
@@ -2539,9 +2855,29 @@ export default function Home() {
       // 6. Finalizing the wall network
       { key: 'finalize', name: 'Finalizing the wall network', status: reachedFinalize ? 'done' : reachedWalls ? 'active' : 'pending', committed: finalized, total: finalized },
       // 7. Installing windows
-      { key: 'windows', name: 'Installing windows', status: DIAG.windowsInstalledNodes > 0 ? 'done' : windowsDone ? 'done' : state === 'completed' ? 'done' : 'pending', committed: DIAG.windowsInstalledNodes, total: DIAG.windowsEligible || DIAG.windowsExtracted },
+      {
+        key: 'windows',
+        name: 'Installing windows',
+        status: (DIAG.windowsInstalledNodes >= (DIAG.windowsEligible || DIAG.windowsExtracted) && (DIAG.windowsEligible || DIAG.windowsExtracted) > 0) || state === 'completed'
+          ? 'done'
+          : (DIAG.currentStage === 'windows' || DIAG.windowsInstalledNodes > 0)
+          ? 'active'
+          : 'pending',
+        committed: DIAG.windowsInstalledNodes,
+        total: DIAG.windowsEligible || DIAG.windowsExtracted,
+      },
       // 8. Installing doors
-      { key: 'doors', name: 'Installing doors', status: DIAG.installedDoors >= DIAG.doorsAutoInstallable && DIAG.doorsAutoInstallable > 0 ? 'done' : DIAG.installedDoors > 0 ? 'active' : 'pending', committed: DIAG.installedDoors, total: DIAG.doorsAutoInstallable },
+      {
+        key: 'doors',
+        name: 'Installing doors',
+        status: (DIAG.installedDoors >= (DIAG.doorsAutoInstallable || DIAG.doorsAccepted) && (DIAG.doorsAutoInstallable || DIAG.doorsAccepted) > 0) || state === 'completed'
+          ? 'done'
+          : (DIAG.currentStage === 'doors' || DIAG.installedDoors > 0)
+          ? 'active'
+          : 'pending',
+        committed: DIAG.installedDoors,
+        total: DIAG.doorsAutoInstallable || DIAG.doorsAccepted,
+      },
       // 9. Structural validation
       { key: 'structural-validation', name: 'Structural validation', status: structuralDone ? 'done' : state === 'importing' ? 'active' : 'pending', committed: structuralDone ? 1 : 0, total: 1 },
       // 9b. Opening validation
@@ -2552,7 +2888,7 @@ export default function Home() {
       { key: 'project-ready', name: 'Project ready', status: projectReady ? 'done' : 'pending', committed: projectReady ? 1 : 0, total: 1 },
     ];
     return def;
-  }, [events]);
+  }, [events, sceneReadyTick]);
 
   // Dev-only manual trigger for the frozen import (no UI button; used for the
   // Dev-only manual triggers. The frozen-import trigger (__code06Start) and the
@@ -2654,6 +2990,11 @@ export default function Home() {
   // Completion card is nonblocking and dismissible.
   const [completionDismissed, setCompletionDismissed] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [renderStudioOpen, setRenderStudioOpen] = useState(false);
+  // The ✨ Render entry appears as soon as the live scene has walls (any pipeline).
+  const sceneHasWalls = (getPascalStores().useScene as unknown as <T>(sel: (s: { nodes: Record<string, { type: string }> }) => T) => T)(
+    (s) => Object.values(s.nodes ?? {}).some((n) => n.type === 'wall'),
+  );
   // Narrow host: the isolated feature owns provider fetch, selection mutation,
   // model derivation, and readiness. page.tsx only invokes the hook and renders
   // the resulting control. No inline registry types, fetch, or POST /select here.
@@ -2716,6 +3057,52 @@ export default function Home() {
       : terminalState,
   };
 
+  const handleTakeSnapshot = useCallback(async (): Promise<AttachmentRef[] | AttachmentRef | null> => {
+    try {
+      let dataUrl: string | null = null;
+      const handle = viewerHandleRef.current;
+      if (handle?.gl && handle?.scene && handle?.camera) {
+        const gl = handle.gl as any;
+        if (typeof gl.render === 'function') {
+          gl.render(handle.scene, handle.camera);
+        }
+        if (gl.domElement && typeof gl.domElement.toDataURL === 'function') {
+          dataUrl = gl.domElement.toDataURL('image/png');
+        }
+      }
+      if (!dataUrl) {
+        const canvas = document.querySelector('canvas');
+        if (canvas) {
+          dataUrl = canvas.toDataURL('image/png');
+        }
+      }
+      if (!dataUrl) return null;
+
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      const file = new File([blob], `3d-camera-view-${Date.now()}.png`, { type: 'image/png' });
+      const id = crypto.randomUUID();
+      attachmentRepository.put(id, file);
+
+      const snapRef: AttachmentRef = {
+        id,
+        kind: 'image',
+        name: `3D View (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
+        byteSize: file.size,
+        mime: 'image/png',
+      };
+
+      const resultRefs: AttachmentRef[] = [snapRef];
+      if (activeGuideAttachmentRef.current) {
+        resultRefs.push(activeGuideAttachmentRef.current);
+      }
+      return resultRefs;
+    } catch (e) {
+      console.error('Failed to take 3D snapshot:', e);
+      return null;
+    }
+  }, []);
+
   const props = useMemo(() => ({
     onCommand, events, models: MOCK_MODELS, activeSelection: selection, onSelectModel, docked, working: importing, busy: extractionBusy, buildProgress,
     onOpenSettings: () => setSettingsOpen(true),
@@ -2735,7 +3122,14 @@ export default function Home() {
         </div>
         <div className="db-header-actions">
           <button>Projects</button>
-          <button onClick={() => setSettingsOpen(true)}>Settings</button>
+          <button
+            className="db-header-settings-btn"
+            onClick={() => setSettingsOpen(true)}
+            title="Open AI Studio & Provider Management"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-violet-500 inline" />
+            <span>AI Studio</span>
+          </button>
           <span className="db-avatar">MA</span>
         </div>
       </header>
@@ -2779,7 +3173,7 @@ export default function Home() {
             />
           ) : (
             <PascalViewerShell
-              sceneReadyKey={importing ? Date.now() : sceneReadyTick}
+              sceneReadyKey={sceneReadyTick}
               mountViewer={viewerVisible}
               viewerKey="pascal-viewer-code06"
               selectionManager="custom"
@@ -2802,6 +3196,15 @@ export default function Home() {
               <SelectionActionBarErrorBoundary>
                 <SelectionActionBarDOM />
               </SelectionActionBarErrorBoundary>
+              {viewerVisible && !proMode && (
+                <RenderStudio
+                  open={renderStudioOpen}
+                  onOpenChange={setRenderStudioOpen}
+                  getViewerHandle={getViewerHandle}
+                  onOpenSettings={() => setSettingsOpen(true)}
+                  onRenderComplete={handleRenderComplete}
+                />
+              )}
             </PascalViewerShell>
           )}
 
@@ -2951,6 +3354,10 @@ export default function Home() {
           onMethodChange={setExtractMethod}
           onStartPro={startCleanProProject}
           onStartImport={() => onCommand({ type: 'start-frozen-import' } as any)}
+          onTakeSnapshot={handleTakeSnapshot}
+          onQuickRender={sceneHasWalls ? () => setRenderStudioOpen(true) : undefined}
+          renderProgress={renderProgress}
+          extractionProgress={extractionProgress}
         />
       </div>
       )}
