@@ -56,6 +56,9 @@ export interface HostedDoorSymbol {
   leafWidthPt: number;
   /** true when the interval was snapped outward to the wall's jamb end-caps */
   jambSnapped: boolean;
+  /** true when the opening sits in the gap beyond this wall's end (wall drawn stopping
+   *  at the jamb); the interval then lies partly or wholly outside 0..wall length */
+  inWallGap?: boolean;
   /** hinge at the interval start (nearer centerline.a) => 'left' in the wall-local frame */
   hingeSide: 'left' | 'right';
   /** +1 when the leaf opens toward the wall-local +Z normal (-u.y, u.x), else -1 */
@@ -80,12 +83,55 @@ const wrap = (d: number) => {
 };
 const RAD = Math.PI / 180;
 
+const CURVE_STEPS = 12;
+
+/** Rebuild subpaths from path commands, flattening each cubic bezier into short chords. */
+function flattenCommands(commands: any[]): Vec2[][] {
+  const out: Vec2[][] = [];
+  let cur: Vec2[] = [];
+  const flush = () => { if (cur.length > 1) out.push(cur); cur = []; };
+  for (const c of commands) {
+    if (c.op === 'M') { flush(); cur = [{ x: c.x, y: c.y }]; }
+    else if (c.op === 'L') cur.push({ x: c.x, y: c.y });
+    else if (c.op === 'C' && cur.length) {
+      const p0 = cur[cur.length - 1]!;
+      const { p1, p2, p3 } = c;
+      for (let i = 1; i <= CURVE_STEPS; i++) {
+        const t = i / CURVE_STEPS, u = 1 - t;
+        cur.push({
+          x: u * u * u * p0.x + 3 * u * u * t * p1.x + 3 * u * t * t * p2.x + t * t * t * p3.x,
+          y: u * u * u * p0.y + 3 * u * u * t * p1.y + 3 * u * t * t * p2.y + t * t * t * p3.y,
+        });
+      }
+    } else if (c.op === 'Z') {
+      if (cur.length > 1) cur.push(cur[0]!);
+      flush();
+    }
+  }
+  flush();
+  return out;
+}
+
 /** Every stroke segment on the page, de-duplicated by geometry (heaviest lineweight kept). */
 export function collectSegments(vectors: MuVector[]): Seg[] {
   const byKey = new Map<string, Seg>();
+  // The capture stores a bezier as its control polygon (p1, p2, p3 pushed as points),
+  // which is not the drawn curve. Paths that contain curves are rebuilt from their
+  // commands with each cubic flattened; their per-subpath copies are skipped.
+  const hasCurve = (v: MuVector) => (v.commands ?? []).some((c) => c.op === 'C');
+  const curvedRoots = new Set<string>();
+  for (const v of vectors) if (hasCurve(v)) curvedRoots.add(v.id);
   for (const v of vectors) {
     const op = v.sourceRootId ?? v.id;
-    const subs = v.subpaths && v.subpaths.length ? v.subpaths : [v.points];
+    let subs: Vec2[][];
+    if (hasCurve(v)) {
+      subs = flattenCommands(v.commands as any[]);
+    } else {
+      if (v.sourceRootId && v.sourceRootId !== v.id && curvedRoots.has(v.sourceRootId)) continue;
+      const m = /^(.*):s\d+$/.exec(v.id);
+      if (m && curvedRoots.has(m[1]!)) continue;
+      subs = v.subpaths && v.subpaths.length ? v.subpaths : [v.points];
+    }
     for (let si = 0; si < subs.length; si++) {
       const s = subs[si];
       if (!s || s.length < 2) continue;
@@ -207,7 +253,11 @@ function findArcs(segs: Seg[], minPt: number, maxPt: number): Arc[] {
         const f = fitCircle(p);
         if (!f) continue;
         if (f.res > Math.max(0.6, 0.03 * f.r) || f.r < minPt || f.r > maxPt) continue;
-        const sweep = Math.abs(wrap(angleOf(f.c, p[0]!) - angleOf(f.c, p[p.length - 1]!)));
+        // true swept angle (sum of the steps around the centre), so a nearly closed
+        // circle is not mistaken for a short arc between its two ends
+        let swept = 0;
+        for (let i = 0; i + 1 < p.length; i++) swept += wrap(angleOf(f.c, p[i + 1]!) - angleOf(f.c, p[i]!));
+        const sweep = Math.abs(swept);
         // quarter swing is typical; doors drawn part-open (30/45 degrees) are common too
         if (sweep < 25 * RAD || sweep > 130 * RAD) continue;
         ok = { pts: p, segs: chain.slice(ta, chain.length - tb), c: f.c, r: f.r, sweep };
@@ -281,7 +331,7 @@ export function hostDoorSymbols(symbols: DoorSymbol[], walls: SymbolWall[], segs
   for (const sym of symbols) {
     const d = { x: sym.closed.x - sym.hinge.x, y: sym.closed.y - sym.hinge.y };
     const dl = Math.hypot(d.x, d.y) || 1;
-    const cands: Array<{ w: SymbolWall; score: number; ah: number; ac: number; u: Vec2; len: number }> = [];
+    const cands: Array<{ w: SymbolWall; score: number; ah: number; ac: number; u: Vec2; len: number; inGap: boolean }> = [];
     for (const w of walls) {
       const A = w.centerline.a, B = w.centerline.b;
       const len = dist(A, B);
@@ -295,19 +345,32 @@ export function hostDoorSymbols(symbols: DoorSymbol[], walls: SymbolWall[], segs
       const score = Math.max(perp(sym.hinge), perp(sym.closed));
       if (score > limit) continue;
       const ah = along(sym.hinge), ac = along(sym.closed);
-      if (Math.min(ah, ac) < -t || Math.max(ah, ac) > len + t) continue;
-      cands.push({ w, score, ah, ac, u, len });
+      const lo = Math.min(ah, ac), hi = Math.max(ah, ac);
+      // Many drawings stop the wall at each jamb, so the opening sits in the GAP
+      // between two collinear wall pieces instead of inside one wall. Accept a wall
+      // on the same line whose end is at the opening's jamb.
+      const inGap = lo < -t || hi > len + t;
+      if (inGap && Math.max(0, -hi, lo - len) > 0.25 * dl + t) continue;
+      cands.push({ w, score, ah, ac, u, len, inGap });
     }
-    cands.sort((x, y) => x.score - y.score || x.w.physicalWallId.localeCompare(y.w.physicalWallId));
+    cands.sort(
+      (x, y) => Number(x.inGap) - Number(y.inGap) || x.score - y.score || x.w.physicalWallId.localeCompare(y.w.physicalWallId),
+    );
     const leafWidthPt = dl;
     if (!cands.length) {
       out.push({ symbol: sym, hostStatus: 'NO_HOST', leafWidthPt, jambSnapped: false, hingeSide: 'left', swingNormalSign: 1 });
       continue;
     }
     const best = cands[0]!;
-    const ambiguous = !!cands[1] && cands[1].score - best.score < 1;
     const { w, u } = best;
     const A = w.centerline.a;
+    // a second candidate is a COMPETING host only if it is a different wall line;
+    // the wall piece on the other side of the same opening is not a competitor
+    const second = cands[1];
+    const secondOffLine = second
+      ? Math.abs((second.w.centerline.a.x - A.x) * u.y - (second.w.centerline.a.y - A.y) * u.x) > 1
+      : false;
+    const ambiguous = !!second && secondOffLine && second.inGap === best.inGap && second.score - best.score < 1;
     const t = w.thickness;
     // jamb end-caps: strokes across the wall, about one thickness long, centred on it
     const sg = best.ah > best.ac ? 1 : -1; // outward direction on the hinge side
@@ -337,11 +400,12 @@ export function hostDoorSymbols(symbols: DoorSymbol[], walls: SymbolWall[], segs
     };
     const nh = pick(best.ah, (al) => (al - best.ah) * sg);
     const nc = pick(best.ac, (al) => (best.ac - al) * sg);
-    const jambSnapped = nh !== null && nc !== null;
+    const jambSnapped = !best.inGap && nh !== null && nc !== null;
     const h = jambSnapped ? nh! : best.ah;
     const c = jambSnapped ? nc! : best.ac;
-    const from = Math.max(0, Math.min(h, c));
-    const to = Math.min(best.len, Math.max(h, c));
+    // in-gap openings keep their true position, which lies beyond this wall's end
+    const from = best.inGap ? Math.min(h, c) : Math.max(0, Math.min(h, c));
+    const to = best.inGap ? Math.max(h, c) : Math.min(best.len, Math.max(h, c));
     const f = { x: sym.free.x - sym.hinge.x, y: sym.free.y - sym.hinge.y };
     out.push({
       symbol: sym,
@@ -350,6 +414,7 @@ export function hostDoorSymbols(symbols: DoorSymbol[], walls: SymbolWall[], segs
       interval: { from, to },
       leafWidthPt,
       jambSnapped,
+      inWallGap: best.inGap,
       hingeSide: best.ah < best.ac ? 'left' : 'right',
       swingNormalSign: u.x * f.y - u.y * f.x > 0 ? 1 : -1,
     });

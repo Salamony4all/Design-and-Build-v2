@@ -96,3 +96,6 @@ Thumbs.db
 packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-grammar-v1/code06-automatic-window-output.json
 packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-r1.3.1/code06-automatic-window-output.json
 packages/design-build-geometric-extraction/evidence/code06/vector-lineage/post-instrumentation-lineage-run*.json
+
+# third-party sample drawings downloaded for generalisation tests (not ours to redistribute)
+test drawings and png/fresh/

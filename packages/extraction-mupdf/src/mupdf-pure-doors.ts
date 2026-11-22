@@ -1372,7 +1372,10 @@ export function runDoorPipeline(
   const tDetect = Date.now();
   const hosted = hostDoorSymbols(symbols, wallResult.accepted, segs, symCfg);
   const tHost = Date.now();
-  if (!hosted.some((h) => h.hostStatus !== 'NO_HOST')) return runLegacyDoorPipeline(input, cfg, captureLineage);
+  // Legacy fallback only when the page has no leaf + arc symbol at all. If symbols
+  // exist but none sits in a wall, the walls are what is missing; guessing doors from
+  // loose strokes there produces doors in the wrong places.
+  if (!symbols.length) return runLegacyDoorPipeline(input, cfg, captureLineage);
 
   const candidates: DoorAssembly[] = hosted.map((h) => {
     const s = h.symbol;
@@ -1406,6 +1409,7 @@ export function runDoorPipeline(
       a.negativeEvidence.push('competing-wall-hosts');
     } else {
       a.positiveEvidence.push('unique-finite-wall-host');
+      if (h.inWallGap) a.positiveEvidence.push('opening-in-wall-gap');
     }
     return a;
   });

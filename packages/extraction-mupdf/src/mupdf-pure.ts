@@ -17,6 +17,8 @@
  *   evidence classification → accepted/review/rejected → split accepted only.
  */
 import * as mupdf from 'mupdf';
+import { collectSegments } from './door-symbols';
+import { estimateScale, textsFromStructuredTextJson } from './scale-detection';
 import {
   collectPageVectors,
   type Bounds,
@@ -182,7 +184,7 @@ export interface MuPdfPureResult {
   /** Real-world scale (mm per PDF point), derived from the drawing's dimension
    *  text via MuPDF — no pdf2json. Used to convert walls to meters. */
   scaleMmPerPt: number;
-  scaleSource: 'dim-text' | 'fallback';
+  scaleSource: 'dim-text' | 'fallback' | 'dimension-vote' | 'dimension-vote+title' | 'title-block';
   review: PurePhysicalWall[];
   rejected: PurePhysicalWall[];
   floatingAccepted: PurePhysicalWall[];
@@ -1426,6 +1428,40 @@ function derivePureScaleMmPerPt(
   return { mmPerPt: 1, source: 'fallback' };
 }
 
+export type PureScaleSource = 'dim-text' | 'fallback' | 'dimension-vote' | 'dimension-vote+title' | 'title-block';
+
+/**
+ * Final scale. The legacy rule above (largest number on the sheet / building width)
+ * only holds when the sheet's largest number happens to be the overall building
+ * dimension; on other drawings it is wrong by large factors. The evidence-based
+ * estimate (scale-detection.ts: dimension-line vote, then title-block scale) is used
+ * whenever it exists. Exception: when the legacy value already agrees within 3% it
+ * is kept, so the frozen CODE_06 baselines (hashes, parity) stay bit-identical.
+ */
+function resolveScale(
+  page: mupdf.Page,
+  vectors: MuVector[],
+  pageBounds: Bounds,
+  legacy: { mmPerPt: number; source: 'dim-text' | 'fallback' },
+): { mmPerPt: number; source: PureScaleSource } {
+  try {
+    const json = (page.toStructuredText('preserve-whitespace') as unknown as { asJSON: () => string }).asJSON();
+    const est = estimateScale(
+      textsFromStructuredTextJson(json),
+      collectSegments(vectors),
+      pageBounds[2] - pageBounds[0],
+      pageBounds[3] - pageBounds[1],
+    );
+    if (est) {
+      const legacyAgrees = legacy.source === 'dim-text' && Math.abs(est.mmPerPt - legacy.mmPerPt) / legacy.mmPerPt <= 0.03;
+      if (!legacyAgrees) return { mmPerPt: est.mmPerPt, source: est.source };
+    }
+  } catch {
+    // no text layer / unexpected structure: keep the legacy value
+  }
+  return legacy;
+}
+
 export function extractPureWallResult(
   data: Uint8Array | Buffer,
   pageNumber?: number,
@@ -1854,7 +1890,12 @@ export function extractPureWallResult(
   };
 
   const total = Date.now() - t0;
-  const { mmPerPt: scaleMmPerPt, source: scaleSource } = derivePureScaleMmPerPt(page, roiMupdf);
+  const { mmPerPt: scaleMmPerPt, source: scaleSource } = resolveScale(
+    page,
+    vectors,
+    pageBoundsMupdf,
+    derivePureScaleMmPerPt(page, roiMupdf),
+  );
   const pureResult: MuPdfPureResult = {
     pageBoundsMupdf,
     activeBuildingRegionMupdf: roiMupdf,
