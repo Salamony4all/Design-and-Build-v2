@@ -287,3 +287,26 @@
   .panel, .progressFill { animation: none; }
   .composerRenderBtn { transition: none; }
 }
+
+/* Tablets and small laptops: below the view toolbar. */
+@media (max-width: 1180px) {
+  .panel { top: 122px; max-height: calc(100% - 122px - var(--db-dock-top, 76px) - 12px); }
+}
+/* Phones: full width under the header, leaving the view toolbar above the prompt bar free. */
+@media (max-width: 720px) {
+  .panel {
+    top: 60px; left: 8px; right: 8px; width: auto;
+    max-height: calc(100% - 60px - var(--db-dock-top, 66px) - 62px);
+  }
+}
+/* Phones on their side. */
+@media (max-height: 520px) {
+  .panel {
+    top: 52px; right: calc(8px + env(safe-area-inset-right, 0px)); left: auto;
+    width: min(360px, 52vw); max-height: calc(100% - 52px - var(--db-dock-top, 56px) - 8px);
+  }
+}
+/* Touch: text fields at 16 px so iOS does not zoom into them. */
+@media (pointer: coarse) {
+  .panel textarea, .panel input[type='text'] { font-size: 16px; }
+}

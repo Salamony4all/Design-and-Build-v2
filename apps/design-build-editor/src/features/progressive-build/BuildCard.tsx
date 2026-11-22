@@ -61,6 +61,31 @@ export function BuildCard(props: BuildCardProps) {
     .map((c) => `${c.value} ${c.value === 1 ? c.label.replace(/s$/, '').toLowerCase() : c.label.toLowerCase()}`)
     .join(' · ');
 
+  // On phones the finished card tucks itself away after a moment so the model
+  // gets the screen (the prompt bar has Render too). Once per finished build.
+  const doneKey = props.status === 'done' ? `${props.title}|${countsText}` : null;
+  const tuckedRef = React.useRef<string | null>(null);
+  const toggleRef = React.useRef(props.onToggleCollapse);
+  toggleRef.current = props.onToggleCollapse;
+  const collapsed = props.collapsed;
+  React.useEffect(() => {
+    if (!doneKey || collapsed || tuckedRef.current === doneKey) return;
+    let small = false;
+    try {
+      small = window.matchMedia('(max-width: 720px), (max-height: 520px)').matches;
+    } catch {
+      small = false;
+    }
+    if (!small) return;
+    const t = window.setTimeout(() => {
+      tuckedRef.current = doneKey;
+      toggleRef.current();
+      // Let the 3D view re-fit into the space the card leaves.
+      window.dispatchEvent(new Event('db:layout'));
+    }, 4500);
+    return () => window.clearTimeout(t);
+  }, [doneKey, collapsed]);
+
   if (props.collapsed) {
     return (
       <button

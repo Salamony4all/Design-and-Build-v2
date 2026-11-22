@@ -98,23 +98,25 @@ export function updateViewerHandleMutable(h: ViewerHandle, patch: Partial<Viewer
 }
 
 /**
- * Mouse navigation for the Pascal Viewer. Pascal 0.9.2's <Viewer> ships NO
- * camera controls (useThree(s => s.controls) is null), so without this the
- * scene is static under the mouse. We mount drei's OrbitControls with
- * makeDefault so it registers as the R3F default controls — ViewerBridge then
- * bridges it into ViewerHandle.controls and the camera-framing service drives
- * controls.target natively (no competing instance: there is no other one).
+ * Mouse and touch navigation for the Pascal Viewer. Pascal 0.9.2's <Viewer>
+ * ships NO camera controls (useThree(s => s.controls) is null), so without
+ * this the scene is static. We mount drei's OrbitControls with makeDefault so
+ * it registers as the R3F default controls — ViewerBridge then bridges it into
+ * ViewerHandle.controls and the host's view navigator drives it natively (no
+ * competing instance: there is no other one).
  *
- * Navigation model (matches the ViewerToolbar documentation):
- *   - left click  → select node (clicks pass through; only drags navigate)
- *   - left-drag   → orbit
- *   - middle-drag → pan
- *   - right-drag  → pan
- *   - wheel       → zoom
+ * Navigation model:
+ *   - click / tap           → select node (only drags navigate)
+ *   - left-drag / 1 finger  → orbit
+ *   - right or middle-drag  → move across the ground (pan)
+ *   - 2 fingers             → pinch to zoom and move
+ *   - wheel / pinch         → zoom towards the pointer, not the screen centre
+ * The camera cannot orbit below the ground. The host sets zoom limits and
+ * clipping planes for the model's size after each build.
  *
- * The Canvas runs frameloop="never", so every control change must request a
- * frame explicitly via invalidate(). Damping is disabled — it needs a
- * continuous frameloop to settle and would leave the camera mid-glide.
+ * The Viewer draws continuously (Pascal's FrameLimiter); invalidate() is kept
+ * for hosts that render on demand. Damping is disabled so the camera stops
+ * where the user lets go.
  */
 function MouseNavigation() {
   const invalidate = useThree((s) => s.invalidate);
@@ -122,7 +124,11 @@ function MouseNavigation() {
     <OrbitControls
       makeDefault
       enableDamping={false}
+      zoomToCursor
+      screenSpacePanning={false}
+      maxPolarAngle={Math.PI / 2 - 0.04}
       mouseButtons={{ LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.PAN, RIGHT: THREE.MOUSE.PAN }}
+      touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN }}
       onChange={() => invalidate()}
     />
   );

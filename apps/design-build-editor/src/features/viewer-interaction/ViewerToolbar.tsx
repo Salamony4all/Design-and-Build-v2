@@ -1,7 +1,8 @@
 // features/viewer-interaction/ViewerToolbar.tsx
-// Floating viewer toolbar over the official Pascal viewer: camera views, the
-// plan overlay, history and the PRO editor. In PRO it also carries Pascal's
-// drawing tools. Mouse navigation stays with the official OrbitControls.
+// Floating view toolbar over the official Pascal viewer: 3D / Top views,
+// zoom, turning around the model, the plan drawing, history and the PRO
+// editor. In PRO it also carries Pascal's drawing tools. Mouse and touch
+// navigation stay with the official OrbitControls.
 
 'use client';
 import React from 'react';
@@ -10,34 +11,50 @@ import { useScene } from '@pascal-app/core';
 import { useEditor } from '@pascal-app/editor';
 import {
   AppWindow,
-  Box,
   BrickWall,
   DoorOpen,
   Layers,
   MousePointer2,
   PenLine,
   Redo2,
+  RotateCcwSquare,
+  RotateCwSquare,
   Scan,
-  Square,
   SquareDashed,
   Undo2,
   View,
+  ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
 
 interface Props {
+  /** 3D view of the whole model (pressing it again re-centres). */
   onFitProject: () => void;
   onFitSelection: () => void;
+  /** Top view of the whole plan. */
   onTopView: () => void;
   onResetView?: () => void;
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
+  onTurnLeft?: () => void;
+  onTurnRight?: () => void;
+  viewMode?: '3d' | 'top';
   proEnabled?: boolean;
   mode?: 'standard' | 'pro';
   onToggleMode?: () => void;
   orientation?: 'vertical' | 'horizontal';
 }
 
-function ToolButton(p: { label: string; onClick: () => void; on?: boolean; children: React.ReactNode }) {
+function ToolButton(p: { label: string; onClick?: () => void; on?: boolean; className?: string; children: React.ReactNode }) {
   return (
-    <button type="button" title={p.label} aria-label={p.label} aria-pressed={p.on} className={p.on ? 'on' : ''} onClick={p.onClick}>
+    <button
+      type="button"
+      title={p.label}
+      aria-label={p.label}
+      aria-pressed={p.on}
+      className={[p.on ? 'on' : '', p.className ?? ''].join(' ').trim()}
+      onClick={p.onClick}
+    >
       {p.children}
     </button>
   );
@@ -47,6 +64,11 @@ export function ViewerToolbar({
   onFitProject,
   onFitSelection,
   onTopView,
+  onZoomIn,
+  onZoomOut,
+  onTurnLeft,
+  onTurnRight,
+  viewMode = '3d',
   proEnabled,
   mode,
   onToggleMode,
@@ -78,9 +100,9 @@ export function ViewerToolbar({
 
   return (
     <div
-      className={`db-toolbar glass ${orientation === 'horizontal' ? 'is-horizontal' : ''}`}
+      className={`db-toolbar glass ${orientation === 'horizontal' ? 'is-horizontal' : ''} ${isPro ? '' : 'db-toolbar--main'}`}
       role="toolbar"
-      aria-label="Viewer controls"
+      aria-label="View controls"
     >
       {isPro && (
         <>
@@ -93,10 +115,47 @@ export function ViewerToolbar({
         </>
       )}
 
-      <ToolButton label="3D view of the whole model" onClick={onFitProject}><Box size={17} /></ToolButton>
-      <ToolButton label="Top view" onClick={onTopView}><Square size={17} /></ToolButton>
+      <div className="db-seg" role="radiogroup" aria-label="View">
+        <button
+          type="button"
+          role="radio"
+          aria-checked={viewMode === '3d'}
+          className={viewMode === '3d' ? 'on' : ''}
+          onClick={onFitProject}
+          title={viewMode === '3d' ? 'Show the whole model again (H)' : '3D view of the whole model (H)'}
+        >
+          3D
+        </button>
+        <button
+          type="button"
+          role="radio"
+          aria-checked={viewMode === 'top'}
+          className={viewMode === 'top' ? 'on' : ''}
+          onClick={onTopView}
+          title="Top view of the whole plan (T)"
+        >
+          Top
+        </button>
+      </div>
+
+      {onZoomOut && onZoomIn && (
+        <>
+          <div className="sep" />
+          <ToolButton label="Zoom out (−)" onClick={onZoomOut}><ZoomOut size={18} /></ToolButton>
+          <ToolButton label="Zoom in (+)" onClick={onZoomIn}><ZoomIn size={18} /></ToolButton>
+        </>
+      )}
+
+      {onTurnLeft && onTurnRight && (
+        <>
+          <div className="sep" />
+          <ToolButton label="Turn left (Q)" onClick={onTurnLeft}><RotateCcwSquare size={18} /></ToolButton>
+          <ToolButton label="Turn right (E)" onClick={onTurnRight}><RotateCwSquare size={18} /></ToolButton>
+        </>
+      )}
+
       {selectedCount > 0 && (
-        <ToolButton label="Zoom to selection" onClick={onFitSelection}><Scan size={17} /></ToolButton>
+        <ToolButton label="Zoom to the selection (F)" onClick={onFitSelection} className="db-tb-scan"><Scan size={18} /></ToolButton>
       )}
       {isPro && (
         <ToolButton
@@ -111,9 +170,11 @@ export function ViewerToolbar({
         <Layers size={17} />
       </ToolButton>
 
-      <div className="sep" />
-      <ToolButton label="Undo" onClick={undo}><Undo2 size={17} /></ToolButton>
-      <ToolButton label="Redo" onClick={redo}><Redo2 size={17} /></ToolButton>
+      <div className="db-tb-group db-tb-desk">
+        <div className="sep" />
+        <ToolButton label="Undo" onClick={undo}><Undo2 size={17} /></ToolButton>
+        <ToolButton label="Redo" onClick={redo}><Redo2 size={17} /></ToolButton>
+      </div>
 
       {proEnabled && (
         <>

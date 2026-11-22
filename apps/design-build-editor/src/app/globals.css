@@ -48,6 +48,9 @@ button { cursor: pointer; }
   inset: 0;
   background: radial-gradient(circle at 50% 32%, #ffffff 0%, #f6f8ff 44%, #e7efff 100%);
   overflow: hidden;
+  /* clip, not just hidden: a hidden box can still be scrolled by focus or
+     scrollIntoView, which slid the whole app sideways on phones. */
+  overflow: clip;
   pointer-events: none; /* full-screen wrapper passes clicks through to the Viewer */
 }
 
@@ -1228,7 +1231,6 @@ button { cursor: pointer; }
 @media (max-width: 900px) {
   .db-rail { width: 240px; }
   .db-props { width: 240px; }
-  .db-toolbar { top: auto; bottom: 96px; transform: none; flex-direction: row; flex-wrap: wrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2931,18 +2933,186 @@ button { cursor: pointer; }
 .db-ais-form__foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; }
 .db-ais-form__buttons { display: flex; gap: 8px; }
 
-/* ---------- Small screens ---------- */
+/* =========================================================================
+   VIEW CONTROLS — 3D / Top switch, toolbar groups, selection card, nav tip
+   ========================================================================= */
+.db-seg { display: inline-flex; align-items: center; gap: 2px; padding: 2px; border-radius: 9px; background: rgba(23, 33, 56, 0.06); }
+.db-toolbar.is-horizontal .db-seg button {
+  width: auto; min-width: 42px; height: 30px; padding: 0 10px; border-radius: 7px;
+  font-size: 12.5px; font-weight: 700; letter-spacing: 0.01em; color: #4b5671;
+}
+.db-toolbar.is-horizontal .db-seg button:hover { background: rgba(255, 255, 255, 0.7); color: var(--ink); }
+.db-toolbar.is-horizontal .db-seg button.on { background: #fff; color: var(--blue); box-shadow: 0 1px 3px rgba(20, 30, 55, 0.16); }
+.db-tb-group { display: contents; }
+.db-toolbar button, .db-gemini-pill-bar button, .db-props button, .db-bc button, .db-bc-pill, .db-nav-hint button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+.db-props { width: 280px; padding: 12px 14px; }
+.db-props__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.db-props__head h3 { margin: 0; font-size: 15px; font-weight: 700; }
+.db-props__head p { margin: 3px 0 0; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 12.5px; color: var(--muted); }
+.db-props__head .db-icon-btn { flex: none; }
+.db-props__actions { display: flex; gap: 8px; margin: 10px 0 2px; }
+.db-props__actions .db-btn-quiet { flex: 1; justify-content: center; }
+.db-props__details { margin-top: 8px; font-size: 12px; }
+.db-props__details summary { padding: 4px 0; color: var(--muted); font-weight: 600; cursor: pointer; }
+.db-props__details .db-prop-row .v { overflow-wrap: anywhere; }
+
+.db-nav-hint {
+  position: absolute; left: 50%; bottom: calc(var(--db-dock-top, 76px) + 12px); transform: translateX(-50%);
+  z-index: 26; display: flex; align-items: center; gap: 8px;
+  width: max-content; max-width: calc(100vw - 24px); padding: 7px 7px 7px 12px;
+  border-radius: 999px; background: rgba(23, 33, 56, 0.88); color: #fff;
+  font-size: 12.5px; font-weight: 500; line-height: 1.35;
+  box-shadow: 0 8px 24px rgba(16, 24, 48, 0.25);
+  pointer-events: auto; animation: db-hint-in 260ms var(--ease);
+}
+.db-nav-hint > svg { flex: none; opacity: 0.85; }
+.db-nav-hint > span { min-width: 0; }
+.db-nav-hint__dot { opacity: 0.5; }
+.db-nav-hint button {
+  flex: none; display: grid; place-items: center; width: 26px; height: 26px;
+  border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.16); color: #fff; cursor: pointer;
+}
+.db-nav-hint button:hover { background: rgba(255, 255, 255, 0.26); }
+@keyframes db-hint-in { from { opacity: 0; transform: translate(-50%, 6px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* The prompt bar never grows wider than the screen: its text field shrinks instead. */
+.db-gemini-capsule-wrapper { min-width: 0; }
+.db-gemini-composer-container { min-width: 0; }
+.db-gemini-input { width: 0; flex: 1 1 0; text-overflow: ellipsis; }
+
+/* =========================================================================
+   RESPONSIVE LAYOUT
+   ≤1180 px wide  tablets and small laptops: panels drop below the toolbar
+   ≤720 px wide   phones (portrait): toolbar sits above the prompt bar, the
+                  selection card becomes a bottom sheet, the build card spans
+                  the width under the header
+   ≤520 px tall   phones on their side: slim header, toolbar top-left,
+                  compact cards
+   ========================================================================= */
+@media (max-width: 1180px) {
+  .db-bc, .db-bc-pill, .db-export { top: 122px; }
+  .db-props { top: 122px; max-height: calc(100% - 122px - var(--db-dock-top, 76px) - 12px); }
+  .db-bc { max-height: calc(100% - 122px - var(--db-dock-top, 76px) - 12px); }
+}
+
 @media (max-width: 720px) {
-  .db-header { padding: 0 12px; }
+  .db-header { height: 52px; padding: 0 10px; }
   .db-brand span:last-child { display: none; }
-  .db-bc, .db-bc.is-done { left: 12px; right: 12px; width: auto; top: 68px; max-height: 44vh; }
-  .db-bc-pill { right: 12px; top: 68px; }
-  .db-toolbar.is-horizontal { top: auto; bottom: 84px; left: 50%; transform: translateX(-50%); flex-wrap: nowrap; }
-  .db-chat.centered { padding: 20px 16px 16px; max-height: calc(100vh - 80px); overflow-y: auto; overflow-x: hidden; top: calc(50% + 30px); }
-  .db-chat-head h1 { font-size: 22px; }
+  .db-mark { width: 30px; height: 30px; border-radius: 9px; font-size: 12px; }
+  .db-header-actions { gap: 6px; }
+  .db-header-actions .db-header-btn, .db-header-actions .db-header-settings-btn { padding: 7px 10px; font-size: 12.5px; }
+  .db-landing-backdrop { inset: 52px 0 0 0; }
+
+  /* Prompt bar */
+  .db-gemini-dock-root { bottom: calc(8px + env(safe-area-inset-bottom, 0px)); width: calc(100vw - 16px); }
+  .db-gemini-capsule-wrapper { gap: 6px; }
+  .db-gemini-pill-bar { gap: 4px; padding: 5px; }
+  .db-gemini-input { padding: 6px 4px; }
+
+  /* Toolbar: one row just above the prompt bar, within thumb reach. */
+  .db-toolbar--main.is-horizontal {
+    top: auto; bottom: calc(var(--db-dock-top, 66px) + 8px); left: 50%; transform: translateX(-50%);
+    flex-wrap: nowrap; gap: 1px; padding: 3px; max-width: calc(100vw - 16px);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .db-toolbar--main.is-horizontal::-webkit-scrollbar { display: none; }
+  .db-toolbar--main.is-horizontal button { flex: none; width: 38px; height: 38px; }
+  .db-toolbar--main.is-horizontal .db-seg button { height: 34px; min-width: 40px; padding: 0 9px; }
+  .db-toolbar--main.is-horizontal .sep { margin: 0 2px; }
+  .db-toolbar--main .db-tb-desk, .db-toolbar--main .db-tb-scan { display: none; }
+  .db-toolbar--main .db-toolbar__text { padding: 0 10px !important; }
+  .db-toolbar--main .db-toolbar__text span { display: none; }
+
+  /* Build card under the header, full width; it tucks itself into a pill once done. */
+  .db-bc, .db-bc.is-done { top: 60px; left: 8px; right: 8px; width: auto; max-height: 42vh; padding: 12px 12px 10px; }
+  .db-bc-pill { top: 60px; right: 8px; padding: 7px 12px; }
+
+  /* Selection: a sheet above the toolbar. */
+  .db-props {
+    top: auto; left: 8px; right: 8px; width: auto;
+    bottom: calc(var(--db-dock-top, 66px) + 58px);
+    max-height: min(34vh, 260px); padding: 10px 12px;
+  }
+  .db-props.hidden { transform: translateY(120%); }
+
+  .db-nav-hint { bottom: calc(var(--db-dock-top, 66px) + 60px); font-size: 12px; border-radius: 14px; }
+
+  .db-chat.centered { padding: 18px 14px 14px; max-height: calc(100vh - 72px); max-height: calc(100dvh - 72px); overflow-y: auto; overflow-x: hidden; top: calc(50% + 26px); }
+  .db-chat-head h1 { font-size: 21px; }
+  .db-landing-card { padding: 16px; }
   .db-ais-role__fields, .db-ais-more__grid { grid-template-columns: 1fr; }
   .db-ais-card { flex-wrap: wrap; }
-  .db-gemini-left-drawer { width: auto; right: 12px; left: 12px; }
+  .db-ais__head, .db-ais__body, .db-ais__foot { padding-left: 16px; padding-right: 16px; }
+  .db-ais__tabs { padding-left: 16px; padding-right: 16px; }
+  .db-dialog.db-ais { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); border-radius: 16px; }
+  .db-gemini-left-drawer { width: auto; right: 8px; left: 8px; top: 60px; bottom: calc(var(--db-dock-top, 66px) + 8px); }
+
+  /* PRO editor toolbar: one scrollable row instead of spilling off screen. */
+  .pro-overlay__top-toolbar .db-toolbar.is-horizontal { flex-wrap: nowrap; max-width: calc(100vw - 16px); overflow-x: auto; scrollbar-width: none; }
+  .pro-overlay__top-toolbar .db-toolbar.is-horizontal::-webkit-scrollbar { display: none; }
+  .pro-overlay__top-toolbar .db-toolbar.is-horizontal button { flex: none; }
+}
+
+@media (max-height: 520px) {
+  .db-header { height: 46px; padding: 0 10px; }
+  .db-brand span:last-child { display: none; }
+  .db-mark { width: 28px; height: 28px; border-radius: 8px; font-size: 11px; }
+  .db-header-actions .db-header-btn, .db-header-actions .db-header-settings-btn { padding: 6px 10px; font-size: 12.5px; }
+  .db-landing-backdrop { inset: 46px 0 0 0; }
+
+  .db-gemini-dock-root { bottom: calc(6px + env(safe-area-inset-bottom, 0px)); width: min(560px, 66vw); }
+
+  /* Toolbar top-left, so the card has the top-right corner. */
+  .db-toolbar--main.is-horizontal {
+    top: 52px; bottom: auto; left: calc(8px + env(safe-area-inset-left, 0px)); transform: none;
+    flex-wrap: nowrap; gap: 1px; padding: 3px; max-width: calc(100vw - 316px); overflow-x: auto; scrollbar-width: none;
+  }
+  .db-toolbar--main.is-horizontal::-webkit-scrollbar { display: none; }
+  .db-toolbar--main.is-horizontal button { flex: none; width: 36px; height: 36px; }
+  .db-toolbar--main.is-horizontal .db-seg button { height: 32px; min-width: 40px; padding: 0 9px; }
+  .db-toolbar--main .db-tb-scan { display: none; }
+  .db-toolbar--main .db-toolbar__text { padding: 0 10px !important; }
+  .db-toolbar--main .db-toolbar__text span { display: none; }
+
+  .db-bc, .db-bc.is-done {
+    top: 52px; right: calc(8px + env(safe-area-inset-right, 0px)); left: auto; width: 290px;
+    max-height: calc(100% - 52px - var(--db-dock-top, 56px) - 8px); padding: 10px 12px;
+  }
+  .db-bc__steps { display: none; }
+  .db-bc__bar { margin: 8px 0 8px; }
+  .db-bc-pill { top: 52px; right: calc(8px + env(safe-area-inset-right, 0px)); padding: 6px 12px; }
+
+  .db-props {
+    top: 98px; bottom: auto; left: calc(8px + env(safe-area-inset-left, 0px)); right: auto; width: min(280px, 40vw);
+    max-height: calc(100% - 98px - var(--db-dock-top, 56px) - 8px); padding: 10px 12px;
+  }
+  .db-nav-hint { bottom: calc(var(--db-dock-top, 56px) + 8px); }
+
+  .db-chat.centered { top: calc(50% + 22px); max-height: calc(100vh - 54px); max-height: calc(100dvh - 54px); overflow-y: auto; overflow-x: hidden; padding: 14px 16px 12px; }
+  .db-chat-head { margin-bottom: 10px; }
+  .db-chat-head h1 { font-size: 19px; }
+  .db-chat-head p { font-size: 12.5px; }
+  .db-landing-card { padding: 12px 14px; }
+  .db-landing-card__icon-box { display: none; }
+  .db-landing-card__body { margin-bottom: 8px; }
+  .db-dialog.db-ais { max-height: calc(100dvh - 12px); }
+  .db-gemini-left-drawer { top: 52px; bottom: calc(var(--db-dock-top, 56px) + 6px); }
+}
+@media (max-height: 520px) and (max-width: 760px) {
+  .db-toolbar--main .db-tb-desk { display: none; }
+}
+
+/* Touch screens: fingers need bigger targets than a mouse pointer, and iOS
+   zooms the page into text fields set below 16 px. */
+@media (pointer: coarse) {
+  .db-toolbar.is-horizontal button { min-width: 38px; min-height: 38px; }
+  .db-toolbar.is-horizontal .db-seg button { min-height: 34px; }
+  .db-gemini-input { font-size: 16px; }
+  .db-props .db-icon-btn { width: 34px; height: 34px; }
+}
+@media (pointer: coarse) and (max-height: 520px) {
+  .db-toolbar.is-horizontal button { min-width: 36px; min-height: 36px; }
 }
 
 .db-ais-form__head h3, .db-ais-role__head h4, .db-ais-empty h4 { font-weight: 700; }

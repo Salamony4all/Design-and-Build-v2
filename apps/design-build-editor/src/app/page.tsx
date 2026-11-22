@@ -79,7 +79,30 @@ import { runStagedCode06Import, type StageEvent } from '@/harness/code06-staged-
 import { installLiveColumns, type LiveColumnInstallerContext } from '@/features/columns/install-live-columns';
 import type { ColumnContract } from 'design-build-extraction-mupdf';
 import { validateSceneTree, type NodeMap } from 'design-build-pascal-adapter';
-import { computeFraming, frameSelectionBoxes, type Aabb, type FramingSolution } from '@/features/viewer-interaction/camera-framing-service';
+import { computeFraming, type Aabb, type FramingSolution } from '@/features/viewer-interaction/camera-framing-service';
+import {
+  ISO_PHI,
+  ISO_THETA,
+  TOP_PHI,
+  animateTo,
+  applyLimits,
+  boxCenter,
+  boxRadius,
+  cancelViewAnimation,
+  combine as combineBoxes,
+  currentPose,
+  fitPose,
+  focusPose,
+  freeAreaShift,
+  navLimits,
+  pickPoint,
+  turnPose,
+  zoomPose,
+  type Aabb as NavAabb,
+  type NavLimits,
+  type ViewArea,
+} from '@/features/viewer-interaction/view-navigator';
+import { NavHint } from '@/features/viewer-interaction/NavHint';
 import type { AttachmentRef } from 'design-build-conversation-core';
 
 declare global {
@@ -611,6 +634,10 @@ export default function Home() {
         const th = slab.thickness ?? 0.3;
         return { min: [mnx, e - th, mnz], max: [mxx, e, mxz] };
       }
+      // Windows and doors sit inside their wall (whose box already covers
+      // them) and their position is along that wall, not in the world: a
+      // point box there lands near the origin and skews the framing.
+      if (n.type === 'window' || n.type === 'door') return null;
       // Generic building node: fall back to a small point box at its position.
       const p = (n as { transform?: { position?: [number, number, number] }; position?: [number, number, number] }).transform?.position
         ?? (n as { transform?: { position?: [number, number, number] }; position?: [number, number, number] }).position;
@@ -746,82 +773,141 @@ export default function Home() {
     }
   }, [collectBuildingBoxes, applySolution]);
 
-  /** Draw a few frames: the viewer renders on demand, and its systems (which
-   *  drain dirty nodes) only run when a frame is drawn. */
-  const pumpFrames = useCallback((count = 24) => {
-    let n = 0;
-    const step = () => {
-      viewerHandleRef.current?.invalidate();
-      if (++n < count) requestAnimationFrame(step);
+  // ---- View navigation (3D / Top, zoom, turn, focus) -------------------------
+  // Fits use the free part of the screen (between header, toolbar and prompt
+  // bar), moves are animated, and the camera's clipping planes and zoom range
+  // follow the model's size so zooming in never slices through it.
+  const [viewMode, setViewMode] = useState<'3d' | 'top'>('3d');
+  const viewModeRef = useRef<'3d' | 'top'>('3d');
+  viewModeRef.current = viewMode;
+  const navLimitsRef = useRef<NavLimits | null>(null);
+  const modelBoxRef = useRef<NavAabb | null>(null);
+  /** True while the camera shows an automatic fit the user has not moved away from. */
+  const autoFramedRef = useRef(false);
+
+  /** Canvas size and the parts of it covered by the header, toolbar and prompt bar. */
+  const measureViewArea = useCallback((): ViewArea => {
+    const canvas = (viewerHandleRef.current?.gl as { domElement?: HTMLCanvasElement } | undefined)?.domElement;
+    const r = canvas?.getBoundingClientRect();
+    const rect = r && r.width > 0 && r.height > 0
+      ? r
+      : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight, right: window.innerWidth, bottom: window.innerHeight };
+    let top = 0;
+    let bottom = 0;
+    const box = (sel: string) => {
+      const el = document.querySelector(sel);
+      const b = el?.getBoundingClientRect();
+      return b && b.width > 0 && b.height > 0 ? b : null;
     };
-    requestAnimationFrame(step);
+    const header = box('.db-header');
+    if (header) top = Math.max(top, header.bottom - rect.top);
+    // The toolbar counts when it sits across the middle (top on desktop, above
+    // the prompt bar on phones), not when it is tucked in a corner (phones on
+    // their side), where it would squeeze the model for nothing.
+    const toolbar = box('.db-toolbar--main');
+    if (toolbar && Math.abs(toolbar.left + toolbar.width / 2 - (rect.left + rect.width / 2)) < rect.width * 0.15) {
+      if (toolbar.top < rect.top + rect.height / 2) top = Math.max(top, toolbar.bottom - rect.top);
+      else bottom = Math.max(bottom, rect.bottom - toolbar.top);
+    }
+    const dock = box('.db-gemini-dock-root');
+    if (dock) bottom = Math.max(bottom, rect.bottom - dock.top);
+    // Cards that span the screen on phones (build card, selection sheet).
+    document.querySelectorAll('.db-bc, .db-props').forEach((el) => {
+      const b = el.getBoundingClientRect();
+      if (b.width < rect.width * 0.55 || b.height <= 0) return;
+      if (b.top + b.height / 2 < rect.top + rect.height / 2) top = Math.max(top, b.bottom - rect.top);
+      else bottom = Math.max(bottom, rect.bottom - b.top);
+    });
+    const pad = Math.max(8, Math.min(24, rect.width * 0.04));
+    return { width: rect.width, height: rect.height, insets: { top: top + pad, bottom: bottom + pad, left: pad, right: pad } };
   }, []);
 
-  /** 3D view of the whole building. Works at any time (manual or after a build). */
-  const frameEntireProject = useCallback(() => {
-    const handle = viewerHandleRef.current;
-    if (!handle || !handle.camera || !handle.scene) return;
-    const { boxes } = collectBuildingBoxes();
-    if (boxes.length === 0) return;
-    const cam = handle.camera as unknown as import('three').PerspectiveCamera | import('three').OrthographicCamera;
-    const mode = (cam as { isPerspectiveCamera?: boolean }).isPerspectiveCamera ? 'perspective' : 'orthographic';
-    const fov = (cam as { fov?: number }).fov ?? 50;
-    const aspect = (cam as { aspect?: number }).aspect ?? (typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 1);
-    const sol = computeFraming(boxes, { mode, fovDeg: fov, aspect, near: (cam as { near?: number }).near ?? 0.1, far: (cam as { far?: number }).far ?? 1000 }, [cam.position.x, cam.position.y, cam.position.z], 0.15);
-    applySolution(sol, framingCtl.current);
-    pumpFrames();
-  }, [collectBuildingBoxes, applySolution, pumpFrames]);
+  /** Fit the model (or the given elements) into view, from the 3D corner view, the top, or the current angle. */
+  const goToView = useCallback((mode: '3d' | 'top', opts: { keepAngle?: boolean; ids?: Set<string>; ms?: number } = {}) => {
+    const h = viewerHandleRef.current;
+    if (!h || !h.camera || !h.scene) return;
+    const whole = combineBoxes(collectBuildingBoxes().boxes);
+    if (!whole) return;
+    const target = opts.ids ? combineBoxes(collectBuildingBoxes(opts.ids).boxes) : whole;
+    if (!target) return;
+    const cur = currentPose(h);
+    const dir = mode === 'top'
+      ? { phi: TOP_PHI, theta: opts.keepAngle && cur.phi < 0.1 ? cur.theta : 0 }
+      : opts.keepAngle && cur.phi > 0.12
+        ? { phi: cur.phi, theta: cur.theta }
+        : { phi: ISO_PHI, theta: ISO_THETA };
+    const area = measureViewArea();
+    const wholeFit = opts.ids ? fitPose(h.camera, whole, { phi: ISO_PHI, theta: ISO_THETA }, area) : null;
+    let pose = fitPose(h.camera, target, dir, area);
+    if (mode === 'top' && !opts.keepAngle) {
+      // Top view: turn the plan a quarter if that shows it clearly larger
+      // (a wide plan on a tall phone screen), otherwise keep north up.
+      const turned = fitPose(h.camera, target, { phi: TOP_PHI, theta: Math.PI / 2 }, area);
+      if (pose.zoom !== undefined && turned.zoom !== undefined ? turned.zoom > pose.zoom * 1.08 : turned.radius < pose.radius * 0.92) pose = turned;
+    }
+    if (!opts.ids || !navLimitsRef.current) {
+      const lim = navLimits(whole, wholeFit?.radius ?? pose.radius);
+      navLimitsRef.current = lim;
+      modelBoxRef.current = whole;
+      applyLimits(h, lim);
+    }
+    const lim = navLimitsRef.current;
+    if (lim && pose.zoom === undefined) pose.radius = Math.min(Math.max(pose.radius, lim.minDistance), lim.maxDistance);
+    setViewMode(mode);
+    autoFramedRef.current = !opts.ids;
+    void animateTo(h, pose, opts.ms ?? 520);
+  }, [collectBuildingBoxes, measureViewArea]);
 
-  /** Frame only the currently-selected building objects (Fit Selection). */
+  /** 3D view of the whole building (also re-centres when pressed again). */
+  const frameEntireProject = useCallback(() => {
+    goToView('3d');
+  }, [goToView]);
+
+  /** Frame only the currently-selected building objects (Zoom to selection). */
   const frameSelection = useCallback(() => {
-    const handle = viewerHandleRef.current;
-    if (!handle || !handle.camera || !handle.scene) return;
     const ids = new Set(useViewer.getState().selection.selectedIds);
     if (ids.size === 0) return;
-    const { boxes } = collectBuildingBoxes(ids);
-    if (boxes.length === 0) return;
-    const cam = handle.camera as unknown as import('three').PerspectiveCamera | import('three').OrthographicCamera;
-    const mode = (cam as { isPerspectiveCamera?: boolean }).isPerspectiveCamera ? 'perspective' : 'orthographic';
-    const fov = (cam as { fov?: number }).fov ?? 50;
-    const aspect = (cam as { aspect?: number }).aspect ?? (typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 1);
-    const sol = frameSelectionBoxes(boxes, { mode, fovDeg: fov, aspect, near: (cam as { near?: number }).near ?? 0.1, far: (cam as { far?: number }).far ?? 1000 }, [cam.position.x, cam.position.y, cam.position.z], 0.18);
-    applySolution(sol, framingCtl.current);
-  }, [collectBuildingBoxes, applySolution]);
+    goToView(viewModeRef.current, { keepAngle: true, ids });
+  }, [goToView]);
 
-  /** Top view: camera directly above building centre, then fit. */
+  /** Top view of the whole plan. */
   const topViewAndFrame = useCallback(() => {
-    const handle = viewerHandleRef.current;
-    if (!handle || !handle.camera || !handle.scene) return;
-    const { boxes } = collectBuildingBoxes();
-    if (boxes.length === 0) return;
-    const cam = handle.camera as unknown as import('three').PerspectiveCamera | import('three').OrthographicCamera;
-    const mode = (cam as { isPerspectiveCamera?: boolean }).isPerspectiveCamera ? 'perspective' : 'orthographic';
-    const fov = (cam as { fov?: number }).fov ?? 50;
-    const aspect = (cam as { aspect?: number }).aspect ?? (typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 1);
-    const sol = computeFraming(boxes, { mode, fovDeg: fov, aspect, near: (cam as { near?: number }).near ?? 0.1, far: (cam as { far?: number }).far ?? 1000 }, [cam.position.x, cam.position.y, cam.position.z], 0.15);
-    const topDir = new THREE.Vector3(0, 1, 0.0001).normalize();
-    // Fit the plan footprint (with a margin) instead of 3x the bounding sphere.
-    const bb = sol.buildingBounds;
-    const vFov = (fov * Math.PI) / 180;
-    const hFov = 2 * Math.atan(Math.tan(vFov / 2) * aspect);
-    const fitDist = Math.max((bb.max[2] - bb.min[2]) / 2 / Math.tan(vFov / 2), (bb.max[0] - bb.min[0]) / 2 / Math.tan(hFov / 2)) * 1.25 + (bb.max[1] - bb.min[1]);
-    const dist = mode === 'perspective' && isFinite(fitDist) && fitDist > 0 ? Math.max(fitDist, 8) : Math.max(sol.boundingSphereRadius * 3, 20);
-    const pos = new THREE.Vector3(...sol.buildingCenter).add(topDir.multiplyScalar(dist));
-    const ctl = framingCtl.current;
-    ctl.camBefore = [cam.position.x, cam.position.y, cam.position.z];
-    cam.position.set(pos.x, pos.y, pos.z);
-    // Clip planes for this (closer) distance, so the roofline is never cut.
-    const R = sol.boundingSphereRadius;
-    (cam as { near: number }).near = mode === 'perspective' ? Math.max(0.05, Math.min(sol.near, (dist - R) * 0.5)) : sol.near;
-    (cam as { far: number }).far = Math.max(sol.far, dist + R * 2 + 100);
-    cam.updateProjectionMatrix();
-    if (handle.controls && handle.controls.target) { handle.controls.target.set(...sol.controlsTarget); handle.controls.update(); }
-    ctl.camAfter = [cam.position.x, cam.position.y, cam.position.z];
-    ctl.tgtAfter = handle.controls?.target ? [handle.controls.target.x, handle.controls.target.y, handle.controls.target.z] : null;
-    ctl.bounds = { min: sol.buildingBounds.min, max: sol.buildingBounds.max };
-    handle.invalidate();
-    pumpFrames();
-  }, [collectBuildingBoxes, pumpFrames]);
+    goToView('top');
+  }, [goToView]);
+
+  const zoomView = useCallback((dir: 1 | -1) => {
+    const h = viewerHandleRef.current;
+    if (!h || !h.camera) return;
+    autoFramedRef.current = false;
+    void animateTo(h, zoomPose(currentPose(h), dir > 0 ? 0.65 : 1.55, navLimitsRef.current), 280);
+  }, []);
+
+  const turnView = useCallback((dir: 1 | -1) => {
+    const h = viewerHandleRef.current;
+    if (!h || !h.camera) return;
+    autoFramedRef.current = false;
+    void animateTo(h, turnPose(currentPose(h), dir), 460);
+  }, []);
+
+  /** Double-tap / double-click: orbit around the point under the finger and come closer. */
+  const focusAt = useCallback((clientX: number, clientY: number) => {
+    const h = viewerHandleRef.current;
+    if (!h || !h.camera) return;
+    const box = modelBoxRef.current;
+    const R = box ? boxRadius(box) : 20;
+    const point = pickPoint(h, clientX, clientY, navLimitsRef.current?.far ?? Infinity);
+    if (!point) return;
+    if (box && point.distanceTo(boxCenter(box)) > R * 3) return;
+    autoFramedRef.current = false;
+    void animateTo(h, focusPose(currentPose(h), point, R, navLimitsRef.current), 480);
+  }, []);
+
+  /** Slide the lens so the model sits in the middle of whatever part of the screen is free now. */
+  const recenterLens = useCallback((ms = 300) => {
+    const h = viewerHandleRef.current;
+    if (!h || !h.camera) return;
+    void animateTo(h, { ...currentPose(h), shift: freeAreaShift(measureViewArea()) }, ms);
+  }, [measureViewArea]);
 
   /** Reset framing state for a new run / reset / scene replace. */
   const resetFraming = useCallback((runId: number) => {
@@ -3176,6 +3262,179 @@ export default function Home() {
     window.setTimeout(() => frameEntireProject(), 150);
   }, [readyKey, fitSiteToBuilding, frameEntireProject]);
 
+  // Gestures on the 3D view: any touch, click or wheel stops a camera glide; a
+  // double tap / double click focuses on the point under it. (Not in PRO, whose
+  // drawing tools use double-click.)
+  const [viewerEpoch, setViewerEpoch] = useState(0);
+  const proModeRef = useRef(proMode);
+  proModeRef.current = proMode;
+  const settingsOpenRef = useRef(settingsOpen);
+  settingsOpenRef.current = settingsOpen;
+  useEffect(() => {
+    const canvas = (viewerHandleRef.current?.gl as { domElement?: HTMLCanvasElement } | undefined)?.domElement;
+    if (!canvas) return;
+    let down: { x: number; y: number; t: number; id: number } | null = null;
+    let lastTap: { x: number; y: number; t: number } | null = null;
+    let lastTouchFocus = 0;
+    const onDown = (e: PointerEvent) => {
+      cancelViewAnimation();
+      autoFramedRef.current = false;
+      down = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId };
+    };
+    const onUp = (e: PointerEvent) => {
+      const d = down;
+      down = null;
+      if (!d || d.id !== e.pointerId) return;
+      const now = performance.now();
+      if (Math.hypot(e.clientX - d.x, e.clientY - d.y) > 10 || now - d.t > 350) {
+        // A drag: keep the 3D / Top switch truthful.
+        const h = viewerHandleRef.current;
+        if (h?.camera) setViewMode(currentPose(h).phi < 0.1 ? 'top' : '3d');
+        lastTap = null;
+        return;
+      }
+      if (e.pointerType !== 'touch' || proModeRef.current) return;
+      if (lastTap && now - lastTap.t < 320 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30) {
+        lastTap = null;
+        lastTouchFocus = now;
+        focusAt(e.clientX, e.clientY);
+      } else {
+        lastTap = { x: e.clientX, y: e.clientY, t: now };
+      }
+    };
+    const onDouble = (e: MouseEvent) => {
+      if (proModeRef.current || performance.now() - lastTouchFocus < 600) return;
+      focusAt(e.clientX, e.clientY);
+    };
+    const onWheel = () => {
+      cancelViewAnimation();
+      autoFramedRef.current = false;
+    };
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('dblclick', onDouble);
+    canvas.addEventListener('wheel', onWheel, { passive: true });
+    return () => {
+      canvas.removeEventListener('pointerdown', onDown);
+      canvas.removeEventListener('pointerup', onUp);
+      canvas.removeEventListener('dblclick', onDouble);
+      canvas.removeEventListener('wheel', onWheel);
+    };
+  }, [viewerEpoch, focusAt]);
+
+  // Keyboard: + / − zoom, Q / E turn, T top, H 3D view, F zoom to the selection.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || proModeRef.current || settingsOpenRef.current) return;
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+      if (!sceneHasWallsNow()) return;
+      const k = e.key;
+      if (k === '+' || k === '=') zoomView(1);
+      else if (k === '-' || k === '_') zoomView(-1);
+      else if (k === 'q' || k === 'Q') turnView(-1);
+      else if (k === 'e' || k === 'E') turnView(1);
+      else if (k === 't' || k === 'T') topViewAndFrame();
+      else if (k === 'h' || k === 'H' || k === 'Home') frameEntireProject();
+      else if (k === 'f' || k === 'F') {
+        if (useViewer.getState().selection.selectedIds.length) frameSelection();
+        else goToView(viewModeRef.current, { keepAngle: true });
+      } else return;
+      e.preventDefault();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [zoomView, turnView, topViewAndFrame, frameEntireProject, frameSelection, goToView]);
+
+  // Rotating the phone, resizing the window or the browser bar sliding away:
+  // re-fit, unless the user has moved the camera since the last automatic fit.
+  useEffect(() => {
+    let timer = 0;
+    const onResize = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (!sceneHasWallsNow()) return;
+        // In top view the plan may turn to suit the new screen shape. Once the
+        // user has moved the camera, keep their view and only re-centre it.
+        if (autoFramedRef.current) goToView(viewModeRef.current, { keepAngle: viewModeRef.current !== 'top', ms: 320 });
+        else recenterLens(320);
+      }, 280);
+    };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+    // Panels announce when they tuck away on small screens (BuildCard).
+    window.addEventListener('db:layout', onResize);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
+      window.removeEventListener('db:layout', onResize);
+    };
+  }, [goToView, recenterLens]);
+
+  // --db-dock-top: how far the top of the prompt bar is from the bottom of the
+  // screen. The phone toolbar, selection sheet and tips sit just above it, so
+  // they move up when the bar grows (attachments, render progress, errors).
+  useEffect(() => {
+    if (!docked) return;
+    let ro: ResizeObserver | null = null;
+    let raf = 0;
+    let last = -1;
+    const update = () => {
+      const el = document.querySelector('.db-gemini-dock-root');
+      const r = el?.getBoundingClientRect();
+      if (!el || !r || r.height === 0) return;
+      const stage = el.closest('.db-stage')?.getBoundingClientRect();
+      const px = Math.max(0, Math.round((stage?.bottom ?? window.innerHeight) - r.top));
+      if (px === last) return;
+      last = px;
+      document.documentElement.style.setProperty('--db-dock-top', `${px}px`);
+    };
+    const attach = () => {
+      const el = document.querySelector('.db-gemini-dock-root');
+      if (!el) { raf = requestAnimationFrame(attach); return; }
+      if (typeof ResizeObserver !== 'undefined') {
+        ro = new ResizeObserver(update);
+        ro.observe(el);
+      }
+      update();
+    };
+    // The bar animates its position, so measure again once that has settled.
+    let settle = 0;
+    const onResize = () => {
+      update();
+      window.clearTimeout(settle);
+      settle = window.setTimeout(update, 320);
+    };
+    attach();
+    window.addEventListener('resize', onResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(settle);
+      ro?.disconnect();
+      window.removeEventListener('resize', onResize);
+    };
+  }, [docked]);
+
+  // Read-only view state for the test harness (same pattern as window.__code06).
+  useEffect(() => {
+    (window as unknown as { __dbNav?: unknown }).__dbNav = {
+      state: () => {
+        const h = viewerHandleRef.current;
+        if (!h?.camera) return null;
+        const p = currentPose(h);
+        const cam = h.camera as unknown as { near: number; far: number; position: { toArray(): number[] } };
+        return {
+          near: cam.near, far: cam.far, radius: p.radius, phi: p.phi, theta: p.theta,
+          target: p.target.toArray(), position: cam.position.toArray(),
+          limits: navLimitsRef.current, mode: viewModeRef.current, auto: autoFramedRef.current,
+          area: measureViewArea(), box: modelBoxRef.current, shift: p.shift,
+        };
+      },
+      boxes: () => collectBuildingBoxes().boxes,
+    };
+  }, [measureViewArea, collectBuildingBoxes]);
+
   const handleTakeSnapshot = useCallback(async (): Promise<AttachmentRef[] | AttachmentRef | null> => {
     try {
       let dataUrl: string | null = null;
@@ -3320,6 +3579,7 @@ export default function Home() {
                 viewerHandleRef.current = h;
                 framingCtl.current.viewerReady = true;
                 evaluateFramingReadiness();
+                setViewerEpoch((n) => n + 1);
               }}
               fallback={<div className="glass" style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', color: 'var(--muted)' }}>Registering node definitions…</div>}
             >
@@ -3349,6 +3609,11 @@ export default function Home() {
               onFitSelection={frameSelection}
               onTopView={topViewAndFrame}
               onResetView={frameEntireProject}
+              onZoomIn={() => zoomView(1)}
+              onZoomOut={() => zoomView(-1)}
+              onTurnLeft={() => turnView(-1)}
+              onTurnRight={() => turnView(1)}
+              viewMode={viewMode}
             />
           )}
         </>
@@ -3379,7 +3644,10 @@ export default function Home() {
 
       {/* STANDARD selection properties panel (hidden in PRO — the official
           Inspector overlay owns inspection). */}
-      {!proMode && !proMounting && (<SelectionPropertiesPanel />)}
+      {!proMode && !proMounting && (<SelectionPropertiesPanel onZoomTo={frameSelection} />)}
+
+      {/* One-time tip on moving around the model. */}
+      <NavHint visible={!!readyKey && docked && sceneHasWalls && !proMode && !proMounting && !settingsOpen} />
 
       {/* Viewer toolbar: shown once there is a model to look at. */}
       {!proMode && !proMounting && docked && sceneHasWalls && (
@@ -3388,6 +3656,11 @@ export default function Home() {
           onFitSelection={frameSelection}
           onTopView={topViewAndFrame}
           onResetView={frameEntireProject}
+          onZoomIn={() => zoomView(1)}
+          onZoomOut={() => zoomView(-1)}
+          onTurnLeft={() => turnView(-1)}
+          onTurnRight={() => turnView(1)}
+          viewMode={viewMode}
           proEnabled={editorMode.proEnabled}
           mode={editorMode.effectiveMode}
           onToggleMode={() => {

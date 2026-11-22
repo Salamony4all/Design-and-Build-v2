@@ -132,8 +132,10 @@ export function computeFraming(
       dir.multiplyScalar(distance),
     );
     position = [camPos.x, camPos.y, camPos.z];
-    near = Math.max(0.05, distance - effRadius * 1.5);
-    far = distance + effRadius * 1.5 + 100;
+    // Keep the near plane close to the camera. Putting it just in front of the
+    // model (distance - radius) sliced the model as soon as the user zoomed in.
+    near = Math.min(0.1, Math.max(0.02, boundingSphereRadius / 500));
+    far = Math.max(1000, distance * 3 + effRadius * 4 + 200);
   } else {
     // Orthographic: derive zoom + half-extents from project bounds.
     const halfW = (sizeX / 2) * (1 + pad);

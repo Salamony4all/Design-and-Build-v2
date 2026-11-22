@@ -29,6 +29,11 @@ interface Props {
   onFitSelection: () => void;
   onTopView: () => void;
   onResetView: () => void;
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
+  onTurnLeft?: () => void;
+  onTurnRight?: () => void;
+  viewMode?: '3d' | 'top';
 }
 
 const INSPECTABLE = new Set([
@@ -269,7 +274,7 @@ function CatalogTab() {
   );
 }
 
-export function ProOverlay({ onReturn, onFitProject, onFitSelection, onTopView, onResetView }: Props) {
+export function ProOverlay({ onReturn, onFitProject, onFitSelection, onTopView, onResetView, onZoomIn, onZoomOut, onTurnLeft, onTurnRight, viewMode }: Props) {
   const [entered, setEntered] = useState(false);
   const [activeTab, setActiveTab] = useState<'hierarchy' | 'catalog'>('hierarchy');
 
@@ -373,6 +378,11 @@ export function ProOverlay({ onReturn, onFitProject, onFitSelection, onTopView, 
           onFitSelection={onFitSelection}
           onTopView={onTopView}
           onResetView={onResetView}
+          onZoomIn={onZoomIn}
+          onZoomOut={onZoomOut}
+          onTurnLeft={onTurnLeft}
+          onTurnRight={onTurnRight}
+          viewMode={viewMode}
           proEnabled
           mode="pro"
           onToggleMode={onReturn}
