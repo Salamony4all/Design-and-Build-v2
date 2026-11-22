@@ -6,6 +6,7 @@
 import { RENDER_TIERS, type RenderStyleId, type RenderTierId } from './render-presets';
 import { OUTSIDE_OK, fidelityGrade, scoreRenderFidelity, type FidelityReport } from './geometry-fidelity';
 import type { PreparedView } from './capture-view';
+import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
 
 export type RenderStageKey = 'capture' | 'send' | 'render' | 'check' | 'retry' | 'done';
 
@@ -78,7 +79,7 @@ interface ApiErr {
 
 export async function renderStatus(): Promise<{ ready: boolean; providerLabel: string | null }> {
   try {
-    const r = await fetch('/api/render', { cache: 'no-store' });
+    const r = await fetch('/api/render', { cache: 'no-store', headers: providerRequestHeaders('render') });
     const j = (await r.json()) as { ready?: boolean; providerLabel?: string | null };
     return { ready: !!j.ready, providerLabel: j.providerLabel ?? null };
   } catch {
@@ -124,7 +125,7 @@ async function postRender(
 ): Promise<ApiOk> {
   const res = await fetch('/api/render', {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', ...providerRequestHeaders('render') },
     signal: o.signal,
     body: JSON.stringify({
       image: view.dataUrl,

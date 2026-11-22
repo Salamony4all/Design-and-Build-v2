@@ -9,6 +9,7 @@ import { z } from 'zod';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { loadRegistry, getProvider, getApiKey } from 'design-build-provider-registry';
+import { readRequestProvider, type RequestProvider } from '@/features/providers/request-provider';
 import {
   ALLOWED_RENDER_MODELS,
   RENDER_PROMPT_VERSION,
@@ -63,20 +64,32 @@ function envKey(): string {
 }
 
 /**
- * Gemini credentials in priority order: the active render provider, the
- * extraction provider, any other Gemini provider, then the server env key.
+ * Gemini credentials in priority order: the key this browser sent with the
+ * request (providers live in the user's browser), then — for local
+ * development — the active render provider, the extraction provider, any other
+ * Gemini provider, then the server env key.
  * A key that is out of quota (e.g. a free-tier key, which has no image quota)
  * or rejected falls through to the next one.
  */
-function resolveGeminiCandidates(): ResolvedGemini[] {
+function resolveGeminiCandidates(fromBrowser: RequestProvider | null = null): ResolvedGemini[] {
+  const out: ResolvedGemini[] = [];
+  const seenKeys = new Set<string>();
+  // The browser's own key first (keys live in the user's browser, like BOQ Flow).
+  if (fromBrowser?.apiKey && fromBrowser.providerType === 'gemini') {
+    out.push({
+      apiKey: fromBrowser.apiKey,
+      baseUrl: (fromBrowser.baseUrl || DEFAULT_GEMINI_BASE).replace(/\/+$/, ''),
+      providerLabel: fromBrowser.label || 'Your Gemini key',
+    });
+    seenKeys.add(fromBrowser.apiKey);
+  }
   const state = loadRegistry();
   const order = [
+    fromBrowser?.apiKey ? undefined : fromBrowser?.providerId,
     state.activeRenderProvider?.providerId,
     state.activeExtractionModel?.providerId,
     ...state.providers.filter((p) => p.providerType === 'gemini').map((p) => p.id),
   ].filter((x): x is string => !!x);
-  const out: ResolvedGemini[] = [];
-  const seenKeys = new Set<string>();
   for (const id of [...new Set(order)]) {
     const p = getProvider(state, id);
     if (!p || !p.enabled || p.providerType !== 'gemini') continue;
@@ -89,6 +102,11 @@ function resolveGeminiCandidates(): ResolvedGemini[] {
   const k = envKey();
   if (k && !seenKeys.has(k)) out.push({ apiKey: k, baseUrl: DEFAULT_GEMINI_BASE, providerLabel: 'Gemini (server env)' });
   return out;
+}
+
+/** Google answers an invalid key with 400 "API key not valid", a revoked or restricted one with 401/403. */
+function keyRejected(r: { status: number; json: GeminiResponse }): boolean {
+  return r.status === 401 || r.status === 403 || (r.status === 400 && /api key not valid|api_key_invalid/i.test(upstreamMessage(r.json)));
 }
 
 function parseDataUrl(s: string | undefined): { mimeType: string; data: string } | null {
@@ -150,8 +168,8 @@ async function saveDebug(id: string, body: Body, prompt: string, out: { mimeType
   ]);
 }
 
-export async function GET() {
-  const c = resolveGeminiCandidates();
+export async function GET(req: NextRequest) {
+  const c = resolveGeminiCandidates(readRequestProvider(req));
   return NextResponse.json({
     ready: c.length > 0,
     providerLabel: c[0]?.providerLabel ?? null,
@@ -197,9 +215,9 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const candidates = resolveGeminiCandidates();
+  const candidates = resolveGeminiCandidates(readRequestProvider(req));
   if (!candidates.length) {
-    return fail(412, 'RENDER_PROVIDER_NOT_CONFIGURED', 'No Gemini API key is configured. Add one in Settings → Providers (or set GEMINI_API_KEY on the server).');
+    return fail(412, 'RENDER_PROVIDER_NOT_CONFIGURED', 'No Gemini key yet. Add your Gemini provider in AI Studio — it is kept in this browser.');
   }
 
   const prompt = buildGeometryLockPrompt({
@@ -252,7 +270,7 @@ export async function POST(req: NextRequest) {
       if (!resp || resp.status === 200) break;
       // Out of quota (free-tier keys have none for image models) or rejected: try the next key.
       const quota = resp.status === 429 && /quota|billing|exceeded/i.test(upstreamMessage(resp.json));
-      if (!(quota || resp.status === 401 || resp.status === 403)) break;
+      if (!(quota || keyRejected(resp))) break;
       const um = upstreamMessage(resp.json);
       const why = resp.status !== 429 ? 'key rejected' : /spend/i.test(um) ? 'monthly spend cap reached' : /free.?tier|limit: ?0/i.test(um) ? 'free tier, no image quota' : 'quota used up';
       skipped.push(`${g.providerLabel} (${why})`);
@@ -265,7 +283,7 @@ export async function POST(req: NextRequest) {
 
   if (resp.status !== 200) {
     const msg = upstreamMessage(resp.json);
-    if (resp.status === 401 || resp.status === 403) return fail(502, 'RENDER_AUTH', `The Gemini key was rejected (${resp.status}). Check it in Settings → Providers.`);
+    if (keyRejected(resp)) return fail(502, 'RENDER_AUTH', 'The Gemini key was rejected. Check it in AI Studio.');
     if (resp.status === 404) return fail(502, 'RENDER_MODEL_UNAVAILABLE', `Model ${model} is not available for this key.`);
     if (resp.status === 429) {
       const tried = skipped.length ? ` Tried: ${skipped.join(', ')}.` : '';

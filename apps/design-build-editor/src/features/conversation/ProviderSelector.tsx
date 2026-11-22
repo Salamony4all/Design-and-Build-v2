@@ -3,9 +3,10 @@
 // preset templates, interactive model discovery, and role assignment.
 //
 // SECURITY CONTRACT (enforced everywhere here):
-//  - The browser only ever receives MASKED ProviderSummary objects (hasApiKey,
-//    never the key bytes). API keys are typed into password fields, POSTed to
-//    the server, stored server-side, and never returned.
+//  - Providers and keys are kept in this browser's storage (like BOQ Flow, see
+//    features/providers/browser-provider-store) and travel to our own server
+//    only inside the request that needs them. The UI itself only ever handles
+//    MASKED ProviderSummary objects (hasApiKey, never the key bytes).
 //  - The key is never placed in ChatPanel state, never logged, never written
 //    into scene/project JSON, exports, or test evidence.
 //  - Selections for chat / extraction / render are INDEPENDENT slots — changing
@@ -41,6 +42,7 @@ import {
   Box,
   ChevronRight,
 } from 'lucide-react';
+import { providerFetch } from '@/features/providers/browser-provider-store';
 
 export type ProviderType = 'gemini' | 'openai-compatible';
 export type ProviderKind = 'chat' | 'extraction' | 'render';
@@ -159,7 +161,8 @@ function emptyDraft(): ProviderDraft {
 }
 
 async function api<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init);
+  // Providers and keys are kept in this browser (like BOQ Flow); see browser-provider-store.
+  const res = await providerFetch(url, init);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data?.error || `${res.status}`);
   return data as T;
@@ -467,7 +470,7 @@ export function ProviderForm({
             </label>
             <span className="db-security-badge">
               <ShieldCheck className="w-3 h-3 text-emerald-600" />
-              <span>Encrypted Server-Side Only</span>
+              <span>Kept in this browser only</span>
             </span>
           </div>
           <div className="db-input-box db-input-box--key">
@@ -1166,7 +1169,7 @@ export function ProviderSettingsPanel({ onClose }: { onClose: () => void }) {
             <div className="db-dialog-footer">
               <div className="text-xs text-slate-400 flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-slate-400" />
-                <span>Credentials securely persisted via Provider Registry</span>
+                <span>Keys stay in this browser and are sent only with your own requests</span>
               </div>
               <button type="button" className="db-btn-primary" onClick={onClose}>
                 Done

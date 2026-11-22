@@ -8,6 +8,7 @@
 // runs. Returns the neutral ExtractionResult + typed multipass events.
 
 import { NextRequest, NextResponse } from 'next/server';
+import { readRequestProvider, type RequestProvider } from '@/features/providers/request-provider';
 import mupdf from 'mupdf';
 import {
   loadRegistry,
@@ -44,12 +45,41 @@ function fail(code: string, message: string, status: number, detail?: string) {
   return NextResponse.json({ error: message, code, detail } as ApiError, { status });
 }
 
-/** Resolve a server-side ProviderRuntime from the persisted registry. */
-function resolveRuntime(): { runtime: ProviderRuntime; providerId: string; modelId: string } | ApiError {
+/**
+ * Resolve the ProviderRuntime for this request. A provider sent by the browser
+ * (key kept in the user's browser, like BOQ Flow) wins; otherwise the persisted
+ * registry (local development) is used.
+ */
+function resolveRuntime(fromBrowser: RequestProvider | null): { runtime: ProviderRuntime; providerId: string; modelId: string } | ApiError {
+  if (fromBrowser?.providerId?.startsWith('bprov_') && !fromBrowser.apiKey) {
+    return { error: 'Your AI Studio provider has no API key or is turned off. Edit it in AI Studio.', code: 'AI_PROVIDER_NOT_CONFIGURED' } as ApiError;
+  }
+  if (fromBrowser?.apiKey && fromBrowser.providerType === 'openai-compatible' && !fromBrowser.baseUrl) {
+    return { error: 'Your provider needs a public https:// base URL. Edit it in AI Studio.', code: 'AI_PROVIDER_NOT_CONFIGURED' } as ApiError;
+  }
+  if (fromBrowser?.apiKey) {
+    if (!fromBrowser.modelId) {
+      return { error: 'Pick an extraction model for your provider in AI Studio.', code: 'AI_MODEL_NOT_CONFIGURED' } as ApiError;
+    }
+    const providerId = fromBrowser.providerId ?? 'browser';
+    return {
+      runtime: {
+        providerId,
+        providerType: fromBrowser.providerType,
+        ...(fromBrowser.baseUrl ? { baseUrl: fromBrowser.baseUrl } : {}),
+        apiKey: fromBrowser.apiKey,
+        ...(fromBrowser.headers ? { headers: fromBrowser.headers } : {}),
+      },
+      providerId,
+      modelId: GOOGLE_MODEL_MAP[fromBrowser.modelId] || fromBrowser.modelId,
+    };
+  }
   const state = loadRegistry();
-  const sel = state.activeExtractionModel;
+  const sel = fromBrowser?.providerId && fromBrowser.modelId
+    ? { providerId: fromBrowser.providerId, modelId: fromBrowser.modelId }
+    : state.activeExtractionModel;
   if (!sel) {
-    return { error: 'No extraction provider/model selected. Open Settings → Providers and pick an extraction model.',
+    return { error: 'No AI provider yet. Open AI Studio, add your provider and pick an extraction model (it is saved in this browser).',
       code: 'AI_MODEL_NOT_CONFIGURED' } as ApiError;
   }
   const provider = getProvider(state, sel.providerId);
@@ -66,7 +96,7 @@ function resolveRuntime(): { runtime: ProviderRuntime; providerId: string; model
       ? storedKey
       : (process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY ?? '');
   if (!apiKey) {
-    return { error: 'Selected extraction provider has no API key configured (set one in Settings → Providers or the GEMINI_API_KEY env var).',
+    return { error: 'Selected extraction provider has no API key (add one in AI Studio or set the GEMINI_API_KEY env var).',
       code: 'AI_PROVIDER_NOT_CONFIGURED' } as ApiError;
   }
   // Model id: explicit selection; GOOGLE_MODEL_MAP friendly-name resolution only
@@ -182,7 +212,7 @@ export async function POST(req: NextRequest) {
     return fail('unsupported-input', 'Document exceeds 25 MB.', 413);
   }
 
-  const resolved = resolveRuntime();
+  const resolved = resolveRuntime(readRequestProvider(req));
   if ('code' in resolved) {
     const status = resolved.code === 'AI_MODEL_NOT_CONFIGURED' ? 400 : 409;
     return fail(resolved.code, resolved.error, status);
@@ -227,12 +257,12 @@ export async function POST(req: NextRequest) {
     }
     if (/no longer available|not found|404/i.test(String(e.message))) {
       return fail('AI_MODEL_UNAVAILABLE',
-        `Model '${resolved.modelId}' is unavailable on the selected provider. Choose another model in Settings → Providers.`,
+        `Model '${resolved.modelId}' is unavailable on the selected provider. Choose another model in AI Studio.`,
         409);
     }
     if (/api key|unauthorized|401|403|permission|connection|ENOTFOUND|ECONNREFUSED|fetch failed|network/i.test(String(e.message))) {
       return fail('AI_PROVIDER_CONNECTION_FAILED',
-        `Provider connection failed: ${String(e.message).slice(0, 200)}. Check the Base URL / API key in Settings → Providers.`,
+        `Provider connection failed: ${String(e.message).slice(0, 200)}. Check the Base URL / API key in AI Studio.`,
         502);
     }
     return fail('extraction-failure', 'AI extraction failed.', 500, e.message);

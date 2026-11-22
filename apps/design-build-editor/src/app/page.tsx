@@ -59,6 +59,7 @@ import { RenderStudio, loadRenderPrefs } from '@/features/render/RenderStudio';
 import { prepareView, currentViewKind, type PreparedView } from '@/features/render/capture-view';
 import { renderPhotoreal, type RenderJobResult } from '@/features/render/render-client';
 import { RENDER_TIERS, getRenderStyle, styleFromText, furnishFromText } from '@/features/render/render-presets';
+import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
 import { useEditorMode } from '@/features/pro/useEditorMode';
 import { ProEditorLazy } from '@/features/pro/ProEditorLazy';
 import { ProOverlay } from '@/features/pro/ProOverlay';
@@ -1903,13 +1904,13 @@ export default function Home() {
       const mime = source.mime || (source.kind === 'pdf' ? 'application/pdf' : 'application/octet-stream');
       form.append('file', new Blob([bytes as BlobPart], { type: mime }), source.name);
 
-      const res = await fetch('/api/extraction/ai', { method: 'POST', body: form, signal: ac.signal });
+      const res = await fetch('/api/extraction/ai', { method: 'POST', body: form, signal: ac.signal, headers: providerRequestHeaders('extraction') });
       DIAG.apiStatus = res.status;
       if (!res.ok) {
         DIAG.extractionState = 'failed';
         const err = await res.json().catch(() => ({})) as { error?: string; code?: string };
         if (err.code === 'AI_MODEL_NOT_CONFIGURED' || err.code === 'AI_MODEL_UNAVAILABLE' || err.code === 'AI_PROVIDER_NOT_CONFIGURED') {
-          push({ type: 'error', message: `${err.error} Open Settings → Providers to choose an extraction model.` });
+          push({ type: 'error', message: /AI Studio/.test(err.error ?? '') ? String(err.error) : `${err.error} Open AI Studio to choose an extraction model.` });
         } else {
           push({ type: 'error', message: err.error || `AI extraction failed (${res.status}).` });
         }
@@ -2422,7 +2423,7 @@ export default function Home() {
       const mime = source.mime || (source.kind === 'pdf' ? 'application/pdf' : 'application/octet-stream');
       form.append('file', new Blob([bytes as BlobPart], { type: mime }), source.name);
 
-      const res = await fetch('/api/extraction/ai/progressive', { method: 'POST', body: form, signal: ac.signal });
+      const res = await fetch('/api/extraction/ai/progressive', { method: 'POST', body: form, signal: ac.signal, headers: providerRequestHeaders('extraction') });
       if (!res.ok) {
         const j = await res.json().catch(() => ({})) as { code?: string; error?: string };
         if (j.code === 'PROGRESSIVE_BUILD_DISABLED') { void startAiExtraction(source); return; }
