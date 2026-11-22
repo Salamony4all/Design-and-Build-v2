@@ -55,6 +55,8 @@ export interface GeneralWall {
   dir: number;
   /** one face looks out of the building: rays from it meet no other wall */
   exterior: boolean;
+  /** windows in this wall, measured along it from a (pt) */
+  windows?: Array<{ from: number; to: number }>;
 }
 
 export interface GeneralWallOptions {
@@ -89,10 +91,17 @@ interface Strip {
   c: number; t: number; lo: number; hi: number;
   cls: 'poche' | 'pen' | 'edge' | 'opening';
   pen: number;
+  /** pens of the low-c and high-c faces (-1: a fill edge) */
+  wA: number; wB: number;
   li: string; lj: string;
   seed?: boolean;
   a: Vec2; b: Vec2;
+  /** windows, as absolute along-coordinates */
+  windows?: Win[];
 }
+/** a window along a strip; `outside`: shown only by lines where the faces stop, so a
+ * window only if the wall looks out of the building there */
+interface Win { lo: number; hi: number; outside?: boolean }
 
 const len = (s: Strip) => s.hi - s.lo;
 
@@ -211,7 +220,7 @@ export function detectWallsGeneral(
         const c = (li.c + lj.c) / 2;
         strips.push({
           dir: d, ux, uy, c, t: dd, lo, hi,
-          cls: pw >= 0 ? 'pen' : 'edge', pen: Math.max(pw, 0),
+          cls: pw >= 0 ? 'pen' : 'edge', pen: Math.max(pw, 0), wA: li.w, wB: lj.w,
           li: `${d}:${i}`, lj: `${d}:${j}`,
           a: { x: lo * ux - c * uy, y: lo * uy + c * ux },
           b: { x: hi * ux - c * uy, y: hi * uy + c * ux },
@@ -236,30 +245,60 @@ export function detectWallsGeneral(
   if (!strips.length) return [];
 
   // ---- 3. poche test on the rendered page
-  if (raster) {
+  // how much darker the inside of a band is than the paper beside it, over [lo, hi]
+  const pocheContrastOf = (s: { ux: number; uy: number; c: number; t: number }, lo: number, hi: number): number | null => {
+    if (!raster) return null;
     const r = raster.pxPerPt;
+    if (s.t * r < 6) return null; // too thin in the render to tell the inside from its edges
     const lum = (x: number, y: number) => {
       const xi = Math.floor(x * r), yi = Math.floor(y * r);
       return xi >= 0 && yi >= 0 && xi < raster.width && yi < raster.height ? raster.lum(xi, yi) : 1;
     };
-    for (const s of strips) {
-      if (s.t * r < 6) continue; // too thin in the render to tell the inside from its edges
-      const n = Math.max(4, Math.floor((len(s) * r) / 2));
-      const mean = (off: number) => {
-        let tot = 0;
-        for (let k = 0; k < n; k++) {
-          const al = s.lo + ((k + 0.5) * len(s)) / n, ac = s.c + off;
-          tot += lum(al * s.ux - ac * s.uy, al * s.uy + ac * s.ux);
-        }
-        return tot / n;
-      };
-      const off = Math.max(2 / r, 0.3 * s.t);
-      const inside = (mean(0) + mean(-0.15 * s.t) + mean(0.15 * s.t)) / 3;
-      const outside = Math.max(mean(-s.t / 2 - off), mean(s.t / 2 + off));
-      if (outside - inside >= o.pocheContrast) s.cls = 'poche';
-    }
+    const n = Math.max(4, Math.floor(((hi - lo) * r) / 2));
+    const mean = (off: number) => {
+      let tot = 0;
+      for (let k = 0; k < n; k++) {
+        const al = lo + ((k + 0.5) * (hi - lo)) / n, ac = s.c + off;
+        tot += lum(al * s.ux - ac * s.uy, al * s.uy + ac * s.ux);
+      }
+      return tot / n;
+    };
+    const off = Math.max(2 / r, 0.3 * s.t);
+    const inside = (mean(0) + mean(-0.15 * s.t) + mean(0.15 * s.t)) / 3;
+    const outside = Math.max(mean(-s.t / 2 - off), mean(s.t / 2 + off));
+    return outside - inside;
+  };
+  for (const s of strips) {
+    const k = pocheContrastOf(s, s.lo, s.hi);
+    if (k !== null && k >= o.pocheContrast) s.cls = 'poche';
   }
+  // the same, robust to lines drawn along the band (a window's frame and glass): the
+  // median over many lines of samples across the band
+  const solidContrastOf = (s: { ux: number; uy: number; c: number; t: number }, lo: number, hi: number): number | null => {
+    if (!raster) return null;
+    const r = raster.pxPerPt;
+    if (s.t * r < 6) return null;
+    const lum = (x: number, y: number) => {
+      const xi = Math.floor(x * r), yi = Math.floor(y * r);
+      return xi >= 0 && yi >= 0 && xi < raster.width && yi < raster.height ? raster.lum(xi, yi) : 1;
+    };
+    const n = Math.max(4, Math.floor(((hi - lo) * r) / 2));
+    const mean = (off: number) => {
+      let tot = 0;
+      for (let k = 0; k < n; k++) {
+        const al = lo + ((k + 0.5) * (hi - lo)) / n, ac = s.c + off;
+        tot += lum(al * s.ux - ac * s.uy, al * s.uy + ac * s.ux);
+      }
+      return tot / n;
+    };
+    const ins: number[] = [];
+    for (let k = -4; k <= 4; k++) ins.push(mean((k / 4) * 0.35 * s.t));
+    ins.sort((x, y) => x - y);
+    const off = Math.max(2 / r, 0.3 * s.t);
+    return Math.max(mean(-s.t / 2 - off), mean(s.t / 2 + off)) - ins[4]!;
+  };
 
+  let hatchedOver: (st: { ux: number; uy: number; c: number; t: number }, lo: number, hi: number) => boolean = () => false;
   // ---- hatched poche: diagonal hatch strokes spanning the band (masonry, concrete,
   // insulated walls drawn with hatching too sparse for the raster test). Shelving and
   // lockers have perpendicular divisions, not diagonal ones, so they do not count.
@@ -272,10 +311,11 @@ export function detectWallsGeneral(
       (hgrid.get(k) ?? hgrid.set(k, []).get(k)!).push(sg);
     }
     const cosLo = Math.cos((65 * Math.PI) / 180), cosHi = Math.cos((25 * Math.PI) / 180);
-    for (const st of strips) {
-      if (st.cls === 'poche') continue;
-      const x0 = Math.min(st.a.x, st.b.x) - st.t, x1 = Math.max(st.a.x, st.b.x) + st.t;
-      const y0 = Math.min(st.a.y, st.b.y) - st.t, y1 = Math.max(st.a.y, st.b.y) + st.t;
+    hatchedOver = (st, lo, hi) => {
+      const p0 = { x: lo * st.ux - st.c * st.uy, y: lo * st.uy + st.c * st.ux };
+      const p1 = { x: hi * st.ux - st.c * st.uy, y: hi * st.uy + st.c * st.ux };
+      const x0 = Math.min(p0.x, p1.x) - st.t, x1 = Math.max(p0.x, p1.x) + st.t;
+      const y0 = Math.min(p0.y, p1.y) - st.t, y1 = Math.max(p0.y, p1.y) + st.t;
       let n = 0;
       for (let cx = Math.floor(x0 / hcell); cx <= Math.floor(x1 / hcell); cx++) {
         for (let cy = Math.floor(y0 / hcell); cy <= Math.floor(y1 / hcell); cy++) {
@@ -283,14 +323,18 @@ export function detectWallsGeneral(
             const ac1 = -sg.a.x * st.uy + sg.a.y * st.ux - st.c, ac2 = -sg.b.x * st.uy + sg.b.y * st.ux - st.c;
             if (Math.max(Math.abs(ac1), Math.abs(ac2)) > st.t / 2 + 0.3 || Math.abs(ac2 - ac1) < 0.5 * st.t) continue;
             const al1 = sg.a.x * st.ux + sg.a.y * st.uy, al2 = sg.b.x * st.ux + sg.b.y * st.uy;
-            if (Math.min(al1, al2) < st.lo || Math.max(al1, al2) > st.hi) continue;
+            if (Math.min(al1, al2) < lo || Math.max(al1, al2) > hi) continue;
             const cosA = Math.abs(((sg.b.x - sg.a.x) * st.ux + (sg.b.y - sg.a.y) * st.uy) / sg.len);
             if (cosA < cosLo || cosA > cosHi) continue;
             n++;
           }
         }
       }
-      if (n >= 3 && n * st.t >= 0.5 * len(st)) st.cls = 'poche';
+      return n >= 3 && n * st.t >= 0.5 * (hi - lo);
+    };
+    for (const st of strips) {
+      if (st.cls === 'poche') continue;
+      if (hatchedOver(st, st.lo, st.hi)) st.cls = 'poche';
     }
   }
 
@@ -594,7 +638,13 @@ export function detectWallsGeneral(
         Math.min(f.hi, s.hi) - Math.max(f.lo, s.lo) > 0.5 * Math.min(len(f), len(s)),
     );
     if (dup) {
-      if (len(s) > len(dup)) { dup.lo = Math.min(dup.lo, s.lo); dup.hi = Math.max(dup.hi, s.hi); }
+      // the longer band is the wall (the shorter one pairs a face with a line of a
+      // window or a fitting drawn against it): keep its faces, over both extents
+      // of two about as long, the one whose faces are both drawn in the heavier pen
+      const fw = (x: Strip) => Math.min(x.wA < 0 ? 1 : x.wA, x.wB < 0 ? 1 : x.wB);
+      const sWins = len(s) > 1.1 * len(dup) || (len(dup) <= 1.1 * len(s) && (fw(s) > fw(dup) || (fw(s) === fw(dup) && len(s) > len(dup))));
+      if (sWins) Object.assign(dup, { ...s, lo: Math.min(dup.lo, s.lo), hi: Math.max(dup.hi, s.hi) });
+      else { dup.lo = Math.min(dup.lo, s.lo); dup.hi = Math.max(dup.hi, s.hi); }
       continue;
     }
     finalStrips.push({ ...s });
@@ -622,10 +672,16 @@ export function detectWallsGeneral(
         if (p.dir !== q.dir) continue;
         const gap = Math.abs(p.c - q.c) - (p.t + q.t) / 2;
         if (gap < -0.5 || gap > abutGap) continue;
-        if (Math.min(p.hi, q.hi) - Math.max(p.lo, q.lo) < 0.8 * Math.min(len(p), len(q))) continue;
+        // layers run along the whole wall; a short band against a long wall is something
+        // drawn against it (a fitting, a sill), not one of its layers
+        const ov = Math.min(p.hi, q.hi) - Math.max(p.lo, q.lo);
+        if (ov < 0.8 * Math.min(len(p), len(q)) || ov < 0.5 * Math.max(len(p), len(q))) continue;
         const f0 = Math.min(p.c - p.t / 2, q.c - q.t / 2), f1 = Math.max(p.c + p.t / 2, q.c + q.t / 2);
         if (f1 - f0 > tMax) continue;
         const keepP = len(p) >= len(q) ? p : q;
+        const wA = p.c - p.t / 2 <= q.c - q.t / 2 ? p.wA : q.wA, wB = p.c + p.t / 2 >= q.c + q.t / 2 ? p.wB : q.wB;
+        p.wA = wA;
+        p.wB = wB;
         p.c = (f0 + f1) / 2;
         p.t = f1 - f0;
         p.lo = keepP.lo;
@@ -693,11 +749,384 @@ export function detectWallsGeneral(
     let dir = Math.round((Math.atan2(uy, ux) * 180) / Math.PI);
     dir = ((dir % 180) + 180) % 180;
     openingStrips.push({
-      dir, ux, uy, c, t, lo, hi: lo + L, cls: 'opening', pen: 0, li: 'opening', lj: 'opening',
+      dir, ux, uy, c, t, lo, hi: lo + L, cls: 'opening', pen: 0, wA: 0, wB: 0, li: 'opening', lj: 'opening',
       a: op.a, b: op.b,
     });
   }
   for (let i = finalStrips.length - 1; i >= 0; i--) if (removed.has(finalStrips[i]!)) finalStrips.splice(i, 1);
+  // ---- windows. A window is an opening in a wall line, 300 mm to 6 m wide, closed at both
+  // ends by jambs (lines across the wall), not a door, and glazed: lines along the wall
+  // span it from jamb to jamb inside the wall's thickness (glass, frame) and stop there,
+  // or - in an outside wall only - lighter lines run across it where the wall's own faces
+  // stop (sill and frame drawn on the faces). A wall drawn solid is not solid across it.
+  // The opening shows in one of three ways, and in each the wall runs on through the
+  // window: a band of its own drawn lighter than the wall pieces beside it; a gap between
+  // two wall pieces; a break in the wall's own faces or in its solid fill. No style, pen or
+  // label is assumed; sizes are in millimetres.
+  {
+    const minWin = 300 / S, maxWin = 6000 / S;
+    const wCell = Math.max(8, 1500 / S);
+    const wGrid = new Map<string, Seg[]>();
+    for (const sg of segs) {
+      if (sg.len < 0.15) continue;
+      for (let cx = Math.floor(Math.min(sg.a.x, sg.b.x) / wCell); cx <= Math.floor(Math.max(sg.a.x, sg.b.x) / wCell); cx++) {
+        for (let cy = Math.floor(Math.min(sg.a.y, sg.b.y) / wCell); cy <= Math.floor(Math.max(sg.a.y, sg.b.y) / wCell); cy++) {
+          const k = `${cx},${cy}`;
+          (wGrid.get(k) ?? wGrid.set(k, []).get(k)!).push(sg);
+        }
+      }
+    }
+    type Band = { ux: number; uy: number; c: number; t: number; poche?: boolean; wA?: number; wB?: number };
+    const near = (st: Band, a: number, b: number): Seg[] => {
+      const r = st.t / 2 + 2;
+      const pts = [[a, st.c - r], [a, st.c + r], [b, st.c - r], [b, st.c + r]].map(([al, ac]) => ({
+        x: al! * st.ux - ac! * st.uy, y: al! * st.uy + ac! * st.ux,
+      }));
+      const x0 = Math.min(...pts.map((p) => p.x)), x1 = Math.max(...pts.map((p) => p.x));
+      const y0 = Math.min(...pts.map((p) => p.y)), y1 = Math.max(...pts.map((p) => p.y));
+      const out = new Set<Seg>();
+      for (let cx = Math.floor(x0 / wCell); cx <= Math.floor(x1 / wCell); cx++) {
+        for (let cy = Math.floor(y0 / wCell); cy <= Math.floor(y1 / wCell); cy++) {
+          for (const sg of wGrid.get(`${cx},${cy}`) ?? []) out.add(sg);
+        }
+      }
+      return [...out];
+    };
+    const cover = (runs: Array<{ lo: number; hi: number }>, a: number, b: number) => {
+      const parts = runs.map((r) => [Math.max(a, r.lo), Math.min(b, r.hi)] as const).filter(([x, y]) => y > x).sort((p, q) => p[0] - q[0]);
+      let tot = 0, cur: [number, number] | null = null;
+      for (const [x, y] of parts) {
+        if (!cur || x > cur[1]) { if (cur) tot += cur[1] - cur[0]; cur = [x, y]; } else cur[1] = Math.max(cur[1], y);
+      }
+      if (cur) tot += cur[1] - cur[0];
+      return tot;
+    };
+    // is [a, b] along band st a window? Its jamb-to-jamb interval, or null. The answer
+    // depends only on the drawing, so it is kept for the merges that ask again.
+    const seen = new Map<string, Win | null>();
+    const windowAt = (st: Band, a: number, b: number): Win | null => {
+      const k = [st.ux, st.uy, st.c, st.t, a, b, st.wA ?? 0, st.wB ?? 0].map((v) => v.toFixed(3)).join('|') + (st.poche ? 'p' : '');
+      if (!seen.has(k)) seen.set(k, windowAt0(st, a, b));
+      return seen.get(k)!;
+    };
+    const windowAt0 = (st: Band, a: number, b: number, doorAt?: { a?: boolean; b?: boolean }): Win | null => {
+      const W = b - a;
+      if (W < minWin || W > maxWin) return null;
+      // a door in the interval: the window, if any, is beside it (a sidelight)
+      const doorsIn: Array<[number, number]> = [];
+      for (const op of doorOpenings) {
+        const al1 = op.a.x * st.ux + op.a.y * st.uy, al2 = op.b.x * st.ux + op.b.y * st.uy;
+        const ac1 = -op.a.x * st.uy + op.a.y * st.ux - st.c, ac2 = -op.b.x * st.uy + op.b.y * st.ux - st.c;
+        if (Math.max(Math.abs(ac1), Math.abs(ac2)) > st.t / 2 + jambReach) continue;
+        const dlo = Math.min(al1, al2), dhi = Math.max(al1, al2);
+        if (Math.min(b, dhi) - Math.max(a, dlo) > 0) doorsIn.push([dlo, dhi]);
+      }
+      if (doorsIn.some(([x, y]) => Math.min(b, y) - Math.max(a, x) > Math.max(0.5, 0.05 * W))) {
+        const pad = Math.max(0.5, 0.1 * st.t);
+        let parts: Array<[number, number]> = [[a, b]];
+        for (const [x, y] of doorsIn) {
+          parts = parts.flatMap(([p0, p1]): Array<[number, number]> => [[p0, Math.min(p1, x - pad)], [Math.max(p0, y + pad), p1]]).filter(([p0, p1]) => p1 - p0 >= minWin);
+        }
+        parts.sort((u, v) => v[1] - v[0] - (u[1] - u[0]));
+        if (!parts.length || parts[0]![1] - parts[0]![0] >= W) return null;
+        // the door's frame is the window's jamb on that side
+        const [p0, p1] = parts[0]!;
+        return windowAt0(st, p0, p1, { a: p0 > a + 1e-6 || !!doorAt?.a, b: p1 < b - 1e-6 || !!doorAt?.b });
+      }
+      // a wall drawn solid (filled or hatched) is not solid across its windows
+      if (st.poche) {
+        const k = solidContrastOf(st, a, b);
+        if ((k !== null && k >= o.pocheContrast) || hatchedOver(st, a, b)) return null;
+      }
+      const tol = Math.max(0.4, 0.12 * st.t);
+      const groups: Array<{ ac: number; fill: boolean; maxW: number; runs: Array<{ lo: number; hi: number }>; raw: Array<{ lo: number; hi: number; w: number }> }> = [];
+      const own: Array<Array<{ lo: number; hi: number }>> = [[], []];
+      const jambA: number[] = [], jambB: number[] = [];
+      const trans: Array<{ al: number; lo: number; hi: number }> = [];
+      const pad = Math.max(1, 0.15 * W);
+      const ext = Math.max(1, 0.5 * st.t, 150 / S);
+      const reach = Math.max(3 * ext, 0.5 * W);
+      for (const sg of near(st, a - reach - 1, b + reach + 1)) {
+        const cosA = Math.abs(((sg.b.x - sg.a.x) * st.ux + (sg.b.y - sg.a.y) * st.uy) / sg.len);
+        const ac1 = -sg.a.x * st.uy + sg.a.y * st.ux - st.c, ac2 = -sg.b.x * st.uy + sg.b.y * st.ux - st.c;
+        const al1 = sg.a.x * st.ux + sg.a.y * st.uy, al2 = sg.b.x * st.ux + sg.b.y * st.uy;
+        if (cosA >= 0.998) {
+          if (Math.max(Math.abs(ac1), Math.abs(ac2)) > st.t / 2 + tol) continue;
+          const ac = (ac1 + ac2) / 2;
+          // the edge of a fill is not a drawn line: kept apart from the strokes it lies along
+          const fill = !sg.stroke;
+          let g = groups.find((x) => Math.abs(x.ac - ac) <= 0.3 && x.fill === fill);
+          if (!g) { g = { ac, fill, maxW: 0, runs: [], raw: [] }; groups.push(g); }
+          g.raw.push({ lo: Math.min(al1, al2), hi: Math.max(al1, al2), w: sg.stroke ? sg.w : -1 });
+          const lo = Math.max(a, Math.min(al1, al2)), hi = Math.min(b, Math.max(al1, al2));
+          if (hi > lo) {
+            g.runs.push({ lo, hi });
+            if (sg.stroke) g.maxW = Math.max(g.maxW, sg.w);
+            for (const [side, at, pen] of [[0, -st.t / 2, st.wA ?? 0], [1, st.t / 2, st.wB ?? 0]] as const) {
+              if (Math.abs(ac - at) > tol) continue;
+              if (pen < 0 ? fill : pen > 0 && !!sg.stroke && sg.w >= 0.75 * pen) own[side]!.push({ lo, hi });
+            }
+          }
+        } else if (cosA <= 0.35) {
+          if (Math.min(ac1, ac2) > st.t / 2 + tol || Math.max(ac1, ac2) < -st.t / 2 - tol) continue;
+          const al = (al1 + al2) / 2;
+          if (Math.abs(al - a) <= pad || Math.abs(al - b) <= pad) {
+            trans.push({ al, lo: Math.max(-st.t / 2 - tol, Math.min(ac1, ac2)), hi: Math.min(st.t / 2 + tol, Math.max(ac1, ac2)) });
+          }
+        }
+      }
+      // a jamb crosses the wall: lines across it at one place, drawn in one piece or several
+      trans.sort((p, q) => p.al - q.al);
+      for (let i = 0; i < trans.length; ) {
+        let j = i;
+        while (j + 1 < trans.length && trans[j + 1]!.al - trans[i]!.al <= 0.4) j++;
+        const cl = trans.slice(i, j + 1).sort((p, q) => p.lo - q.lo);
+        let span = 0, cur: { lo: number; hi: number } | null = null;
+        for (const x of cl) {
+          if (cur && x.lo <= cur.hi + 0.8) cur.hi = Math.max(cur.hi, x.hi);
+          else { if (cur) span = Math.max(span, cur.hi - cur.lo); cur = { lo: x.lo, hi: x.hi }; }
+        }
+        if (cur) span = Math.max(span, cur.hi - cur.lo);
+        if (span >= 0.5 * st.t) {
+          const al = cl.reduce((t0, x) => t0 + x.al, 0) / cl.length;
+          if (Math.abs(al - a) <= pad) jambA.push(al);
+          if (Math.abs(al - b) <= pad) jambB.push(al);
+        }
+        i = j + 1;
+      }
+      if (doorAt?.a) jambA.push(a);
+      if (doorAt?.b) jambB.push(b);
+      // glass and frame lines span the opening, jamb to jamb; a line running on along the
+      // wall past it, whole or broken (a face, a cavity, a cladding or lining layer, a
+      // dashed line, a face broken by studs), is part of the wall. A glazed door beside
+      // the window may carry its lines on: that end is not checked.
+      const confined = (g: { raw: Array<{ lo: number; hi: number }> }) =>
+        !g.raw.some((r) => (!doorAt?.a && r.lo < a - ext && r.hi > a - 2 * ext) || (!doorAt?.b && r.hi > b + ext && r.lo < b + 2 * ext));
+      const lines = groups.filter((g) => cover(g.runs, a, b) >= 0.6 * W);
+      const margin = Math.max(0.3, 0.05 * st.t);
+      // where the wall's own face stops, a lighter line drawn on across the opening in its
+      // place (the sill, the frame's outer line), however far past the jambs it runs
+      const inPlace = (g: (typeof groups)[number]) => {
+        const side = g.ac < 0 ? 0 : 1;
+        const pen = side === 0 ? st.wA ?? 0 : st.wB ?? 0;
+        if (!(pen > 0) || g.maxW >= 0.75 * pen || cover(own[side]!, a, b) >= 0.3 * W) return false;
+        const light = g.raw.filter((r) => r.w < 0.75 * pen).sort((p, q) => p.lo - q.lo);
+        if (light.some((r) => (!doorAt?.a && r.lo < a - reach) || (!doorAt?.b && r.hi > b + reach))) return false;
+        // one line across, not a dashed one
+        let pieces = 0, end = -Infinity;
+        for (const r of light) {
+          if (r.hi <= a || r.lo >= b) continue;
+          if (r.lo > end + 0.8) pieces++;
+          end = Math.max(end, r.hi);
+        }
+        return pieces <= 2;
+      };
+      const glazed = lines.filter((g) => !g.fill && Math.abs(g.ac) <= st.t / 2 - margin && confined(g));
+      const inner = glazed.length ? glazed : lines.filter((g) => !g.fill && Math.abs(g.ac) > st.t / 2 - margin && inPlace(g));
+      if (!inner.length || lines.length < 2 || !jambA.length || !jambB.length) return null;
+      const snap = (xs: number[], v: number) => (xs.length ? xs.reduce((p, q) => (Math.abs(q - v) < Math.abs(p - v) ? q : p)) : v);
+      const lo = snap(jambA, a), hi = snap(jambB, b);
+      // lines only where the faces stop (no glass inside) are a window only in an outside
+      // wall: inside, the same lines over an opening are its header (checked once the
+      // walls are finished)
+      return hi - lo >= minWin ? { lo: Math.min(lo, hi), hi: Math.max(lo, hi), ...(glazed.length ? {} : { outside: true }) } : null;
+    };
+    const collinear = (p: Strip, q: Strip) => q !== p && q.dir === p.dir && Math.abs(q.c - p.c) <= 0.5 * Math.max(p.t, q.t);
+    // a band drawn lighter than the wall it continues: not poche beside poche, or both its
+    // faces in a clearly lighter pen than both of the wall's
+    const lighter = (q: Strip, p: Strip) =>
+      q.cls !== 'poche' && q.cls !== 'opening' &&
+      (p.cls === 'poche' || (q.wA >= 0 && q.wB >= 0 && p.wA > 0 && p.wB > 0 && Math.max(q.wA, q.wB) < 0.75 * Math.min(p.wA, p.wB)));
+    const drop = (xs: Strip[]) => { for (const x of xs) { const i = finalStrips.indexOf(x); if (i >= 0) finalStrips.splice(i, 1); } };
+    // 1. a window drawn as a band of its own in the wall's line, beside wall pieces drawn
+    // heavier: the wall runs through it
+    for (let changed = true; changed; ) {
+      changed = false;
+      for (const q of finalStrips) {
+        if (len(q) < minWin || len(q) > maxWin) continue;
+        const slack = Math.max(1, 0.5 * q.t);
+        const longest = (xs: Strip[]) => xs.sort((x, y) => len(y) - len(x))[0];
+        const b = longest(finalStrips.filter((p) => collinear(q, p) && lighter(q, p) && Math.abs(p.hi - q.lo) <= slack));
+        const a = longest(finalStrips.filter((p) => collinear(q, p) && lighter(q, p) && Math.abs(p.lo - q.hi) <= slack));
+        const host = longest([b, a].filter((x): x is Strip => !!x));
+        if (!host) continue;
+        const iv = windowAt({ ux: host.ux, uy: host.uy, c: host.c, t: host.t, poche: host.cls === 'poche', wA: host.wA, wB: host.wB }, q.lo, q.hi);
+        if (!iv) continue;
+        const parts = [b, q, a].filter((x): x is Strip => !!x);
+        host.windows = [...new Set(parts.flatMap((x) => x.windows ?? [])), iv];
+        host.lo = Math.min(...parts.map((x) => x.lo));
+        host.hi = Math.max(...parts.map((x) => x.hi));
+        drop(parts.filter((x) => x !== host));
+        changed = true;
+        break;
+      }
+    }
+    // 2. a wall drawn stopping at the window jambs: two collinear pieces, the window
+    // between them (and any lighter band drawn in it)
+    for (let merged = true; merged; ) {
+      merged = false;
+      outer: for (const p of finalStrips) {
+        // the wall line runs on through wall pieces overlapping its end
+        let reach = p.hi;
+        for (let grew = true; grew; ) {
+          grew = false;
+          for (const q of finalStrips) {
+            if (collinear(p, q) && !lighter(q, p) && q.lo <= reach + 0.5 && q.hi > reach + 0.5) { reach = q.hi; grew = true; }
+          }
+        }
+        if (reach > p.hi + 0.5) continue;
+        const cands = finalStrips
+          .filter((q) => collinear(p, q) && q.lo - p.hi >= -0.5 && q.lo - p.hi <= maxWin)
+          .sort((x, y) => x.lo - y.lo);
+        const between: Strip[] = [];
+        for (const q of cands) {
+          if (lighter(q, p)) { between.push(q); continue; }
+          const band = len(p) >= len(q) ? p : q;
+          const iv = windowAt({ ux: p.ux, uy: p.uy, c: band.c, t: Math.max(p.t, q.t), poche: p.cls === 'poche' && q.cls === 'poche', wA: band.wA, wB: band.wB }, p.hi, q.lo);
+          if (iv) {
+            p.windows = [...(p.windows ?? []), iv, ...(q.windows ?? [])];
+            if (band === q) { p.c = q.c; p.t = q.t; p.wA = q.wA; p.wB = q.wB; }
+            p.hi = Math.max(p.hi, q.hi);
+            drop([q, ...between.filter((x) => x.hi <= q.lo + 0.5)]);
+            merged = true;
+            break outer;
+          }
+          break;
+        }
+      }
+    }
+    // 3. a wall running on with its own faces broken at the window
+    for (const st of finalStrips) {
+      const tol = Math.max(0.4, 0.12 * st.t);
+      const faceRuns: Array<Array<{ lo: number; hi: number }>> = [[], []];
+      for (const sg of near(st, st.lo, st.hi)) {
+        if (Math.abs(((sg.b.x - sg.a.x) * st.ux + (sg.b.y - sg.a.y) * st.uy) / sg.len) < 0.998) continue;
+        const ac1 = -sg.a.x * st.uy + sg.a.y * st.ux - st.c, ac2 = -sg.b.x * st.uy + sg.b.y * st.ux - st.c;
+        const al1 = sg.a.x * st.ux + sg.a.y * st.uy, al2 = sg.b.x * st.ux + sg.b.y * st.uy;
+        for (const [side, at, pen] of [[0, -st.t / 2, st.wA], [1, st.t / 2, st.wB]] as const) {
+          if (Math.abs(ac1 - at) > tol || Math.abs(ac2 - at) > tol) continue;
+          const own = pen < 0 ? !!sg.fill && !sg.stroke : !!sg.stroke && sg.w >= 0.75 * pen;
+          if (own) faceRuns[side]!.push({ lo: Math.min(al1, al2), hi: Math.max(al1, al2) });
+        }
+      }
+      const gaps: Array<{ lo: number; hi: number }> = [];
+      for (const runs of faceRuns) {
+        // a face the wall's own pen barely draws is not where this band says it is
+        if (cover(runs, st.lo, st.hi) < 0.05 * len(st)) continue;
+        const parts = runs.map((r) => [Math.max(st.lo, r.lo), Math.min(st.hi, r.hi)] as const).filter(([x, y]) => y > x).sort((p, q) => p[0] - q[0]);
+        let at = st.lo;
+        for (const [x, y] of parts) {
+          if (x - at >= minWin) gaps.push({ lo: at, hi: x });
+          at = Math.max(at, y);
+        }
+        if (st.hi - at >= minWin && parts.length) gaps.push({ lo: at, hi: st.hi });
+      }
+      // a wall drawn solid whose faces run on past its windows (an outline around a filled
+      // or hatched wall): the window is where the solid stops
+      if (st.cls !== 'opening' && raster && solidContrastOf(st, st.lo, st.hi) !== null) {
+        const step = Math.max(0.5, 1 / raster.pxPerPt), h = Math.max(0.75, 0.25 * st.t);
+        const runs: Array<{ lo: number; hi: number }> = [];
+        let runLo: number | null = null, nSolid = 0, n = 0;
+        for (let x = st.lo + h; x <= st.hi - h + 1e-9; x += step) {
+          const solid = (solidContrastOf(st, x - h, x + h) ?? 1) >= o.pocheContrast;
+          n++;
+          if (solid) nSolid++;
+          if (!solid) { if (runLo === null) runLo = x; continue; }
+          if (runLo !== null && x - runLo >= minWin) runs.push({ lo: runLo, hi: x });
+          runLo = null;
+        }
+        if (runLo !== null && st.hi - h - runLo >= minWin) runs.push({ lo: runLo, hi: st.hi - h });
+        // only a wall that is drawn solid somewhere has its solid broken by a window
+        if (nSolid >= 0.15 * n) gaps.push(...runs);
+      }
+      // a window breaking both faces leaves the same gap in each: try the shorter first
+      gaps.sort((p, q) => p.hi - p.lo - (q.hi - q.lo));
+      for (const g of gaps) {
+        if ((st.windows ?? []).some((w) => Math.min(w.hi, g.hi) - Math.max(w.lo, g.lo) > 0)) continue;
+        const iv = windowAt({ ux: st.ux, uy: st.uy, c: st.c, t: st.t, poche: st.cls === 'poche', wA: st.wA, wB: st.wB }, g.lo, g.hi);
+        if (iv) st.windows = [...(st.windows ?? []), iv];
+      }
+    }
+    // ---- window checks on the finished wall lines
+    {
+      // a piece left lying inside a wall that now runs through its windows is that wall
+      for (let i = finalStrips.length - 1; i >= 0; i--) {
+        const s = finalStrips[i]!;
+        const f = finalStrips.find(
+          (g) => g !== s && g.dir === s.dir && Math.abs(g.c - s.c) < 0.5 * Math.min(g.t, s.t) && len(g) > len(s) &&
+            Math.min(g.hi, s.hi) - Math.max(g.lo, s.lo) >= 0.9 * len(s),
+        );
+        if (!f) continue;
+        for (const w of s.windows ?? []) {
+          if (!(f.windows ?? []).some((v) => Math.min(v.hi, w.hi) - Math.max(v.lo, w.lo) > 0)) f.windows = [...(f.windows ?? []), w];
+        }
+        finalStrips.splice(i, 1);
+      }
+      // one opening drawn across a wall and a layer band against it (cladding, a projecting
+      // sill) is one window: it belongs to the band that is the wall (both faces in its pen)
+      const faceW = (st: Strip) => Math.min(st.wA < 0 ? 1 : st.wA, st.wB < 0 ? 1 : st.wB);
+      const moves: Array<[Strip, Win]> = [];
+      for (const st of finalStrips) {
+        if (!st.windows?.length) continue;
+        st.windows = st.windows.filter((w) => {
+          let to: Strip | null = null;
+          for (const q of finalStrips) {
+            if (q === st || q.dir !== st.dir) continue;
+            if (Math.abs(q.c - st.c) - (q.t + st.t) / 2 > abutGap) continue;
+            if (q.lo > w.lo + 0.5 || q.hi < w.hi - 0.5) continue;
+            if (faceW(q) > 1.25 * faceW(st) && (!to || faceW(q) > faceW(to))) to = q;
+          }
+          if (!to) return true;
+          moves.push([to, w]);
+          return false;
+        });
+      }
+      for (const [q, w] of moves) {
+        if (!(q.windows ?? []).some((v) => Math.min(v.hi, w.hi) - Math.max(v.lo, w.lo) > 0)) q.windows = [...(q.windows ?? []), w];
+      }
+      // one window found on two overlapping pieces of a wall line is one window: it stays
+      // with the longer piece
+      const order = new Map(finalStrips.map((x, i) => [x, i] as const));
+      for (const st of finalStrips) {
+        if (!st.windows?.length) continue;
+        st.windows = st.windows.filter((w) => !finalStrips.some((q) =>
+          collinear(st, q) && (len(q) > len(st) || (len(q) === len(st) && order.get(q)! < order.get(st)!)) &&
+          (q.windows ?? []).some((v) => Math.min(v.hi, w.hi) - Math.max(v.lo, w.lo) > 0.5 * Math.min(v.hi - v.lo, w.hi - w.lo))));
+      }
+      // an opening fronting a shallow recess closed by walls (a cupboard, an alcove, a bay
+      // opened into the room) is not a window: 250-900 mm behind it, on either side, runs a
+      // wall drawn at least as heavily across its whole width, and lines close the space
+      // between the two at both ends
+      const recessMin = 250 / S, recess = 900 / S, closeReach = 1500 / S;
+      for (const st of finalStrips) {
+        if (!st.windows?.length) continue;
+        st.windows = st.windows.filter((w) => {
+          const W = w.hi - w.lo;
+          for (const side of [-1, 1]) {
+            const face = st.c + side * st.t / 2;
+            for (const q of finalStrips) {
+              if (q === st || q.dir !== st.dir || faceW(q) < 0.9 * faceW(st)) continue;
+              const depth = side > 0 ? q.c - q.t / 2 - face : face - (q.c + q.t / 2);
+              if (depth < recessMin || depth > recess) continue;
+              if (Math.min(q.hi, w.hi) - Math.max(q.lo, w.lo) < 0.8 * W) continue;
+              const ac0 = Math.min(face, face + side * depth), ac1 = Math.max(face, face + side * depth);
+              const mid = { c: (ac0 + ac1) / 2, t: ac1 - ac0 };
+              const closes = (from: number, to: number) => near({ ux: st.ux, uy: st.uy, c: mid.c, t: mid.t }, from, to).some((sg) => {
+                if (Math.abs(((sg.b.x - sg.a.x) * st.ux + (sg.b.y - sg.a.y) * st.uy) / sg.len) > 0.35) return false;
+                const al = ((sg.a.x + sg.b.x) * st.ux + (sg.a.y + sg.b.y) * st.uy) / 2;
+                if (al < from || al > to) return false;
+                const c1 = -sg.a.x * st.uy + sg.a.y * st.ux, c2 = -sg.b.x * st.uy + sg.b.y * st.ux;
+                return Math.min(c1, c2) <= ac0 + 0.15 * mid.t && Math.max(c1, c2) >= ac1 - 0.15 * mid.t;
+              });
+              if (closes(w.lo - closeReach, w.lo + 0.25 * W) && closes(w.hi - 0.25 * W, w.hi + closeReach)) return false;
+            }
+          }
+          return true;
+        });
+      }
+    }
+  }
+  const minWinOut = 300 / S;
   // a band ends where its shorter face ends, one thickness short of the corner:
   // run each end on to the centreline of the wall it meets
   for (const s of finalStrips) {
@@ -740,6 +1169,14 @@ export function detectWallsGeneral(
       kind: s.cls === 'poche' ? 'poche' : 'faces',
       dir: s.dir,
       exterior: false,
+      ...(s.windows?.length
+        ? {
+          windows: s.windows
+            .map((w) => ({ from: Math.max(0, w.lo - s.lo), to: Math.min(s.hi - s.lo, w.hi - s.lo), ...(w.outside ? { outside: true } : {}) }))
+            .filter((w) => w.to - w.from >= minWinOut)
+            .sort((p, q) => p.from - q.from),
+        }
+        : {}),
     });
   }
   // ---- exterior walls: three rays from a face (at a quarter, half and three quarters of
@@ -775,7 +1212,28 @@ export function detectWallsGeneral(
       if (escapes >= 2) { w.exterior = true; break; }
     }
   });
-  if (diag) { diag.openingWalls = openingStrips.length; diag.columns = columns.length; diag.frame = excluded.size; diag.exterior = out.filter((w) => w.exterior).length; }
+  // a window shown only by lines where the faces stop must look out of the building:
+  // straight out from its middle, on one side, no other wall
+  out.forEach((w, i) => {
+    if (!w.windows?.length) return;
+    const ux = (w.b.x - w.a.x) / (w.length || 1), uy = (w.b.y - w.a.y) / (w.length || 1);
+    w.windows = w.windows.filter((win) => {
+      const o = win as { from: number; to: number; outside?: boolean };
+      if (!o.outside) return true;
+      delete o.outside;
+      const m = (win.from + win.to) / 2;
+      return [1, -1].some((side) => {
+        const n = { x: -uy * side, y: ux * side }, off = w.thickness / 2 + 0.5;
+        return !rayHits({ x: w.a.x + ux * m + n.x * off, y: w.a.y + uy * m + n.y * off }, n, i);
+      });
+    });
+    if (!w.windows.length) delete w.windows;
+  });
+  if (diag) {
+    diag.openingWalls = openingStrips.length; diag.columns = columns.length; diag.frame = excluded.size;
+    diag.exterior = out.filter((w) => w.exterior).length;
+    diag.windows = out.reduce((n, w) => n + (w.windows?.length ?? 0), 0);
+  }
   out.sort((p, q) => p.a.y - q.a.y || p.a.x - q.a.x || p.id.localeCompare(q.id));
   return out;
 }

@@ -123,4 +123,75 @@ describe('general wall detector', () => {
     });
     expect(hosted.every((x) => x.hostStatus === 'UNIQUE_HOST')).toBe(true);
   });
+
+  // windows: the same room with a 1200 mm window in its top wall, x = 2000..3200 mm
+  const windowSheet = (style: 'gap' | 'broken' | 'header') => {
+    const base = sheet();
+    const { o, W, t } = base;
+    const w0 = mm(2000), w1 = mm(3200);
+    const P = (x: number, y: number): P => ({ x: o.x + x, y: o.y + y });
+    // the top wall's two faces are the first two strokes: redraw them stopping at the jambs
+    const v: any[] = base.vectors.slice(2);
+    v.push(stroke([P(0, 0), P(w0, 0)]), stroke([P(t, t), P(w0, t)]));
+    v.push(stroke([P(w1, 0), P(W, 0)]), stroke([P(w1, t), P(W - t, t)]));
+    v.push(stroke([P(w0, 0), P(w0, t)]), stroke([P(w1, 0), P(w1, t)]));
+    if (style === 'gap') {
+      // glass: two lines inside the wall, jamb to jamb
+      v.push(stroke([P(w0, mm(85)), P(w1, mm(85))], 0.18), stroke([P(w0, mm(115)), P(w1, mm(115))], 0.18));
+    } else {
+      // sill and frame drawn lighter across the opening where the faces stop
+      v.push(stroke([P(w0, 0), P(w1, 0)], 0.18), stroke([P(w0, t), P(w1, t)], 0.18));
+      if (style === 'broken') v.push(stroke([P(w0, mm(100)), P(w1, mm(100))], 0.18));
+    }
+    return { vectors: v, o, W, t, w0, w1 };
+  };
+  const topWindows = (vectors: any[], o: P, t: number) => {
+    const segs = collectSegments(vectors as any);
+    const symbols = detectDoorSymbols(segs, S, { minLeafMm: 500, maxLeafMm: 1500, hostCorridorPadPt: 18 });
+    const openings = symbols.map((s) => ({ a: s.hinge, b: s.closed, leaf: { a: s.hinge, b: s.free } }));
+    const walls = detectWallsGeneral(segs, S, undefined, { openings });
+    const top = walls.filter((w) => Math.abs(w.a.y - w.b.y) < 0.5 && Math.abs(w.a.y - (o.y + t / 2)) < t);
+    return { walls, top };
+  };
+
+  it('runs a wall on through a window drawn as a gap with glass in it', () => {
+    const { vectors, o, W, t, w0, w1 } = windowSheet('gap');
+    const { walls, top } = topWindows(vectors, o, t);
+    expect(walls).toHaveLength(4);
+    expect(top).toHaveLength(1);
+    expect(top[0]!.length).toBeGreaterThan(W - 2 * t);
+    const win = top[0]!.windows ?? [];
+    expect(win).toHaveLength(1);
+    const x = Math.min(top[0]!.a.x, top[0]!.b.x) - o.x;
+    expect(Math.abs(x + win[0]!.from - w0) * S).toBeLessThan(30);
+    expect(Math.abs(x + win[0]!.to - w1) * S).toBeLessThan(30);
+  });
+
+  it('finds a window where the faces stop and lighter lines carry on across it', () => {
+    const { vectors, o, t, w0, w1 } = windowSheet('broken');
+    const { top } = topWindows(vectors, o, t);
+    expect(top).toHaveLength(1);
+    const win = top[0]!.windows ?? [];
+    expect(win).toHaveLength(1);
+    expect(Math.abs(win[0]!.to - win[0]!.from - (w1 - w0)) * S).toBeLessThan(30);
+    // no window in the other walls
+    expect(topWindows(vectors, o, t).walls.filter((w) => w.windows?.length)).toHaveLength(1);
+  });
+
+  it('takes lines over an opening for a window only in an outside wall', () => {
+    // outside wall, faces stopping under lighter lines: a window (frame drawn on the faces)
+    const out = windowSheet('header');
+    expect(topWindows(out.vectors, out.o, out.t).top[0]!.windows ?? []).toHaveLength(1);
+    // the same opening in a wall shared with a second room beyond it: a header over a
+    // passage, not a window
+    const { vectors, o, W, t } = out;
+    const P = (x: number, y: number) => ({ x: o.x + x, y: o.y + y });
+    const D = mm(3000);
+    vectors.push(stroke([P(0, -D), P(W, -D)]), stroke([P(t, -D + t), P(W - t, -D + t)]));
+    vectors.push(stroke([P(0, -D), P(0, 0)]), stroke([P(t, -D + t), P(t, 0)]));
+    vectors.push(stroke([P(W, -D), P(W, 0)]), stroke([P(W - t, -D + t), P(W - t, 0)]));
+    const shared = topWindows(vectors, o, t).top;
+    expect(shared.length).toBeGreaterThan(0);
+    expect(shared.every((w) => !w.windows?.length)).toBe(true);
+  });
 });

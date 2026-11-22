@@ -15,7 +15,8 @@ import {
 } from '../../src/index';
 
 const ROOT = process.cwd();
-const DIR = join(ROOT, '..', '..', 'test drawings and png', 'fresh');
+// FRESH_DIR picks another folder under "test drawings and png" (default "fresh")
+const DIR = join(ROOT, '..', '..', 'test drawings and png', process.env.FRESH_DIR ?? 'fresh');
 const OUT = join(ROOT, 'tests', 'fixtures', '_fresh');
 
 it.skipIf(process.env.FRESH !== '1')('fresh drawings', async () => {

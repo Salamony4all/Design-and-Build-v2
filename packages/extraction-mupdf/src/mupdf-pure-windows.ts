@@ -20,7 +20,6 @@ import {
   type LineageStore,
 } from './vector-device';
 import type { MuPdfPureResult, PurePhysicalWall } from './mupdf-pure';
-import { collectSegments, detectDoorSymbols, type Seg } from './door-symbols';
 
 export type WindowVerdict = 'accepted' | 'review' | 'rejected';
 export type HostStatus =
@@ -459,101 +458,52 @@ export function classifyWindowCandidates(candidates: PureWindowCandidate[], cfg:
 }
 
 /**
- * Walls from the general detector run on through their windows, so a frame pair is a
- * window only where it interrupts the wall: where both faces continue in the wall's own
- * pen (or fill), the wall is solid there and the pair is a fixture fixed against it
- * (cistern, mirror, dispenser). Sills and frames are drawn lighter than the wall faces
- * and do not count as faces. Nor is anything inside a door's swing a window: a leaf
- * drawn as a narrow rectangle looks like a frame pair.
+ * The general wall detector finds windows as it runs its walls through them; each
+ * becomes a candidate already hosted on its wall, at its interval along the centre line.
  */
-export function rejectWindowsInSolidWall(candidates: PureWindowCandidate[], walls: PurePhysicalWall[], vectors: MuVector[], scaleMmPerPt: number): void {
-  const live = candidates.filter((c) => c.verdict !== 'rejected' && c.selectedPhysicalWallId && c.wallLocalInterval);
-  if (!live.length) return;
-  const segs = collectSegments(vectors);
-  const doors = detectDoorSymbols(segs, scaleMmPerPt, { minLeafMm: 500, maxLeafMm: 1500, hostCorridorPadPt: 18 });
-  for (const c of live) {
-    if (doors.some((dr) => dist(c.centre, dr.hinge) <= dr.radiusPt * 1.05)) {
-      c.verdict = 'rejected';
-      c.negativeEvidence.push('inside-door-swing');
-    }
+export function windowsFromGeneralWalls(walls: PurePhysicalWall[], scaleMmPerPt: number): PureWindowCandidate[] {
+  const out: PureWindowCandidate[] = [];
+  for (const w of walls) {
+    if (!w.windowIntervals?.length) continue;
+    const { a, b } = w.centerline;
+    const L = Math.hypot(b.x - a.x, b.y - a.y);
+    if (L < EPS) continue;
+    const u = { x: (b.x - a.x) / L, y: (b.y - a.y) / L };
+    const at = (s: number, off: number): Vec2 => ({ x: a.x + u.x * s - u.y * off, y: a.y + u.y * s + u.x * off });
+    w.windowIntervals.forEach((iv, i) => {
+      const id = `general-window-${w.physicalWallId}-${i}`;
+      const face = (side: number): SourceSegment => {
+        const p = at(iv.from, (side * w.thickness) / 2), q = at(iv.to, (side * w.thickness) / 2);
+        return {
+          id: `${id}-face-${side < 0 ? 'a' : 'b'}`, a: p, b: q, strokeWidth: 0,
+          bounds: [Math.min(p.x, q.x), Math.min(p.y, q.y), Math.max(p.x, q.x), Math.max(p.y, q.y)],
+        };
+      };
+      const widthPt = iv.to - iv.from;
+      out.push({
+        candidateId: id,
+        sourceSegmentIds: [], sourceRootIds: [], sourceSubpathIds: [], sourceStrokeIds: [],
+        frameSegments: [face(-1), face(1)],
+        openingAxis: { a: at(iv.from, 0), b: at(iv.to, 0) },
+        centre: at((iv.from + iv.to) / 2, 0),
+        widthPt,
+        widthMm: widthPt * scaleMmPerPt,
+        frameSeparationPt: w.thickness,
+        frameOverlap: 1,
+        jambCount: 2,
+        gapEvidence: true,
+        positiveEvidence: ['general-wall-window'],
+        negativeEvidence: [],
+        hostEvaluations: [],
+        selectedPhysicalWallId: w.physicalWallId,
+        wallLocalInterval: { from: iv.from, to: iv.to, unit: 'mupdf-point' },
+        hostStatus: 'unique-host',
+        score: 1,
+        verdict: 'accepted',
+      });
+    });
   }
-  const cell = 24;
-  const grid = new Map<string, Seg[]>();
-  // a face line may run on along several walls: index each segment in every cell its
-  // bounds touch, not just its midpoint
-  for (const s of segs) {
-    for (let cx = Math.floor(Math.min(s.a.x, s.b.x) / cell); cx <= Math.floor(Math.max(s.a.x, s.b.x) / cell); cx++) {
-      for (let cy = Math.floor(Math.min(s.a.y, s.b.y) / cell); cy <= Math.floor(Math.max(s.a.y, s.b.y) / cell); cy++) {
-        const k = `${cx},${cy}`;
-        (grid.get(k) ?? grid.set(k, []).get(k)!).push(s);
-      }
-    }
-  }
-  type Run = { lo: number; hi: number; heavy: boolean };
-  const faceCache = new Map<string, Run[][]>();
-  const facesOf = (w: PurePhysicalWall): Run[][] => {
-    const cached = faceCache.get(w.physicalWallId);
-    if (cached) return cached;
-    const A = w.centerline.a, L = segmentLength(w.centerline);
-    const u = unit(w.centerline.a, w.centerline.b);
-    const t = w.thickness, tol = Math.max(0.6, 0.15 * t);
-    const runs: Array<Array<Run & { w: number; fill: boolean }>> = [[], []];
-    const seen = new Set<Seg>();
-    const x0 = Math.min(w.centerline.a.x, w.centerline.b.x) - t, x1 = Math.max(w.centerline.a.x, w.centerline.b.x) + t;
-    const y0 = Math.min(w.centerline.a.y, w.centerline.b.y) - t, y1 = Math.max(w.centerline.a.y, w.centerline.b.y) + t;
-    for (let cx = Math.floor(x0 / cell); cx <= Math.floor(x1 / cell); cx++) {
-      for (let cy = Math.floor(y0 / cell); cy <= Math.floor(y1 / cell); cy++) {
-        for (const s of grid.get(`${cx},${cy}`) ?? []) {
-          if (seen.has(s)) continue;
-          seen.add(s);
-          if (s.len < 0.5 || Math.abs((s.b.x - s.a.x) * u.y - (s.b.y - s.a.y) * u.x) / s.len > 0.05) continue;
-          const acA = -(s.a.x - A.x) * u.y + (s.a.y - A.y) * u.x, acB = -(s.b.x - A.x) * u.y + (s.b.y - A.y) * u.x;
-          const side = Math.abs(acA - t / 2) <= tol && Math.abs(acB - t / 2) <= tol ? 0
-            : Math.abs(acA + t / 2) <= tol && Math.abs(acB + t / 2) <= tol ? 1 : -1;
-          if (side < 0) continue;
-          const alA = (s.a.x - A.x) * u.x + (s.a.y - A.y) * u.y, alB = (s.b.x - A.x) * u.x + (s.b.y - A.y) * u.y;
-          const lo = Math.max(0, Math.min(alA, alB)), hi = Math.min(L, Math.max(alA, alB));
-          if (hi <= lo) continue;
-          runs[side]!.push({ lo, hi, heavy: false, w: s.stroke ? s.w : -1, fill: !!s.fill && !s.stroke });
-        }
-      }
-    }
-    // the wall's own face style: stroke pen (length-weighted median) or fill edge
-    const all = [...runs[0]!, ...runs[1]!];
-    const fillLen = all.filter((r) => r.fill).reduce((a, r) => a + r.hi - r.lo, 0);
-    const strokes = all.filter((r) => r.w >= 0).sort((p, q) => p.w - q.w);
-    const strokeLen = strokes.reduce((a, r) => a + r.hi - r.lo, 0);
-    let pen = 0;
-    for (let acc = 0, i = 0; i < strokes.length; i++) {
-      acc += strokes[i]!.hi - strokes[i]!.lo;
-      if (acc >= strokeLen / 2) { pen = strokes[i]!.w; break; }
-    }
-    const byFill = fillLen > strokeLen;
-    const out = runs.map((side) => side.map((r) => ({ lo: r.lo, hi: r.hi, heavy: byFill ? r.fill : r.w >= 0.75 * pen })));
-    faceCache.set(w.physicalWallId, out);
-    return out;
-  };
-  const coverage = (runs: Run[], from: number, to: number): number => {
-    const parts = runs.filter((r) => r.heavy && r.hi > from && r.lo < to)
-      .map((r) => [Math.max(from, r.lo), Math.min(to, r.hi)] as const).sort((p, q) => p[0] - q[0]);
-    let tot = 0, cur: [number, number] | null = null;
-    for (const [a, b] of parts) {
-      if (!cur || a > cur[1]) { if (cur) tot += cur[1] - cur[0]; cur = [a, b]; } else cur[1] = Math.max(cur[1], b);
-    }
-    if (cur) tot += cur[1] - cur[0];
-    return to > from ? tot / (to - from) : 0;
-  };
-  const byId = new Map(walls.map((w) => [w.physicalWallId, w]));
-  for (const c of live) {
-    if (c.verdict === 'rejected') continue;
-    const w = byId.get(c.selectedPhysicalWallId!);
-    if (!w) continue;
-    const { from, to } = c.wallLocalInterval!;
-    if (facesOf(w).every((side) => coverage(side, from, to) >= 0.5)) {
-      c.verdict = 'rejected';
-      c.negativeEvidence.push('wall-faces-continue-across');
-    }
-  }
+  return out;
 }
 
 function intervalsOverlap(a: { from: number; to: number }, b: { from: number; to: number }): number {
@@ -636,11 +586,15 @@ export function runWindowPipeline(
   const sourceSegments = collectWindowSourceSegments(vectors, wallResult.roi);
   const vectorCollection = Date.now() - tCollect0;
   const tCand0 = Date.now();
-  const candidates = generateFramePairCandidates(sourceSegments, wallResult.accepted, wallResult.scaleMmPerPt, cfg);
-  attachJambEvidence(candidates, sourceSegments, wallResult.accepted);
-  resolveWindowHosts(candidates, wallResult.accepted, cfg);
-  classifyWindowCandidates(candidates, cfg);
-  if (wallResult.wallEngine === 'general') rejectWindowsInSolidWall(candidates, wallResult.accepted, vectors, wallResult.scaleMmPerPt);
+  let candidates: PureWindowCandidate[];
+  if (wallResult.wallEngine === 'general') {
+    candidates = windowsFromGeneralWalls(wallResult.accepted, wallResult.scaleMmPerPt);
+  } else {
+    candidates = generateFramePairCandidates(sourceSegments, wallResult.accepted, wallResult.scaleMmPerPt, cfg);
+    attachJambEvidence(candidates, sourceSegments, wallResult.accepted);
+    resolveWindowHosts(candidates, wallResult.accepted, cfg);
+    classifyWindowCandidates(candidates, cfg);
+  }
   const candidateGeneration = Date.now() - tCand0;
   const tRegion0 = Date.now();
   const openingRegions = consolidateOpeningRegions(candidates, cfg);

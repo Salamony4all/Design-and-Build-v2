@@ -16,7 +16,7 @@ it.skipIf(process.env.FRESH !== '1')('dump segments', async () => {
   const pick: Record<string, number> = {};
   for (const kv of (process.env.FRESH_PAGES ?? '').split(',').filter(Boolean)) pick[kv.split('=')[0]!] = Number(kv.split('=')[1]);
   const files = [join(BASE, 'CODE_06 1 page.pdf')];
-  const fresh = join(BASE, 'fresh');
+  const fresh = join(BASE, process.env.FRESH_DIR ?? 'fresh');
   if (existsSync(fresh)) for (const f of readdirSync(fresh).filter((f) => f.toLowerCase().endsWith('.pdf')).sort()) files.push(join(fresh, f));
   for (const file of files) {
     const name = file.split(/[\\/]/).pop()!;

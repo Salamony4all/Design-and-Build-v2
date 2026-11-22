@@ -106,6 +106,8 @@ export interface PurePhysicalWall extends PureCandidate {
   isFragmentOfOpening?: boolean;
   rejectionReason?: string;
   ownedBy?: string; // physicalWallId of the stronger candidate that owns this primitive
+  /** windows the general wall detector found in this wall: intervals (pt) along the centre line from `centerline.a` */
+  windowIntervals?: Array<{ from: number; to: number }>;
 }
 
 export interface RecallDiscrepancy {
@@ -2033,6 +2035,7 @@ function applyGeneralWallsIfNeeded(r: MuPdfPureResult, page: mupdf.Page, vectors
       evidenceTypes: [w.kind === 'poche' ? 'filled-rect' : 'parallel-face'] as EvidenceType[],
       positiveEvidence: ['general-wall-detector'],
       negativeEvidence: [],
+      ...(w.windows?.length ? { windowIntervals: w.windows.map((x) => ({ from: x.from, to: x.to })) } : {}),
     }));
     let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
     for (const w of walls) for (const p of [w.a, w.b]) {
