@@ -1,39 +1,52 @@
 // features/viewer-interaction/ViewerToolbar.tsx
-// Floating viewer toolbar wrapping official Pascal capabilities + the host
-// camera-framing service. Does not recreate Pascal editor functionality.
-// Documented navigation model (works with the official OrbitControls):
-//   - left click            → select node (Pascal)
-//   - right-drag / Alt+drag → orbit
-//   - middle-drag           → pan
-//   - wheel                 → zoom
-// The Select/Orbit/Pan buttons reflect the documented intent with a visible
-// active state; the official controls remain authoritative.
+// Floating viewer toolbar over the official Pascal viewer: camera views, the
+// plan overlay, history and the PRO editor. In PRO it also carries Pascal's
+// drawing tools. Mouse navigation stays with the official OrbitControls.
 
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { useViewer } from '@pascal-app/viewer';
 import { useScene } from '@pascal-app/core';
-
 import { useEditor } from '@pascal-app/editor';
-
-type NavMode = 'select' | 'orbit' | 'pan';
+import {
+  AppWindow,
+  Box,
+  BrickWall,
+  DoorOpen,
+  Layers,
+  MousePointer2,
+  PenLine,
+  Redo2,
+  Scan,
+  Square,
+  SquareDashed,
+  Undo2,
+  View,
+} from 'lucide-react';
 
 interface Props {
   onFitProject: () => void;
   onFitSelection: () => void;
   onTopView: () => void;
-  onResetView: () => void;
+  onResetView?: () => void;
   proEnabled?: boolean;
   mode?: 'standard' | 'pro';
   onToggleMode?: () => void;
   orientation?: 'vertical' | 'horizontal';
 }
 
+function ToolButton(p: { label: string; onClick: () => void; on?: boolean; children: React.ReactNode }) {
+  return (
+    <button type="button" title={p.label} aria-label={p.label} aria-pressed={p.on} className={p.on ? 'on' : ''} onClick={p.onClick}>
+      {p.children}
+    </button>
+  );
+}
+
 export function ViewerToolbar({
   onFitProject,
   onFitSelection,
   onTopView,
-  onResetView,
   proEnabled,
   mode,
   onToggleMode,
@@ -43,47 +56,25 @@ export function ViewerToolbar({
   const setCameraMode = useViewer((s) => s.setCameraMode);
   const showGuides = useViewer((s) => s.showGuides);
   const setShowGuides = useViewer((s) => s.setShowGuides);
-  const [navMode, setNavMode] = useState<NavMode>('select');
+  const selectedCount = useViewer((s) => s.selection?.selectedIds?.length ?? 0);
 
-  // Official Editor tool state
   const activeMode = useEditor((s) => s.mode);
-  const activePhase = useEditor((s) => s.phase);
   const activeTool = useEditor((s) => s.tool);
 
+  const pickTool = (tool: 'wall' | 'slab' | 'door' | 'window') => {
+    useEditor.getState().setPhase('structure');
+    useEditor.getState().setMode('build');
+    useEditor.getState().setTool(tool);
+  };
   const activateSelect = () => {
     useEditor.getState().setMode('select');
     useEditor.getState().setTool(null);
     useEditor.getState().setMovingNode(null);
-    setNavMode('select');
   };
-
-  const activateWall = () => {
-    useEditor.getState().setPhase('structure');
-    useEditor.getState().setMode('build');
-    useEditor.getState().setTool('wall');
-  };
-
-  const activateSlab = () => {
-    useEditor.getState().setPhase('structure');
-    useEditor.getState().setMode('build');
-    useEditor.getState().setTool('slab');
-  };
-
-  const activateDoor = () => {
-    useEditor.getState().setPhase('structure');
-    useEditor.getState().setMode('build');
-    useEditor.getState().setTool('door');
-  };
-
-  const activateWindow = () => {
-    useEditor.getState().setPhase('structure');
-    useEditor.getState().setMode('build');
-    useEditor.getState().setTool('window');
-  };
-
-  const undo = () => { try { (useScene.getState() as unknown as { temporal: { undo: () => void } }).temporal.undo(); } catch { /* noop */ } };
-  const redo = () => { try { (useScene.getState() as unknown as { temporal: { redo: () => void } }).temporal.redo(); } catch { /* noop */ } };
-  const toggleCam = () => setCameraMode(cameraMode === 'perspective' ? 'orthographic' : 'perspective');
+  const history = () => (useScene.getState() as unknown as { temporal?: { undo: () => void; redo: () => void } }).temporal;
+  const undo = () => { try { history()?.undo(); } catch { /* nothing to undo */ } };
+  const redo = () => { try { history()?.redo(); } catch { /* nothing to redo */ } };
+  const isPro = mode === 'pro';
 
   return (
     <div
@@ -91,88 +82,51 @@ export function ViewerToolbar({
       role="toolbar"
       aria-label="Viewer controls"
     >
-      {mode === 'pro' ? (
+      {isPro && (
         <>
-          {/* Official Pascal PRO Tools */}
-          <button
-            title="Select Mode — click elements in 3D (Escape to clear)"
-            aria-label="Select mode"
-            className={activeMode === 'select' ? 'on' : ''}
-            onClick={activateSelect}
-          >⌖</button>
-          <button
-            title="Wall Tool — draw parametric walls"
-            aria-label="Wall tool"
-            className={activeMode === 'build' && activeTool === 'wall' ? 'on' : ''}
-            onClick={activateWall}
-          >🧱</button>
-          <button
-            title="Slab Tool — create floor slab boundaries"
-            aria-label="Slab tool"
-            className={activeMode === 'build' && activeTool === 'slab' ? 'on' : ''}
-            onClick={activateSlab}
-          >▱</button>
-          <button
-            title="Door Tool — place hosted doors on walls"
-            aria-label="Door tool"
-            className={activeMode === 'build' && activeTool === 'door' ? 'on' : ''}
-            onClick={activateDoor}
-          >🚪</button>
-          <button
-            title="Window Tool — place hosted windows on walls"
-            aria-label="Window tool"
-            className={activeMode === 'build' && activeTool === 'window' ? 'on' : ''}
-            onClick={activateWindow}
-          >🪟</button>
-        </>
-      ) : (
-        <>
-          {/* Standard Navigation */}
-          <button title="Select — left click selects a node" aria-label="Select" className={navMode === 'select' ? 'on' : ''} onClick={() => setNavMode('select')}>⌖</button>
-          <button title="Orbit — right-drag or Alt+drag to orbit" aria-label="Orbit" className={navMode === 'orbit' ? 'on' : ''} onClick={() => setNavMode('orbit')}>⟳</button>
-          <button title="Pan — middle-drag to pan" aria-label="Pan" className={navMode === 'pan' ? 'on' : ''} onClick={() => setNavMode('pan')}>✥</button>
+          <ToolButton label="Select (Esc)" on={activeMode === 'select'} onClick={activateSelect}><MousePointer2 size={17} /></ToolButton>
+          <ToolButton label="Draw walls" on={activeMode === 'build' && activeTool === 'wall'} onClick={() => pickTool('wall')}><BrickWall size={17} /></ToolButton>
+          <ToolButton label="Draw a floor slab" on={activeMode === 'build' && activeTool === 'slab'} onClick={() => pickTool('slab')}><SquareDashed size={17} /></ToolButton>
+          <ToolButton label="Place a door" on={activeMode === 'build' && activeTool === 'door'} onClick={() => pickTool('door')}><DoorOpen size={17} /></ToolButton>
+          <ToolButton label="Place a window" on={activeMode === 'build' && activeTool === 'window'} onClick={() => pickTool('window')}><AppWindow size={17} /></ToolButton>
+          <div className="sep" />
         </>
       )}
 
-      <div className="sep" />
-
-      {/* Views */}
-      <button title="Top view + Fit" aria-label="Top view" onClick={onTopView}>▦</button>
-      <button
-        title={cameraMode === 'perspective' ? 'Switch to orthographic' : 'Switch to perspective'}
-        aria-label="Toggle camera mode"
-        className={cameraMode === 'orthographic' ? 'on' : ''}
-        onClick={toggleCam}
-      >{cameraMode === 'orthographic' ? '▭' : '◳'}</button>
-      <button title="Fit Project — frame the whole building" aria-label="Fit project" onClick={onFitProject}>⤢</button>
-      <button title="Fit Selection — frame selected nodes" aria-label="Fit selection" onClick={onFitSelection}>⤡</button>
-
-      <div className="sep" />
-
-      {/* Display */}
-      <button
-        title="Guide On/Off"
-        aria-label="Toggle guide"
-        className={showGuides ? 'on' : ''}
-        onClick={() => setShowGuides(!showGuides)}
-      >▦̶</button>
+      <ToolButton label="3D view of the whole model" onClick={onFitProject}><Box size={17} /></ToolButton>
+      <ToolButton label="Top view" onClick={onTopView}><Square size={17} /></ToolButton>
+      {selectedCount > 0 && (
+        <ToolButton label="Zoom to selection" onClick={onFitSelection}><Scan size={17} /></ToolButton>
+      )}
+      {isPro && (
+        <ToolButton
+          label={cameraMode === 'orthographic' ? 'Switch to perspective' : 'Switch to orthographic'}
+          on={cameraMode === 'orthographic'}
+          onClick={() => setCameraMode(cameraMode === 'perspective' ? 'orthographic' : 'perspective')}
+        ><View size={17} /></ToolButton>
+      )}
 
       <div className="sep" />
+      <ToolButton label={showGuides ? 'Hide the plan drawing' : 'Show the plan drawing'} on={showGuides} onClick={() => setShowGuides(!showGuides)}>
+        <Layers size={17} />
+      </ToolButton>
 
-      {/* History */}
-      <button title="Reset View" aria-label="Reset view" onClick={onResetView}>⌂</button>
-      <button title="Undo" aria-label="Undo" onClick={undo}>↶</button>
-      <button title="Redo" aria-label="Redo" onClick={redo}>↷</button>
+      <div className="sep" />
+      <ToolButton label="Undo" onClick={undo}><Undo2 size={17} /></ToolButton>
+      <ToolButton label="Redo" onClick={redo}><Redo2 size={17} /></ToolButton>
 
       {proEnabled && (
         <>
           <div className="sep" />
           <button
-            title={mode === 'pro' ? 'Return to Standard Viewer' : 'Open Pascal PRO Editor'}
-            aria-label={mode === 'pro' ? 'Return to Standard Viewer' : 'Open Pascal PRO Editor'}
-            className={mode === 'pro' ? 'on' : ''}
+            type="button"
+            className={`db-toolbar__text ${isPro ? 'on' : ''}`}
+            title={isPro ? 'Leave the PRO editor' : 'Edit the model in the PRO editor'}
             onClick={onToggleMode}
-          >PRO</button>
+          >
+            <PenLine size={15} />
+            <span>{isPro ? 'Done' : 'Edit'}</span>
+          </button>
         </>
       )}
     </div>

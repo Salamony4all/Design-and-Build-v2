@@ -35,7 +35,7 @@ import type { ChatCommand, ChatEvent } from 'design-build-conversation-core';
 import { ChatPanel } from '@/features/conversation/ChatPanel';
 import { attachmentRepository } from '@/features/conversation/attachment-repository';
 import { ProviderSettingsPanel } from '@/features/conversation/ProviderSelector';
-import { Sparkles, SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 import { AiExtractionControls, useAiProviderRegistry } from '@/features/ai-extraction';
 import { ViewerToolbar } from '@/features/viewer-interaction/ViewerToolbar';
 import { SelectionPropertiesPanel } from '@/features/viewer-interaction/SelectionPropertiesPanel';
@@ -56,7 +56,7 @@ import { ExportRail } from '@/features/project-export/ExportRail';
 import { selectDoorInstallerInput, type RuntimeWallMap } from '@/features/door-pilot/door-boundary';
 import { getPascalStores, ensureBuiltinPluginLoaded, type ViewerHandle } from 'design-build-simplified-viewer-shell';
 import { RenderStudio, loadRenderPrefs } from '@/features/render/RenderStudio';
-import { prepareView, currentViewKind, type PreparedView } from '@/features/render/capture-view';
+import { prepareView, currentViewKind, captureViewForRender, type PreparedView } from '@/features/render/capture-view';
 import { renderPhotoreal, type RenderJobResult } from '@/features/render/render-client';
 import { RENDER_TIERS, getRenderStyle, styleFromText, furnishFromText } from '@/features/render/render-presets';
 import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
@@ -259,9 +259,15 @@ const nid = () => `ev_${++evId}`;
 /** Chat text that adjusts the last render (look, light, materials) rather than asking something new. */
 const RENDER_TWEAK = /render|photo ?real|light|golden|sunset|night|dusk|overcast|clay|marble|wood|oak|concrete|tile|floor|wall finish|material|furnish|furniture|warm|style/i;
 
+/** True when the live scene has at least one wall (read straight from the store). */
+function sceneHasWallsNow(): boolean {
+  const st = getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, { type?: string }> };
+  return Object.values(st.nodes ?? {}).some((n) => n?.type === 'wall');
+}
+
 export default function Home() {
   const [events, setEvents] = useState<ChatEvent[]>([
-    { type: 'message', role: 'assistant', id: nid(), text: 'Attach a PDF drawing, keep Geometric selected, and press Extract to build the project with Pure MuPDF.' },
+    { type: 'message', role: 'assistant', id: nid(), text: 'Upload a floor plan and I will turn it into a 3D model. Then press Render for a photoreal image.' },
   ]);
   const [selection, setSelection] = useState({ chat: MOCK_MODELS.chat[0], extraction: MOCK_MODELS.extraction[0], render: MOCK_MODELS.render[0] });
   // Extraction method (geometric | ai), lifted from ChatPanel so the visible
@@ -740,10 +746,31 @@ export default function Home() {
     }
   }, [collectBuildingBoxes, applySolution]);
 
-  /** Frame the entire committed building once import+registry+viewer are ready. */
+  /** Draw a few frames: the viewer renders on demand, and its systems (which
+   *  drain dirty nodes) only run when a frame is drawn. */
+  const pumpFrames = useCallback((count = 24) => {
+    let n = 0;
+    const step = () => {
+      viewerHandleRef.current?.invalidate();
+      if (++n < count) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, []);
+
+  /** 3D view of the whole building. Works at any time (manual or after a build). */
   const frameEntireProject = useCallback(() => {
-    evaluateFramingReadiness();
-  }, [evaluateFramingReadiness]);
+    const handle = viewerHandleRef.current;
+    if (!handle || !handle.camera || !handle.scene) return;
+    const { boxes } = collectBuildingBoxes();
+    if (boxes.length === 0) return;
+    const cam = handle.camera as unknown as import('three').PerspectiveCamera | import('three').OrthographicCamera;
+    const mode = (cam as { isPerspectiveCamera?: boolean }).isPerspectiveCamera ? 'perspective' : 'orthographic';
+    const fov = (cam as { fov?: number }).fov ?? 50;
+    const aspect = (cam as { aspect?: number }).aspect ?? (typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 1);
+    const sol = computeFraming(boxes, { mode, fovDeg: fov, aspect, near: (cam as { near?: number }).near ?? 0.1, far: (cam as { far?: number }).far ?? 1000 }, [cam.position.x, cam.position.y, cam.position.z], 0.15);
+    applySolution(sol, framingCtl.current);
+    pumpFrames();
+  }, [collectBuildingBoxes, applySolution, pumpFrames]);
 
   /** Frame only the currently-selected building objects (Fit Selection). */
   const frameSelection = useCallback(() => {
@@ -773,20 +800,28 @@ export default function Home() {
     const aspect = (cam as { aspect?: number }).aspect ?? (typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 1);
     const sol = computeFraming(boxes, { mode, fovDeg: fov, aspect, near: (cam as { near?: number }).near ?? 0.1, far: (cam as { far?: number }).far ?? 1000 }, [cam.position.x, cam.position.y, cam.position.z], 0.15);
     const topDir = new THREE.Vector3(0, 1, 0.0001).normalize();
-    const pos = new THREE.Vector3(...sol.buildingCenter).add(topDir.multiplyScalar(Math.max(sol.boundingSphereRadius * 3, 20)));
+    // Fit the plan footprint (with a margin) instead of 3x the bounding sphere.
+    const bb = sol.buildingBounds;
+    const vFov = (fov * Math.PI) / 180;
+    const hFov = 2 * Math.atan(Math.tan(vFov / 2) * aspect);
+    const fitDist = Math.max((bb.max[2] - bb.min[2]) / 2 / Math.tan(vFov / 2), (bb.max[0] - bb.min[0]) / 2 / Math.tan(hFov / 2)) * 1.25 + (bb.max[1] - bb.min[1]);
+    const dist = mode === 'perspective' && isFinite(fitDist) && fitDist > 0 ? Math.max(fitDist, 8) : Math.max(sol.boundingSphereRadius * 3, 20);
+    const pos = new THREE.Vector3(...sol.buildingCenter).add(topDir.multiplyScalar(dist));
     const ctl = framingCtl.current;
     ctl.camBefore = [cam.position.x, cam.position.y, cam.position.z];
     cam.position.set(pos.x, pos.y, pos.z);
-    (cam as { near: number }).near = sol.near;
-    (cam as { far: number }).far = sol.far;
+    // Clip planes for this (closer) distance, so the roofline is never cut.
+    const R = sol.boundingSphereRadius;
+    (cam as { near: number }).near = mode === 'perspective' ? Math.max(0.05, Math.min(sol.near, (dist - R) * 0.5)) : sol.near;
+    (cam as { far: number }).far = Math.max(sol.far, dist + R * 2 + 100);
     cam.updateProjectionMatrix();
     if (handle.controls && handle.controls.target) { handle.controls.target.set(...sol.controlsTarget); handle.controls.update(); }
     ctl.camAfter = [cam.position.x, cam.position.y, cam.position.z];
     ctl.tgtAfter = handle.controls?.target ? [handle.controls.target.x, handle.controls.target.y, handle.controls.target.z] : null;
     ctl.bounds = { min: sol.buildingBounds.min, max: sol.buildingBounds.max };
     handle.invalidate();
-    requestAnimationFrame(() => handle.invalidate());
-  }, [collectBuildingBoxes]);
+    pumpFrames();
+  }, [collectBuildingBoxes, pumpFrames]);
 
   /** Reset framing state for a new run / reset / scene replace. */
   const resetFraming = useCallback((runId: number) => {
@@ -1479,7 +1514,7 @@ export default function Home() {
         setExtractionProgress((prev) => ({
           ...prev,
           progressPercent: pct,
-          stageText: `Erecting 3D walls (${committed}/${totalWalls})…`,
+          stageText: `Placing walls (${committed} of ${totalWalls})…`,
         }));
         useViewer?.getState()?.bumpGeometryRevision?.();
         viewerHandleRef.current?.invalidate();
@@ -1498,7 +1533,7 @@ export default function Home() {
         setExtractionProgress((prev) => ({
           ...prev,
           progressPercent: pct,
-          stageText: `Glazing exterior windows (${count}/${tot})…`,
+          stageText: `Placing windows (${count} of ${tot})…`,
         }));
         useViewer?.getState()?.bumpGeometryRevision?.();
         viewerHandleRef.current?.invalidate();
@@ -1517,7 +1552,7 @@ export default function Home() {
         setExtractionProgress((prev) => ({
           ...prev,
           progressPercent: pct,
-          stageText: `Mounting doors & swings in 3D (${count}/${tot})…`,
+          stageText: `Placing doors (${count} of ${tot})…`,
         }));
         useViewer?.getState()?.bumpGeometryRevision?.();
         viewerHandleRef.current?.invalidate();
@@ -1562,7 +1597,7 @@ export default function Home() {
             ...prev,
             isExtracting: false,
             progressPercent: 100,
-            stageText: `3D Model Ready (${totalWalls} walls, ${DIAG.windowsInstalledNodes || 24} windows, ${DIAG.installedDoors || 25} doors)`,
+            stageText: `Model ready: ${totalWalls} walls, ${DIAG.windowsInstalledNodes} windows, ${DIAG.installedDoors} doors`,
           }));
         }, 800);
       }
@@ -1616,7 +1651,7 @@ export default function Home() {
     setExtractionProgress({
       isExtracting: true,
       pipeline: 'geometric',
-      stageText: 'Initializing MuPDF geometric parser…',
+      stageText: 'Opening the drawing…',
       progressPercent: 15,
       fileName: source.name,
     });
@@ -1676,7 +1711,7 @@ export default function Home() {
                 setExtractionProgress({
                   isExtracting: true,
                   pipeline: 'geometric',
-                  stageText: `Constructing ${DIAG.finalizedWallCount} structural walls in 3D…`,
+                  stageText: `Building ${DIAG.finalizedWallCount} walls…`,
                   progressPercent: 35,
                   fileName: source.name,
                 });
@@ -1703,7 +1738,7 @@ export default function Home() {
                 DIAG.windowsEligible = wspecs.length;
                 setExtractionProgress((prev) => ({
                   ...prev,
-                  stageText: `Glazing ${wspecs.length} window openings across exterior walls…`,
+                  stageText: `Adding ${wspecs.length} windows…`,
                   progressPercent: 65,
                 }));
                 push({ type: 'extraction-progress', event: { phase: 'windows', progress: 0.65, message: `Glazing ${wspecs.length} window units` } });
@@ -1732,7 +1767,7 @@ export default function Home() {
                 DIAG.doorsAutoInstallable = dspecs.length;
                 setExtractionProgress((prev) => ({
                   ...prev,
-                  stageText: `Mounting ${dspecs.length} door assemblies & swings in 3D…`,
+                  stageText: `Adding ${dspecs.length} doors…`,
                   progressPercent: 80,
                 }));
                 push({ type: 'extraction-progress', event: { phase: 'doors', progress: 0.80, message: `Mounting ${dspecs.length} door assemblies` } });
@@ -1817,7 +1852,7 @@ export default function Home() {
         setExtractionProgress({
           isExtracting: true,
           pipeline: 'geometric',
-          stageText: `Validated ${result.walls.length} walls, ${windowCount} windows & ${doorCount} doors. Installing in 3D Pascal…`,
+          stageText: `Found ${result.walls.length} walls, ${windowCount} windows and ${doorCount} doors. Building the 3D model…`,
           progressPercent: 85,
           fileName: source.name,
         });
@@ -2404,7 +2439,7 @@ export default function Home() {
     setExtractionProgress({
       isExtracting: true,
       pipeline: 'ai',
-      stageText: 'Gemini Vision multi-pass architectural floor plan parsing…',
+      stageText: 'Reading the plan with AI…',
       progressPercent: 20,
       fileName: source.name,
     });
@@ -2720,13 +2755,38 @@ export default function Home() {
       } else if (lastRenderRef.current && RENDER_TWEAK.test(cmd.text)) {
         // Follow-up on the last render ("golden hour", "marble floors"…): same view, new look.
         void runChatRender({ reuseView: lastRenderRef.current.view, text: cmd.text });
+      } else if (RENDER_TWEAK.test(cmd.text) && sceneHasWallsNow()) {
+        // A render request with no earlier render: capture the current view, then render it.
+        void (async () => {
+          try {
+            const view = await captureViewForRender(viewerHandleRef.current, { frameBuilding: loadRenderPrefs().frameBuilding });
+            await runChatRender({ reuseView: view, text: cmd.text });
+          } catch (e) {
+            push({ type: 'error', message: e instanceof Error ? e.message : 'Could not capture the 3D view. Try the Render button.' });
+          }
+        })();
       } else {
-        setTimeout(() => push({ type: 'message', role: 'assistant', id: nid(), text: `(mock) ${cmd.text}` }), 300);
+        const reply = sceneHasWallsNow()
+          ? 'I can render this model: try "golden hour with oak floors", or press Render. To work on another plan, upload it with +.'
+          : 'Upload a floor plan with + and I will build the 3D model.';
+        setTimeout(() => push({ type: 'message', role: 'assistant', id: nid(), text: reply }), 250);
       }
     }
     if (cmd.type === 'start-frozen-import') {
-      push({ type: 'message', role: 'user', id: nid(), text: 'Start frozen CODE-06 wall import.' });
-      void startFrozenImport();
+      // The sample is a real vector PDF run through the same pipeline as an upload.
+      void (async () => {
+        try {
+          const res = await fetch('/CODE_06.pdf');
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const file = new File([await res.blob()], 'Sample plan (CODE-06).pdf', { type: 'application/pdf' });
+          const id = crypto.randomUUID();
+          attachmentRepository.put(id, file);
+          setExtractMethod('geometric');
+          void runLiveGeometricExtraction({ id, kind: 'pdf', name: file.name, byteSize: file.size, mime: 'application/pdf' });
+        } catch {
+          push({ type: 'error', message: 'Could not load the sample plan. Check your connection and try again.' });
+        }
+      })();
     }
     // Change Set 3: AI method → clean Gemini Multipass boundary (V2) or Progressive V3.
     if (cmd.type === 'start-extraction' && cmd.extractor === 'gemini') {
@@ -2852,7 +2912,7 @@ export default function Home() {
       // 4. Building original walls
       { key: 'original-walls', name: 'Building original walls', status: state === 'importing' && !reachedCompletion ? 'active' : reachedCompletion || wallsDone ? 'done' : 'pending', committed: orig, total: orig },
       // 5. Completing walls and partitions
-      { key: 'completion', name: 'Completing walls and partitions', status: reachedCompletion ? 'done' : reachedWalls && !reachedCompletion ? 'active' : 'pending', committed: comp, total: comp },
+      { key: 'completion', name: 'Completing walls and partitions', status: reachedCompletion || wallsDone || reachedFinalize ? 'done' : reachedWalls ? 'active' : 'pending', committed: comp, total: comp },
       // 6. Finalizing the wall network
       { key: 'finalize', name: 'Finalizing the wall network', status: reachedFinalize ? 'done' : reachedWalls ? 'active' : 'pending', committed: finalized, total: finalized },
       // 7. Installing windows
@@ -2992,6 +3052,16 @@ export default function Home() {
   const [completionDismissed, setCompletionDismissed] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [renderStudioOpen, setRenderStudioOpen] = useState(false);
+  // "New plan" asks once inline ("Discard this model?") instead of a blocking dialog.
+  const [confirmNew, setConfirmNew] = useState(false);
+  const startOver = useCallback(() => {
+    if (!confirmNew) {
+      setConfirmNew(true);
+      window.setTimeout(() => setConfirmNew(false), 4000);
+      return;
+    }
+    window.location.reload();
+  }, [confirmNew]);
   // The ✨ Render entry appears as soon as the live scene has walls (any pipeline).
   const sceneHasWalls = (getPascalStores().useScene as unknown as <T>(sel: (s: { nodes: Record<string, { type: string }> }) => T) => T)(
     (s) => Object.values(s.nodes ?? {}).some((n) => n.type === 'wall'),
@@ -3058,6 +3128,54 @@ export default function Home() {
       : terminalState,
   };
 
+  /** Fit the site lot around the building (Pascal's default lot is a 30 m square at
+   *  the origin, which sits off to one side of an imported plan). Not an undo step. */
+  const fitSiteToBuilding = useCallback(() => {
+    try {
+      const core = getPascalStores();
+      const st = core.useScene.getState() as unknown as {
+        nodes: Record<string, { id?: string; type?: string; start?: number[]; end?: number[] }>;
+        updateNode: (id: string, data: unknown) => void;
+      };
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (const n of Object.values(st.nodes ?? {})) {
+        if (n?.type !== 'wall' || !n.start || !n.end) continue;
+        for (const pt of [n.start, n.end]) {
+          if (!isFinite(pt[0]) || !isFinite(pt[1])) continue;
+          minX = Math.min(minX, pt[0]); maxX = Math.max(maxX, pt[0]);
+          minY = Math.min(minY, pt[1]); maxY = Math.max(maxY, pt[1]);
+        }
+      }
+      const site = Object.values(st.nodes ?? {}).find((n) => n?.type === 'site');
+      if (!site?.id || !isFinite(minX) || !isFinite(maxX)) return;
+      const m = 3;
+      const points: [number, number][] = [[minX - m, minY - m], [maxX + m, minY - m], [maxX + m, maxY + m], [minX - m, maxY + m]];
+      const temporal = ((core.useScene as unknown as { temporal?: { getState?: () => { pause?: () => void; resume?: () => void } } }).temporal?.getState?.())
+        ?? (st as unknown as { temporal?: { pause?: () => void; resume?: () => void } }).temporal;
+      temporal?.pause?.();
+      try {
+        st.updateNode(site.id, { polygon: { type: 'polygon', points } });
+      } finally {
+        temporal?.resume?.();
+      }
+    } catch (e) {
+      console.warn('[site] could not fit the lot to the building:', e);
+    }
+  }, []);
+
+  // When a build finishes: tidy the lot around the building, then show the whole
+  // model (once per run). The viewer draws on demand, so the framing also pumps frames.
+  const readyKey = buildProgress.terminalState === 'project-ready'
+    ? `${extractMethod}:${DIAG.runCounter ?? 0}:${progRunId ?? ''}`
+    : null;
+  const framedKeyRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!readyKey || framedKeyRef.current === readyKey) return;
+    framedKeyRef.current = readyKey;
+    fitSiteToBuilding();
+    window.setTimeout(() => frameEntireProject(), 150);
+  }, [readyKey, fitSiteToBuilding, frameEntireProject]);
+
   const handleTakeSnapshot = useCallback(async (): Promise<AttachmentRef[] | AttachmentRef | null> => {
     try {
       let dataUrl: string | null = null;
@@ -3122,18 +3240,29 @@ export default function Home() {
           <span>Design &amp; Build Copilot</span>
         </div>
         <div className="db-header-actions">
-          <button>Projects</button>
+          {docked && !extractionBusy && !importing && (
+            <button
+              type="button"
+              className={`db-header-btn ${confirmNew ? 'is-confirm' : ''}`}
+              onClick={startOver}
+              title="Start again with another plan"
+            >
+              {confirmNew ? 'Discard this model?' : 'New plan'}
+            </button>
+          )}
           <button
+            type="button"
             className="db-header-settings-btn"
             onClick={() => setSettingsOpen(true)}
-            title="Open AI Studio & Provider Management"
+            title={aiRegistry.canRunAiExtraction ? 'AI connected: manage your providers and keys' : 'Connect an AI provider (your key stays in this browser)'}
           >
-            <Sparkles className="w-3.5 h-3.5 text-violet-500 inline" />
+            <span className={`db-ai-dot ${aiRegistry.canRunAiExtraction ? 'is-on' : ''}`} aria-hidden />
             <span>AI Studio</span>
           </button>
-          <span className="db-avatar">MA</span>
         </div>
       </header>
+
+      {!docked && <div className="db-landing-backdrop" aria-hidden />}
 
       {/*
         The Viewer mounts when the import starts (viewerVisible, set true in
@@ -3252,8 +3381,8 @@ export default function Home() {
           Inspector overlay owns inspection). */}
       {!proMode && !proMounting && (<SelectionPropertiesPanel />)}
 
-      {/* STANDARD floating viewer toolbar (navigation, camera framing & PRO toggle) */}
-      {!proMode && !proMounting && (
+      {/* Viewer toolbar: shown once there is a model to look at. */}
+      {!proMode && !proMounting && docked && sceneHasWalls && (
         <ViewerToolbar
           onFitProject={frameEntireProject}
           onFitSelection={frameSelection}
@@ -3279,7 +3408,7 @@ export default function Home() {
           rail in the same right-side space. */}
       {!proMode && !proMounting && (
       <BuildProgressRail
-        visible={(extractionBusy || importing || isBuildComplete || DIAG.importState === 'completed' || DIAG.importState === 'stalled' || DIAG.importState === 'failed') && rightRail === 'progress' && !progActive && !progBuiltRef.current && extractMethod !== 'ai'}
+        visible={(extractionBusy || importing || isBuildComplete || DIAG.importState === 'completed' || DIAG.importState === 'stalled' || DIAG.importState === 'failed') && rightRail === 'progress' && !progActive && !progBuiltRef.current && extractMethod !== 'ai' && !renderStudioOpen}
         collapsed={railCollapsed}
         onToggleCollapse={() => setRailCollapsed((v) => !v)}
         stages={stages}
@@ -3302,6 +3431,13 @@ export default function Home() {
         doorsAuditReview={DIAG.doorsAuditReview}
         doorDiagnosticReviewCount={DIAG.doorDiagnosticReviewCount}
         title="Geometric Build"
+        fileName={extractionProgress.fileName}
+        detail={extractionProgress.isExtracting ? extractionProgress.stageText : undefined}
+        percent={extractionProgress.isExtracting ? extractionProgress.progressPercent : undefined}
+        done={isBuildComplete}
+        failed={DIAG.importState === 'failed' || DIAG.importState === 'stalled'}
+        onRender={sceneHasWalls ? () => setRenderStudioOpen(true) : undefined}
+        onCancel={extractionBusy ? () => extractionAbortRef.current?.abort() : undefined}
       />
       )}
 
@@ -3335,6 +3471,10 @@ export default function Home() {
         onCancel={() => extractionAbortRef.current?.abort()}
         onAcceptReview={acceptReviewItem}
         onRetryFurniture={() => { /* furniture re-run handled by retry button in ChatPanel */ }}
+        fileName={extractionProgress.fileName}
+        detail={extractionProgress.isExtracting ? extractionProgress.stageText : undefined}
+        onRender={sceneHasWalls ? () => setRenderStudioOpen(true) : undefined}
+        hidden={renderStudioOpen}
       />
       )}
 

@@ -1,11 +1,11 @@
 // features/progressive-build/BuildProgressRail.tsx
-// Real progressive-build rail. Driven by the frozen import event log.
-// Only stages that actually run are shown (windows/doors/furniture are NOT
-// shown during the frozen fixture, per spec).
+// Geometric build status. The fine-grained construction stages from the page
+// are grouped into four plain steps and shown in the shared BuildCard.
 
 'use client';
 import React from 'react';
-import { BuildStageRow, type StageView } from './BuildStageRow';
+import type { StageView } from './BuildStageRow';
+import { BuildCard, combineStates, formatElapsed, sequenceSteps, stepProgress, type BuildStep, type BuildStepState } from './BuildCard';
 
 export interface RailProps {
   visible: boolean;
@@ -16,10 +16,8 @@ export interface RailProps {
   total: number;
   elapsedMs: number;
   reviewCount: number;
-  /** real installed-element counts for the live progress summary (§12). */
   wallsInstalled?: number;
   wallsTotal?: number;
-  /** M2: explicit wall breakdown — do NOT show one combined count. */
   wallsOriginal?: number;
   wallsCompletion?: number;
   wallsFinalized?: number;
@@ -32,77 +30,76 @@ export interface RailProps {
   doorsEligible?: number;
   doorsAuditReview?: number;
   doorDiagnosticReviewCount?: number;
-  /** Project title — never a hardcoded CODE-06 / filename; derived from the active build. */
   title?: string;
+  /** Live text of the extraction step in progress. */
+  detail?: string;
+  /** Source file name. */
+  fileName?: string;
+  /** Extraction progress 0..100 while the drawing is being read. */
+  percent?: number;
+  /** The model is complete and validated. */
+  done?: boolean;
+  /** The build failed or stalled. */
+  failed?: boolean;
+  onRender?: () => void;
+  onCancel?: () => void;
 }
 
-function fmtElapsed(ms: number) {
-  const s = Math.floor(ms / 1000);
-  const m = Math.floor(s / 60);
-  return `${String(m).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
-}
+const GROUPS: { key: string; label: string; stages: string[] }[] = [
+  { key: 'read', label: 'Reading the drawing', stages: ['drawing', 'guide', 'slab'] },
+  { key: 'walls', label: 'Walls', stages: ['original-walls', 'completion', 'finalize'] },
+  { key: 'openings', label: 'Windows and doors', stages: ['windows', 'doors'] },
+  { key: 'check', label: 'Checking the model', stages: ['structural-validation', 'opening-validation', 'final-validation', 'project-ready'] },
+];
 
-export function BuildProgressRail({ visible, collapsed, onToggleCollapse, stages, committed, total, elapsedMs, reviewCount, wallsInstalled, wallsTotal, wallsOriginal, wallsCompletion, wallsFinalized, windowsInstalled, windowsTotal, windowsExtracted, windowsEligible, windowsFailed, doorsInstalled, doorsEligible, doorsAuditReview, doorDiagnosticReviewCount, title }: RailProps) {
-  if (!visible) return null;
-  const projectTitle = title && title.trim().length > 0 ? title : 'Live Project Build';
-  const showBreakdown =
-    wallsInstalled !== undefined && windowsInstalled !== undefined && doorsInstalled !== undefined;
-  const totalValidated =
-    (wallsInstalled ?? 0) + (windowsInstalled ?? 0) + (doorsInstalled ?? 0);
+export function BuildProgressRail(p: RailProps) {
+  if (!p.visible) return null;
+  const byKey = new Map(p.stages.map((s) => [s.key, s]));
+  const walls = p.wallsFinalized ?? p.wallsInstalled ?? p.committed;
+  const windows = p.windowsInstalled ?? 0;
+  const doors = p.doorsInstalled ?? 0;
+
+  const steps: BuildStep[] = sequenceSteps(GROUPS.map((g) => {
+    const states = g.stages
+      .map((k) => byKey.get(k)?.status)
+      .filter((s): s is StageView['status'] => !!s)
+      .map((s) => s as BuildStepState);
+    let state = combineStates(states);
+    if (p.done) state = state === 'failed' ? 'failed' : state === 'review' ? 'review' : 'done';
+    const value = g.key === 'walls' && walls > 0 ? String(walls)
+      : g.key === 'openings' && windows + doors > 0 ? `${windows} · ${doors}`
+        : undefined;
+    return { key: g.key, label: g.label, state, value };
+  }));
+
+  const status: 'running' | 'done' | 'failed' = p.failed ? 'failed' : p.done ? 'done' : 'running';
+  const fromSteps = stepProgress(steps);
+  const fromExtraction = p.percent !== undefined ? (p.percent / 100) * 0.9 : 0;
+  const review = (p.doorsAuditReview ?? 0) + (p.windowsFailed ?? 0);
+
   return (
-    <aside className={`db-rail glass ${collapsed ? 'collapsed' : ''}`} aria-label="Build progress">
-      <div className="db-rail-head">
-        <div>
-          <small>LIVE PROJECT BUILD</small>
-          <h3>{projectTitle}</h3>
-        </div>
-        <button className="db-link" onClick={onToggleCollapse} aria-label="Collapse rail">
-          {collapsed ? '▸' : '×'}
-        </button>
-      </div>
-      <div className="db-rail-summary">
-        {showBreakdown ? (
-          <div className="db-rail-counts">
-            <div>Walls <b>{wallsInstalled}</b> / {wallsTotal ?? wallsInstalled}</div>
-            {wallsOriginal !== undefined && wallsCompletion !== undefined && wallsFinalized !== undefined ? (
-              <div className="db-rail-sub">
-                <span>original {wallsOriginal}</span>
-                <span>completion {wallsCompletion}</span>
-                <span>finalized {wallsFinalized}</span>
-              </div>
-            ) : null}
-            {/* M2: do NOT show "Windows 0 / 0" when WindowNodes exist — show the
-                semantic extracted/eligible counts instead. */}
-            <div>Windows <b>{windowsInstalled}</b> / {windowsTotal ?? windowsInstalled}</div>
-            {windowsExtracted !== undefined ? (
-              <div className="db-rail-sub">
-                <span>extracted {windowsExtracted}</span>
-                {windowsEligible !== undefined ? <span>eligible {windowsEligible}</span> : null}
-                {windowsFailed && windowsFailed > 0 ? <span>failed {windowsFailed}</span> : null}
-              </div>
-            ) : null}
-            <div>Doors <b>{doorsInstalled}</b> / {doorsEligible ?? doorsInstalled}{doorsAuditReview ? <span className="db-review"> (+{doorsAuditReview} audit review)</span> : null}</div>
-            {doorsAuditReview && doorsAuditReview > 0 ? (
-              <div className="db-rail-sub"><span>{doorsAuditReview} production review candidates (not auto-installed)</span></div>
-            ) : null}
-            {doorDiagnosticReviewCount && doorDiagnosticReviewCount > 0 ? (
-              <div className="db-rail-sub"><span>{doorDiagnosticReviewCount} diagnostic candidates excluded from automatic installation</span></div>
-            ) : null}
-            <div className="db-rail-total">Total validated Pascal nodes <b>{totalValidated}</b></div>
-            {reviewCount ? <div className="db-rail-sub"><span>{reviewCount} candidate review evidence</span></div> : null}
-          </div>
-        ) : (
-          <>
-            <b>{committed}</b>
-            <span>/ {total} validated Pascal nodes</span>
-          </>
-        )}
-      </div>
-      {stages.map((s) => <BuildStageRow key={s.key} stage={s} />)}
-      <div className="db-rail-details">
-        <span>Elapsed</span>
-        <b>{fmtElapsed(elapsedMs)}</b>
-      </div>
-    </aside>
+    <BuildCard
+      status={status}
+      title={status === 'done' ? 'Model ready' : status === 'failed' ? 'Build stopped' : 'Building your model'}
+      fileName={p.fileName}
+      detail={p.detail}
+      progress={status === 'done' ? 1 : Math.max(fromSteps, fromExtraction)}
+      elapsed={p.elapsedMs > 0 ? formatElapsed(p.elapsedMs) : undefined}
+      counts={[
+        { label: 'Walls', value: walls },
+        { label: 'Windows', value: windows },
+        { label: 'Doors', value: doors },
+      ]}
+      steps={steps}
+      collapsed={p.collapsed}
+      onToggleCollapse={p.onToggleCollapse}
+      onCancel={p.onCancel}
+      onRender={p.onRender}
+      ariaLabel="Build progress"
+    >
+      {review > 0 && status !== 'running' ? (
+        <p className="db-bc__note">{review === 1 ? '1 opening was left for review' : `${review} openings were left for review`}</p>
+      ) : null}
+    </BuildCard>
   );
 }

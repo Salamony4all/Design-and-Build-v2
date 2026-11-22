@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import type { BuildStage, FurnitureCandidate } from 'design-build-extraction-ai';
+import { BuildCard, combineStates, formatElapsed, sequenceSteps, stepProgress, type BuildStep, type BuildStepState } from './BuildCard';
 
 export type StageStatus = 'pending' | 'running' | 'completed' | 'review' | 'failed' | 'cancelled';
 
@@ -39,32 +40,17 @@ export interface ProgressiveBuildV3Props {
   wallMap?: import('@/harness/ai-scene-install/runtime-wall-map').RuntimeWallMapBuild | null;
   /** Phase B structural validation result. */
   structural?: import('@/harness/ai-scene-install/structural-validation').StructuralValidationResult | null;
+  /** Live text of the extraction step in progress. */
+  detail?: string;
+  /** Source file name. */
+  fileName?: string;
+  /** Photoreal render shortcut, shown once the model is ready. */
+  onRender?: () => void;
+  /** Hide while another right-side panel is open. */
+  hidden?: boolean;
 }
 
 const ORDER: BuildStage[] = ['guide', 'slab', 'walls', 'windows', 'doors', 'furniture'];
-const LABELS: Record<BuildStage, string> = {
-  guide: 'Placing Guide',
-  slab: 'Creating Slab',
-  walls: 'Building Walls',
-  windows: 'Installing Windows',
-  doors: 'Installing Doors',
-  furniture: 'Supplying Furniture',
-};
-const STATUS_COLOR: Record<StageStatus, string> = {
-  pending: '#6b7280',
-  running: '#3b82f6',
-  completed: '#22c55e',
-  review: '#f59e0b',
-  failed: '#ef4444',
-  cancelled: '#9ca3af',
-};
-
-function elapsed(s?: StageCardState): string {
-  if (!s?.startedAt) return '';
-  const end = s.completedAt ?? Date.now();
-  const ms = Math.max(0, end - s.startedAt);
-  return `${(ms / 1000).toFixed(1)}s`;
-}
 
 /**
  * Truthful Guide lifecycle transitions (Phase A, Step 6).
@@ -129,128 +115,89 @@ export function guideSignalApplicable(
   return true;
 }
 
-export function ProgressiveBuildV3({ active, runId, stages, review, onCancel, onAcceptReview, onRetryFurniture, wallMap, structural }: ProgressiveBuildV3Props) {
+export function ProgressiveBuildV3({ active, stages, review, onCancel, onAcceptReview, onRetryFurniture, wallMap, structural, detail, fileName, onRender, hidden }: ProgressiveBuildV3Props) {
   const [collapsed, setCollapsed] = React.useState(false);
-  if (!active) return null;
-  const furniture = stages.furniture;
-  const audit = furniture?.audit;
+  const [showReview, setShowReview] = React.useState(false);
+  if (!active || hidden) return null;
 
-  const totalNodes =
-    (stages.walls?.installed ?? 0) +
-    (stages.windows?.installed ?? 0) +
-    (stages.doors?.installed ?? 0) +
-    (stages.furniture?.installed ?? 0) +
-    (stages.slab?.installed ? 1 : 0);
+  const settled = (s?: StageCardState) => !!s && (s.status === 'completed' || s.status === 'review' || s.status === 'failed' || s.status === 'cancelled');
+  const toStep = (s?: StageCardState): BuildStepState =>
+    !s ? 'pending'
+      : s.status === 'completed' ? 'done'
+        : s.status === 'running' ? 'active'
+          : s.status === 'review' ? 'review'
+            : s.status === 'failed' ? 'failed'
+              : 'pending';
+  const furniture = stages.furniture;
+  const hasFurniture = !!furniture && (furniture.total > 0 || furniture.installed > 0 || furniture.status === 'running');
+  const checkState: BuildStepState = structural
+    ? (structural.status === 'FAILED' ? 'failed' : 'done')
+    : wallMap ? 'active' : 'pending';
+
+  const steps: BuildStep[] = sequenceSteps([
+    { key: 'read', label: 'Reading the drawing', state: combineStates([toStep(stages.guide), toStep(stages.slab)]) },
+    { key: 'walls', label: 'Walls', state: toStep(stages.walls), value: stages.walls?.installed ? String(stages.walls.installed) : undefined },
+    {
+      key: 'openings', label: 'Windows and doors', state: combineStates([toStep(stages.windows), toStep(stages.doors)]),
+      value: (stages.windows?.installed ?? 0) + (stages.doors?.installed ?? 0) > 0 ? `${stages.windows?.installed ?? 0} · ${stages.doors?.installed ?? 0}` : undefined,
+    },
+    ...(hasFurniture ? [{ key: 'furniture', label: 'Furniture', state: toStep(furniture), value: furniture.installed ? String(furniture.installed) : undefined }] : []),
+    { key: 'check', label: 'Checking the model', state: checkState },
+  ]);
+
+  const allSettled = ORDER.every((k) => settled(stages[k]) || (k === 'furniture' && !hasFurniture));
+  const anyStarted = ORDER.some((k) => stages[k] && stages[k].status !== 'pending');
+  const failed = ORDER.some((k) => stages[k]?.status === 'failed' && k !== 'furniture');
+  const status: 'running' | 'done' | 'failed' = failed ? 'failed' : allSettled && anyStarted ? 'done' : 'running';
+  const starts = ORDER.map((k) => stages[k]?.startedAt).filter((v): v is number => typeof v === 'number');
+  const ends = ORDER.map((k) => stages[k]?.completedAt ?? (stages[k]?.startedAt ? Date.now() : undefined)).filter((v): v is number => typeof v === 'number');
+  const elapsedMs = starts.length && ends.length ? Math.max(...ends) - Math.min(...starts) : 0;
 
   return (
-    <aside className={`db-rail glass ${collapsed ? 'collapsed' : ''}`} aria-label="AI Progressive Build progress">
-      <div className="db-rail-head">
-        <div>
-          <small>LIVE PROJECT BUILD</small>
-          <h3>AI Progressive Build</h3>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <button
-            onClick={onCancel}
-            style={{
-              background: '#fee2e2',
-              color: '#dc2626',
-              border: '1px solid #fecaca',
-              borderRadius: 6,
-              padding: '2px 8px',
-              fontSize: 11,
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
-          >
-            Cancel
-          </button>
-          <button className="db-link" onClick={() => setCollapsed((v) => !v)} aria-label="Collapse rail">
-            {collapsed ? '▸' : '×'}
-          </button>
-        </div>
-      </div>
-
-      <div className="db-rail-summary">
-        <div className="db-rail-counts">
-          <div>Walls <b>{stages.walls?.installed ?? 0}</b> / {stages.walls?.total || (stages.walls?.installed ?? 0)}</div>
-          <div>Windows <b>{stages.windows?.installed ?? 0}</b> / {stages.windows?.total || (stages.windows?.installed ?? 0)}</div>
-          <div>Doors <b>{stages.doors?.installed ?? 0}</b> / {stages.doors?.total || (stages.doors?.installed ?? 0)}</div>
-          {stages.furniture && (
-            <div>Furniture <b>{stages.furniture.installed}</b> / {stages.furniture.total || stages.furniture.installed}</div>
-          )}
-          <div className="db-rail-total">Total validated Pascal nodes <b>{totalNodes}</b></div>
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4, margin: '8px 0' }}>
-        {ORDER.map((stage) => {
-          const s = stages[stage];
-          const color = STATUS_COLOR[s?.status ?? 'pending'];
-          return (
-            <div key={stage} className="db-stage-row" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 4px', borderBottom: '1px solid var(--line, #e5e7eb)' }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0 }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, fontSize: 12 }}>{LABELS[stage]}</div>
-                <div style={{ color: 'var(--muted, #64748b)', fontSize: 10 }}>
-                  {s?.status === 'review' ? `review: ${s.review}` : s ? `${s.installed}/${s.total} installed` : 'pending'}
-                  {elapsed(s) && ` · ${elapsed(s)}`}
-                </div>
-              </div>
-              <span style={{ textTransform: 'uppercase', fontSize: 9, fontWeight: 700, color }}>{s?.status ?? 'pending'}</span>
-            </div>
-          );
-        })}
-
-        {/* Phase B §9: Runtime wall map */}
-        <div className="db-stage-row" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 4px', borderBottom: '1px solid var(--line, #e5e7eb)' }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: wallMap?.status === 'READY' ? '#22c55e' : wallMap ? '#f59e0b' : '#6b7280', flexShrink: 0 }} />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 600, fontSize: 12 }}>Mapping Wall Hosts</div>
-            <div style={{ color: 'var(--muted, #64748b)', fontSize: 10 }}>
-              {wallMap ? `${wallMap.entries.length} host mappings · ${wallMap.status}` : 'pending'}
-            </div>
-          </div>
-          <span style={{ textTransform: 'uppercase', fontSize: 9, fontWeight: 700, color: wallMap?.status === 'READY' ? '#22c55e' : '#9ca3af' }}>{wallMap?.status ?? 'pending'}</span>
-        </div>
-
-        {/* Phase B §10: Structural validation */}
-        <div className="db-stage-row" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 4px' }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: structural ? (structural.status === 'FAILED' ? '#ef4444' : '#22c55e') : '#6b7280', flexShrink: 0 }} />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 600, fontSize: 12 }}>Structural Validation</div>
-            <div style={{ color: 'var(--muted, #64748b)', fontSize: 10 }}>
-              {structural ? `${structural.status} · orphans ${(structural.orphanWindowCount ?? 0) + (structural.orphanDoorCount ?? 0)} · meta ${structural.metadataSchemaFailures ?? 0}` : 'pending'}
-            </div>
-          </div>
-          <span style={{ textTransform: 'uppercase', fontSize: 9, fontWeight: 700, color: structural ? (structural.status === 'FAILED' ? '#ef4444' : '#22c55e') : '#9ca3af' }}>{structural?.status ?? 'pending'}</span>
-        </div>
-      </div>
-
-      {audit && (
-        <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--line, #e5e7eb)', fontSize: 10, color: 'var(--muted, #64748b)' }}>
-          <div style={{ fontWeight: 600 }}>Furniture audit</div>
-          <div>verified {audit.verified} · accepted {audit.accepted} · review {audit.review}</div>
-        </div>
-      )}
-
+    <BuildCard
+      status={status}
+      title={status === 'done' ? 'Model ready' : status === 'failed' ? 'Build stopped' : 'Building with AI'}
+      fileName={fileName}
+      detail={detail}
+      progress={status === 'done' ? 1 : stepProgress(steps)}
+      elapsed={elapsedMs > 0 ? formatElapsed(elapsedMs) : undefined}
+      counts={[
+        { label: 'Walls', value: stages.walls?.installed ?? 0 },
+        { label: 'Windows', value: stages.windows?.installed ?? 0 },
+        { label: 'Doors', value: stages.doors?.installed ?? 0 },
+        ...(hasFurniture ? [{ label: 'Furniture', value: furniture.installed }] : []),
+      ]}
+      steps={steps}
+      collapsed={collapsed}
+      onToggleCollapse={() => setCollapsed((v) => !v)}
+      onCancel={onCancel}
+      onRender={onRender}
+      ariaLabel="AI build progress"
+    >
       {review.length > 0 && (
-        <div style={{ marginTop: 8, borderTop: '1px solid var(--line, #e5e7eb)', paddingTop: 6 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <strong style={{ fontSize: 12 }}>Review ({review.length})</strong>
-            <button onClick={onRetryFurniture} style={{ background: '#fef3c7', color: '#92400e', border: '1px solid #fde68a', borderRadius: 4, padding: '2px 6px', cursor: 'pointer', fontSize: 10 }}>Retry</button>
-          </div>
-          <div style={{ maxHeight: 140, overflowY: 'auto', marginTop: 4 }}>
-            {review.map((item, i) => (
-              <div key={item.sourceEntityId ?? i} style={{ background: 'rgba(241,245,249,0.7)', borderRadius: 6, padding: 6, marginBottom: 4, border: '1px solid var(--line, #e5e7eb)' }}>
-                <div style={{ fontWeight: 600, fontSize: 11 }}>{item.type}</div>
-                <div style={{ color: 'var(--muted, #64748b)', fontSize: 9 }}>conf {(item.confidence ?? 0).toFixed(2)} · {item.reason ?? 'review'}</div>
-                <button onClick={() => onAcceptReview(item)} style={{ marginTop: 3, background: '#22c55e', color: '#fff', border: 'none', borderRadius: 4, padding: '2px 6px', cursor: 'pointer', fontSize: 10 }}>Accept</button>
-              </div>
-            ))}
-          </div>
+        <div className="db-bc__review">
+          <button type="button" className="db-bc__review-toggle" onClick={() => setShowReview((v) => !v)} aria-expanded={showReview}>
+            {review.length === 1 ? '1 item to review' : `${review.length} items to review`}
+            <span aria-hidden>{showReview ? '▴' : '▾'}</span>
+          </button>
+          {showReview && (
+            <ul>
+              {review.map((item, i) => (
+                <li key={item.sourceEntityId ?? i}>
+                  <span>
+                    <b>{item.type}</b>
+                    <small>{Math.round((item.confidence ?? 0) * 100)}% sure{item.reason ? ` · ${item.reason}` : ''}</small>
+                  </span>
+                  <button type="button" className="db-btn-quiet" onClick={() => onAcceptReview(item)}>Add</button>
+                </li>
+              ))}
+              <li className="db-bc__review-retry">
+                <button type="button" className="db-link" onClick={onRetryFurniture}>Try furniture again</button>
+              </li>
+            </ul>
+          )}
         </div>
       )}
-    </aside>
+    </BuildCard>
   );
 }

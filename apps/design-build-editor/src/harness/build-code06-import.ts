@@ -24,6 +24,7 @@ import type { AnyNode } from '@pascal-app/core';
 import { createCoordinateFrame, type PageMetrics } from 'design-build-coordinate-frame';
 import { replaceChildren, validateSceneTree, type NodeMap, type SceneTreeValidationResult } from 'design-build-pascal-adapter';
 import frozen from '@/harness/frozen-code06-walls.json';
+import { computeBuildingFrame, guideWorldPlacement } from './building-frame';
 
 export interface Code06Drafts {
   initialShell: { nodes: NodeMap; rootNodeIds: string[]; ids: InitialIds };

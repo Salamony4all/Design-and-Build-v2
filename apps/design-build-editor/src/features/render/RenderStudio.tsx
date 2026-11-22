@@ -175,13 +175,13 @@ export function RenderStudio({ open, onOpenChange, getViewerHandle, onOpenSettin
 
           {phase === 'form' && (
             <div className={styles.body}>
-              {noScene && <p className={styles.warn}>Build or load a model first — there is nothing in the 3D view yet.</p>}
+              {noScene && <p className={styles.warn}>Build a model first: the 3D view is empty.</p>}
               {status && !status.ready && (
                 <p className={styles.warn}>
-                  No Gemini key is set up for rendering.{' '}
+                  Rendering uses your own Gemini key.{' '}
                   {onOpenSettings && (
                     <button type="button" className={styles.linkBtn} onClick={onOpenSettings}>
-                      Open provider settings
+                      Add it in AI Studio
                     </button>
                   )}
                 </p>
