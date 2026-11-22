@@ -17,7 +17,7 @@
  *   evidence classification → accepted/review/rejected → split accepted only.
  */
 import * as mupdf from 'mupdf';
-import { collectSegments, detectDoorSymbols } from './door-symbols';
+import { collectSegments, detectDoorSymbols, hostDoorSymbols, type SymbolWall } from './door-symbols';
 import { estimateScale, textsFromStructuredTextJson } from './scale-detection';
 import { detectWallsGeneral, type WallRaster } from './wall-general';
 import {
@@ -1957,18 +1957,30 @@ export function extractPureWallResult(
 
 /**
  * The legacy wall stages are tuned to drawings whose walls are filled masses (they
- * derive the building region and thickness bands from fills). They are kept untouched
- * for those drawings. When they accept almost nothing, the general detector (wall-general.ts) is
- * run and, if it finds more wall than the legacy stages did, its walls become the
- * accepted set.
+ * derive the building region and thickness bands from fills). They are kept for those
+ * drawings. Every door stands in a wall, so door symbols the legacy walls cannot host
+ * are direct evidence of walls they missed. The general detector (wall-general.ts) is
+ * run when the legacy stages accept almost nothing or leave doors without a wall, and
+ * its walls are used when they find more wall (legacy nearly empty) or host clearly more
+ * doors.
  */
 function applyGeneralWallsIfNeeded(r: MuPdfPureResult, page: mupdf.Page, vectors: MuVector[]): void {
-  // The review pile is not a usable signal: fill-based drawings that extract correctly
-  // still leave several times more candidates in review than they accept.
-  const legacyHealthy = r.accepted.length >= 8;
   r.wallEngine = 'legacy';
-  if (legacyHealthy) return;
   try {
+    const segs = collectSegments(vectors);
+    const symCfg = { minLeafMm: 500, maxLeafMm: 1500, hostCorridorPadPt: 18 };
+    const symbols = detectDoorSymbols(segs, r.scaleMmPerPt, symCfg);
+    const hostedBy = (walls: SymbolWall[]) =>
+      symbols.length ? hostDoorSymbols(symbols, walls, segs, symCfg).filter((h) => h.hostStatus !== 'NO_HOST').length : 0;
+    const hostedLegacy = hostedBy(r.accepted);
+    const margin = Math.max(2, Math.ceil(0.1 * symbols.length));
+    // The review pile is not a usable signal: fill-based drawings that extract correctly
+    // still leave several times more candidates in review than they accept.
+    const legacyFew = r.accepted.length < 8;
+    if (!legacyFew && symbols.length - hostedLegacy < margin) {
+      r.wallEngineNote = `legacy ${r.accepted.length} walls host ${hostedLegacy}/${symbols.length} door symbols`;
+      return;
+    }
     const pb = r.pageBoundsMupdf;
     const pxPerPt = Math.min(4, 6000 / Math.max(pb[2] - pb[0], pb[3] - pb[1], 1));
     const pix = (page as any).toPixmap(mupdf.Matrix.scale(pxPerPt, pxPerPt), mupdf.ColorSpace.DeviceGray, false, true);
@@ -1985,18 +1997,18 @@ function applyGeneralWallsIfNeeded(r: MuPdfPureResult, page: mupdf.Page, vectors
     };
     // Door symbols tell the wall detector where openings are: walls run on through their
     // doors, and a door set across a corner still gets the wall piece it hangs in.
-    const segs = collectSegments(vectors);
-    const symbols = detectDoorSymbols(segs, r.scaleMmPerPt, { minLeafMm: 500, maxLeafMm: 1500, hostCorridorPadPt: 18 });
     const openings = symbols.map((s) => ({ a: s.hinge, b: s.closed, leaf: { a: s.hinge, b: s.free } }));
     const diag: Record<string, unknown> = {};
     const walls = detectWallsGeneral(segs, r.scaleMmPerPt, raster, { openings }, diag);
+    const hostedGeneral = hostedBy(walls.map((w) => ({ physicalWallId: w.id, centerline: { a: w.a, b: w.b }, thickness: w.thickness })));
     const generalLen = walls.reduce((t, w) => t + w.length, 0);
     const legacyLen = r.accepted.reduce((t, w) => t + w.length, 0);
     const openingWalls = walls.filter((w) => w.kind === 'opening').length;
     r.wallEngineNote =
-      `general ${walls.length} walls (${openingWalls} door headers, ${symbols.length} door symbols, ` +
-      `${diag.columns ?? 0} columns) / ${Math.round(generalLen)}pt vs legacy ${r.accepted.length} / ${Math.round(legacyLen)}pt`;
-    if (walls.length < 3 || generalLen <= legacyLen) return;
+      `general ${walls.length} walls (${openingWalls} door headers, ${diag.columns ?? 0} columns) host ` +
+      `${hostedGeneral}/${symbols.length} door symbols; legacy ${r.accepted.length} walls host ${hostedLegacy}`;
+    const useGeneral = legacyFew ? walls.length >= 3 && generalLen > legacyLen : hostedGeneral >= hostedLegacy + margin;
+    if (!useGeneral) return;
     const evidenceOf = (k: string) => (k === 'poche' ? 'poche-band' : k === 'opening' ? 'door-opening-header' : 'parallel-faces');
     const physical: PurePhysicalWall[] = walls.map((w) => ({
       ...withOrientation({
@@ -2009,12 +2021,13 @@ function applyGeneralWallsIfNeeded(r: MuPdfPureResult, page: mupdf.Page, vectors
         thickness: w.thickness,
         length: w.length,
         confidence: w.kind === 'opening' ? 0.7 : 0.8,
-        evidence: ['general-wall-detector', evidenceOf(w.kind), 'connected-network'],
+        evidence: ['general-wall-detector', evidenceOf(w.kind), 'connected-network', ...(w.exterior ? ['exterior-face'] : [])],
       }),
       physicalWallId: w.id,
       verdict: 'accepted' as const,
       networkConnectivity: 1,
-      perimeterContribution: false,
+      // windows open only in walls with a face to the outside
+      perimeterContribution: w.exterior,
       genuinelyFloating: false,
       fusedCandidateIds: [w.id],
       evidenceTypes: [w.kind === 'poche' ? 'filled-rect' : 'parallel-face'] as EvidenceType[],
@@ -2032,6 +2045,14 @@ function applyGeneralWallsIfNeeded(r: MuPdfPureResult, page: mupdf.Page, vectors
     r.rejected = [];
     r.floatingAccepted = [];
     r.genuinelyFloatingAcceptedPhysicalWalls = [];
+    // structures derived from the legacy walls no longer describe the accepted set
+    r.logicalWallRuns = [];
+    r.collinearRuns = [];
+    r.junctions = [];
+    r.recoveredSmallWalls = [];
+    r.connectivity = [];
+    r.openingLedger = [];
+    r.promotedSingleLines = [];
     r.roi = roi;
     r.activeBuildingRegionMupdf = roi;
     r.activeBuildingRegionSource = roi;

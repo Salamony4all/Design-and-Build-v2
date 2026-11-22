@@ -66,6 +66,8 @@ describe('general wall detector', () => {
     expect(bottom).toBeDefined();
     expect(bottom.length).toBeGreaterThan(W - 2 * t);
     expect(walls.some((w) => w.kind === 'opening')).toBe(false);
+    // a single room: every wall has a face to the outside
+    expect(walls.every((w) => w.exterior)).toBe(true);
     // and the door is hosted inside that wall
     const hosted = hostDoorSymbols(symbols, walls.map((w) => ({ physicalWallId: w.id, centerline: { a: w.a, b: w.b }, thickness: w.thickness })), segs, {
       minLeafMm: 500, maxLeafMm: 1500, hostCorridorPadPt: 18,
@@ -108,6 +110,10 @@ describe('general wall detector', () => {
     const symbols = detectDoorSymbols(segs, S, { minLeafMm: 500, maxLeafMm: 1500, hostCorridorPadPt: 18 });
     const openings = symbols.map((s) => ({ a: s.hinge, b: s.closed, leaf: { a: s.hinge, b: s.free } }));
     const walls = detectWallsGeneral(segs, S, undefined, { openings });
+    // the wall the two rooms share looks out of neither
+    const shared = walls.filter((w) => w.kind !== 'opening' && Math.abs(w.a.x - w.b.x) < 0.5 && Math.abs(w.a.x - (o.x + W - t / 2)) < t);
+    expect(shared.length).toBeGreaterThan(0);
+    expect(shared.every((w) => !w.exterior)).toBe(true);
     const headers = walls.filter((w) => w.kind === 'opening');
     expect(headers).toHaveLength(1);
     const h = headers[0]!;

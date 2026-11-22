@@ -53,6 +53,8 @@ export interface GeneralWall {
   kind: 'poche' | 'faces' | 'opening';
   /** direction in degrees, 0..179 */
   dir: number;
+  /** one face looks out of the building: rays from it meet no other wall */
+  exterior: boolean;
 }
 
 export interface GeneralWallOptions {
@@ -608,6 +610,33 @@ export function detectWallsGeneral(
     );
     if (inside) finalStrips.splice(i, 1);
   }
+  // layer bands drawn side by side (a wall whose layers are all drawn with the same pen)
+  // abut along their length: they are one wall from the outer face of one to the outer
+  // face of the other
+  const abutGap = Math.max(0.5, 50 / S);
+  for (let merged = true; merged; ) {
+    merged = false;
+    outer: for (let i = 0; i < finalStrips.length; i++) {
+      for (let j = i + 1; j < finalStrips.length; j++) {
+        const p = finalStrips[i]!, q = finalStrips[j]!;
+        if (p.dir !== q.dir) continue;
+        const gap = Math.abs(p.c - q.c) - (p.t + q.t) / 2;
+        if (gap < -0.5 || gap > abutGap) continue;
+        if (Math.min(p.hi, q.hi) - Math.max(p.lo, q.lo) < 0.8 * Math.min(len(p), len(q))) continue;
+        const f0 = Math.min(p.c - p.t / 2, q.c - q.t / 2), f1 = Math.max(p.c + p.t / 2, q.c + q.t / 2);
+        if (f1 - f0 > tMax) continue;
+        const keepP = len(p) >= len(q) ? p : q;
+        p.c = (f0 + f1) / 2;
+        p.t = f1 - f0;
+        p.lo = keepP.lo;
+        p.hi = keepP.hi;
+        if (q.cls === 'poche') p.cls = 'poche';
+        finalStrips.splice(j, 1);
+        merged = true;
+        break outer;
+      }
+    }
+  }
   // ---- doors: a wall runs on through its doors. An opening whose wall is drawn
   // stopping at the jambs extends that wall across it (pieces on both sides become one
   // wall); an opening with no wall on its own line (set across a corner, in a splayed
@@ -698,7 +727,7 @@ export function detectWallsGeneral(
       id: hashId(['opening', s.dir, s.c.toFixed(2), s.lo.toFixed(2), s.hi.toFixed(2)]),
       a: { x: s.lo * s.ux - s.c * s.uy, y: s.lo * s.uy + s.c * s.ux },
       b: { x: s.hi * s.ux - s.c * s.uy, y: s.hi * s.uy + s.c * s.ux },
-      thickness: s.t, length: s.hi - s.lo, kind: 'opening', dir: s.dir,
+      thickness: s.t, length: s.hi - s.lo, kind: 'opening', dir: s.dir, exterior: false,
     });
   }
   for (const s of finalStrips) {
@@ -710,9 +739,43 @@ export function detectWallsGeneral(
       a, b, thickness: s.t, length: s.hi - s.lo,
       kind: s.cls === 'poche' ? 'poche' : 'faces',
       dir: s.dir,
+      exterior: false,
     });
   }
-  if (diag) { diag.openingWalls = openingStrips.length; diag.columns = columns.length; diag.frame = excluded.size; }
+  // ---- exterior walls: three rays from a face (at a quarter, half and three quarters of
+  // its length) cast straight out; if most meet no other wall, that face looks out of the
+  // building. Walls run on through doors, so rays rarely escape through an opening.
+  const rayHits = (p: Vec2, d: Vec2, self: number) => {
+    for (let k = 0; k < out.length; k++) {
+      if (k === self) continue;
+      const q = out[k]!;
+      const el = Math.hypot(q.b.x - q.a.x, q.b.y - q.a.y) || 1;
+      const qx = (q.b.x - q.a.x) / el, qy = (q.b.y - q.a.y) / el, pad = q.thickness / 2;
+      const ax = q.a.x - qx * pad, ay = q.a.y - qy * pad;
+      const ex = q.b.x + qx * pad - ax, ey = q.b.y + qy * pad - ay;
+      const den = d.x * ey - d.y * ex;
+      if (Math.abs(den) < 1e-9) continue;
+      const wx = ax - p.x, wy = ay - p.y;
+      const sAlong = (wx * ey - wy * ex) / den, rOn = (wx * d.y - wy * d.x) / den;
+      if (sAlong > 0 && rOn >= 0 && rOn <= 1) return true;
+    }
+    return false;
+  };
+  out.forEach((w, i) => {
+    if (w.length < 1e-6) return;
+    const ux = (w.b.x - w.a.x) / w.length, uy = (w.b.y - w.a.y) / w.length;
+    for (const side of [1, -1]) {
+      const n = { x: -uy * side, y: ux * side };
+      let escapes = 0;
+      for (const f of [0.25, 0.5, 0.75]) {
+        const off = w.thickness / 2 + 0.5;
+        const p = { x: w.a.x + ux * f * w.length + n.x * off, y: w.a.y + uy * f * w.length + n.y * off };
+        if (!rayHits(p, n, i)) escapes++;
+      }
+      if (escapes >= 2) { w.exterior = true; break; }
+    }
+  });
+  if (diag) { diag.openingWalls = openingStrips.length; diag.columns = columns.length; diag.frame = excluded.size; diag.exterior = out.filter((w) => w.exterior).length; }
   out.sort((p, q) => p.a.y - q.a.y || p.a.x - q.a.x || p.id.localeCompare(q.id));
   return out;
 }
