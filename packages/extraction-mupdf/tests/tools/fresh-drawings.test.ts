@@ -68,6 +68,8 @@ it.skipIf(process.env.FRESH !== '1')('fresh drawings', async () => {
         row.scaleMmPerPt = pure.scaleMmPerPt;
         row.walls = pure.accepted.length;
         row.wallReview = (pure.review ?? []).length;
+        row.wallEngine = pure.wallEngine;
+        row.wallEngineNote = pure.wallEngineNote;
         scene.scaleMmPerPt = pure.scaleMmPerPt;
         scene.walls = pure.accepted.map((w: any) => ({ id: w.physicalWallId, a: w.centerline.a, b: w.centerline.b, t: w.thickness }));
       } catch (e) {

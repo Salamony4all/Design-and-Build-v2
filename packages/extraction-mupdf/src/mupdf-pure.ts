@@ -19,6 +19,7 @@
 import * as mupdf from 'mupdf';
 import { collectSegments } from './door-symbols';
 import { estimateScale, textsFromStructuredTextJson } from './scale-detection';
+import { detectWallsGeneral, type WallRaster } from './wall-general';
 import {
   collectPageVectors,
   type Bounds,
@@ -185,6 +186,10 @@ export interface MuPdfPureResult {
    *  text via MuPDF — no pdf2json. Used to convert walls to meters. */
   scaleMmPerPt: number;
   scaleSource: 'dim-text' | 'fallback' | 'dimension-vote' | 'dimension-vote+title' | 'title-block';
+  /** which wall stages produced `accepted`: the fill-based legacy stages or the general detector */
+  wallEngine?: 'legacy' | 'general';
+  /** why that engine was chosen (diagnostic) */
+  wallEngineNote?: string;
   review: PurePhysicalWall[];
   rejected: PurePhysicalWall[];
   floatingAccepted: PurePhysicalWall[];
@@ -428,7 +433,9 @@ export function derivePureBuildingRoi(vectors: MuVector[], pageBounds: Bounds, c
   const candidates = vectors.filter(
     (v) => v.operation === 'fill-path' && rectArea(v.bounds) > 0 && rectArea(v.bounds) < pageArea * cfg.pageFillMaxRatio,
   );
-  if (!candidates.length) throw new Error('No architectural fill candidate found');
+  // Drawings whose walls are plain double lines have no fill at all. That is not an
+  // error: the legacy fill-based stages find nothing and the general detector takes over.
+  if (!candidates.length) return { roiMupdf: pageBounds, roiSource: pageBounds };
   const dominant = [...candidates].sort((a, b) => rectArea(b.bounds) - rectArea(a.bounds))[0]!;
   return { roiMupdf: dominant.bounds, roiSource: dominant.bounds };
 }
@@ -1936,6 +1943,7 @@ export function extractPureWallResult(
     },
     candidateHash: candHash,
   };
+  applyGeneralWallsIfNeeded(pureResult, page, vectors);
 
   if (captureLineage) {
     return {
@@ -1945,6 +1953,83 @@ export function extractPureWallResult(
     };
   }
   return pureResult;
+}
+
+/**
+ * The legacy wall stages are tuned to drawings whose walls are filled masses (they
+ * derive the building region and thickness bands from fills). They are kept untouched
+ * for those drawings. When they accept almost nothing, the general detector (wall-general.ts) is
+ * run and, if it finds more wall than the legacy stages did, its walls become the
+ * accepted set.
+ */
+function applyGeneralWallsIfNeeded(r: MuPdfPureResult, page: mupdf.Page, vectors: MuVector[]): void {
+  // The review pile is not a usable signal: fill-based drawings that extract correctly
+  // still leave several times more candidates in review than they accept.
+  const legacyHealthy = r.accepted.length >= 8;
+  r.wallEngine = 'legacy';
+  if (legacyHealthy) return;
+  try {
+    const pb = r.pageBoundsMupdf;
+    const pxPerPt = Math.min(4, 6000 / Math.max(pb[2] - pb[0], pb[3] - pb[1], 1));
+    const pix = (page as any).toPixmap(mupdf.Matrix.scale(pxPerPt, pxPerPt), mupdf.ColorSpace.DeviceGray, false, true);
+    const W: number = pix.getWidth(), H: number = pix.getHeight(), stride: number = pix.getStride();
+    const n: number = pix.getNumberOfComponents();
+    const ox: number = typeof pix.getX === 'function' ? pix.getX() : 0;
+    const oy: number = typeof pix.getY === 'function' ? pix.getY() : 0;
+    const px: Uint8ClampedArray = pix.getPixels();
+    const raster: WallRaster = {
+      pxPerPt,
+      width: ox + W,
+      height: oy + H,
+      lum: (xi, yi) => (xi < ox || yi < oy ? 1 : (px[(yi - oy) * stride + (xi - ox) * n] ?? 255) / 255),
+    };
+    const walls = detectWallsGeneral(collectSegments(vectors), r.scaleMmPerPt, raster);
+    const generalLen = walls.reduce((t, w) => t + w.length, 0);
+    const legacyLen = r.accepted.reduce((t, w) => t + w.length, 0);
+    r.wallEngineNote = `general ${walls.length} walls / ${Math.round(generalLen)}pt vs legacy ${r.accepted.length} / ${Math.round(legacyLen)}pt`;
+    if (walls.length < 3 || generalLen <= legacyLen) return;
+    const physical: PurePhysicalWall[] = walls.map((w) => ({
+      ...withOrientation({
+        id: w.id,
+        evidenceType: w.kind === 'poche' ? 'filled-rect' : 'parallel-face',
+        sourceRootIds: [],
+        sourceSubpathIds: [],
+        sourceStrokeIds: [],
+        centerline: { a: w.a, b: w.b },
+        thickness: w.thickness,
+        length: w.length,
+        confidence: 0.8,
+        evidence: ['general-wall-detector', w.kind === 'poche' ? 'poche-band' : 'parallel-faces', 'connected-network'],
+      }),
+      physicalWallId: w.id,
+      verdict: 'accepted' as const,
+      networkConnectivity: 1,
+      perimeterContribution: false,
+      genuinelyFloating: false,
+      fusedCandidateIds: [w.id],
+      evidenceTypes: [w.kind === 'poche' ? 'filled-rect' : 'parallel-face'] as EvidenceType[],
+      positiveEvidence: ['general-wall-detector'],
+      negativeEvidence: [],
+    }));
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const w of walls) for (const p of [w.a, w.b]) {
+      x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y);
+    }
+    const roi: Bounds = [x0, y0, x1, y1];
+    r.accepted = physical;
+    r.physicalWalls = physical;
+    r.review = [];
+    r.rejected = [];
+    r.floatingAccepted = [];
+    r.genuinelyFloatingAcceptedPhysicalWalls = [];
+    r.roi = roi;
+    r.activeBuildingRegionMupdf = roi;
+    r.activeBuildingRegionSource = roi;
+    r.wallEngine = 'general';
+  } catch (e) {
+    // keep the legacy result
+    r.wallEngineNote = `general detector failed: ${String(e).slice(0, 160)}`;
+  }
 }
 
 function hashStrings(xs: string[]): string {

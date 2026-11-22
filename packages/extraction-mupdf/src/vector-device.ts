@@ -28,6 +28,8 @@ export interface MuVector {
   color?: number[];
   alpha?: number;
   strokeWidth?: number;
+  /** stroke width as drawn on the page (line width x CTM scale), in points */
+  strokeWidthPt?: number;
   dashes?: number[];
 }
 
@@ -364,7 +366,11 @@ export function collectPageVectors(page: any, captureLineage = false, pageNumber
       add('fill-path', path, ctm, { evenOdd, color: [...color], alpha });
     },
     strokePath(path: any, stroke: any, ctm: number[], _cs: any, color: number[], alpha: number) {
-      add('stroke-path', path, ctm, { color: [...color], alpha, strokeWidth: stroke.getLineWidth(), dashes: stroke.getDashes() });
+      // strokeWidth is the raw PDF line width (user space). strokeWidthPt is the width
+      // as drawn on the page, so pens are comparable across views with different CTMs.
+      const lw = stroke.getLineWidth();
+      const ctmScale = Math.sqrt(Math.abs((ctm[0] ?? 1) * (ctm[3] ?? 1) - (ctm[1] ?? 0) * (ctm[2] ?? 0))) || 1;
+      add('stroke-path', path, ctm, { color: [...color], alpha, strokeWidth: lw, strokeWidthPt: lw * ctmScale, dashes: stroke.getDashes() });
     },
   });
   page.runPageContents(device, mupdf.Matrix.identity);

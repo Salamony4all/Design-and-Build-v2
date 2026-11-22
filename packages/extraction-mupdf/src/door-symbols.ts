@@ -65,13 +65,22 @@ export interface HostedDoorSymbol {
   swingNormalSign: 1 | -1;
 }
 
-interface Seg {
+export interface Seg {
   id: string;
   op: string;
   a: Vec2;
   b: Vec2;
   len: number;
   w: number;
+  /** true when this edge was seen as the outline of a filled path */
+  fill?: boolean;
+  /** true when it was seen as a stroke */
+  stroke?: boolean;
+  /** darkest luminance (0 = black .. 1 = white) of the paint that drew it */
+  shade?: number;
+  /** root id and luminance of the (darkest) filled path this edge bounds */
+  fillOp?: string;
+  fillShade?: number;
 }
 
 const dist = (a: Vec2, b: Vec2) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -143,14 +152,27 @@ export function collectSegments(vectors: MuVector[]): Seg[] {
         const ka = `${a.x.toFixed(1)},${a.y.toFixed(1)}`;
         const kb = `${b.x.toFixed(1)},${b.y.toFixed(1)}`;
         const key = ka < kb ? `${ka}|${kb}` : `${kb}|${ka}`;
-        const w = v.strokeWidth ?? 0;
+        const w = v.strokeWidthPt ?? v.strokeWidth ?? 0;
         const prev = byKey.get(key);
+        const isFill = v.operation === 'fill-path';
+        const col = v.color ?? [];
+        const shade = col.length >= 3 ? 0.299 * col[0]! + 0.587 * col[1]! + 0.114 * col[2]! : col.length === 1 ? col[0]! : 0;
         if (prev) {
           if (w > prev.w) prev.w = w;
+          if (isFill) {
+            // keep the darkest fill this edge bounds (a wall edge is often shared with a
+            // lighter room/floor fill)
+            if (!prev.fill || shade < (prev.fillShade ?? 1)) { prev.fillOp = op; prev.fillShade = shade; }
+            prev.fill = true;
+          } else prev.stroke = true;
+          if (shade < (prev.shade ?? 1)) prev.shade = shade;
           continue;
         }
         // same id scheme as the legacy leaf ids / the route's claimed-source registry
-        byKey.set(key, { id: `${v.id}:L${i}`, op, a, b, len, w });
+        byKey.set(key, {
+          id: `${v.id}:L${i}`, op, a, b, len, w, fill: isFill, stroke: !isFill, shade,
+          ...(isFill ? { fillOp: op, fillShade: shade } : {}),
+        });
       }
     }
   }
