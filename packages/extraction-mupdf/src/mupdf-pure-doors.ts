@@ -26,6 +26,7 @@ import * as mupdf from 'mupdf';
 import { collectPageVectors, type Bounds, type MuVector, type Vec2 } from './vector-device';
 import type { MuPdfPureResult, PurePhysicalWall } from './mupdf-pure';
 import type { RecoveredAnnotation, AnnotationSpatialIndex } from 'design-build-extraction-annotations';
+import { collectSegments, detectDoorSymbols, hostDoorSymbols, type DoorSymbolConfig } from './door-symbols';
 
 export type DoorVerdict = 'ACCEPT' | 'REVIEW' | 'REJECTED';
 export type DoorType = 'SINGLE_SWING' | 'DOUBLE_SWING' | 'SLIDING' | 'REVIEW';
@@ -57,6 +58,12 @@ export interface DoorAssembly {
   widthPt: number;
   widthMm: number;
   hinge?: Vec2;
+  /** closed-position jamb opposite the hinge (symbol detector only) */
+  closedJamb?: Vec2;
+  /** hinge at the interval start (nearer wall endpoint A) = 'left' in the wall-local frame */
+  hingeSide?: 'left' | 'right';
+  /** bare leaf width (mm); widthMm is the structural opening when jambs were found */
+  leafWidthMm?: number;
   swingDirection?: 'inward' | 'outward';
   leafSegmentIds: string[];
   swingSegmentIds: string[];
@@ -93,6 +100,11 @@ export interface PureDoorConfig {
   enableProgrammaticAnnotations: boolean;
   enableDoorAnnotationAssist: boolean;
   enableAnnotationOcrFallback: boolean;
+  /** leaf + swing-arc symbol detector (door-symbols.ts). false = legacy leaf-projection path. */
+  enableSymbolDetector?: boolean;
+  /** single-leaf length band (mm) for the symbol detector */
+  symbolMinLeafMm?: number;
+  symbolMaxLeafMm?: number;
 }
 
 export const PURE_DOOR_DEFAULTS: PureDoorConfig = {
@@ -108,6 +120,9 @@ export const PURE_DOOR_DEFAULTS: PureDoorConfig = {
   enableProgrammaticAnnotations: true,
   enableDoorAnnotationAssist: true,
   enableAnnotationOcrFallback: false,
+  enableSymbolDetector: true,
+  symbolMinLeafMm: 500,
+  symbolMaxLeafMm: 1500,
 };
 
 export interface MuPdfPureDoorResult {
@@ -1019,7 +1034,9 @@ export function samePhysicalDoor(a: DoorAssembly, b: DoorAssembly): boolean {
   return shared || true; // interval + wall + width is sufficient physical identity
 }
 
-export function runDoorPipeline(
+/** Legacy leaf-projection pipeline. Kept as rollback (cfg.enableSymbolDetector = false)
+ *  and as fallback for pages where no leaf + arc door symbol can be tied to a wall. */
+export function runLegacyDoorPipeline(
   input: DoorGeometryInput,
   cfg: PureDoorConfig = PURE_DOOR_DEFAULTS,
   _captureLineage = false,
@@ -1257,7 +1274,7 @@ export function buildDoorProductionManifest(
       selectedPhysicalWallId: a.selectedPhysicalWallId,
       wallLocalInterval: { startM, endM },
       widthM: (to - from) * mPerPt,
-      hingeSide: a.hinge ? 'left' : 'left',
+      hingeSide: a.hingeSide ?? 'left',
       swingDirection: a.swingDirection ?? 'inward',
       sourceSegmentIds: [...a.leafSegmentIds, ...a.swingSegmentIds],
       sourceOperationIds: a.sourceOperationIds,
@@ -1323,4 +1340,203 @@ export function extractPureDoorResult(
   const pageBoundsMupdf: Bounds = [pb[0] ?? 0, pb[1] ?? 0, pb[2] ?? 0, pb[3] ?? 0];
   const collected = collectPageVectors(page, false, pageNumber);
   return runDoorPipeline({ vectors: collected.vectors, wallResult, pageBoundsMupdf }, cfg, false);
+}
+
+// ---------------------------------------------------------------------------
+// SYMBOL pipeline (production default): leaf + swing arc => opening, hinge, swing
+// ---------------------------------------------------------------------------
+/**
+ * Door extraction from the door SYMBOL (see door-symbols.ts). The opening is the
+ * hinge -> closed-position segment of the swing arc, hosted on the wall parallel to
+ * it; the drawn (open) leaf is never projected onto a wall. Annotations only ENRICH
+ * the evidence mode of a geometry-proven door; they never create, move or gate one.
+ * Falls back to the legacy pipeline when the detector is disabled or when no symbol
+ * on the page can be tied to a wall.
+ */
+export function runDoorPipeline(
+  input: DoorGeometryInput,
+  cfg: PureDoorConfig = PURE_DOOR_DEFAULTS,
+  captureLineage = false,
+): MuPdfPureDoorResult {
+  if (cfg.enableSymbolDetector === false) return runLegacyDoorPipeline(input, cfg, captureLineage);
+  const t0 = Date.now();
+  const { vectors, wallResult, pageBoundsMupdf } = input;
+  const scale = wallResult.scaleMmPerPt;
+  const symCfg: DoorSymbolConfig = {
+    minLeafMm: cfg.symbolMinLeafMm ?? 500,
+    maxLeafMm: cfg.symbolMaxLeafMm ?? 1500,
+    hostCorridorPadPt: cfg.hostCorridorPadPt,
+  };
+  const segs = collectSegments(vectors);
+  const symbols = detectDoorSymbols(segs, scale, symCfg);
+  const tDetect = Date.now();
+  const hosted = hostDoorSymbols(symbols, wallResult.accepted, segs, symCfg);
+  const tHost = Date.now();
+  if (!hosted.some((h) => h.hostStatus !== 'NO_HOST')) return runLegacyDoorPipeline(input, cfg, captureLineage);
+
+  const candidates: DoorAssembly[] = hosted.map((h) => {
+    const s = h.symbol;
+    const widthPt = h.interval ? h.interval.to - h.interval.from : h.leafWidthPt;
+    const a: DoorAssembly = {
+      doorAssemblyId: '',
+      doorType: 'SINGLE_SWING',
+      selectedPhysicalWallId: h.physicalWallId,
+      hostStatus: h.hostStatus,
+      wallLocalInterval: h.interval ? { from: h.interval.from, to: h.interval.to, unit: 'mupdf-point' } : undefined,
+      widthPt,
+      widthMm: widthPt * scale,
+      leafWidthMm: h.leafWidthPt * scale,
+      hinge: s.hinge,
+      closedJamb: s.closed,
+      hingeSide: h.hingeSide,
+      swingDirection: h.swingNormalSign > 0 ? 'inward' : 'outward',
+      leafSegmentIds: [s.leafSegmentId],
+      swingSegmentIds: s.arcSegmentIds,
+      sourceOperationIds: [...new Set([s.leafOperationId, ...s.arcOperationIds])],
+      positiveEvidence: ['door-symbol:leaf+swing-arc', `sweep=${s.sweepRad.toFixed(2)}`, h.jambSnapped ? 'jamb-snap' : 'leaf-width-only'],
+      negativeEvidence: [],
+      verdict: 'ACCEPT',
+      evidenceMode: 'GEOMETRY_ONLY',
+    };
+    if (h.hostStatus === 'NO_HOST') {
+      a.verdict = 'REJECTED';
+      a.negativeEvidence.push('no-finite-wall-host');
+    } else if (h.hostStatus === 'AMBIGUOUS_HOST') {
+      a.verdict = 'REVIEW';
+      a.negativeEvidence.push('competing-wall-hosts');
+    } else {
+      a.positiveEvidence.push('unique-finite-wall-host');
+    }
+    return a;
+  });
+
+  // One physical door per wall interval.
+  const byWall = (x: DoorAssembly, y: DoorAssembly) =>
+    (x.selectedPhysicalWallId ?? '').localeCompare(y.selectedPhysicalWallId ?? '') ||
+    (x.wallLocalInterval?.from ?? 0) - (y.wallLocalInterval?.from ?? 0);
+  let accepted: DoorAssembly[] = [];
+  for (const c of candidates.filter((x) => x.verdict === 'ACCEPT').sort(byWall)) {
+    const ci = c.wallLocalInterval!;
+    const dup = accepted.some((a) => {
+      if (a.selectedPhysicalWallId !== c.selectedPhysicalWallId) return false;
+      const ai = a.wallLocalInterval!;
+      const ov = Math.min(ai.to, ci.to) - Math.max(ai.from, ci.from);
+      return ov > 0.5 * Math.min(ai.to - ai.from, ci.to - ci.from);
+    });
+    if (!dup) accepted.push(c);
+  }
+  // Double doors: a left-hinged and a right-hinged leaf on the same wall, swinging to
+  // the same side, whose closed positions meet => one DOUBLE_SWING opening.
+  const merged: DoorAssembly[] = [];
+  const consumed = new Set<DoorAssembly>();
+  for (const l of accepted) {
+    if (consumed.has(l)) continue;
+    if (l.hingeSide === 'left') {
+      const r = accepted.find(
+        (x) =>
+          !consumed.has(x) &&
+          x !== l &&
+          x.hingeSide === 'right' &&
+          x.selectedPhysicalWallId === l.selectedPhysicalWallId &&
+          x.swingDirection === l.swingDirection &&
+          x.wallLocalInterval!.from > l.wallLocalInterval!.from &&
+          Math.abs(x.wallLocalInterval!.from - l.wallLocalInterval!.to) <= Math.max(2, 0.12 * l.widthPt),
+      );
+      if (r) {
+        consumed.add(r);
+        l.doorType = 'DOUBLE_SWING';
+        l.wallLocalInterval = { from: l.wallLocalInterval!.from, to: r.wallLocalInterval!.to, unit: 'mupdf-point' };
+        l.widthPt = l.wallLocalInterval.to - l.wallLocalInterval.from;
+        l.widthMm = l.widthPt * scale;
+        l.leafSegmentIds.push(...r.leafSegmentIds);
+        l.swingSegmentIds.push(...r.swingSegmentIds);
+        l.sourceOperationIds = [...new Set([...l.sourceOperationIds, ...r.sourceOperationIds])];
+        l.positiveEvidence.push('double-leaf');
+      }
+    }
+    merged.push(l);
+  }
+  accepted = merged;
+
+  // Annotation enrichment: nearest tag to each opening (one tag per door).
+  const tAnn0 = Date.now();
+  const annotationAssisted: DoorAssembly[] = [];
+  const anns = cfg.enableProgrammaticAnnotations && cfg.enableDoorAnnotationAssist ? input.annotations ?? [] : [];
+  if (anns.length) {
+    const edges: Array<{ ai: number; di: number; d: number }> = [];
+    accepted.forEach((a, di) => {
+      if (!a.hinge || !a.closedJamb) return;
+      const mid = { x: (a.hinge.x + a.closedJamb.x) / 2, y: (a.hinge.y + a.closedJamb.y) / 2 };
+      anns.forEach((an, ai) => {
+        const d = Math.hypot(an.centrePdf[0] - mid.x, an.centrePdf[1] - mid.y);
+        if (d <= 1.5 * a.widthPt) edges.push({ ai, di, d });
+      });
+    });
+    edges.sort((x, y) => x.d - y.d || x.di - y.di || x.ai - y.ai);
+    const usedA = new Set<number>();
+    const usedD = new Set<number>();
+    for (const e of edges) {
+      if (usedA.has(e.ai) || usedD.has(e.di)) continue;
+      usedA.add(e.ai);
+      usedD.add(e.di);
+      const a = accepted[e.di]!;
+      a.evidenceMode = 'ANNOTATION_ASSISTED_GEOMETRY_VERIFIED';
+      a.assistedByAnnotationId = anns[e.ai]!.annotationId;
+      a.positiveEvidence.push(`annotation-assist:${anns[e.ai]!.normalizedText}`);
+      annotationAssisted.push(a);
+    }
+  }
+
+  const review = candidates.filter((c) => c.verdict === 'REVIEW');
+  const rejected = candidates.filter((c) => c.verdict === 'REJECTED');
+  [...accepted, ...review].sort(byWall).forEach((a, i) => {
+    a.doorAssemblyId = `door-${i.toString().padStart(3, '0')}`;
+  });
+  const evidenceModeSummary: Record<string, number> = {};
+  for (const a of [...accepted, ...review]) evidenceModeSummary[a.evidenceMode] = (evidenceModeSummary[a.evidenceMode] ?? 0) + 1;
+
+  const canonical = accepted
+    .map((a) => `${a.doorAssemblyId}:${a.selectedPhysicalWallId}:${a.wallLocalInterval?.from.toFixed(3)}:${a.wallLocalInterval?.to.toFixed(3)}:${a.doorType}:${a.hingeSide}:${a.swingDirection}:${a.evidenceMode}`)
+    .sort()
+    .join('\n');
+  const assemblyCanon = candidates
+    .map((a) => `${a.doorAssemblyId || ''}:${a.selectedPhysicalWallId}:${a.wallLocalInterval?.from.toFixed(3)}:${a.wallLocalInterval?.to.toFixed(3)}:${a.verdict}:${a.evidenceMode}`)
+    .sort()
+    .join('\n');
+  const annotationCanon = (input.annotations ?? [])
+    .map((a) => `${a.annotationId}:${a.normalizedText}:${a.centrePdf[0].toFixed(2)}:${a.centrePdf[1].toFixed(2)}`)
+    .sort()
+    .join('\n');
+
+  return {
+    pageBoundsMupdf,
+    scaleMmPerPt: scale,
+    vectorOperationCount: vectors.length,
+    primitiveCount: symbols.length,
+    rawCandidateCount: candidates.length,
+    assemblies: candidates,
+    accepted,
+    review,
+    rejected,
+    annotationAssisted,
+    evidenceModeSummary,
+    metrics: {
+      accepted: accepted.length,
+      review: review.length,
+      rejected: rejected.length,
+      annotationAssisted: annotationAssisted.length,
+    },
+    candidateHash: hashStrings([canonical]),
+    assemblyHash: hashStrings([assemblyCanon]),
+    annotationHash: hashStrings([annotationCanon]),
+    timings: {
+      vectorCollection: tDetect - t0,
+      candidateGeneration: tHost - tDetect,
+      hostResolution: tHost - tDetect,
+      consolidation: tAnn0 - tHost,
+      annotationCapture: input.annotationCaptureMs ?? 0,
+      annotationAssociation: Date.now() - tAnn0,
+      total: Date.now() - t0,
+    },
+  };
 }

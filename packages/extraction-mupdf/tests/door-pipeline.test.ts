@@ -141,7 +141,9 @@ describe('annotation-disabled parity', () => {
 });
 
 describe('real-PDF A/B/C scorer assertions', () => {
-  it('hybrid (C) achieves precision 1.0 and recall 1.0 for auto-install', async () => {
+  // NOTE: this only checks the accepted count and evidence modes. Real precision/recall
+  // against the answer key is measured in door-answer-key.test.ts.
+  it('hybrid (C) accepts >= 20 doors with allowed evidence modes', async () => {
     const { cap, wr, ann, merged } = await loadInput();
     const C = runDoorPipeline(
       {
