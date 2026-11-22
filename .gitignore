@@ -91,3 +91,8 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+
+# >100MB evidence dumps: kept on disk, not in git (GitHub file-size limit)
+packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-grammar-v1/code06-automatic-window-output.json
+packages/design-build-geometric-extraction/evidence/code06/phase-b-clean/blind-r1.3.1/code06-automatic-window-output.json
+packages/design-build-geometric-extraction/evidence/code06/vector-lineage/post-instrumentation-lineage-run*.json
