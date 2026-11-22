@@ -42,6 +42,30 @@ describe('scale detection', () => {
     expect(est.votes).toBeGreaterThanOrEqual(6);
   });
 
+  it('reads a sheet-tagged scale that is not a stock ratio', () => {
+    const r = parseTitleScales([text('1:65 (A1) / 1:130 (A3)', 0, 0)], 2384, 1684);
+    expect(r.forThisSheet).toBeCloseTo(65 * 25.4 / 72, 4);
+    expect(r.all).toHaveLength(2);
+    // an untagged odd ratio is not a plot scale
+    expect(parseTitleScales([text('SLOPE 1:12', 0, 0)], 2384, 1684).all).toHaveLength(0);
+  });
+
+  it('takes the sheet scale when the dimension strings are in centimetres', () => {
+    const S = 65 * 25.4 / 72; // 1:65 on A1, mm per pt
+    const segs: ScaleSegment[] = [];
+    const texts: ScaleText[] = [text('SCALE', 2000, 1500), text('1:65 (A1) / 1:130 (A3)', 2000, 1510, 80, 6)];
+    let x = 100;
+    for (const cm of [515, 490, 240, 375, 160]) {
+      const len = (cm * 10) / S;
+      segs.push(seg(x, 100, x + len, 100), seg(x - 2, 102, x + 2, 98), seg(x + len - 2, 102, x + len + 2, 98));
+      texts.push(text(String(cm), x + len / 2 - 10, 92));
+      x += len;
+    }
+    const est = estimateScale(texts, segs, 2384, 1684)!;
+    expect(est.source).toBe('dimension-vote+title');
+    expect(est.mmPerPt).toBeCloseTo(S, 4);
+  });
+
   it('returns null when the sheet gives no usable evidence', () => {
     expect(estimateScale([text('HELLO', 0, 0)], [seg(0, 0, 100, 0)], 1000, 1000)).toBeNull();
   });

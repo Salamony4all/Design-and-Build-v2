@@ -11,8 +11,9 @@
  *    with a true-size PDF, mm per point = N * 25.4 / 72.
  *
  * The vote wins when it is strong; a title-block scale within 1.5% snaps it to the
- * exact value. With no usable dimensions the title block alone is used when it is
- * unambiguous. No drawing-specific numbers are involved.
+ * exact value, and one ten times the vote shows the dimensions are in centimetres.
+ * With no usable dimensions the title block alone is used when it is unambiguous.
+ * No drawing-specific numbers are involved.
  */
 import type { Vec2 } from './vector-device';
 
@@ -62,9 +63,12 @@ export function parseTitleScales(texts: ScaleText[], pageWidthPt: number, pageHe
   })();
   for (const t of texts) {
     const s = t.text;
-    for (const m of s.matchAll(/\b1\s*:\s*(\d{1,4})\b(?:\s*@\s*(A[0-4]))?/gi)) {
+    // "1:50", "1:50 @ A1", "1:65 (A1)". A scale tagged with its sheet size is taken as
+    // written even when it is not a stock ratio.
+    for (const m of s.matchAll(/\b1\s*:\s*(\d{1,4})\b(?:\s*(?:@\s*|\(\s*)(A[0-4])\b\)?)?/gi)) {
       const n = parseInt(m[1]!, 10);
-      if (![5, 10, 20, 25, 40, 50, 75, 100, 125, 150, 200, 250, 500].includes(n)) continue;
+      const stock = [5, 10, 20, 25, 40, 50, 75, 100, 125, 150, 200, 250, 500].includes(n);
+      if (!stock && !(m[2] && n >= 5 && n <= 1000)) continue;
       const v = n * MM_PER_PT_AT_1_TO_1;
       all.push(v);
       if (m[2] && sheet && m[2].toUpperCase() === sheet) forThisSheet = v;
@@ -165,7 +169,12 @@ export function estimateScale(texts: ScaleText[], segments: ScaleSegment[], page
   if (best && best.votes >= 4 && best.distinct >= 2) {
     const r = best.ratios.slice().sort((a, b) => a - b);
     const median = r[r.length >> 1]!;
-    const snap = titleScales.find((s) => Math.abs(s - median) / s <= 0.015);
+    // Dimension strings are read as millimetres. When the scale written for this sheet
+    // size is ten times the vote, the strings are centimetres ("515" = 5.15 m) and the
+    // sheet wins. (Only the sheet's own scale: a 1:500 key plan must not rescale a 1:50 plan.)
+    let snap = titleScales.find((s) => Math.abs(s - median) / s <= 0.015);
+    const own = title.forThisSheet;
+    if (!snap && own && Math.abs(own - median * 10) / own <= 0.015) snap = own;
     return {
       mmPerPt: snap ?? median,
       source: snap ? 'dimension-vote+title' : 'dimension-vote',

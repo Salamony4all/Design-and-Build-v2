@@ -25,6 +25,51 @@ function fail(code: string, message: string, status: number, detail?: string) {
   return NextResponse.json(body, { status });
 }
 
+type MupdfLib = typeof import('design-build-extraction-mupdf');
+type Pt = { x: number; y: number };
+
+/**
+ * Curved walls, glass partitions and pods read from the drawing's own arcs, cut into
+ * Pascal walls (start, end, curveOffset). Straight walls read from the same curves are
+ * dropped in their favour. Never fatal: a failure only means no curved walls.
+ */
+function curvedWallsFor(
+  lib: Pick<MupdfLib, 'detectCurvedWalls' | 'curvedWallPieces' | 'curvedBandUnder' | 'documentFrameFromPure'>,
+  createCoordinateFrame: typeof import('design-build-coordinate-frame').createCoordinateFrame,
+  vectors: any[],
+  pureResult: any,
+  geometryHash: string,
+) {
+  const none = { walls: [] as any[], pods: [] as any[], dropWallIds: new Set<string>(), onCurve: (_a?: Pt, _b?: Pt) => false };
+  try {
+    const found = lib.detectCurvedWalls({ vectors, scaleMmPerPt: pureResult.scaleMmPerPt });
+    if (found.segments.length === 0) return none;
+    const frameIn = lib.documentFrameFromPure(pureResult);
+    const cf = createCoordinateFrame({
+      pageBoundsPt: frameIn.pageBoundsPt,
+      scaleMmPerPt: frameIn.scaleMmPerPt,
+      pageWidthM: frameIn.widthM,
+      pageHeightM: frameIn.heightM,
+    });
+    const walls = lib.curvedWallPieces(found.segments, (x, y) => cf.toPascal(x, y)).map((p) => ({ ...p, sourceHash: geometryHash }));
+    const pods = found.pods.map((p) => {
+      const [x, y] = cf.toPascal(p.center.x, p.center.y);
+      return { ...p, centerPascal: { x, y } };
+    });
+    const tolPt = 0.1 / (pureResult.scaleMmPerPt / 1000);
+    const onCurve = (a?: Pt, b?: Pt) => !!a && !!b && !!lib.curvedBandUnder(a, b, found.segments, tolPt);
+    const dropWallIds = new Set<string>();
+    for (const w of pureResult.accepted ?? []) {
+      if (onCurve(w.centerline?.a, w.centerline?.b)) dropWallIds.add(w.physicalWallId);
+    }
+    console.log(`[MuPdfRoute] Curved walls: ${found.segments.length} arcs -> ${walls.length} walls, ${pods.length} pods, ${dropWallIds.size} straight duplicates dropped.`);
+    return { walls, pods, dropWallIds, onCurve };
+  } catch (e) {
+    console.warn('[MuPdfRoute] curved wall detection skipped:', e);
+    return none;
+  }
+}
+
 export async function POST(req: NextRequest) {
   console.log('[MuPdfRoute] POST request received');
   let bytes: Uint8Array;
@@ -89,7 +134,8 @@ export async function POST(req: NextRequest) {
     req.headers.get('accept')?.includes('text/event-stream');
 
   try {
-    const { extractPureWallResult, toExtractionResult, documentFrameFromPure, runWindowPipeline, runDoorPipeline, collectPageVectors, mupdf, PURE_WINDOW_DEFAULTS, PURE_DOOR_DEFAULTS, acceptedGeometryHash, acceptedEvidenceHash, buildDoorProductionManifest, extractColumnsFromCapturedGeometry } = await import('design-build-extraction-mupdf');
+    const { extractPureWallResult, toExtractionResult, documentFrameFromPure, runWindowPipeline, runDoorPipeline, collectPageVectors, mupdf, PURE_WINDOW_DEFAULTS, PURE_DOOR_DEFAULTS, acceptedGeometryHash, acceptedEvidenceHash, buildDoorProductionManifest, extractColumnsFromCapturedGeometry, detectCurvedWalls, curvedWallPieces, curvedBandUnder } = await import('design-build-extraction-mupdf');
+    const curvedLib = { detectCurvedWalls, curvedWallPieces, curvedBandUnder, documentFrameFromPure };
     const { createCoordinateFrame } = await import('design-build-coordinate-frame');
     const { captureDoorAnnotations, DEFAULT_ANNOTATION_OPTIONS } = await import('design-build-extraction-annotations');
     const t0 = Date.now();
@@ -221,11 +267,20 @@ export async function POST(req: NextRequest) {
             console.warn('[MuPdfRoute Stream] wall completion warning:', wce);
           }
 
+          // Curved walls, glass partitions and pods; straight copies of them are dropped.
+          const curved = curvedWallsFor(curvedLib, createCoordinateFrame, captured.vectors as any[], pureResult, geometryHash);
+          const wallsResult = curved.dropWallIds.size
+            ? { ...result, walls: result.walls.filter((w) => !curved.dropWallIds.has(w.id)) }
+            : result;
+          completionWalls = completionWalls.filter((c) => !curved.onCurve(c.centrelineStartProjectM, c.centrelineEndProjectM));
+
           // STAGE 1 CHUNK: Stream Walls immediately (in under 250ms!)
           await sendChunk({
             type: 'stage-walls',
-            result,
+            result: wallsResult,
             completionWalls,
+            curvedWalls: curved.walls,
+            curvedPods: curved.pods,
             coordinateFrame: {
               scaleMmPerPt: pureResult.scaleMmPerPt,
               pageBoundsMupdf: pureResult.pageBoundsMupdf,
@@ -799,6 +854,13 @@ export async function POST(req: NextRequest) {
     }
     const tWcMs = Date.now() - tWc0;
 
+    // Curved walls, glass partitions and pods; straight copies of them are dropped.
+    const curved = curvedWallsFor(curvedLib, createCoordinateFrame, captured.vectors as any[], pureResult, geometryHash);
+    const wallsResult = curved.dropWallIds.size
+      ? { ...result, walls: result.walls.filter((w) => !curved.dropWallIds.has(w.id)) }
+      : result;
+    completionWalls = completionWalls.filter((c) => !curved.onCurve(c.centrelineStartProjectM, c.centrelineEndProjectM));
+
     let guideDataUrl: string | undefined;
     try {
       const [px0, py0, px1, py1] = pureResult.pageBoundsMupdf;
@@ -844,7 +906,9 @@ export async function POST(req: NextRequest) {
     const payload = {
       ok: true,
       fileName,
-      result,
+      result: wallsResult,
+      curvedWalls: curved.walls,
+      curvedPods: curved.pods,
       guideDataUrl,
       windowSpecs,
       windowAudit,

@@ -260,6 +260,7 @@ const DIAG = {
   originalWallCount: 0,
   completionWallCount: 0,
   finalizedWallCount: 0,
+  curvedWallCount: 0,
   wallMapPass: false,
   wallMap: [] as unknown[],
   // Windows (semantic, from the geometric detector — host rendering out of scope in M2):
@@ -1607,6 +1608,7 @@ export default function Home() {
     guideDataUrlFromServer?: string,
     doorManifest?: any,
     doorSpecs?: any[],
+    curvedWalls?: any[],
   ) => {
     if (DIAG.importState === 'importing' || DIAG.importState === 'initializing') return;
     DIAG.importState = 'importing';
@@ -1694,6 +1696,56 @@ export default function Home() {
         levelNode.children = [...existing, ...completionIds];
         drafts.initialShell.nodes[levelId] = levelNode;
       }
+      DIAG.expectedWalls = drafts.wallDrafts.length;
+    }
+
+    // --- CURVED WALLS: curved walls, glass partitions and pods read from the
+    // drawing's arcs, as native curved WallNodes (curveOffset = the arc's sagitta).
+    // Curved walls host no openings: a pod's door is the gap the drawing leaves in its ring.
+    DIAG.curvedWallCount = 0;
+    if (curvedWalls && curvedWalls.length > 0) {
+      const levelId = drafts.initialShell.ids.level;
+      const curvedIds: string[] = [];
+      for (const c of curvedWalls) {
+        if (!c?.id || !c.start || !c.end || !Number.isFinite(c.curveOffset)) continue;
+        const id = `wall_${c.id}`;
+        if (drafts.initialShell.nodes[id]) continue;
+        const glass = c.kind === 'glass';
+        const node = WallNode.parse({
+          id,
+          name: `${glass ? 'Glass partition' : 'Curved wall'} ${curvedIds.length + 1}${c.podId ? ` (${String(c.podId).replace('_', ' ')})` : ''}`,
+          parentId: levelId,
+          start: [c.start.x, c.start.y] as [number, number],
+          end: [c.end.x, c.end.y] as [number, number],
+          curveOffset: c.curveOffset,
+          height: 3.0,
+          thickness: c.thicknessM ?? 0.2,
+          // plain painted finish like the other extracted walls (a textured default
+          // smears on curved faces); glass partitions get the glass finish
+          ...(glass ? { material: { preset: 'glass' as const } } : { materialPreset: 'white' }),
+          metadata: {
+            physicalWallId: c.id,
+            curvedWallId: c.segmentId,
+            podId: c.podId ?? null,
+            wallClassification: glass ? 'GLASS_PARTITION' : 'CURVED_WALL',
+            sourceHash: c.sourceHash ?? '',
+            sourceOperationIds: c.sourceOperationIds ?? [],
+            automaticExtraction: true,
+            extractionSource: 'CURVED_WALLS',
+            confidence: 0.85,
+          },
+        }) as AnyNode;
+        drafts.wallDrafts.push({ id, physicalWallId: c.id, node });
+        drafts.initialShell.nodes[id] = node;
+        curvedIds.push(id);
+      }
+      const levelNode = drafts.initialShell.nodes[levelId] as any;
+      if (levelNode && curvedIds.length > 0) {
+        const existing = Array.isArray(levelNode.children) ? levelNode.children : [];
+        levelNode.children = [...existing, ...curvedIds];
+        drafts.initialShell.nodes[levelId] = levelNode;
+      }
+      DIAG.curvedWallCount = curvedIds.length;
       DIAG.expectedWalls = drafts.wallDrafts.length;
     }
 
@@ -2006,13 +2058,14 @@ export default function Home() {
               if (chunk.type === 'stage-walls') {
                 extractedResult = chunk.result;
                 extractedCompletionWalls = chunk.completionWalls || [];
+                const extractedCurvedWalls: any[] = chunk.curvedWalls || [];
                 DIAG.originalWallCount = chunk.originalWallCount;
                 DIAG.completionWallCount = chunk.completionWallCount;
                 DIAG.finalizedWallCount = chunk.finalizedWallCount;
                 setExtractionProgress({
                   isExtracting: true,
                   pipeline: 'geometric',
-                  stageText: `Building ${DIAG.finalizedWallCount} walls…`,
+                  stageText: `Building ${DIAG.finalizedWallCount + extractedCurvedWalls.length} walls…`,
                   progressPercent: 35,
                   fileName: source.name,
                 });
@@ -2029,6 +2082,7 @@ export default function Home() {
                   chunk.guideDataUrl,
                   null,
                   [],
+                  extractedCurvedWalls,
                 );
               } else if (chunk.type === 'stage-windows') {
                 const wspecs = chunk.windowSpecs || [];
@@ -2168,6 +2222,7 @@ export default function Home() {
           (body as any).guideDataUrl,
           body.doorManifest,
           doorSpecsRef.current,
+          (body as any).curvedWalls,
         );
       }
     } catch (e) {

@@ -68,6 +68,8 @@ export type {
 } from './mupdf-pure-doors';
 export type { LineageStore, PaintedOperationLineage, SubpathLineage, SegmentLineage, MuVector } from './vector-device';
 export { collectPageVectors } from './vector-device';
+export { detectCurvedWalls, curvedWallPieces, curvedBandUnder, CURVED_WALL_DEFAULTS } from './curved-walls';
+export type { CurvedWallConfig, CurvedWallSegment, CurvedWallPiece, CurvedPod, CurvedWallResult, CurvedWallKind } from './curved-walls';
 import * as mupdf from 'mupdf';
 export { mupdf };
 export { toExtractionResult, documentFrameFromPure } from './result-adapter';
