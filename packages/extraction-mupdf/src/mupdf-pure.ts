@@ -17,7 +17,7 @@
  *   evidence classification → accepted/review/rejected → split accepted only.
  */
 import * as mupdf from 'mupdf';
-import { collectSegments } from './door-symbols';
+import { collectSegments, detectDoorSymbols } from './door-symbols';
 import { estimateScale, textsFromStructuredTextJson } from './scale-detection';
 import { detectWallsGeneral, type WallRaster } from './wall-general';
 import {
@@ -1983,11 +1983,21 @@ function applyGeneralWallsIfNeeded(r: MuPdfPureResult, page: mupdf.Page, vectors
       height: oy + H,
       lum: (xi, yi) => (xi < ox || yi < oy ? 1 : (px[(yi - oy) * stride + (xi - ox) * n] ?? 255) / 255),
     };
-    const walls = detectWallsGeneral(collectSegments(vectors), r.scaleMmPerPt, raster);
+    // Door symbols tell the wall detector where openings are: walls run on through their
+    // doors, and a door set across a corner still gets the wall piece it hangs in.
+    const segs = collectSegments(vectors);
+    const symbols = detectDoorSymbols(segs, r.scaleMmPerPt, { minLeafMm: 500, maxLeafMm: 1500, hostCorridorPadPt: 18 });
+    const openings = symbols.map((s) => ({ a: s.hinge, b: s.closed, leaf: { a: s.hinge, b: s.free } }));
+    const diag: Record<string, unknown> = {};
+    const walls = detectWallsGeneral(segs, r.scaleMmPerPt, raster, { openings }, diag);
     const generalLen = walls.reduce((t, w) => t + w.length, 0);
     const legacyLen = r.accepted.reduce((t, w) => t + w.length, 0);
-    r.wallEngineNote = `general ${walls.length} walls / ${Math.round(generalLen)}pt vs legacy ${r.accepted.length} / ${Math.round(legacyLen)}pt`;
+    const openingWalls = walls.filter((w) => w.kind === 'opening').length;
+    r.wallEngineNote =
+      `general ${walls.length} walls (${openingWalls} door headers, ${symbols.length} door symbols, ` +
+      `${diag.columns ?? 0} columns) / ${Math.round(generalLen)}pt vs legacy ${r.accepted.length} / ${Math.round(legacyLen)}pt`;
     if (walls.length < 3 || generalLen <= legacyLen) return;
+    const evidenceOf = (k: string) => (k === 'poche' ? 'poche-band' : k === 'opening' ? 'door-opening-header' : 'parallel-faces');
     const physical: PurePhysicalWall[] = walls.map((w) => ({
       ...withOrientation({
         id: w.id,
@@ -1998,8 +2008,8 @@ function applyGeneralWallsIfNeeded(r: MuPdfPureResult, page: mupdf.Page, vectors
         centerline: { a: w.a, b: w.b },
         thickness: w.thickness,
         length: w.length,
-        confidence: 0.8,
-        evidence: ['general-wall-detector', w.kind === 'poche' ? 'poche-band' : 'parallel-faces', 'connected-network'],
+        confidence: w.kind === 'opening' ? 0.7 : 0.8,
+        evidence: ['general-wall-detector', evidenceOf(w.kind), 'connected-network'],
       }),
       physicalWallId: w.id,
       verdict: 'accepted' as const,

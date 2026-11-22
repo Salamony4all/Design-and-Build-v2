@@ -364,8 +364,11 @@ export function hostDoorSymbols(symbols: DoorSymbol[], walls: SymbolWall[], segs
       const perp = (p: Vec2) => Math.abs((p.x - A.x) * u.y - (p.y - A.y) * u.x);
       const t = w.thickness;
       const limit = t / 2 + Math.min(cfg.hostCorridorPadPt, Math.max(1.5, 0.35 * t));
-      const score = Math.max(perp(sym.hinge), perp(sym.closed));
-      if (score > limit) continue;
+      // the hinge (arc centre) is exact; the closed end may drift off the wall line by as
+      // much as the 12 degree direction tolerance allows
+      const ph = perp(sym.hinge), pc = perp(sym.closed);
+      if (ph > limit || pc > limit + dl * Math.sin(12 * RAD)) continue;
+      const score = Math.max(ph, pc);
       const ah = along(sym.hinge), ac = along(sym.closed);
       const lo = Math.min(ah, ac), hi = Math.max(ah, ac);
       // Many drawings stop the wall at each jamb, so the opening sits in the GAP
