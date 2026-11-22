@@ -173,6 +173,46 @@ export function centreCrop(width: number, height: number, ratio: number): { x: n
   return { x: 0, y: Math.round((height - h) / 2), w: width, h };
 }
 
+/** Render frames offered in the panel: the screen's own shape, or a fixed photo format. */
+export const RENDER_FRAMES = [
+  { id: 'screen', label: 'Screen', hint: 'What you see, cropped to the nearest format' },
+  { id: '16:9', label: '16:9', hint: 'Wide' },
+  { id: '3:2', label: '3:2', hint: 'Classic photo' },
+  { id: '1:1', label: '1:1', hint: 'Square' },
+  { id: '4:5', label: '4:5', hint: 'Portrait' },
+  { id: '9:16', label: '9:16', hint: 'Tall' },
+] as const;
+export type RenderFrameId = (typeof RENDER_FRAMES)[number]['id'];
+
+export function isRenderFrame(id: unknown): id is RenderFrameId {
+  return RENDER_FRAMES.some((f) => f.id === id);
+}
+
+/** Aspect of a fixed frame (undefined for "screen"). */
+export function frameAspect(id: RenderFrameId): AspectChoice | undefined {
+  return id === 'screen' ? undefined : SUPPORTED_ASPECTS.find((a) => a.label === id);
+}
+
+/**
+ * Viewfinder: the largest rectangle of `ratio` (width / height) that fits in the
+ * free box, centred in it. Pixel coordinates; null when nothing usable fits.
+ */
+export function viewfinderRect(
+  free: { x0: number; y0: number; x1: number; y1: number },
+  ratio: number,
+): { x: number; y: number; w: number; h: number } | null {
+  const fw = free.x1 - free.x0;
+  const fh = free.y1 - free.y0;
+  if (fw < 40 || fh < 40 || !(ratio > 0)) return null;
+  let w = fw;
+  let h = w / ratio;
+  if (h > fh) {
+    h = fh;
+    w = h * ratio;
+  }
+  return { x: free.x0 + (fw - w) / 2, y: free.y0 + (fh - h) / 2, w, h };
+}
+
 /** Rectangle in normalized frame coordinates (0..1, origin top-left). */
 export interface NormRect {
   x0: number;
@@ -223,8 +263,8 @@ export function focusCrop(
   return { x, y, w: Math.round(w), h: Math.round(h), aspect };
 }
 
-/** 'cutaway' = roofless model seen from above; 'eye-level' = near-horizontal camera. */
-export type ViewKind = 'cutaway' | 'eye-level';
+/** 'cutaway' = roofless model seen from above; 'eye-level' = near-horizontal camera; 'interior' = standing inside a room (walk mode). */
+export type ViewKind = 'cutaway' | 'eye-level' | 'interior';
 
 export interface GeometryLockPromptOptions {
   style: RenderStyleId;
@@ -238,6 +278,10 @@ export interface GeometryLockPromptOptions {
   note?: string;
   /** Retry after the geometry check failed: tighten the instructions. */
   strict?: boolean;
+  /** Interior views: lens of the view (35 mm-equivalent). */
+  lensMm?: number;
+  /** Interior views: close the open-top rooms with a plain ceiling. */
+  ceiling?: boolean;
 }
 
 const DEFAULT_MATERIALS =
@@ -270,6 +314,12 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   lines.push('');
   lines.push('GEOMETRY LOCK (identical to the input, pixel-aligned):');
   lines.push('1. Camera: same viewpoint, perspective, focal length, framing and crop. Do not zoom, pan, rotate, tilt or re-compose.');
+  if (o.viewKind === 'interior') {
+    const lens = o.lensMm && o.lensMm > 0 ? `about ${Math.round(o.lensMm)} mm (full-frame equivalent)` : 'a wide-angle lens';
+    lines.push(
+      `   This is an interior photograph taken at eye height (about 1.6 m) with ${lens}: keep that wide-angle perspective exactly, keep vertical lines vertical, and do not crop in or straighten the lens.`,
+    );
+  }
   lines.push('2. Walls: every wall keeps its exact position, length, thickness, height and corners; the room layout stays the same.');
   lines.push(
     '3. Openings: every door and window stays exactly where it is, with the same width and the same count. Window openings get glass in slim frames; door openings get a door leaf or stay an open passage, as in the model.',
@@ -279,11 +329,19 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
     lines.push(
       '5. This is a roofless cutaway seen from above: keep it open-top. No roof, ceiling, beams, upper floor or extra storey; wall tops stay flat cut sections.',
     );
+  } else if (o.viewKind === 'interior') {
+    lines.push(
+      o.ceiling === false
+        ? '5. We stand inside the building. Keep the rooms open above the walls (no ceiling), exactly as in the input.'
+        : '5. We stand inside the building. The model has no ceilings: close the rooms with a plain flat white ceiling resting exactly on top of the existing walls, with a few simple recessed lights. Add nothing else above the walls: no beams, bulkheads, lowered sections, skylights or upper floors.',
+    );
   } else {
     lines.push('5. Show only the building that is in the model: no extra storeys, roof shapes, extensions or neighbouring buildings.');
   }
   lines.push(
-    '6. The model is complete. Everything outside its outer walls is empty background: keep it plain and empty, as in the input. Never add rooms, walls, floors, furniture or buildings outside the model, and never fill or "complete" an empty area.',
+    o.viewKind === 'interior'
+      ? '6. The model is complete: never add rooms, walls, partitions or openings. Where the input shows open space beyond the walls, keep it empty (apart from the ceiling described above).'
+      : '6. The model is complete. Everything outside its outer walls is empty background: keep it plain and empty, as in the input. Never add rooms, walls, floors, furniture or buildings outside the model, and never fill or "complete" an empty area.',
   );
 
   if (o.withEdgeGuide) {

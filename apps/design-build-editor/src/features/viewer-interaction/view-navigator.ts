@@ -45,6 +45,8 @@ export interface ViewPose {
   zoom?: number;
   /** Where the orbit centre shows on screen, from the screen centre, as fractions of the canvas (+x right, +y down). */
   shift?: { x: number; y: number };
+  /** Vertical field of view in degrees (perspective cameras only). */
+  fov?: number;
 }
 
 export interface NavLimits {
@@ -62,6 +64,41 @@ export const ISO_PHI = Math.acos(1 / Math.sqrt(3));
 export const TOP_PHI = 1e-4;
 /** Never orbit below the ground. */
 export const MAX_POLAR = Math.PI / 2 - 0.04;
+
+// ---- Lenses --------------------------------------------------------------
+// Focal lengths are 35 mm-equivalent and measured on the frame's diagonal, so a
+// lens frames a room the same way on a tall phone, a tablet or a wide monitor.
+// (A fixed vertical angle gave phones a narrow 26° slit of view.)
+
+/** Diagonal of a 35 mm film frame, in mm. */
+const FULL_FRAME_DIAGONAL = 43.27;
+/** Overview lens: about what a 50° vertical view gave on a laptop. */
+export const ORBIT_LENS_MM = 26;
+/** Walk-mode lens: wide, like interior photography. */
+export const WALK_LENS_MM = 18;
+export const MIN_LENS_MM = 12;
+export const MAX_LENS_MM = 70;
+/** Lens steps offered by the lens button. */
+export const LENS_STEPS_MM = [14, 18, 24, 35] as const;
+
+/** Vertical field of view (degrees) of a 35 mm-equivalent lens on a frame of this aspect (width / height). */
+export function lensToVFov(mm: number, aspect: number): number {
+  const tanHalfDiag = FULL_FRAME_DIAGONAL / (2 * THREE.MathUtils.clamp(mm, 1, 2000));
+  const tanHalfV = tanHalfDiag / Math.sqrt(1 + Math.max(aspect, 1e-3) ** 2);
+  return THREE.MathUtils.radToDeg(2 * Math.atan(tanHalfV));
+}
+
+/** 35 mm-equivalent focal length of a vertical field of view on a frame of this aspect. */
+export function vFovToLens(vFovDeg: number, aspect: number): number {
+  const tanHalfV = Math.tan(THREE.MathUtils.degToRad(vFovDeg) / 2);
+  const tanHalfDiag = tanHalfV * Math.sqrt(1 + Math.max(aspect, 1e-3) ** 2);
+  return FULL_FRAME_DIAGONAL / (2 * tanHalfDiag);
+}
+
+/** Horizontal field of view (degrees) for a vertical one on a frame of this aspect. */
+export function hFovOf(vFovDeg: number, aspect: number): number {
+  return THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(vFovDeg) / 2) * aspect));
+}
 
 const isPerspective = (c: THREE.Camera): c is THREE.PerspectiveCamera => (c as THREE.PerspectiveCamera).isPerspectiveCamera === true;
 const isOrtho = (c: THREE.Camera): c is THREE.OrthographicCamera => (c as THREE.OrthographicCamera).isOrthographicCamera === true;
@@ -114,7 +151,10 @@ export function currentPose(h: NavHandle): ViewPose {
     target = cam.position.clone().addScaledVector(dir, 20);
   }
   const s = new THREE.Spherical().setFromVector3(cam.position.clone().sub(target));
-  return { target, radius: Math.max(s.radius, 1e-3), phi: s.phi, theta: s.theta, zoom: isOrtho(cam) ? cam.zoom : undefined, shift: lensShift(cam) };
+  return {
+    target, radius: Math.max(s.radius, 1e-3), phi: s.phi, theta: s.theta,
+    zoom: isOrtho(cam) ? cam.zoom : undefined, shift: lensShift(cam), fov: isPerspective(cam) ? cam.fov : undefined,
+  };
 }
 
 type LensCamera = THREE.PerspectiveCamera | THREE.OrthographicCamera;
@@ -182,7 +222,7 @@ export function freeAreaShift(area: ViewArea): { x: number; y: number } {
  * the distance refined until they touch the free window (a bounding sphere
  * would leave the model small, especially on tall phone screens).
  */
-export function fitPose(cam: THREE.Camera, box: Aabb, dir: { phi: number; theta: number }, area: ViewArea): ViewPose {
+export function fitPose(cam: THREE.Camera, box: Aabb, dir: { phi: number; theta: number }, area: ViewArea, fovDeg?: number): ViewPose {
   const win = freeWindow(area);
   const aspect = win.W / win.H;
   const pts = corners(box);
@@ -224,7 +264,7 @@ export function fitPose(cam: THREE.Camera, box: Aabb, dir: { phi: number; theta:
     return { target, radius, phi: dir.phi, theta: dir.theta, zoom, shift: win.shift };
   }
 
-  const fov = isPerspective(cam) ? cam.fov : 50;
+  const fov = fovDeg ?? (isPerspective(cam) ? cam.fov : 50);
   const tanV = Math.tan(THREE.MathUtils.degToRad(fov) / 2);
   const tanH = tanV * aspect;
   const probe = new THREE.PerspectiveCamera(fov, aspect, 0.01, 1e7);
@@ -256,7 +296,7 @@ export function fitPose(cam: THREE.Camera, box: Aabb, dir: { phi: number; theta:
     radius *= s;
     if (Math.abs(s - 1) < 0.002 && !moved) break;
   }
-  return { target, radius, phi: dir.phi, theta: dir.theta, shift: win.shift };
+  return { target, radius, phi: dir.phi, theta: dir.theta, shift: win.shift, ...(fovDeg !== undefined ? { fov: fovDeg } : {}) };
 }
 
 /** Zoom range, clipping planes and tilt limit for a model of this size. */
@@ -313,8 +353,13 @@ export function focusPose(p: ViewPose, point: THREE.Vector3, modelRadius: number
   return { ...p, target: point.clone(), radius: Math.max(Math.min(p.radius, close), lim?.minDistance ?? 0.3) };
 }
 
-/** The first visible surface under a screen point, or the ground under it. */
-export function pickPoint(h: NavHandle, clientX: number, clientY: number, maxDistance = Infinity): THREE.Vector3 | null {
+/** The first visible surface under a screen point (with its world-space normal), or the ground under it. */
+export function pickSurface(
+  h: NavHandle,
+  clientX: number,
+  clientY: number,
+  maxDistance = Infinity,
+): { point: THREE.Vector3; normal: THREE.Vector3 | null } | null {
   const el = (h.gl as { domElement?: HTMLCanvasElement } | undefined)?.domElement;
   if (!el) return null;
   const rect = el.getBoundingClientRect();
@@ -330,14 +375,24 @@ export function pickPoint(h: NavHandle, clientX: number, clientY: number, maxDis
     try {
       for (const hit of ray.intersectObjects(h.scene.children, true)) {
         if (hit.distance > maxDistance) break;
-        if ((hit.object as THREE.Mesh).isMesh && visible(hit.object)) return hit.point.clone();
+        if ((hit.object as THREE.Mesh).isMesh && visible(hit.object)) {
+          const normal = hit.face ? hit.face.normal.clone().transformDirection(hit.object.matrixWorld) : null;
+          // Faces seen from behind (thin planes): flip towards the camera.
+          if (normal && normal.dot(ray.ray.direction) > 0) normal.negate();
+          return { point: hit.point.clone(), normal };
+        }
       }
     } catch {
       /* fall back to the ground */
     }
   }
   const ground = new THREE.Vector3();
-  return ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), ground) ? ground : null;
+  return ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), ground) ? { point: ground, normal: new THREE.Vector3(0, 1, 0) } : null;
+}
+
+/** The first visible surface under a screen point, or the ground under it. */
+export function pickPoint(h: NavHandle, clientX: number, clientY: number, maxDistance = Infinity): THREE.Vector3 | null {
+  return pickSurface(h, clientX, clientY, maxDistance)?.point ?? null;
 }
 
 let animToken = 0;
@@ -357,6 +412,48 @@ function prefersReducedMotion(): boolean {
   }
 }
 
+/** Free camera move (walk mode): position in a straight line, orientation along the shortest turn, lens and lens shift eased. */
+export function animateFree(
+  h: Pick<NavHandle, 'camera' | 'invalidate'>,
+  to: { position: THREE.Vector3; quaternion: THREE.Quaternion; fov?: number; shift?: { x: number; y: number } },
+  ms = 520,
+  onFrame?: () => void,
+): Promise<void> {
+  const my = ++animToken;
+  const cam = h.camera;
+  const p0 = cam.position.clone();
+  const q0 = cam.quaternion.clone();
+  const fov0 = isPerspective(cam) ? cam.fov : undefined;
+  const s0 = lensShift(cam);
+  const s1 = to.shift ?? s0;
+  const apply = (e: number) => {
+    cam.position.lerpVectors(p0, to.position, e);
+    cam.quaternion.slerpQuaternions(q0, to.quaternion, e);
+    if (isPerspective(cam) && fov0 !== undefined && to.fov !== undefined) cam.fov = fov0 + (to.fov - fov0) * e;
+    if (s1.x !== s0.x || s1.y !== s0.y) setLensShift(cam, { x: s0.x + (s1.x - s0.x) * e, y: s0.y + (s1.y - s0.y) * e });
+    else if (isPerspective(cam)) cam.updateProjectionMatrix();
+    cam.updateMatrixWorld();
+    onFrame?.();
+    h.invalidate();
+  };
+  const duration = prefersReducedMotion() || typeof requestAnimationFrame !== 'function' ? 0 : ms;
+  if (duration <= 0) {
+    apply(1);
+    return Promise.resolve();
+  }
+  const start = performance.now();
+  return new Promise((resolve) => {
+    const step = (now: number) => {
+      if (my !== animToken) { resolve(); return; }
+      const t = Math.min(1, (now - start) / duration);
+      apply(easeInOutCubic(t));
+      if (t < 1) requestAnimationFrame(step);
+      else resolve();
+    };
+    requestAnimationFrame(step);
+  });
+}
+
 /** Glide to a pose: target moves straight, distance on a log scale, angles along the short way round. */
 export function animateTo(h: NavHandle, to: ViewPose, ms = 480): Promise<void> {
   const my = ++animToken;
@@ -367,6 +464,8 @@ export function animateTo(h: NavHandle, to: ViewPose, ms = 480): Promise<void> {
   const fromZoom = isOrtho(cam) ? cam.zoom : 1;
   const fromShift = from.shift ?? { x: 0, y: 0 };
   const toShift = to.shift ?? fromShift;
+  const fromFov = isPerspective(cam) ? cam.fov : undefined;
+  const toFov = isPerspective(cam) && to.fov !== undefined ? to.fov : fromFov;
   const apply = (e: number) => {
     const target = from.target.clone().lerp(to.target, e);
     const radius = from.radius * Math.pow(to.radius / from.radius, e);
@@ -378,8 +477,12 @@ export function animateTo(h: NavHandle, to: ViewPose, ms = 480): Promise<void> {
       cam.zoom = fromZoom + (to.zoom - fromZoom) * e;
       cam.updateProjectionMatrix();
     }
+    const fovMoves = isPerspective(cam) && fromFov !== undefined && toFov !== undefined && toFov !== fromFov;
+    if (fovMoves) cam.fov = fromFov + (toFov - fromFov) * e;
     if (toShift.x !== fromShift.x || toShift.y !== fromShift.y) {
       setLensShift(cam, { x: fromShift.x + (toShift.x - fromShift.x) * e, y: fromShift.y + (toShift.y - fromShift.y) * e });
+    } else if (fovMoves) {
+      (cam as THREE.PerspectiveCamera).updateProjectionMatrix();
     }
     if (ctl) {
       ctl.target.copy(target);

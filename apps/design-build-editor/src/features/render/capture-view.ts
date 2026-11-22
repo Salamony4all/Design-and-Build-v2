@@ -20,6 +20,14 @@ export interface PreparedView {
   edgeGuideUrl: string;
   /** Transparent cyan edge overlay, for checking the result by eye. */
   edgeOverlayUrl: string;
+  /** Interior views: lens of the view, 35 mm-equivalent. */
+  lensMm?: number;
+}
+
+/** A fixed render frame (viewfinder): the part of the canvas to keep, and its exact format. */
+export interface FrameCrop {
+  rect: NormRect;
+  aspect: AspectChoice;
 }
 
 interface LiveViewer {
@@ -179,13 +187,14 @@ export function hasRenderableScene(handle: ViewerHandle | null): boolean {
  */
 export function captureBeautyPass(
   handle: ViewerHandle | null,
-  opts: { targetLongSide?: number; frameBuilding?: boolean } = {},
+  opts: { targetLongSide?: number; frameBuilding?: boolean; subject?: NormRect | null } = {},
 ): { dataUrl: string; viewKind: ViewKind; focus: NormRect | null } {
   const v = resolveViewer(handle);
   if (!v) throw new Error('The 3D view is not ready yet.');
   const targetLongSide = opts.targetLongSide ?? 1600;
   const canvas = v.gl.domElement;
-  const focus = opts.frameBuilding === false ? null : buildingScreenRect(v);
+  // A viewfinder frame is the subject when given; otherwise the building.
+  const focus = opts.subject ?? (opts.frameBuilding === false ? null : buildingScreenRect(v));
   const restoreNodes = hideNonModelNodes();
   const prevRatio = v.gl.getPixelRatio?.();
   let dataUrl = '';
@@ -225,11 +234,29 @@ export function captureBeautyPass(
  * Crops any image (a fresh capture or a snapshot attached in the chat) to the
  * nearest supported aspect ratio and prepares the guide images.
  */
-export async function prepareView(sourceUrl: string, viewKind: ViewKind, maxLongSide = 1536, focus?: NormRect | null): Promise<PreparedView> {
+export async function prepareView(
+  sourceUrl: string,
+  viewKind: ViewKind,
+  maxLongSide = 1536,
+  focus?: NormRect | null,
+  frame?: FrameCrop | null,
+): Promise<PreparedView> {
   const img = await loadImage(sourceUrl);
   let aspect = nearestAspect(img.width, img.height);
   let crop = centreCrop(img.width, img.height, aspect.ratio);
-  if (focus) {
+  if (frame) {
+    // Exactly the viewfinder: same place, exact format.
+    aspect = frame.aspect;
+    const x = Math.max(0, frame.rect.x0) * img.width;
+    const y = Math.max(0, frame.rect.y0) * img.height;
+    let w = Math.min(1, frame.rect.x1) * img.width - x;
+    let h = w / aspect.ratio;
+    if (y + h > img.height) {
+      h = img.height - y;
+      w = h * aspect.ratio;
+    }
+    crop = { x: Math.round(x), y: Math.round(y), w: Math.max(1, Math.round(w)), h: Math.max(1, Math.round(h)) };
+  } else if (focus) {
     const f = focusCrop(img.width, img.height, focus);
     aspect = f.aspect;
     crop = f;
@@ -264,10 +291,15 @@ export async function prepareView(sourceUrl: string, viewKind: ViewKind, maxLong
 }
 
 /** Capture + prepare in one step, for the one-click render button. */
-export async function captureViewForRender(handle: ViewerHandle | null, opts: { frameBuilding?: boolean } = {}): Promise<PreparedView> {
-  const frameBuilding = opts.frameBuilding ?? true;
-  const { dataUrl, viewKind, focus } = captureBeautyPass(handle, { frameBuilding });
-  return prepareView(dataUrl, viewKind, 1536, frameBuilding ? focus : null);
+export async function captureViewForRender(
+  handle: ViewerHandle | null,
+  opts: { frameBuilding?: boolean; frame?: FrameCrop | null; viewKind?: ViewKind; lensMm?: number } = {},
+): Promise<PreparedView> {
+  const frame = opts.frame ?? null;
+  const frameBuilding = !frame && (opts.frameBuilding ?? true);
+  const { dataUrl, viewKind, focus } = captureBeautyPass(handle, { frameBuilding, subject: frame?.rect ?? null });
+  const view = await prepareView(dataUrl, opts.viewKind ?? viewKind, 1536, frameBuilding ? focus : null, frame);
+  return opts.lensMm ? { ...view, lensMm: opts.lensMm } : view;
 }
 
 /** Reads the floor-plan underlay (guide node) as a JPEG data URL, if one is loaded. */

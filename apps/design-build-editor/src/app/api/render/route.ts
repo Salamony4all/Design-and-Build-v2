@@ -37,7 +37,9 @@ const BodySchema = z.object({
   tier: z.enum(['fast', 'balanced', 'pro']).default('fast'),
   model: z.string().max(80).optional(),
   aspectRatio: z.string().max(8),
-  viewKind: z.enum(['cutaway', 'eye-level']).default('cutaway'),
+  viewKind: z.enum(['cutaway', 'eye-level', 'interior']).default('cutaway'),
+  lensMm: z.number().min(6).max(200).optional(),
+  ceiling: z.boolean().optional(),
   furnish: z.boolean().default(false),
   note: z.string().max(2000).optional(),
   strict: z.boolean().default(false),
@@ -210,7 +212,7 @@ export async function POST(req: NextRequest) {
       promptVersion: RENDER_PROMPT_VERSION,
       prompt: buildGeometryLockPrompt({
         style: body.style, viewKind: body.viewKind, furnish: body.furnish, withEdgeGuide: !!edge,
-        withPlan: !!plan, note: body.note, strict: body.strict,
+        withPlan: !!plan, note: body.note, strict: body.strict, lensMm: body.lensMm, ceiling: body.ceiling,
       }),
     });
   }
@@ -228,6 +230,8 @@ export async function POST(req: NextRequest) {
     withPlan: !!plan,
     note: body.note,
     strict: body.strict,
+    lensMm: body.lensMm,
+    ceiling: body.ceiling,
   });
 
   // Images first, in the order the prompt numbers them; the instruction last.

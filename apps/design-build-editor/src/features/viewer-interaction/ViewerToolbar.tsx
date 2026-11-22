@@ -13,6 +13,7 @@ import {
   AppWindow,
   BrickWall,
   DoorOpen,
+  Footprints,
   Layers,
   MousePointer2,
   PenLine,
@@ -38,7 +39,13 @@ interface Props {
   onZoomOut?: () => void;
   onTurnLeft?: () => void;
   onTurnRight?: () => void;
-  viewMode?: '3d' | 'top';
+  /** Walk inside the model at eye height (shown when given). */
+  onWalk?: () => void;
+  /** Walk mode: step through the lens presets. */
+  onLensStep?: () => void;
+  /** Walk mode: current lens, 35 mm-equivalent. */
+  lensMm?: number;
+  viewMode?: '3d' | 'top' | 'walk';
   proEnabled?: boolean;
   mode?: 'standard' | 'pro';
   onToggleMode?: () => void;
@@ -68,6 +75,9 @@ export function ViewerToolbar({
   onZoomOut,
   onTurnLeft,
   onTurnRight,
+  onWalk,
+  onLensStep,
+  lensMm,
   viewMode = '3d',
   proEnabled,
   mode,
@@ -136,9 +146,22 @@ export function ViewerToolbar({
         >
           Top
         </button>
+        {onWalk && (
+          <button
+            type="button"
+            role="radio"
+            aria-checked={viewMode === 'walk'}
+            className={`db-seg__walk ${viewMode === 'walk' ? 'on' : ''}`}
+            onClick={onWalk}
+            title={viewMode === 'walk' ? 'Stand here again, level (V)' : 'Walk inside at eye height, with a wide lens (V)'}
+          >
+            <Footprints size={14} aria-hidden />
+            <span>Walk</span>
+          </button>
+        )}
       </div>
 
-      {onZoomOut && onZoomIn && (
+      {onZoomOut && onZoomIn && viewMode !== 'walk' && (
         <>
           <div className="sep" />
           <ToolButton label="Zoom out (−)" onClick={onZoomOut}><ZoomOut size={18} /></ToolButton>
@@ -146,7 +169,24 @@ export function ViewerToolbar({
         </>
       )}
 
-      {onTurnLeft && onTurnRight && (
+      {onZoomOut && onZoomIn && viewMode === 'walk' && (
+        <>
+          <div className="sep" />
+          <ToolButton label="Wider lens (−)" onClick={onZoomOut}><ZoomOut size={18} /></ToolButton>
+          <button
+            type="button"
+            className="db-lens-chip"
+            onClick={onLensStep}
+            title="Lens (35 mm equivalent). Tap for 14 / 18 / 24 / 35 mm, or pinch the view."
+            aria-label={`Lens ${Math.round(lensMm ?? 18)} millimetres`}
+          >
+            {Math.round(lensMm ?? 18)}<small>mm</small>
+          </button>
+          <ToolButton label="Narrower lens (+)" onClick={onZoomIn}><ZoomIn size={18} /></ToolButton>
+        </>
+      )}
+
+      {onTurnLeft && onTurnRight && viewMode !== 'walk' && (
         <>
           <div className="sep" />
           <ToolButton label="Turn left (Q)" onClick={onTurnLeft}><RotateCcwSquare size={18} /></ToolButton>

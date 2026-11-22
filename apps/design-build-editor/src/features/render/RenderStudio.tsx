@@ -3,11 +3,25 @@
 // Copilot bar opens this panel: pick a look, press Render. The exact view is captured, rendered
 // by the image model under a geometry lock, scored against the model's edges
 // and shown with a before/after slider. Results also go to Copilot Activity.
+// A fixed frame (16:9, 3:2, …) shows a viewfinder over the 3D view, and the
+// render is exactly what is inside it; inside views (walk mode) tell the model
+// the lens and let it close the open-top rooms with a ceiling.
 'use client';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { ViewerHandle } from 'design-build-simplified-viewer-shell';
-import { RENDER_STYLES, RENDER_TIERS, type RenderStyleId, type RenderTierId } from './render-presets';
-import { captureViewForRender, hasRenderableScene, type PreparedView } from './capture-view';
+import {
+  RENDER_FRAMES,
+  RENDER_STYLES,
+  RENDER_TIERS,
+  frameAspect,
+  isRenderFrame,
+  viewfinderRect,
+  type RenderFrameId,
+  type RenderStyleId,
+  type RenderTierId,
+} from './render-presets';
+import { captureViewForRender, hasRenderableScene, type FrameCrop, type PreparedView } from './capture-view';
+import type { ViewArea } from '../viewer-interaction/view-navigator';
 import { renderPhotoreal, renderStatus, RenderRequestError, type RenderJobResult, type RenderStage } from './render-client';
 import { OUTSIDE_OK, fidelityGrade } from './geometry-fidelity';
 import { CompareSlider } from './CompareSlider';
@@ -27,6 +41,10 @@ export interface RenderStudioProps {
   onOpenSettings?: () => void;
   onRenderProgress?: (p: RenderProgressInfo) => void;
   onRenderComplete?: (r: RenderJobResult) => void;
+  /** Is the camera standing inside the model (walk mode), and with which lens. */
+  getViewContext?: () => { interior: boolean; lensMm: number };
+  /** Part of the 3D view not covered by the header, toolbar and prompt bar (for the viewfinder). */
+  getFreeArea?: () => ViewArea;
 }
 
 type Phase = 'form' | 'running' | 'result' | 'error';
@@ -39,6 +57,10 @@ interface Prefs {
   furnish: boolean;
   /** Crop to the building (more pixels on walls and openings) instead of the full frame. */
   frameBuilding: boolean;
+  /** Render format: the screen's shape, or a fixed frame shown as a viewfinder. */
+  frame: RenderFrameId;
+  /** Inside views: close the open-top rooms with a plain ceiling. */
+  ceiling: boolean;
 }
 
 export function loadRenderPrefs(): Prefs {
@@ -49,9 +71,11 @@ export function loadRenderPrefs(): Prefs {
       tier: p.tier && p.tier in RENDER_TIERS ? p.tier : 'fast',
       furnish: !!p.furnish,
       frameBuilding: p.frameBuilding !== false,
+      frame: isRenderFrame(p.frame) ? p.frame : 'screen',
+      ceiling: p.ceiling !== false,
     };
   } catch {
-    return { style: 'daylight', tier: 'fast', furnish: false, frameBuilding: true };
+    return { style: 'daylight', tier: 'fast', furnish: false, frameBuilding: true, frame: 'screen', ceiling: true };
   }
 }
 
@@ -74,10 +98,25 @@ function downloadDataUrl(url: string, mime: string, name: string) {
   a.remove();
 }
 
-export function RenderStudio({ open, onOpenChange, getViewerHandle, onOpenSettings, onRenderProgress, onRenderComplete }: RenderStudioProps) {
+export function RenderStudio({
+  open,
+  onOpenChange,
+  getViewerHandle,
+  onOpenSettings,
+  onRenderProgress,
+  onRenderComplete,
+  getViewContext,
+  getFreeArea,
+}: RenderStudioProps) {
   const setOpen = onOpenChange;
   const [phase, setPhase] = useState<Phase>('form');
-  const [prefs, setPrefs] = useState<Prefs>({ style: 'daylight', tier: 'fast', furnish: false, frameBuilding: true });
+  const [prefs, setPrefs] = useState<Prefs>({ style: 'daylight', tier: 'fast', furnish: false, frameBuilding: true, frame: 'screen', ceiling: true });
+  const [viewCtx, setViewCtx] = useState<{ interior: boolean; lensMm: number }>({ interior: false, lensMm: 0 });
+  /** Phones: fold the panel to a slim bar so the viewfinder gets the screen. */
+  const [compact, setCompact] = useState(false);
+  /** Viewfinder rectangle, in canvas pixels (left/top relative to the canvas). */
+  const [finder, setFinder] = useState<{ x: number; y: number; w: number; h: number; cw: number; ch: number; left: number; top: number } | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
   const [note, setNote] = useState('');
   const [stage, setStage] = useState<RenderStage | null>(null);
   const [result, setResult] = useState<RenderJobResult | null>(null);
@@ -95,7 +134,78 @@ export function RenderStudio({ open, onOpenChange, getViewerHandle, onOpenSettin
     if (!open) return;
     setNoScene(!hasRenderableScene(getViewerHandle()));
     void renderStatus().then(setStatus);
-  }, [open, getViewerHandle]);
+    setViewCtx(getViewContext?.() ?? { interior: false, lensMm: 0 });
+    const id = window.setInterval(() => {
+      const c = getViewContext?.();
+      if (c) setViewCtx((old) => (old.interior === c.interior && Math.round(old.lensMm) === Math.round(c.lensMm) ? old : c));
+    }, 500);
+    return () => window.clearInterval(id);
+  }, [open, getViewerHandle, getViewContext]);
+
+  // Viewfinder: the largest frame of the chosen format in the free part of the
+  // 3D view, clear of this panel. The render is exactly what is inside it.
+  const measureFinder = useCallback(() => {
+    const aspect = frameAspect(prefs.frame);
+    const canvas = (getViewerHandle()?.gl as { domElement?: HTMLCanvasElement } | undefined)?.domElement;
+    if (!open || !aspect || !canvas || !getFreeArea || (phase !== 'form' && phase !== 'running')) {
+      setFinder(null);
+      return;
+    }
+    const area = getFreeArea();
+    const cr = canvas.getBoundingClientRect();
+    let x0 = area.insets.left;
+    let x1 = area.width - area.insets.right;
+    let y0 = area.insets.top;
+    let y1 = area.height - area.insets.bottom;
+    const pr = panelRef.current?.getBoundingClientRect();
+    if (pr && pr.width > 0) {
+      const l = pr.left - cr.left;
+      const r = pr.right - cr.left;
+      const b = pr.bottom - cr.top;
+      if (pr.width > area.width * 0.55) y0 = Math.max(y0, b + 10);
+      else if ((l + r) / 2 > area.width / 2) x1 = Math.min(x1, l - 12);
+      else x0 = Math.max(x0, r + 12);
+    }
+    const rect = viewfinderRect({ x0, y0, x1, y1 }, aspect.ratio);
+    setFinder(rect ? { ...rect, cw: cr.width, ch: cr.height, left: cr.left, top: cr.top } : null);
+  }, [open, prefs.frame, phase, getFreeArea, getViewerHandle]);
+
+  useEffect(() => {
+    measureFinder();
+    if (!open) return;
+    const onResize = () => measureFinder();
+    window.addEventListener('resize', onResize);
+    let ro: ResizeObserver | null = null;
+    if (panelRef.current && typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => measureFinder());
+      ro.observe(panelRef.current);
+    }
+    const settle = window.setTimeout(measureFinder, 320);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      ro?.disconnect();
+      window.clearTimeout(settle);
+    };
+  }, [open, measureFinder, compact]);
+
+  const frameCrop = useCallback((): FrameCrop | null => {
+    const aspect = frameAspect(prefs.frame);
+    if (!aspect || !finder) return null;
+    return {
+      aspect,
+      rect: { x0: finder.x / finder.cw, y0: finder.y / finder.ch, x1: (finder.x + finder.w) / finder.cw, y1: (finder.y + finder.h) / finder.ch },
+    };
+  }, [prefs.frame, finder]);
+
+  const pickFrame = (frame: RenderFrameId) => {
+    setPrefs((p) => ({ ...p, frame }));
+    // On a phone, fold the panel so the viewfinder has room.
+    try {
+      if (frame !== 'screen' && window.matchMedia('(max-width: 720px)').matches) setCompact(true);
+    } catch {
+      /* no matchMedia */
+    }
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -122,11 +232,20 @@ export function RenderStudio({ open, onOpenChange, getViewerHandle, onOpenSettin
       };
       try {
         report({ key: 'capture', label: 'Capturing your exact 3D view…', progress: 0.03 });
-        const view = opts?.reuseView ?? (await captureViewForRender(getViewerHandle(), { frameBuilding: prefs.frameBuilding }));
+        const ctx = getViewContext?.() ?? { interior: false, lensMm: 0 };
+        const view =
+          opts?.reuseView ??
+          (await captureViewForRender(getViewerHandle(), {
+            frameBuilding: prefs.frameBuilding && !ctx.interior,
+            frame: frameCrop(),
+            viewKind: ctx.interior ? 'interior' : undefined,
+            lensMm: ctx.interior ? ctx.lensMm : undefined,
+          }));
         const res = await renderPhotoreal(view, {
           style,
           tier: prefs.tier,
           furnish: prefs.furnish,
+          ceiling: prefs.ceiling,
           note,
           signal: ac.signal,
           onStage: (s) => report(s, view.dataUrl),
@@ -151,7 +270,7 @@ export function RenderStudio({ open, onOpenChange, getViewerHandle, onOpenSettin
         onRenderProgress?.({ active: false });
       }
     },
-    [prefs, note, getViewerHandle, onRenderProgress, onRenderComplete, result],
+    [prefs, note, getViewerHandle, onRenderProgress, onRenderComplete, result, getViewContext, frameCrop],
   );
 
   const tier = RENDER_TIERS[prefs.tier];
@@ -159,18 +278,48 @@ export function RenderStudio({ open, onOpenChange, getViewerHandle, onOpenSettin
   const grade = result ? fidelityGrade(result.fidelity.score) : null;
   const settingsHint = error && /PROVIDER_NOT_CONFIGURED|RATE_LIMIT|AUTH|MODEL_UNAVAILABLE/.test(error.code);
 
+  const lensLabel = viewCtx.interior && viewCtx.lensMm ? `${Math.round(viewCtx.lensMm)} mm` : null;
+  const showCompact = compact && phase === 'form';
+
   return (
     <>
+      {open && finder && (
+        <div
+          className={styles.viewfinder}
+          style={{ left: finder.left + finder.x, top: finder.top + finder.y, width: finder.w, height: finder.h }}
+          aria-hidden
+        >
+          <span className={styles.vfLabel}>
+            {prefs.frame}
+            {lensLabel ? ` · ${lensLabel}` : ''}
+          </span>
+        </div>
+      )}
       {open && (
-        <section className={styles.panel} role="dialog" aria-label="Photoreal render">
+        <section ref={panelRef} className={`${styles.panel} ${showCompact ? styles.compact : ''}`} role="dialog" aria-label="Photoreal render">
           <header className={styles.head}>
             <div>
               <strong>Photoreal render</strong>
-              <small>Your exact view · walls, doors &amp; windows stay locked</small>
+              <small>
+                {viewCtx.interior ? `Inside view${lensLabel ? ` · ${lensLabel} lens` : ''}` : 'Your exact view'} · walls, doors &amp; windows stay locked
+              </small>
             </div>
-            <button type="button" className={styles.iconBtn} onClick={() => setOpen(false)} aria-label="Close" disabled={phase === 'running'}>
-              ✕
-            </button>
+            <div className={styles.headBtns}>
+              {phase === 'form' && (
+                <button
+                  type="button"
+                  className={styles.iconBtn}
+                  onClick={() => setCompact((c) => !c)}
+                  aria-label={showCompact ? 'Show all render options' : 'Fold the panel to frame the shot'}
+                  title={showCompact ? 'Show all options' : 'Fold the panel to frame the shot'}
+                >
+                  {showCompact ? '▾' : '▴'}
+                </button>
+              )}
+              <button type="button" className={styles.iconBtn} onClick={() => setOpen(false)} aria-label="Close" disabled={phase === 'running'}>
+                ✕
+              </button>
+            </div>
           </header>
 
           {phase === 'form' && (
@@ -187,6 +336,30 @@ export function RenderStudio({ open, onOpenChange, getViewerHandle, onOpenSettin
                 </p>
               )}
 
+              <div className={styles.label}>Frame</div>
+              <div className={styles.frameRow} role="radiogroup" aria-label="Frame">
+                {RENDER_FRAMES.map((f) => (
+                  <button
+                    key={f.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={prefs.frame === f.id}
+                    className={`${styles.frameChip} ${prefs.frame === f.id ? styles.active : ''}`}
+                    onClick={() => pickFrame(f.id)}
+                    title={f.hint}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+              {prefs.frame !== 'screen' && (
+                <p className={styles.hint}>
+                  {finder ? 'Move the view to frame your shot: the render is exactly what is inside the frame.' : 'Not enough room for the frame: fold the panel or turn the phone.'}
+                </p>
+              )}
+
+              {!showCompact && (
+              <>
               <div className={styles.label}>Look</div>
               <div className={styles.styleGrid}>
                 {RENDER_STYLES.map((s) => (
@@ -233,17 +406,33 @@ export function RenderStudio({ open, onOpenChange, getViewerHandle, onOpenSettin
                 </span>
               </label>
 
-              <label className={styles.toggle}>
-                <input
-                  type="checkbox"
-                  checked={prefs.frameBuilding}
-                  onChange={(e) => setPrefs((p) => ({ ...p, frameBuilding: e.target.checked }))}
-                />
-                <span className={styles.switch} aria-hidden />
-                <span>
-                  Frame the building <small>(same angle, more detail on walls &amp; openings)</small>
-                </span>
-              </label>
+              {viewCtx.interior && (
+                <label className={styles.toggle}>
+                  <input
+                    type="checkbox"
+                    checked={prefs.ceiling}
+                    onChange={(e) => setPrefs((p) => ({ ...p, ceiling: e.target.checked }))}
+                  />
+                  <span className={styles.switch} aria-hidden />
+                  <span>
+                    Add a ceiling <small>(plain, on top of the walls: the model has none)</small>
+                  </span>
+                </label>
+              )}
+
+              {!viewCtx.interior && prefs.frame === 'screen' && (
+                <label className={styles.toggle}>
+                  <input
+                    type="checkbox"
+                    checked={prefs.frameBuilding}
+                    onChange={(e) => setPrefs((p) => ({ ...p, frameBuilding: e.target.checked }))}
+                  />
+                  <span className={styles.switch} aria-hidden />
+                  <span>
+                    Frame the building <small>(same angle, more detail on walls &amp; openings)</small>
+                  </span>
+                </label>
+              )}
 
               <textarea
                 className={styles.note}
@@ -256,14 +445,18 @@ export function RenderStudio({ open, onOpenChange, getViewerHandle, onOpenSettin
                   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) void run();
                 }}
               />
+              </>
+              )}
 
               <button type="button" className={styles.primary} onClick={() => void run()} disabled={noScene || (status ? !status.ready : false)}>
                 Render this view
               </button>
-              <p className={styles.meta}>
-                {tier.modelLabel} · {tier.imageSize} · about {tier.etaSec}s · ~${tier.approxUsd.toFixed(2)}
-                {status?.providerLabel ? ` · ${status.providerLabel}` : ''}
-              </p>
+              {!showCompact && (
+                <p className={styles.meta}>
+                  {tier.modelLabel} · {tier.imageSize} · about {tier.etaSec}s · ~${tier.approxUsd.toFixed(2)}
+                  {status?.providerLabel ? ` · ${status.providerLabel}` : ''}
+                </p>
+              )}
             </div>
           )}
 

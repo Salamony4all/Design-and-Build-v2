@@ -9,7 +9,11 @@ import {
   combine,
   currentPose,
   fitPose,
+  hFovOf,
+  lensToVFov,
   navLimits,
+  ORBIT_LENS_MM,
+  vFovToLens,
   setLensShift,
   turnPose,
   zoomPose,
@@ -168,5 +172,41 @@ describe('combine', () => {
   it('ignores boxes with non-finite numbers', () => {
     expect(combine([{ min: [0, 0, 0], max: [1, 1, 1] }, { min: [NaN, 0, 0], max: [5, 5, 5] }])).toEqual({ min: [0, 0, 0], max: [1, 1, 1] });
     expect(combine([])).toBeNull();
+  });
+});
+
+describe('lenses', () => {
+  it('converts focal length and field of view both ways', () => {
+    for (const aspect of [393 / 780, 1, 1440 / 900, 2]) {
+      for (const mm of [14, 18, 24, 35, 50]) {
+        expect(vFovToLens(lensToVFov(mm, aspect), aspect)).toBeCloseTo(mm, 6);
+      }
+    }
+  });
+
+  it('frames the same diagonal on a phone and on a monitor', () => {
+    const diag = (mm: number, aspect: number) => {
+      const t = Math.tan(THREE.MathUtils.degToRad(lensToVFov(mm, aspect)) / 2);
+      return Math.atan(t * Math.sqrt(1 + aspect * aspect));
+    };
+    expect(diag(18, 393 / 780)).toBeCloseTo(diag(18, 1440 / 900), 9);
+  });
+
+  it('keeps the laptop overview close to the old 50° view and widens phones', () => {
+    expect(lensToVFov(ORBIT_LENS_MM, 1440 / 900)).toBeGreaterThan(45);
+    expect(lensToVFov(ORBIT_LENS_MM, 1440 / 900)).toBeLessThan(50);
+    // The old fixed 50° gave a phone held upright only ~26° across.
+    expect(hFovOf(50, 393 / 780)).toBeLessThan(27);
+    expect(hFovOf(lensToVFov(ORBIT_LENS_MM, 393 / 780), 393 / 780)).toBeGreaterThan(38);
+    // 18 mm in walk mode: a real room's worth across, even upright.
+    expect(hFovOf(lensToVFov(18, 393 / 780), 393 / 780)).toBeGreaterThan(50);
+  });
+
+  it('fits with the lens it is given', () => {
+    const cam = new THREE.PerspectiveCamera(50, PHONE.width / PHONE.height, 0.1, 1000);
+    const narrow = fitPose(cam, BOX, { phi: ISO_PHI, theta: ISO_THETA }, PHONE, 30);
+    const wide = fitPose(cam, BOX, { phi: ISO_PHI, theta: ISO_THETA }, PHONE, 70);
+    expect(wide.fov).toBe(70);
+    expect(wide.radius).toBeLessThan(narrow.radius);
   });
 });

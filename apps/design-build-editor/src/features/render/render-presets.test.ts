@@ -1,16 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import {
   ALLOWED_RENDER_MODELS,
+  RENDER_FRAMES,
   RENDER_TIERS,
   SUPPORTED_ASPECTS,
   buildGeometryLockPrompt,
   centreCrop,
   clampNote,
+  frameAspect,
   furnishFromText,
+  isRenderFrame,
   isSupportedAspect,
   modelSupportsImageSize,
   nearestAspect,
   styleFromText,
+  viewfinderRect,
 } from './render-presets';
 
 describe('aspect ratios', () => {
@@ -130,5 +134,41 @@ describe('focusCrop', () => {
     const { focusCrop } = await import('./render-presets');
     const c = focusCrop(1600, 1000, { x0: 0.5, y0: 0.5, x1: 0.51, y1: 0.51 });
     expect(c.w).toBeGreaterThan(1000);
+  });
+});
+
+describe('render frames and inside views', () => {
+  it('fits the largest frame of the chosen format in the free box, centred', () => {
+    const r = viewfinderRect({ x0: 8, y0: 220, x1: 385, y1: 660 }, 16 / 9)!;
+    expect(r.w).toBeCloseTo(377, 6);
+    expect(r.h).toBeCloseTo(377 / (16 / 9), 6);
+    expect(r.x).toBeCloseTo(8, 6);
+    expect(r.y + r.h / 2).toBeCloseTo((220 + 660) / 2, 6);
+    const tall = viewfinderRect({ x0: 0, y0: 0, x1: 400, y1: 300 }, 9 / 16)!;
+    expect(tall.h).toBeCloseTo(300, 6);
+    expect(tall.w).toBeCloseTo(300 * (9 / 16), 6);
+    expect(viewfinderRect({ x0: 0, y0: 0, x1: 30, y1: 300 }, 1)).toBeNull();
+  });
+
+  it('maps every fixed frame to a supported model format', () => {
+    for (const f of RENDER_FRAMES) {
+      if (f.id === 'screen') expect(frameAspect(f.id)).toBeUndefined();
+      else expect(isSupportedAspect(frameAspect(f.id)!.label)).toBe(true);
+    }
+    expect(isRenderFrame('16:9')).toBe(true);
+    expect(isRenderFrame('2:1')).toBe(false);
+  });
+
+  it('tells the model about the lens and the missing ceiling inside the building', () => {
+    const p = buildGeometryLockPrompt({ style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false, lensMm: 18, ceiling: true });
+    expect(p).toMatch(/eye height/);
+    expect(p).toMatch(/18 mm/);
+    expect(p).toMatch(/plain flat white ceiling/);
+    expect(p).not.toMatch(/roofless cutaway/);
+    const open = buildGeometryLockPrompt({ style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false, ceiling: false });
+    expect(open).toMatch(/open above the walls/);
+    expect(open).not.toMatch(/plain flat white ceiling/);
+    const outside = buildGeometryLockPrompt({ style: 'daylight', viewKind: 'eye-level', furnish: false, withEdgeGuide: false, withPlan: false });
+    expect(outside).not.toMatch(/eye height \(about 1\.6 m\)/);
   });
 });

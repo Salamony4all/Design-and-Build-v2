@@ -288,6 +288,59 @@
   .composerRenderBtn { transition: none; }
 }
 
+/* ---- Frame (viewfinder) ---- */
+.headBtns { display: flex; align-items: center; gap: 2px; flex: none; }
+.frameRow { display: flex; flex-wrap: wrap; gap: 6px; }
+.frameChip {
+  flex: 1 1 auto;
+  min-width: 46px;
+  padding: 6px 8px;
+  border: 1px solid rgba(77, 91, 126, 0.16);
+  border-radius: 9px;
+  background: #fff;
+  color: #172138;
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.frameChip:hover { border-color: rgba(45, 102, 246, 0.45); }
+.hint { margin: -2px 0 0; color: #6f7891; font-size: 12px; line-height: 1.4; }
+.compact .body { gap: 8px; padding-bottom: 12px; }
+
+/* The frame the render will have. Clicks go through to the 3D view, so you can
+   keep moving the camera to frame the shot. */
+.viewfinder {
+  position: fixed;
+  z-index: 24;
+  pointer-events: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: 4px;
+  box-shadow: 0 0 0 100vmax rgba(12, 18, 32, 0.34), 0 0 0 1px rgba(23, 33, 56, 0.35) inset;
+}
+.viewfinder::before,
+.viewfinder::after {
+  content: '';
+  position: absolute;
+  inset: 33.333% 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+.viewfinder::after { inset: 0 33.333%; border: 0; border-left: 1px solid rgba(255, 255, 255, 0.35); border-right: 1px solid rgba(255, 255, 255, 0.35); }
+.vfLabel {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(12, 18, 32, 0.62);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
 /* Tablets and small laptops: below the view toolbar. */
 @media (max-width: 1180px) {
   .panel { top: 122px; max-height: calc(100% - 122px - var(--db-dock-top, 76px) - 12px); }

@@ -212,6 +212,8 @@ export interface FidelityOptions {
   aspectMismatch?: boolean;
   /** The render was asked to add furniture (looser limit for edges inside rooms). */
   furnished?: boolean;
+  /** Inside a room there is no empty background to guard (a ceiling may close the open top). */
+  ignoreOutside?: boolean;
 }
 
 export function edgeMapOf(img: RgbaImage, keep: number): { mask: Uint8Array; mag: Float32Array } {
@@ -247,7 +249,9 @@ export function geometryFidelity(model: RgbaImage, render: RgbaImage, opts: Fide
     if (!srcWide[i]) strongOff++;
   }
   const added = strong ? strongOff / strong : 0;
-  const sil = silhouetteMask(model, 14, Math.max(2, Math.round(0.016 * longSide)));
+  const sil = opts.ignoreOutside
+    ? { mask: new Uint8Array(0), confident: false }
+    : silhouetteMask(model, 14, Math.max(2, Math.round(0.016 * longSide)));
   let strongOutside = 0;
   if (sil.confident) {
     for (let i = 0; i < outStrong.length; i++) if (outStrong[i] && !sil.mask[i]) strongOutside++;
@@ -337,7 +341,7 @@ export function rasterize(img: CanvasImageSource & { width: number; height: numb
 export async function scoreRenderFidelity(
   modelUrl: string,
   renderUrl: string,
-  opts: { analysisLongSide?: number; furnished?: boolean } = {},
+  opts: { analysisLongSide?: number; furnished?: boolean; ignoreOutside?: boolean } = {},
 ): Promise<FidelityReport> {
   const analysisLongSide = opts.analysisLongSide ?? 384;
   const [a, b] = await Promise.all([loadImage(modelUrl), loadImage(renderUrl)]);
@@ -348,6 +352,7 @@ export async function scoreRenderFidelity(
   return geometryFidelity(rasterize(a, w, h), rasterize(b, w, h), {
     aspectMismatch: Math.abs(rb / ra - 1) > 0.02,
     furnished: opts.furnished,
+    ignoreOutside: opts.ignoreOutside,
   });
 }
 

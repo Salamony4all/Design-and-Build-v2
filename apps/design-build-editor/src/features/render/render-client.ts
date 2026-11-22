@@ -36,6 +36,8 @@ export interface RenderJobOptions {
   onStage?: (s: RenderStage) => void;
   /** Dev only: the server keeps input/output under .data/render-debug. */
   debugSave?: boolean;
+  /** Interior views: close the open-top rooms with a plain ceiling (default on). */
+  ceiling?: boolean;
 }
 
 export interface RenderJobResult {
@@ -135,6 +137,7 @@ async function postRender(
       tier: o.tier,
       aspectRatio: view.aspect.label,
       viewKind: view.viewKind,
+      ...(view.viewKind === 'interior' ? { lensMm: view.lensMm, ceiling: o.ceiling !== false } : {}),
       furnish: o.furnish,
       note: o.note,
       strict,
@@ -181,7 +184,10 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
       stop();
     }
     o.onStage?.({ key: 'check', label: 'Checking walls, doors and windows against your model…', progress: cap + 0.03 });
-    const fidelity = await scoreRenderFidelity(view.dataUrl, api.image, { furnished: o.furnish });
+    // Inside a room a ceiling (and its lights) may close the open top: looser
+    // limit for new edges, and no empty background to guard.
+    const interior = view.viewKind === 'interior';
+    const fidelity = await scoreRenderFidelity(view.dataUrl, api.image, { furnished: o.furnish || interior, ignoreOutside: interior });
     if (!best || fidelity.score > best.fidelity.score) best = { api, fidelity };
     return fidelity;
   };

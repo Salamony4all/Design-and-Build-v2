@@ -94,15 +94,34 @@ import {
   fitPose,
   focusPose,
   freeAreaShift,
+  lensToVFov,
   navLimits,
   pickPoint,
+  pickSurface,
+  setLensShift,
   turnPose,
   zoomPose,
+  animateFree,
+  LENS_STEPS_MM,
+  MAX_LENS_MM,
+  MAX_POLAR,
+  MIN_LENS_MM,
+  ORBIT_LENS_MM,
+  WALK_LENS_MM,
   type Aabb as NavAabb,
   type NavLimits,
   type ViewArea,
 } from '@/features/viewer-interaction/view-navigator';
 import { NavHint } from '@/features/viewer-interaction/NavHint';
+import {
+  WalkControls,
+  clampToArea,
+  findStandingSpot,
+  quaternionFromYawPitch,
+  sceneProbe,
+  yawPitchFromDirection,
+  type WalkHost,
+} from '@/features/viewer-interaction/walk-controls';
 import type { AttachmentRef } from 'design-build-conversation-core';
 
 declare global {
@@ -777,13 +796,43 @@ export default function Home() {
   // Fits use the free part of the screen (between header, toolbar and prompt
   // bar), moves are animated, and the camera's clipping planes and zoom range
   // follow the model's size so zooming in never slices through it.
-  const [viewMode, setViewMode] = useState<'3d' | 'top'>('3d');
-  const viewModeRef = useRef<'3d' | 'top'>('3d');
+  const [viewMode, setViewMode] = useState<'3d' | 'top' | 'walk'>('3d');
+  const viewModeRef = useRef<'3d' | 'top' | 'walk'>('3d');
   viewModeRef.current = viewMode;
   const navLimitsRef = useRef<NavLimits | null>(null);
   const modelBoxRef = useRef<NavAabb | null>(null);
   /** True while the camera shows an automatic fit the user has not moved away from. */
   const autoFramedRef = useRef(false);
+  /** Walk mode: an eye-level camera inside the model, with its own wide lens. */
+  const walkRef = useRef<{ controls: WalkControls; canvas: HTMLCanvasElement } | null>(null);
+  const walkLensRef = useRef<number>(WALK_LENS_MM);
+  const [walkLens, setWalkLens] = useState<number>(WALK_LENS_MM);
+
+  const viewerCanvas = (): HTMLCanvasElement | null =>
+    (viewerHandleRef.current?.gl as { domElement?: HTMLCanvasElement } | undefined)?.domElement ?? null;
+  const perspectiveCam = (): THREE.PerspectiveCamera | null => {
+    const c = viewerHandleRef.current?.camera as THREE.PerspectiveCamera | undefined;
+    return c && c.isPerspectiveCamera ? c : null;
+  };
+  /** Vertical field of view of a 35 mm-equivalent lens on the current canvas. */
+  const fovForLens = useCallback((mm: number): number => {
+    const c = (viewerHandleRef.current?.gl as { domElement?: HTMLCanvasElement } | undefined)?.domElement;
+    const cam = viewerHandleRef.current?.camera as THREE.PerspectiveCamera | undefined;
+    const aspect = c && c.clientHeight > 0 ? c.clientWidth / c.clientHeight : cam?.aspect ?? 1;
+    return lensToVFov(mm, aspect);
+  }, []);
+  /** Walk-mode lens (pinch, toolbar, keys). */
+  const setWalkLensMm = useCallback((mm: number) => {
+    const v = Math.min(MAX_LENS_MM, Math.max(MIN_LENS_MM, mm));
+    walkLensRef.current = v;
+    const cam = viewerHandleRef.current?.camera as THREE.PerspectiveCamera | undefined;
+    if (cam?.isPerspectiveCamera && viewModeRef.current === 'walk') {
+      cam.fov = fovForLens(v);
+      cam.updateProjectionMatrix();
+      viewerHandleRef.current?.invalidate();
+    }
+    setWalkLens((old) => (Math.round(old) === Math.round(v) ? old : v));
+  }, [fovForLens]);
 
   /** Canvas size and the parts of it covered by the header, toolbar and prompt bar. */
   const measureViewArea = useCallback((): ViewArea => {
@@ -822,6 +871,26 @@ export default function Home() {
     return { width: rect.width, height: rect.height, insets: { top: top + pad, bottom: bottom + pad, left: pad, right: pad } };
   }, []);
 
+  /** Back from walk mode: hand the camera to the orbit controls, pivoting just ahead of it. */
+  const leaveWalk = useCallback(() => {
+    walkRef.current?.controls.stop();
+    // Taps select elements again.
+    try {
+      (useViewer.getState() as { setCameraDragging?: (d: boolean) => void }).setCameraDragging?.(false);
+    } catch {
+      /* viewer store unavailable */
+    }
+    const h = viewerHandleRef.current;
+    const ctl = h?.controls as { target: THREE.Vector3; update: () => void; enabled?: boolean } | null | undefined;
+    if (h?.camera && ctl) {
+      const dir = new THREE.Vector3();
+      h.camera.getWorldDirection(dir);
+      ctl.target.copy(h.camera.position).addScaledVector(dir, 4);
+      ctl.enabled = true;
+      ctl.update();
+    }
+  }, []);
+
   /** Fit the model (or the given elements) into view, from the 3D corner view, the top, or the current angle. */
   const goToView = useCallback((mode: '3d' | 'top', opts: { keepAngle?: boolean; ids?: Set<string>; ms?: number } = {}) => {
     const h = viewerHandleRef.current;
@@ -830,19 +899,22 @@ export default function Home() {
     if (!whole) return;
     const target = opts.ids ? combineBoxes(collectBuildingBoxes(opts.ids).boxes) : whole;
     if (!target) return;
+    if (viewModeRef.current === 'walk') leaveWalk();
     const cur = currentPose(h);
     const dir = mode === 'top'
       ? { phi: TOP_PHI, theta: opts.keepAngle && cur.phi < 0.1 ? cur.theta : 0 }
       : opts.keepAngle && cur.phi > 0.12
-        ? { phi: cur.phi, theta: cur.theta }
+        ? { phi: Math.min(cur.phi, MAX_POLAR), theta: cur.theta }
         : { phi: ISO_PHI, theta: ISO_THETA };
     const area = measureViewArea();
-    const wholeFit = opts.ids ? fitPose(h.camera, whole, { phi: ISO_PHI, theta: ISO_THETA }, area) : null;
-    let pose = fitPose(h.camera, target, dir, area);
+    // The overview always uses the same lens, whatever the screen's shape.
+    const fov = (h.camera as THREE.PerspectiveCamera).isPerspectiveCamera ? fovForLens(ORBIT_LENS_MM) : undefined;
+    const wholeFit = opts.ids ? fitPose(h.camera, whole, { phi: ISO_PHI, theta: ISO_THETA }, area, fov) : null;
+    let pose = fitPose(h.camera, target, dir, area, fov);
     if (mode === 'top' && !opts.keepAngle) {
       // Top view: turn the plan a quarter if that shows it clearly larger
       // (a wide plan on a tall phone screen), otherwise keep north up.
-      const turned = fitPose(h.camera, target, { phi: TOP_PHI, theta: Math.PI / 2 }, area);
+      const turned = fitPose(h.camera, target, { phi: TOP_PHI, theta: Math.PI / 2 }, area, fov);
       if (pose.zoom !== undefined && turned.zoom !== undefined ? turned.zoom > pose.zoom * 1.08 : turned.radius < pose.radius * 0.92) pose = turned;
     }
     if (!opts.ids || !navLimitsRef.current) {
@@ -854,9 +926,10 @@ export default function Home() {
     const lim = navLimitsRef.current;
     if (lim && pose.zoom === undefined) pose.radius = Math.min(Math.max(pose.radius, lim.minDistance), lim.maxDistance);
     setViewMode(mode);
+    viewModeRef.current = mode;
     autoFramedRef.current = !opts.ids;
     void animateTo(h, pose, opts.ms ?? 520);
-  }, [collectBuildingBoxes, measureViewArea]);
+  }, [collectBuildingBoxes, measureViewArea, fovForLens]);
 
   /** 3D view of the whole building (also re-centres when pressed again). */
   const frameEntireProject = useCallback(() => {
@@ -867,7 +940,7 @@ export default function Home() {
   const frameSelection = useCallback(() => {
     const ids = new Set(useViewer.getState().selection.selectedIds);
     if (ids.size === 0) return;
-    goToView(viewModeRef.current, { keepAngle: true, ids });
+    goToView(viewModeRef.current === 'top' ? 'top' : '3d', { keepAngle: true, ids });
   }, [goToView]);
 
   /** Top view of the whole plan. */
@@ -878,13 +951,22 @@ export default function Home() {
   const zoomView = useCallback((dir: 1 | -1) => {
     const h = viewerHandleRef.current;
     if (!h || !h.camera) return;
+    if (viewModeRef.current === 'walk') {
+      // Walking: + / − change the lens, like a camera's zoom ring.
+      setWalkLensMm(walkLensRef.current * (dir > 0 ? 1.25 : 0.8));
+      return;
+    }
     autoFramedRef.current = false;
     void animateTo(h, zoomPose(currentPose(h), dir > 0 ? 0.65 : 1.55, navLimitsRef.current), 280);
-  }, []);
+  }, [setWalkLensMm]);
 
   const turnView = useCallback((dir: 1 | -1) => {
     const h = viewerHandleRef.current;
     if (!h || !h.camera) return;
+    if (viewModeRef.current === 'walk') {
+      void walkRef.current?.controls.turn((-dir * Math.PI) / 4);
+      return;
+    }
     autoFramedRef.current = false;
     void animateTo(h, turnPose(currentPose(h), dir), 460);
   }, []);
@@ -902,12 +984,118 @@ export default function Home() {
     void animateTo(h, focusPose(currentPose(h), point, R, navLimitsRef.current), 480);
   }, []);
 
-  /** Slide the lens so the model sits in the middle of whatever part of the screen is free now. */
+  /** Slide the lens so the model sits in the middle of whatever part of the screen is free now (and keep the lens after a resize). */
   const recenterLens = useCallback((ms = 300) => {
     const h = viewerHandleRef.current;
     if (!h || !h.camera) return;
-    void animateTo(h, { ...currentPose(h), shift: freeAreaShift(measureViewArea()) }, ms);
-  }, [measureViewArea]);
+    const shift = freeAreaShift(measureViewArea());
+    if (viewModeRef.current === 'walk') {
+      setLensShift(h.camera, shift);
+      setWalkLensMm(walkLensRef.current);
+      h.invalidate();
+      return;
+    }
+    const fov = (h.camera as THREE.PerspectiveCamera).isPerspectiveCamera ? fovForLens(ORBIT_LENS_MM) : undefined;
+    void animateTo(h, { ...currentPose(h), shift, ...(fov !== undefined ? { fov } : {}) }, ms);
+  }, [measureViewArea, fovForLens, setWalkLensMm]);
+
+  /**
+   * Walk mode: stand at eye height on the floor you are looking at, facing the
+   * same way, with a wide lens. Drag to look, two fingers to move, pinch for
+   * the lens, double-tap to walk somewhere.
+   */
+  const enterWalk = useCallback(() => {
+    const h = viewerHandleRef.current;
+    const cam = h?.camera as THREE.PerspectiveCamera | undefined;
+    const canvas = (h?.gl as { domElement?: HTMLCanvasElement } | undefined)?.domElement;
+    if (!h || !h.scene || !cam?.isPerspectiveCamera || !canvas) return;
+    const whole = modelBoxRef.current ?? combineBoxes(collectBuildingBoxes().boxes);
+    if (!whole) return;
+    modelBoxRef.current = whole;
+    if (!navLimitsRef.current) {
+      const lim = navLimits(whole, boxRadius(whole) * 3);
+      navLimitsRef.current = lim;
+      applyLimits(h, lim);
+    }
+    const floorY = 0;
+    const dir = new THREE.Vector3();
+    cam.getWorldDirection(dir);
+    // Stand where you are looking: the floor under the middle of the view.
+    let spot: THREE.Vector3 | null = null;
+    if (viewModeRef.current !== 'walk') {
+      const p = new THREE.Vector3();
+      if (new THREE.Ray(cam.position.clone(), dir.clone()).intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -floorY), p)) spot = p;
+    } else {
+      spot = cam.position.clone();
+    }
+    const inside = (p: THREE.Vector3) =>
+      p.x >= whole.min[0] - 0.5 && p.x <= whole.max[0] + 0.5 && p.z >= whole.min[2] - 0.5 && p.z <= whole.max[2] + 0.5;
+    if (!spot || !inside(spot)) spot = boxCenter(whole);
+    const heading = Math.hypot(dir.x, dir.z) > 1e-3 ? yawPitchFromDirection(dir).yaw : 0;
+    // Not inside a wall, in the middle of that room or corridor, facing down
+    // it if a wall would be in the way.
+    const stand = viewModeRef.current === 'walk'
+      ? { position: clampToArea(spot, whole, floorY), yaw: heading }
+      : findStandingSpot(sceneProbe(h.scene), spot, heading, whole, floorY);
+    const position = stand.position;
+    const yaw = stand.yaw;
+
+    cancelViewAnimation();
+    const ctl = h.controls as { enabled?: boolean } | null;
+    if (ctl) ctl.enabled = false;
+    if (!walkRef.current || walkRef.current.canvas !== canvas || !walkRef.current.controls.enabled) {
+      walkRef.current?.controls.stop();
+      const host: WalkHost = {
+        getCamera: () => {
+          const c = viewerHandleRef.current?.camera as THREE.PerspectiveCamera | undefined;
+          return c?.isPerspectiveCamera ? c : null;
+        },
+        dom: canvas,
+        invalidate: () => viewerHandleRef.current?.invalidate(),
+        getLens: () => walkLensRef.current,
+        setLens: (mm) => setWalkLensMm(mm),
+        area: () => modelBoxRef.current,
+        floorY: () => floorY,
+        pick: (x, y) => {
+          const hh = viewerHandleRef.current;
+          return hh ? pickSurface(hh, x, y) : null;
+        },
+        onUserMove: () => cancelViewAnimation(),
+        glide: (to, ms) => {
+          const hh = viewerHandleRef.current;
+          return hh ? animateFree(hh, to, ms) : Promise.resolve();
+        },
+      };
+      walkRef.current = { controls: new WalkControls(host), canvas };
+    }
+    setViewMode('walk');
+    viewModeRef.current = 'walk';
+    autoFramedRef.current = false;
+    setWalkLens(walkLensRef.current);
+    // Walking is for looking: taps do not select (a selection sheet popping up
+    // on the first tap of a double tap would cover the floor you aim at).
+    try {
+      const vs = useViewer.getState() as { setCameraDragging?: (d: boolean) => void; setSelection?: (s: { selectedIds: string[] }) => void };
+      vs.setSelection?.({ selectedIds: [] });
+      vs.setCameraDragging?.(true);
+      (useViewer as unknown as { setState: (p: Record<string, unknown>) => void }).setState({ hoveredId: null });
+    } catch {
+      /* viewer store unavailable */
+    }
+    walkRef.current.controls.start({ position, yaw, pitch: 0 });
+    void animateFree(
+      h,
+      { position, quaternion: quaternionFromYawPitch(yaw, 0), fov: fovForLens(walkLensRef.current), shift: freeAreaShift(measureViewArea()) },
+      750,
+    );
+  }, [collectBuildingBoxes, measureViewArea, fovForLens, setWalkLensMm]);
+
+  /** Lens button: steps through 14 / 18 / 24 / 35 mm. */
+  const stepWalkLens = useCallback(() => {
+    const cur = Math.round(walkLensRef.current);
+    const next = LENS_STEPS_MM.find((mm) => mm > cur) ?? LENS_STEPS_MM[0];
+    setWalkLensMm(next);
+  }, [setWalkLensMm]);
 
   /** Reset framing state for a new run / reset / scene replace. */
   const resetFraming = useCallback((runId: number) => {
@@ -3276,25 +3464,58 @@ export default function Home() {
     let down: { x: number; y: number; t: number; id: number } | null = null;
     let lastTap: { x: number; y: number; t: number } | null = null;
     let lastTouchFocus = 0;
+    const pressed = new Set<number>();
+    let dragging = false;
+    // While the camera is being dragged, the viewer must not treat the release
+    // as a click: otherwise every turn or pinch ends by selecting whatever is
+    // under the finger (and the selection sheet pops up on phones).
+    const setDragging = (v: boolean) => {
+      try {
+        (useViewer.getState() as { setCameraDragging?: (d: boolean) => void }).setCameraDragging?.(v);
+      } catch {
+        /* viewer store unavailable */
+      }
+    };
+    const startDrag = () => {
+      if (dragging || proModeRef.current) return;
+      dragging = true;
+      setDragging(true);
+    };
     const onDown = (e: PointerEvent) => {
+      pressed.add(e.pointerId);
       cancelViewAnimation();
       autoFramedRef.current = false;
-      down = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId };
+      if (pressed.size === 1) down = { x: e.clientX, y: e.clientY, t: e.timeStamp > 0 ? e.timeStamp : performance.now(), id: e.pointerId };
+      else startDrag();
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!down || dragging || e.pointerId !== down.id) return;
+      if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) startDrag();
     };
     const onUp = (e: PointerEvent) => {
+      if (!pressed.delete(e.pointerId) || pressed.size > 0) return;
+      const wasDrag = dragging;
+      if (dragging) {
+        dragging = false;
+        // After the viewer has seen this release (walk mode keeps taps from selecting).
+        window.setTimeout(() => setDragging(viewModeRef.current === 'walk'), 0);
+      }
       const d = down;
       down = null;
-      if (!d || d.id !== e.pointerId) return;
-      const now = performance.now();
-      if (Math.hypot(e.clientX - d.x, e.clientY - d.y) > 10 || now - d.t > 350) {
+      if (!d) return;
+      // Input time, not handler time: a busy frame must not split a double tap.
+      const now = e.timeStamp > 0 ? e.timeStamp : performance.now();
+      const walking = viewModeRef.current === 'walk';
+      if (wasDrag || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 10 || now - d.t > 350) {
         // A drag: keep the 3D / Top switch truthful.
         const h = viewerHandleRef.current;
-        if (h?.camera) setViewMode(currentPose(h).phi < 0.1 ? 'top' : '3d');
+        if (!walking && h?.camera) setViewMode(currentPose(h).phi < 0.1 ? 'top' : '3d');
         lastTap = null;
         return;
       }
-      if (e.pointerType !== 'touch' || proModeRef.current) return;
-      if (lastTap && now - lastTap.t < 320 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30) {
+      // Walk mode handles its own double taps (walk there).
+      if (walking || e.pointerType !== 'touch' || proModeRef.current) return;
+      if (lastTap && d.t - lastTap.t < 300 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30) {
         lastTap = null;
         lastTouchFocus = now;
         focusAt(e.clientX, e.clientY);
@@ -3303,7 +3524,7 @@ export default function Home() {
       }
     };
     const onDouble = (e: MouseEvent) => {
-      if (proModeRef.current || performance.now() - lastTouchFocus < 600) return;
+      if (viewModeRef.current === 'walk' || proModeRef.current || performance.now() - lastTouchFocus < 600) return;
       focusAt(e.clientX, e.clientY);
     };
     const onWheel = () => {
@@ -3311,16 +3532,43 @@ export default function Home() {
       autoFramedRef.current = false;
     };
     canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointermove', onMove);
     canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('pointercancel', onUp);
     canvas.addEventListener('dblclick', onDouble);
     canvas.addEventListener('wheel', onWheel, { passive: true });
     return () => {
       canvas.removeEventListener('pointerdown', onDown);
+      canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerup', onUp);
+      canvas.removeEventListener('pointercancel', onUp);
       canvas.removeEventListener('dblclick', onDouble);
       canvas.removeEventListener('wheel', onWheel);
+      if (dragging) setDragging(viewModeRef.current === 'walk');
     };
   }, [viewerEpoch, focusAt]);
+
+  // A new viewer (or a dev refresh) leaves the walk controls on the old canvas:
+  // go back to the orbit view rather than a camera that ignores the finger.
+  useEffect(() => {
+    if (viewModeRef.current !== 'walk') return;
+    const canvas = (viewerHandleRef.current?.gl as { domElement?: HTMLCanvasElement } | undefined)?.domElement;
+    const w = walkRef.current;
+    if (w && w.canvas === canvas && w.controls.enabled) return;
+    leaveWalk();
+    setViewMode('3d');
+    viewModeRef.current = '3d';
+  }, [viewerEpoch, leaveWalk]);
+
+  // PRO uses the orbit camera (and its own tools): leave walk mode first.
+  useEffect(() => {
+    if ((proMode || proMounting) && viewModeRef.current === 'walk') {
+      leaveWalk();
+      setViewMode('3d');
+      viewModeRef.current = '3d';
+    }
+  }, [proMode, proMounting, leaveWalk]);
+  useEffect(() => () => walkRef.current?.controls.stop(), []);
 
   // Keyboard: + / − zoom, Q / E turn, T top, H 3D view, F zoom to the selection.
   useEffect(() => {
@@ -3336,15 +3584,18 @@ export default function Home() {
       else if (k === 'e' || k === 'E') turnView(1);
       else if (k === 't' || k === 'T') topViewAndFrame();
       else if (k === 'h' || k === 'H' || k === 'Home') frameEntireProject();
-      else if (k === 'f' || k === 'F') {
+      else if (k === 'v' || k === 'V') {
+        if (viewModeRef.current === 'walk') frameEntireProject();
+        else enterWalk();
+      } else if (k === 'f' || k === 'F') {
         if (useViewer.getState().selection.selectedIds.length) frameSelection();
-        else goToView(viewModeRef.current, { keepAngle: true });
+        else goToView(viewModeRef.current === 'top' ? 'top' : '3d', { keepAngle: viewModeRef.current !== 'walk' });
       } else return;
       e.preventDefault();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [zoomView, turnView, topViewAndFrame, frameEntireProject, frameSelection, goToView]);
+  }, [zoomView, turnView, topViewAndFrame, frameEntireProject, frameSelection, goToView, enterWalk]);
 
   // Rotating the phone, resizing the window or the browser bar sliding away:
   // re-fit, unless the user has moved the camera since the last automatic fit.
@@ -3356,7 +3607,8 @@ export default function Home() {
         if (!sceneHasWallsNow()) return;
         // In top view the plan may turn to suit the new screen shape. Once the
         // user has moved the camera, keep their view and only re-centre it.
-        if (autoFramedRef.current) goToView(viewModeRef.current, { keepAngle: viewModeRef.current !== 'top', ms: 320 });
+        const m = viewModeRef.current;
+        if (autoFramedRef.current && m !== 'walk') goToView(m, { keepAngle: m !== 'top', ms: 320 });
         else recenterLens(320);
       }, 280);
     };
@@ -3428,10 +3680,13 @@ export default function Home() {
           near: cam.near, far: cam.far, radius: p.radius, phi: p.phi, theta: p.theta,
           target: p.target.toArray(), position: cam.position.toArray(),
           limits: navLimitsRef.current, mode: viewModeRef.current, auto: autoFramedRef.current,
-          area: measureViewArea(), box: modelBoxRef.current, shift: p.shift,
+          area: measureViewArea(), box: modelBoxRef.current, shift: p.shift, fov: p.fov,
+          orbitEnabled: (h.controls as { enabled?: boolean } | null)?.enabled ?? null,
+          walking: walkRef.current?.controls.enabled ?? false,
         };
       },
       boxes: () => collectBuildingBoxes().boxes,
+      ...(process.env.NODE_ENV !== 'production' ? { walkDebug: () => walkRef.current?.controls ?? null } : {}),
     };
   }, [measureViewArea, collectBuildingBoxes]);
 
@@ -3588,6 +3843,8 @@ export default function Home() {
               </SelectionActionBarErrorBoundary>
               {viewerVisible && !proMode && (
                 <RenderStudio
+                  getViewContext={() => ({ interior: viewModeRef.current === 'walk', lensMm: walkLensRef.current })}
+                  getFreeArea={measureViewArea}
                   open={renderStudioOpen}
                   onOpenChange={setRenderStudioOpen}
                   getViewerHandle={getViewerHandle}
@@ -3613,7 +3870,7 @@ export default function Home() {
               onZoomOut={() => zoomView(-1)}
               onTurnLeft={() => turnView(-1)}
               onTurnRight={() => turnView(1)}
-              viewMode={viewMode}
+              viewMode={viewMode === 'top' ? 'top' : '3d'}
             />
           )}
         </>
@@ -3647,7 +3904,8 @@ export default function Home() {
       {!proMode && !proMounting && (<SelectionPropertiesPanel onZoomTo={frameSelection} />)}
 
       {/* One-time tip on moving around the model. */}
-      <NavHint visible={!!readyKey && docked && sceneHasWalls && !proMode && !proMounting && !settingsOpen} />
+      <NavHint visible={!!readyKey && docked && sceneHasWalls && !proMode && !proMounting && !settingsOpen && viewMode !== 'walk'} />
+      <NavHint variant="walk" visible={viewMode === 'walk' && !proMode && !proMounting && !settingsOpen} />
 
       {/* Viewer toolbar: shown once there is a model to look at. */}
       {!proMode && !proMounting && docked && sceneHasWalls && (
@@ -3660,6 +3918,9 @@ export default function Home() {
           onZoomOut={() => zoomView(-1)}
           onTurnLeft={() => turnView(-1)}
           onTurnRight={() => turnView(1)}
+          onWalk={enterWalk}
+          onLensStep={stepWalkLens}
+          lensMm={walkLens}
           viewMode={viewMode}
           proEnabled={editorMode.proEnabled}
           mode={editorMode.effectiveMode}
