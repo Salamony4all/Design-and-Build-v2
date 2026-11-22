@@ -16,6 +16,8 @@
 // it captures once then delegates to the captured-geometry entry point.
 import { collectPageVectors, mupdf } from './index';
 import { extractColumns, type CapturedGeometry, type Segment, type CubicCurve, type ColumnFootprint } from 'design-build-extraction-columns';
+import { detectFilledColumns, type FilledColumnWall } from './filled-columns';
+import type { MuVector } from './vector-device';
 
 export interface ColumnContract {
   physicalColumnId: string;
@@ -54,9 +56,25 @@ export function extractColumnsFromCapturedGeometry(
     sourceHash: string;
     coordinateFrame?: unknown;
     structuralEnvelope?: { minX: number; minY: number; maxX: number; maxY: number };
+    /** Captured vectors (with fill info). When given with `walls`, solid-filled
+     *  rectangles in the wall network are the primary column evidence. */
+    vectors?: MuVector[];
+    /** Accepted physical walls. Also used to keep only wall-embedded squares from
+     *  the legacy outline extractor (free-standing unfilled squares are furniture). */
+    walls?: FilledColumnWall[];
   },
   opts: ColumnExtractOptions = {},
 ): ColumnContract[] {
+  // PRIMARY: solid-filled rectangles (see filled-columns.ts).
+  if (input.vectors && input.walls) {
+    const filled = detectFilledColumns(input.vectors, input.walls, input.scaleMmPerPt);
+    if (filled.some((c) => c.verdict === 'ACCEPT')) {
+      return filled
+        .filter((c) => opts.includeReview || c.verdict === 'ACCEPT')
+        .map(({ evidence: _evidence, ...c }) => ({ ...c, sourceHash: input.sourceHash }) as ColumnContract);
+    }
+  }
+  // FALLBACK: legacy closed-outline extractor on unclaimed geometry.
   const claimed = new Set(input.claimedSourceIds);
   const segments = (input.lines ?? []).filter((l) => !claimed.has(l.id));
   const curves = (input.cubics ?? []).filter((c) => !claimed.has(c.id));
@@ -70,9 +88,27 @@ export function extractColumnsFromCapturedGeometry(
     geo,
     opts.minSizeM != null ? { minSizeM: opts.minSizeM } : {},
   );
-  const filtered = opts.includeReview
+  let filtered = opts.includeReview
     ? cols
     : cols.filter((c) => c.verdict === 'ACCEPT' && c.footprintType === 'RECTANGULAR');
+  // An unfilled square cannot be told from a table by shape alone. When the wall
+  // network is known, keep only squares whose centre sits inside it.
+  if (input.walls) {
+    const ptPerM = 1000 / input.scaleMmPerPt;
+    filtered = filtered.filter((c) => {
+      const cx = c.centreProjectM.x * ptPerM, cy = c.centreProjectM.y * ptPerM;
+      const half = (Math.max(c.widthM ?? 0, c.depthM ?? 0) * ptPerM) / 2;
+      return input.walls!.some((w) => {
+        const A = w.centerline.a, B = w.centerline.b;
+        const L = Math.hypot(B.x - A.x, B.y - A.y);
+        if (L < 1e-6) return false;
+        const ux = (B.x - A.x) / L, uy = (B.y - A.y) / L;
+        const along = (cx - A.x) * ux + (cy - A.y) * uy;
+        const across = Math.abs((cx - A.x) * uy - (cy - A.y) * ux);
+        return across <= Math.max(w.thickness / 2, half) && along >= -2 * half && along <= L + 2 * half;
+      });
+    });
+  }
   return filtered.map((c) => ({
     physicalColumnId: c.physicalColumnId,
     footprintType: c.footprintType,

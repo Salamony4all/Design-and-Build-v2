@@ -215,7 +215,7 @@ export async function POST(req: NextRequest) {
           intervalStartM: from * mPerPt,
           intervalEndM: to * mPerPt,
           widthM: (to - from) * mPerPt,
-          hingeSide: a.hinge ? 'left' : 'left',
+          hingeSide: a.hingeSide ?? 'left',
           swingDirection: a.swingDirection ?? 'inward',
           sourceSegmentIds: [...a.leafSegmentIds, ...a.swingSegmentIds],
           sourceOperationIds: a.sourceOperationIds,
@@ -301,6 +301,9 @@ export async function POST(req: NextRequest) {
         claimedSourceIds: claimedIds,
         scaleMmPerPt: pureResult.scaleMmPerPt,
         sourceHash: geometryHash,
+        // solid-filled rectangles in the wall network are the primary column evidence
+        vectors: captured.vectors as any,
+        walls: (pureResult.accepted ?? []) as any,
       });
       columnAudit = {
         accepted: columnContracts.length,

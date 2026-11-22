@@ -1,0 +1,32 @@
+{
+ "drawing": "CODE_06 1 page.pdf",
+ "units": "centre in mupdf points (y down); sizes in mm (x-extent, y-extent)",
+ "provenance": "Built 2026-11-22. The 24 structural columns are the solid grey blocks in the wall lines; count and locations were checked by eye on the rendered page (24 grey blocks counted tile by tile before looking at the vector data). Coordinates are taken from the PDF fill rectangles, so this key proves count, location and size, not an independent measurement of each edge. The 24 bedside tables and 4 common-room tables (unfilled squares) are furniture and must NOT be reported as columns.",
+ "columnCount": 24,
+ "columns": [
+  {"id": "C01", "centre": [323.1, 382.6], "xMm": 595, "yMm": 200},
+  {"id": "C02", "centre": [575.3, 382.6], "xMm": 595, "yMm": 200},
+  {"id": "C03", "centre": [1499.4, 382.6], "xMm": 595, "yMm": 200},
+  {"id": "C04", "centre": [1751.7, 382.6], "xMm": 595, "yMm": 200},
+  {"id": "C05", "centre": [969.4, 393.9], "xMm": 200, "yMm": 595},
+  {"id": "C06", "centre": [1105.4, 393.9], "xMm": 200, "yMm": 595},
+  {"id": "C07", "centre": [311.8, 609.3], "xMm": 200, "yMm": 595},
+  {"id": "C08", "centre": [1763.1, 609.3], "xMm": 200, "yMm": 595},
+  {"id": "C09", "centre": [578.1, 609.4], "xMm": 495, "yMm": 200},
+  {"id": "C10", "centre": [960.9, 609.4], "xMm": 495, "yMm": 200},
+  {"id": "C11", "centre": [1113.9, 609.4], "xMm": 495, "yMm": 200},
+  {"id": "C12", "centre": [1496.6, 609.4], "xMm": 495, "yMm": 200},
+  {"id": "C13", "centre": [578.1, 938.1], "xMm": 495, "yMm": 200},
+  {"id": "C14", "centre": [960.9, 938.1], "xMm": 495, "yMm": 200},
+  {"id": "C15", "centre": [1113.9, 938.1], "xMm": 495, "yMm": 200},
+  {"id": "C16", "centre": [1496.6, 938.1], "xMm": 495, "yMm": 200},
+  {"id": "C17", "centre": [311.8, 949.5], "xMm": 200, "yMm": 595},
+  {"id": "C18", "centre": [1763.1, 949.5], "xMm": 200, "yMm": 595},
+  {"id": "C19", "centre": [969.4, 1153.6], "xMm": 200, "yMm": 595},
+  {"id": "C20", "centre": [1105.4, 1153.6], "xMm": 200, "yMm": 595},
+  {"id": "C21", "centre": [323.1, 1164.9], "xMm": 595, "yMm": 200},
+  {"id": "C22", "centre": [575.3, 1164.9], "xMm": 595, "yMm": 200},
+  {"id": "C23", "centre": [1499.4, 1164.9], "xMm": 595, "yMm": 200},
+  {"id": "C24", "centre": [1751.7, 1164.9], "xMm": 595, "yMm": 200}
+ ]
+}
