@@ -9,7 +9,7 @@
  *  1. FACES   every stroke and dark-fill edge, grouped by direction and merged into
  *             maximal lines.
  *  2. BANDS   pairs of faces 40-500 mm apart that overlap for at least 400 mm with no
- *             third line between them (ladders such as stair treads and table rows
+ *             third line between them, a centre line apart (ladders such as stair treads and table rows
  *             are rejected: a line that is a face on both sides at the same spacing).
  *  3. POCHE   on the rendered page, is the inside of the band darker than what lies
  *             beside it? (solid fill, dense hatch, grey tone). Only judged when the
@@ -131,15 +131,30 @@ export function detectWallsGeneral(
       const c = (-(it.x1 + it.x2) * uy + (it.y1 + it.y2) * ux) / 2;
       lines.push({ c, lo: Math.min(a1, a2), hi: Math.max(a1, a2), w: it.w });
     }
-    lines.sort((p, q) => Math.round(p.c / 0.25) - Math.round(q.c / 0.25) || p.lo - q.lo);
+    // group lines that lie on the same axis (offsets within 0.3 pt), then join the
+    // pieces of each group end to end
+    lines.sort((p, q) => p.c - q.c || p.lo - q.lo);
     const merged: Line[] = [];
+    const flush = (g: Line[]) => {
+      g.sort((p, q) => p.lo - q.lo);
+      let cur: Line | null = null;
+      for (const l of g) {
+        if (cur && l.lo - cur.hi <= 0.8) {
+          if (l.hi - l.lo > cur.hi - cur.lo) cur.c = l.c;
+          cur.hi = Math.max(cur.hi, l.hi);
+          cur.w = Math.max(cur.w, l.w);
+        } else {
+          cur = { ...l };
+          merged.push(cur);
+        }
+      }
+    };
+    let group: Line[] = [];
     for (const l of lines) {
-      const m = merged[merged.length - 1];
-      if (m && Math.abs(m.c - l.c) <= 0.3 && l.lo - m.hi <= 0.8) {
-        m.hi = Math.max(m.hi, l.hi);
-        m.w = Math.max(m.w, l.w);
-      } else merged.push({ ...l });
+      if (group.length && l.c - group[0]!.c > 0.3) { flush(group); group = []; }
+      group.push(l);
     }
+    if (group.length) flush(group);
     const faces = merged.filter((m) => m.hi - m.lo >= minLen * 0.5).sort((p, q) => p.c - q.c || p.lo - q.lo);
     const cs = faces.map((f) => f.c);
     const firstAbove = (v: number) => {
@@ -159,7 +174,12 @@ export function detectWallsGeneral(
         for (let k = firstAbove(li.c + 0.4); k < j; k++) {
           const lk = faces[k]!;
           if (lk.c >= lj.c - 0.4) break;
-          if (Math.min(hi, lk.hi) - Math.max(lo, lk.lo) >= 0.5 * (hi - lo)) { blocked = true; break; }
+          if (Math.min(hi, lk.hi) - Math.max(lo, lk.lo) >= 0.5 * (hi - lo)) {
+            // a thin wall drawn with a centre line (glazed or cored partition) is still one wall
+            if (dd * S <= 250 && Math.abs(lk.c - (li.c + lj.c) / 2) <= 0.12 * dd) continue;
+            blocked = true;
+            break;
+          }
         }
         if (blocked) continue;
         const pw = Math.min(li.w, lj.w);
