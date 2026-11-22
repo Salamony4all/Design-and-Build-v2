@@ -300,6 +300,37 @@ export function geometryFidelity(model: RgbaImage, render: RgbaImage, opts: Fide
   };
 }
 
+/**
+ * Edges of the 3D model itself, from two flat render passes of the same view:
+ * surface orientation (normals) and object identity (one flat colour per mesh).
+ * A pixel is an edge where either changes — wall corners, a wall end in front
+ * of another wall, floor and ceiling lines, door and window frames — with no
+ * shadows, gradients or texture.
+ */
+export function modelLineMask(normals: RgbaImage, ids: RgbaImage, normalStep = 40, idStep = 24): Uint8Array {
+  const { width: w, height: h } = normals;
+  if (ids.width !== w || ids.height !== h) throw new Error('modelLineMask: both passes must share one size');
+  const out = new Uint8Array(w * h);
+  const n = normals.data;
+  const d = ids.data;
+  const diff = (px: Uint8ClampedArray | Uint8Array, a: number, b: number) =>
+    Math.abs(px[a] - px[b]) + Math.abs(px[a + 1] - px[b + 1]) + Math.abs(px[a + 2] - px[b + 2]);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = y * w + x;
+      const p = i * 4;
+      let edge = false;
+      if (x + 1 < w) edge = diff(n, p, p + 4) > normalStep || diff(d, p, p + 4) > idStep;
+      if (!edge && y + 1 < h) {
+        const q = p + w * 4;
+        edge = diff(n, p, q) > normalStep || diff(d, p, q) > idStep;
+      }
+      if (edge) out[i] = 1;
+    }
+  }
+  return out;
+}
+
 export type FidelityGrade = 'good' | 'fair' | 'poor';
 
 export function fidelityGrade(score: number): FidelityGrade {
@@ -361,13 +392,17 @@ export async function scoreRenderFidelity(
  * it shows at a glance whether walls and openings stayed in place.
  */
 export function edgeOverlayDataUrl(img: RgbaImage, color: [number, number, number] = [0, 200, 255], keep = 0.08): string {
-  const { mask } = edgeMapOf(img, keep);
+  return maskOverlayDataUrl(edgeMapOf(img, keep).mask, img.width, img.height, color);
+}
+
+/** Transparent PNG with `mask` pixels drawn in `color`. */
+export function maskOverlayDataUrl(mask: Uint8Array, width: number, height: number, color: [number, number, number] = [0, 200, 255]): string {
   const c = document.createElement('canvas');
-  c.width = img.width;
-  c.height = img.height;
+  c.width = width;
+  c.height = height;
   const ctx = c.getContext('2d');
   if (!ctx) throw new Error('2D canvas unavailable');
-  const out = ctx.createImageData(img.width, img.height);
+  const out = ctx.createImageData(width, height);
   for (let i = 0, p = 0; i < mask.length; i++, p += 4) {
     if (!mask[i]) continue;
     out.data[p] = color[0];
@@ -381,14 +416,18 @@ export function edgeOverlayDataUrl(img: RgbaImage, color: [number, number, numbe
 
 /** Dark-on-white edge map of the view, sent to the model as a geometry guide. */
 export function edgeGuideDataUrl(img: RgbaImage, keep = 0.1): string {
-  const { mask } = edgeMapOf(img, keep);
-  const thick = dilate(mask, img.width, img.height, img.width > 900 ? 1 : 0);
+  return maskGuideDataUrl(edgeMapOf(img, keep).mask, img.width, img.height);
+}
+
+/** Dark lines on white from `mask` (thickened on large images so they survive scaling). */
+export function maskGuideDataUrl(mask: Uint8Array, width: number, height: number): string {
+  const thick = dilate(mask, width, height, Math.max(width, height) > 900 ? 1 : 0);
   const c = document.createElement('canvas');
-  c.width = img.width;
-  c.height = img.height;
+  c.width = width;
+  c.height = height;
   const ctx = c.getContext('2d');
   if (!ctx) throw new Error('2D canvas unavailable');
-  const out = ctx.createImageData(img.width, img.height);
+  const out = ctx.createImageData(width, height);
   for (let i = 0, p = 0; i < thick.length; i++, p += 4) {
     const v = thick[i] ? 20 : 255;
     out.data[p] = v;

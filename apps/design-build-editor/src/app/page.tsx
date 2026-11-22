@@ -835,7 +835,7 @@ export default function Home() {
   }, [fovForLens]);
 
   /** Canvas size and the parts of it covered by the header, toolbar and prompt bar. */
-  const measureViewArea = useCallback((): ViewArea => {
+  const measureScreenArea = useCallback((): ViewArea => {
     const canvas = (viewerHandleRef.current?.gl as { domElement?: HTMLCanvasElement } | undefined)?.domElement;
     const r = canvas?.getBoundingClientRect();
     const rect = r && r.width > 0 && r.height > 0
@@ -870,6 +870,24 @@ export default function Home() {
     const pad = Math.max(8, Math.min(24, rect.width * 0.04));
     return { width: rect.width, height: rect.height, insets: { top: top + pad, bottom: bottom + pad, left: pad, right: pad } };
   }, []);
+
+  /** Render viewfinder on screen (canvas pixels), while the render panel shows one. */
+  const finderRef = useRef<{ x: number; y: number; w: number; h: number } | null>(null);
+  /**
+   * The part of the screen views are framed into: the render viewfinder when
+   * one is shown (so the shot is centred on the lens, with a natural
+   * perspective), otherwise what the header, toolbar and cards leave free.
+   */
+  const measureViewArea = useCallback((): ViewArea => {
+    const a = measureScreenArea();
+    const f = finderRef.current;
+    if (!f || f.w < 40 || f.h < 40) return a;
+    return {
+      width: a.width,
+      height: a.height,
+      insets: { top: f.y, left: f.x, right: Math.max(0, a.width - (f.x + f.w)), bottom: Math.max(0, a.height - (f.y + f.h)) },
+    };
+  }, [measureScreenArea]);
 
   /** Back from walk mode: hand the camera to the orbit controls, pivoting just ahead of it. */
   const leaveWalk = useCallback(() => {
@@ -998,6 +1016,15 @@ export default function Home() {
     const fov = (h.camera as THREE.PerspectiveCamera).isPerspectiveCamera ? fovForLens(ORBIT_LENS_MM) : undefined;
     void animateTo(h, { ...currentPose(h), shift, ...(fov !== undefined ? { fov } : {}) }, ms);
   }, [measureViewArea, fovForLens, setWalkLensMm]);
+
+  /** The render panel's viewfinder moved or closed: centre the lens on it (or back on the free area). */
+  const onFinderChange = useCallback((rect: { x: number; y: number; w: number; h: number } | null) => {
+    const prev = finderRef.current;
+    if (!prev && !rect) return;
+    if (prev && rect && Math.abs(prev.x - rect.x) < 1 && Math.abs(prev.y - rect.y) < 1 && Math.abs(prev.w - rect.w) < 1 && Math.abs(prev.h - rect.h) < 1) return;
+    finderRef.current = rect;
+    recenterLens(260);
+  }, [recenterLens]);
 
   /**
    * Walk mode: stand at eye height on the floor you are looking at, facing the
@@ -2992,6 +3019,7 @@ export default function Home() {
         style,
         tier: prefs.tier,
         furnish,
+        ceiling: prefs.ceiling,
         note: o.text,
         onStage: (st) => setRenderProgress({ isRendering: true, progress: st.progress, stageName: st.label, snapshotUrl: view.dataUrl, modelLabel: tier.modelLabel }),
         debugSave: process.env.NODE_ENV !== 'production',
@@ -3033,7 +3061,12 @@ export default function Home() {
         // A render request with no earlier render: capture the current view, then render it.
         void (async () => {
           try {
-            const view = await captureViewForRender(viewerHandleRef.current, { frameBuilding: loadRenderPrefs().frameBuilding });
+            const rp = loadRenderPrefs();
+            const walking = viewModeRef.current === 'walk';
+            const view = await captureViewForRender(viewerHandleRef.current, {
+              frameBuilding: rp.frameBuilding,
+              ...(walking ? { viewKind: 'interior' as const, lensMm: walkLensRef.current, ceiling: rp.ceiling } : {}),
+            });
             await runChatRender({ reuseView: view, text: cmd.text });
           } catch (e) {
             push({ type: 'error', message: e instanceof Error ? e.message : 'Could not capture the 3D view. Try the Render button.' });
@@ -3844,7 +3877,8 @@ export default function Home() {
               {viewerVisible && !proMode && (
                 <RenderStudio
                   getViewContext={() => ({ interior: viewModeRef.current === 'walk', lensMm: walkLensRef.current })}
-                  getFreeArea={measureViewArea}
+                  getFreeArea={measureScreenArea}
+                  onFinderChange={onFinderChange}
                   open={renderStudioOpen}
                   onOpenChange={setRenderStudioOpen}
                   getViewerHandle={getViewerHandle}

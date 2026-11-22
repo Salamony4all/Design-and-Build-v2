@@ -7,6 +7,9 @@ import {
   buildGeometryLockPrompt,
   centreCrop,
   clampNote,
+  cropCentredAt,
+  cropFieldOfView,
+  describeOpenings,
   frameAspect,
   furnishFromText,
   isRenderFrame,
@@ -170,5 +173,62 @@ describe('render frames and inside views', () => {
     expect(open).not.toMatch(/plain flat white ceiling/);
     const outside = buildGeometryLockPrompt({ style: 'daylight', viewKind: 'eye-level', furnish: false, withEdgeGuide: false, withPlan: false });
     expect(outside).not.toMatch(/eye height \(about 1\.6 m\)/);
+  });
+});
+
+describe('inside views: framing and prompt facts', () => {
+  it('centres the crop on the camera, as large as fits', () => {
+    // 900 x 1600 canvas, optical centre 46% down: a 9:16 crop centred there.
+    const c = cropCentredAt(900, 1600, 9 / 16, 450, 736);
+    expect(c.y + c.h / 2).toBeCloseTo(736, 0);
+    expect(c.x + c.w / 2).toBeCloseTo(450, 0);
+    expect(c.h).toBeCloseTo(1472, 0);
+    expect(c.w / c.h).toBeCloseTo(9 / 16, 2);
+    // An optical centre outside the image falls back to the plain centre crop.
+    expect(cropCentredAt(900, 1600, 9 / 16, 0, 0)).toEqual(centreCrop(900, 1600, 9 / 16));
+  });
+
+  it('measures the angles a crop covers, lens shift included', () => {
+    const full = cropFieldOfView(90, 1, { x: 0.5, y: 0.5 }, { x0: 0, y0: 0, x1: 1, y1: 1 });
+    expect(full.v).toBeCloseTo(90, 6);
+    expect(full.h).toBeCloseTo(90, 6);
+    // The upper half of a 90° view, centred on the axis: 45° up.
+    const upper = cropFieldOfView(90, 1, { x: 0.5, y: 0.5 }, { x0: 0, y0: 0, x1: 1, y1: 0.5 });
+    expect(upper.v).toBeCloseTo(45, 6);
+    // Same crop height off the axis covers less (the edges are compressed).
+    const off = cropFieldOfView(90, 1, { x: 0.5, y: 0.8 }, { x0: 0, y0: 0, x1: 1, y1: 0.5 });
+    expect(off.v).toBeLessThan(45);
+  });
+
+  it('lists the doors and windows in view, left to right, and says there are no others', () => {
+    const s = describeOpenings([
+      { kind: 'door', x0: 0.8, y0: 0.3, x1: 0.9, y1: 0.7 },
+      { kind: 'window', x0: 0.05, y0: 0.2, x1: 0.2, y1: 0.5 },
+    ]);
+    expect(s).toBe('Exactly 1 window and 1 door are visible, left to right: a window on the left, a door on the right. There are no other doors or windows in view.');
+    expect(describeOpenings([])).toMatch(/No door or window is visible/);
+  });
+
+  it('builds the inside prompt from the capture: closed ceiling, line drawing, field of view, level camera, openings', () => {
+    const p = buildGeometryLockPrompt({
+      style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: true, withPlan: false, lensMm: 13, ceiling: true,
+      ceilingInView: true, lineGuide: true, fovDeg: { h: 64, v: 104 }, pitchDeg: 0.5,
+      openings: [{ kind: 'door', x0: 0.7, y0: 0.3, x1: 0.8, y1: 0.8 }],
+    });
+    expect(p).toMatch(/ultra-wide 13 mm lens/);
+    expect(p).toMatch(/104° from top to bottom and 64° across/);
+    expect(p).toMatch(/camera is level/);
+    expect(p).toMatch(/flat ceiling in the input rests on top of the walls/);
+    expect(p).not.toMatch(/close the rooms with a plain flat white ceiling/);
+    expect(p).toMatch(/line drawing made directly from the 3D model/);
+    expect(p).toMatch(/Exactly 1 door is visible/);
+    expect(p).toMatch(/no furniture, beds, desks/);
+    expect(p).toMatch(/Blank wall surfaces stay blank/);
+    // Only a door in view: no window material note to tempt the model.
+    expect(p).not.toMatch(/windows with clear glass/);
+    expect(p).toMatch(/doors in light wood/);
+    const tilted = buildGeometryLockPrompt({ style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false, pitchDeg: 14 });
+    expect(tilted).toMatch(/looks up by about 14°/);
+    expect(tilted).not.toMatch(/line drawing/);
   });
 });

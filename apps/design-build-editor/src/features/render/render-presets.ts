@@ -4,7 +4,7 @@
 // Pure module: no DOM, no Node APIs, so it is safe to import from the API route,
 // the browser and unit tests.
 
-export const RENDER_PROMPT_VERSION = 'geo-lock-v4';
+export const RENDER_PROMPT_VERSION = 'geo-lock-v5';
 
 export type RenderStyleId = 'daylight' | 'golden-hour' | 'overcast' | 'dusk' | 'clay';
 
@@ -263,6 +263,73 @@ export function focusCrop(
   return { x, y, w: Math.round(w), h: Math.round(h), aspect };
 }
 
+/**
+ * Largest crop of `ratio` centred on (cx, cy) — the camera's optical centre —
+ * that stays inside the image. A crop centred there keeps the photo's natural
+ * perspective (horizon in the middle for a level camera), which image models
+ * reproduce instead of "re-centring" the shot.
+ */
+export function cropCentredAt(
+  width: number,
+  height: number,
+  ratio: number,
+  cx: number,
+  cy: number,
+): { x: number; y: number; w: number; h: number } {
+  const x = Math.min(Math.max(cx, 0), width);
+  const y = Math.min(Math.max(cy, 0), height);
+  const halfW = Math.min(x, width - x);
+  const halfH = Math.min(y, height - y);
+  let w = 2 * halfW;
+  let h = w / ratio;
+  if (h > 2 * halfH) {
+    h = 2 * halfH;
+    w = h * ratio;
+  }
+  if (w < 48 || h < 48) return centreCrop(width, height, ratio);
+  return { x: Math.round(x - w / 2), y: Math.round(y - h / 2), w: Math.round(w), h: Math.round(h) };
+}
+
+/**
+ * Angles a crop of the camera's view covers, in degrees. `fovDeg` is the
+ * vertical field of the whole canvas, `aspect` its width / height, `principal`
+ * the optical centre in normalized canvas coordinates (it moves with the lens
+ * shift) and `crop` the kept part, also normalized.
+ */
+export function cropFieldOfView(fovDeg: number, aspect: number, principal: { x: number; y: number }, crop: NormRect): { h: number; v: number } {
+  const t = Math.tan((fovDeg * Math.PI) / 360) * 2;
+  const deg = (r: number) => (r * 180) / Math.PI;
+  const v = Math.atan((crop.y1 - principal.y) * t) - Math.atan((crop.y0 - principal.y) * t);
+  const h = Math.atan((crop.x1 - principal.x) * t * aspect) - Math.atan((crop.x0 - principal.x) * t * aspect);
+  return { h: deg(h), v: deg(v) };
+}
+
+/** A door or window seen in the render view (normalized to the cropped image). */
+export interface OpeningInView {
+  kind: 'door' | 'window';
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+}
+
+/** "Visible openings, left to right: …" for the prompt, from the 3D scene (never guessed from pixels). */
+export function describeOpenings(openings: readonly OpeningInView[]): string {
+  if (!openings.length) return 'No door or window is visible in this view: do not add any.';
+  const sorted = [...openings].sort((a, b) => a.x0 + a.x1 - (b.x0 + b.x1));
+  const doors = sorted.filter((o) => o.kind === 'door').length;
+  const windows = sorted.length - doors;
+  const count = [windows ? `${windows} window${windows > 1 ? 's' : ''}` : '', doors ? `${doors} door${doors > 1 ? 's' : ''}` : '']
+    .filter(Boolean)
+    .join(' and ');
+  if (sorted.length > 8) return `Exactly ${count} are visible, where the input shows them; there are no other doors or windows in view.`;
+  const where = (o: OpeningInView) => {
+    const c = (o.x0 + o.x1) / 2;
+    return c < 0.34 ? 'on the left' : c > 0.66 ? 'on the right' : 'in the centre';
+  };
+  return `Exactly ${count} ${sorted.length > 1 ? 'are' : 'is'} visible, left to right: ${sorted.map((o) => `a ${o.kind} ${where(o)}`).join(', ')}. There are no other doors or windows in view.`;
+}
+
 /** 'cutaway' = roofless model seen from above; 'eye-level' = near-horizontal camera; 'interior' = standing inside a room (walk mode). */
 export type ViewKind = 'cutaway' | 'eye-level' | 'interior';
 
@@ -282,11 +349,37 @@ export interface GeometryLockPromptOptions {
   lensMm?: number;
   /** Interior views: close the open-top rooms with a plain ceiling. */
   ceiling?: boolean;
+  /** The ceiling is already drawn in the input (added to the 3D view for the capture). */
+  ceilingInView?: boolean;
+  /** Image 2 is a line drawing made from the 3D model (not an edge map of the picture). */
+  lineGuide?: boolean;
+  /** Angles the input covers, in degrees. */
+  fovDeg?: { h: number; v: number };
+  /** Camera pitch in degrees (positive = looking up). */
+  pitchDeg?: number;
+  /** Doors and windows visible in the input, from the 3D scene. */
+  openings?: readonly OpeningInView[];
 }
 
 const DEFAULT_MATERIALS =
   'Walls in smooth warm-white painted plaster; cut wall tops as clean flat light-grey sections; floors in light natural oak inside rooms; ' +
   'windows with clear glass, subtle reflections and slim dark-grey aluminium frames; doors in light wood with simple metal handles.';
+
+/**
+ * Inside views with a known list of openings: leave out the material notes for
+ * kinds that are not in view (a "windows with clear glass" note invites the
+ * model to add a window to a blank wall).
+ */
+function materialsFor(materials: string, o: Pick<GeometryLockPromptOptions, 'viewKind' | 'openings'>): string {
+  if (o.viewKind !== 'interior' || !o.openings) return materials;
+  const hasWindow = o.openings.some((x) => x.kind === 'window');
+  const hasDoor = o.openings.some((x) => x.kind === 'door');
+  const parts = materials
+    .replace(/\.$/, '')
+    .split(/;\s*/)
+    .filter((part) => !((!hasWindow && /^windows?\b/i.test(part)) || (!hasDoor && /^doors?\b/i.test(part))));
+  return `${parts.join('; ')}.`;
+}
 
 export function getRenderStyle(id: string): RenderStyle {
   return RENDER_STYLES.find((s) => s.id === id) ?? RENDER_STYLES[0];
@@ -315,15 +408,27 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   lines.push('GEOMETRY LOCK (identical to the input, pixel-aligned):');
   lines.push('1. Camera: same viewpoint, perspective, focal length, framing and crop. Do not zoom, pan, rotate, tilt or re-compose.');
   if (o.viewKind === 'interior') {
-    const lens = o.lensMm && o.lensMm > 0 ? `about ${Math.round(o.lensMm)} mm (full-frame equivalent)` : 'a wide-angle lens';
+    const mm = o.lensMm && o.lensMm > 0 ? Math.round(o.lensMm) : 0;
+    const lens = mm ? `${mm < 17 ? 'an ultra-wide' : 'a wide'} ${mm} mm lens (full-frame equivalent)` : 'a wide-angle lens';
+    const fov = o.fovDeg && o.fovDeg.v > 0 ? `, covering about ${Math.round(o.fovDeg.v)}° from top to bottom and ${Math.round(o.fovDeg.h)}° across` : '';
+    lines.push(`   This is an interior photograph taken at eye height (about 1.6 m) with ${lens}${fov}.`);
+    const pitch = o.pitchDeg ?? 0;
     lines.push(
-      `   This is an interior photograph taken at eye height (about 1.6 m) with ${lens}: keep that wide-angle perspective exactly, keep vertical lines vertical, and do not crop in or straighten the lens.`,
+      Math.abs(pitch) < 3
+        ? '   The camera is level and the shot is centred on it: vertical lines stay vertical and the horizon stays where it is. Keep this exact perspective — do not crop in, zoom, re-centre or straighten it.'
+        : `   The camera looks ${pitch > 0 ? 'up' : 'down'} by about ${Math.round(Math.abs(pitch))}°, so vertical lines converge as in the input. Keep this exact perspective — do not crop in, zoom, re-centre or straighten it.`,
     );
   }
   lines.push('2. Walls: every wall keeps its exact position, length, thickness, height and corners; the room layout stays the same.');
   lines.push(
     '3. Openings: every door and window stays exactly where it is, with the same width and the same count. Window openings get glass in slim frames; door openings get a door leaf or stay an open passage, as in the model.',
   );
+  if (o.viewKind === 'interior' && o.openings) lines.push(`   ${describeOpenings(o.openings)}`);
+  if (o.viewKind === 'interior') {
+    lines.push(
+      '   Blank wall surfaces stay blank: never put a door, window, niche, panel or picture on a wall that shows none in the input — including the large wall surfaces close to the camera.',
+    );
+  }
   lines.push('4. Never add, remove, move, merge, split, resize or straighten any wall, door, window, column, slab or room.');
   if (o.viewKind === 'cutaway') {
     lines.push(
@@ -333,21 +438,25 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
     lines.push(
       o.ceiling === false
         ? '5. We stand inside the building. Keep the rooms open above the walls (no ceiling), exactly as in the input.'
-        : '5. We stand inside the building. The model has no ceilings: close the rooms with a plain flat white ceiling resting exactly on top of the existing walls, with a few simple recessed lights. Add nothing else above the walls: no beams, bulkheads, lowered sections, skylights or upper floors.',
+        : o.ceilingInView
+          ? '5. We stand inside the building. The flat ceiling in the input rests on top of the walls: keep it a plain flat white ceiling at exactly that height, with a few small recessed lights. Nothing above or below it: no beams, bulkheads, lowered sections or skylights.'
+          : '5. We stand inside the building. The model has no ceilings: close the rooms with a plain flat white ceiling resting exactly on top of the existing walls, with a few simple recessed lights. Add nothing else above the walls: no beams, bulkheads, lowered sections, skylights or upper floors.',
     );
   } else {
     lines.push('5. Show only the building that is in the model: no extra storeys, roof shapes, extensions or neighbouring buildings.');
   }
   lines.push(
     o.viewKind === 'interior'
-      ? '6. The model is complete: never add rooms, walls, partitions or openings. Where the input shows open space beyond the walls, keep it empty (apart from the ceiling described above).'
+      ? '6. The model is complete: never add rooms, walls, wall stubs, partitions, alcoves, columns or openings. Every wall face and corner in your render is one that is in the input, and where the input shows open floor it stays open.'
       : '6. The model is complete. Everything outside its outer walls is empty background: keep it plain and empty, as in the input. Never add rooms, walls, floors, furniture or buildings outside the model, and never fill or "complete" an empty area.',
   );
 
   if (o.withEdgeGuide) {
     lines.push('');
     lines.push(
-      'Image 2 is an edge map of the same view (dark lines on white). Each line is a real edge of the model: the wall, door and window edges in your render must sit exactly on these lines. Never draw the lines themselves.',
+      o.lineGuide
+        ? 'Image 2 is a line drawing made directly from the 3D model, in exactly the same view: every line is a real edge — wall corners, ends and tops, where walls meet the floor (and the ceiling), and door and window frames. Every wall, door and window edge in your render must lie on one of these lines, and none may appear where image 2 has no line. Never draw the lines themselves.'
+        : 'Image 2 is an edge map of the same view (dark lines on white). Each line is a real edge of the model: the wall, door and window edges in your render must sit exactly on these lines. Never draw the lines themselves.',
     );
   }
   if (o.withPlan) {
@@ -360,11 +469,13 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   lines.push('');
   lines.push('CHANGE ONLY: surface materials, textures, lighting, shadows, reflections and photographic realism.');
   lines.push(`Lighting: ${style.lighting}`);
-  lines.push(`Materials: ${style.materials ?? DEFAULT_MATERIALS}`);
+  lines.push(`Materials: ${materialsFor(style.materials ?? DEFAULT_MATERIALS, o)}`);
   lines.push(
     o.furnish
       ? 'Furnishing: furnish each room for its use with realistic furniture standing on the floor inside that room. Furniture goes only inside the rooms of the model — nothing outside its outer walls (no terraces, gardens, plants or outdoor furniture). It must never block, cover or alter any door or window opening, and must not hide wall corners.'
-      : 'Furnishing: leave the rooms unfurnished with clean empty floors, so the architecture reads clearly.',
+      : o.viewKind === 'interior'
+        ? 'Furnishing: none. Every room stays completely empty — no furniture, beds, desks, chairs, shelves, rugs or appliances — so the architecture reads clearly.'
+        : 'Furnishing: leave the rooms unfurnished with clean empty floors, so the architecture reads clearly.',
   );
   if (note) {
     lines.push(`Client request (apply only where it changes no geometry): ${note}`);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dilate, edgeMask, fidelityGrade, geometryFidelity, type RgbaImage } from './geometry-fidelity';
+import { dilate, edgeMask, fidelityGrade, geometryFidelity, modelLineMask, type RgbaImage } from './geometry-fidelity';
 
 const W = 240;
 const H = 180;
@@ -121,5 +121,46 @@ describe('mask helpers', () => {
   it('keeps nothing below the magnitude floor', () => {
     const mag = new Float32Array([0, 1, 2, 3, 100]);
     expect(Array.from(edgeMask(mag, 0.5, 50))).toEqual([0, 0, 0, 0, 1]);
+  });
+});
+
+describe('modelLineMask (edges of the 3D model from flat passes)', () => {
+  const w = 40;
+  const h = 30;
+  const flat = (paint: (x: number, y: number) => [number, number, number]): RgbaImage => {
+    const data = new Uint8ClampedArray(w * h * 4);
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const [r, g, b] = paint(x, y);
+        data.set([r, g, b, 255], (y * w + x) * 4);
+      }
+    }
+    return { width: w, height: h, data };
+  };
+
+  it('finds a corner (orientation change) and a wall end in front of a parallel wall (object change), nothing else', () => {
+    // Two wall faces meet at x = 20 (different normals); a parallel wall end (same
+    // normal, another object) covers x 5..9, y 5..24 on the left face.
+    const normals = flat((x) => (x < 20 ? [128, 128, 255] : [255, 128, 128]));
+    const ids = flat((x, y) => (x >= 5 && x < 10 && y >= 5 && y < 25 ? [200, 40, 40] : x < 20 ? [40, 200, 40] : [40, 40, 200]));
+    const m = modelLineMask(normals, ids);
+    const at = (x: number, y: number) => m[y * w + x];
+    expect(at(19, 15)).toBe(1); // corner between the two faces
+    expect(at(4, 15)).toBe(1); // left side of the wall end
+    expect(at(9, 15)).toBe(1); // right side of the wall end
+    expect(at(7, 4)).toBe(1); // top of the wall end
+    expect(at(14, 15)).toBe(0); // flat wall face
+    expect(at(30, 10)).toBe(0);
+    expect(at(7, 15)).toBe(0); // inside the wall end
+  });
+
+  it('ignores small colour noise (no shading or texture lines)', () => {
+    const normals = flat((x, y) => [128 + ((x + y) % 3), 128, 255 - ((x * y) % 4)]);
+    const ids = flat(() => [40, 200, 40]);
+    expect(modelLineMask(normals, ids).reduce((a, b) => a + b, 0)).toBe(0);
+  });
+
+  it('rejects passes of different sizes', () => {
+    expect(() => modelLineMask({ width: 2, height: 2, data: new Uint8ClampedArray(16) }, { width: 3, height: 2, data: new Uint8ClampedArray(24) })).toThrow();
   });
 });

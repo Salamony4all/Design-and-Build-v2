@@ -40,6 +40,25 @@ const BodySchema = z.object({
   viewKind: z.enum(['cutaway', 'eye-level', 'interior']).default('cutaway'),
   lensMm: z.number().min(6).max(200).optional(),
   ceiling: z.boolean().optional(),
+  /** The capture already shows a plain ceiling on top of the walls. */
+  ceilingInView: z.boolean().optional(),
+  /** The edge guide is a line drawing made from the 3D model. */
+  lineGuide: z.boolean().optional(),
+  fovDeg: z.object({ h: z.number().min(1).max(179), v: z.number().min(1).max(179) }).optional(),
+  pitchDeg: z.number().min(-90).max(90).optional(),
+  /** Doors and windows in view, from the 3D scene (normalized to the image). */
+  openings: z
+    .array(
+      z.object({
+        kind: z.enum(['door', 'window']),
+        x0: z.number().min(0).max(1),
+        y0: z.number().min(0).max(1),
+        x1: z.number().min(0).max(1),
+        y1: z.number().min(0).max(1),
+      }),
+    )
+    .max(60)
+    .optional(),
   furnish: z.boolean().default(false),
   note: z.string().max(2000).optional(),
   strict: z.boolean().default(false),
@@ -213,6 +232,8 @@ export async function POST(req: NextRequest) {
       prompt: buildGeometryLockPrompt({
         style: body.style, viewKind: body.viewKind, furnish: body.furnish, withEdgeGuide: !!edge,
         withPlan: !!plan, note: body.note, strict: body.strict, lensMm: body.lensMm, ceiling: body.ceiling,
+        ceilingInView: body.ceilingInView, lineGuide: body.lineGuide && !!edge, fovDeg: body.fovDeg, pitchDeg: body.pitchDeg,
+        openings: body.openings,
       }),
     });
   }
@@ -232,6 +253,11 @@ export async function POST(req: NextRequest) {
     strict: body.strict,
     lensMm: body.lensMm,
     ceiling: body.ceiling,
+    ceilingInView: body.ceilingInView,
+    lineGuide: body.lineGuide && !!edge,
+    fovDeg: body.fovDeg,
+    pitchDeg: body.pitchDeg,
+    openings: body.openings,
   });
 
   // Images first, in the order the prompt numbers them; the instruction last.

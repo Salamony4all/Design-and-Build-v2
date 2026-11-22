@@ -137,7 +137,17 @@ async function postRender(
       tier: o.tier,
       aspectRatio: view.aspect.label,
       viewKind: view.viewKind,
-      ...(view.viewKind === 'interior' ? { lensMm: view.lensMm, ceiling: o.ceiling !== false } : {}),
+      ...(view.viewKind === 'interior'
+        ? {
+            lensMm: view.lensMm,
+            ceiling: o.ceiling !== false,
+            ceilingInView: !!view.ceilingInView,
+            ...(view.openings ? { openings: view.openings } : {}),
+            ...(view.fovDeg ? { fovDeg: view.fovDeg } : {}),
+            ...(typeof view.pitchDeg === 'number' ? { pitchDeg: view.pitchDeg } : {}),
+          }
+        : {}),
+      ...(withEdges && view.lineGuide ? { lineGuide: true } : {}),
       furnish: o.furnish,
       note: o.note,
       strict,
@@ -192,7 +202,9 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
     return fidelity;
   };
 
-  const first = await run(false, !!o.edgeGuideFirst, 0.1, 0.78);
+  // Inside views send the model's own line drawing from the start: a room seen
+  // with an ultra-wide lens is where image models most often redraw walls.
+  const first = await run(false, !!o.edgeGuideFirst || (view.viewKind === 'interior' && !!view.lineGuide), 0.1, 0.78);
   // Structure outside the model is a hard geometry error, whatever the score.
   if ((o.autoRetry ?? true) && (first.score < minScore || first.outside > OUTSIDE_OK) && !o.signal?.aborted) {
     o.onStage?.({

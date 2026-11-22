@@ -45,6 +45,11 @@ export interface RenderStudioProps {
   getViewContext?: () => { interior: boolean; lensMm: number };
   /** Part of the 3D view not covered by the header, toolbar and prompt bar (for the viewfinder). */
   getFreeArea?: () => ViewArea;
+  /**
+   * The viewfinder moved or went away (canvas pixels). The page centres the
+   * camera's lens on it, so the framed shot keeps a natural perspective.
+   */
+  onFinderChange?: (rect: { x: number; y: number; w: number; h: number } | null) => void;
 }
 
 type Phase = 'form' | 'running' | 'result' | 'error';
@@ -107,6 +112,7 @@ export function RenderStudio({
   onRenderComplete,
   getViewContext,
   getFreeArea,
+  onFinderChange,
 }: RenderStudioProps) {
   const setOpen = onOpenChange;
   const [phase, setPhase] = useState<Phase>('form');
@@ -132,6 +138,12 @@ export function RenderStudio({
 
   useEffect(() => {
     if (!open) return;
+    // A fixed frame on a phone: start folded so the viewfinder has room.
+    try {
+      if (loadRenderPrefs().frame !== 'screen' && window.matchMedia('(max-width: 720px)').matches) setCompact(true);
+    } catch {
+      /* no matchMedia */
+    }
     setNoScene(!hasRenderableScene(getViewerHandle()));
     void renderStatus().then(setStatus);
     setViewCtx(getViewContext?.() ?? { interior: false, lensMm: 0 });
@@ -188,6 +200,19 @@ export function RenderStudio({
     };
   }, [open, measureFinder, compact]);
 
+  // Tell the page where the viewfinder is (it re-centres the lens on it).
+  const finderKey = open && finder ? `${Math.round(finder.x)},${Math.round(finder.y)},${Math.round(finder.w)},${Math.round(finder.h)}` : '';
+  useEffect(() => {
+    if (!onFinderChange) return;
+    if (!finderKey) {
+      onFinderChange(null);
+      return;
+    }
+    const [x, y, w, h] = finderKey.split(',').map(Number);
+    onFinderChange({ x, y, w, h });
+  }, [finderKey, onFinderChange]);
+  useEffect(() => () => onFinderChange?.(null), [onFinderChange]);
+
   const frameCrop = useCallback((): FrameCrop | null => {
     const aspect = frameAspect(prefs.frame);
     if (!aspect || !finder) return null;
@@ -240,6 +265,7 @@ export function RenderStudio({
             frame: frameCrop(),
             viewKind: ctx.interior ? 'interior' : undefined,
             lensMm: ctx.interior ? ctx.lensMm : undefined,
+            ceiling: ctx.interior ? prefs.ceiling : undefined,
           }));
         const res = await renderPhotoreal(view, {
           style,
