@@ -1,0 +1,126 @@
+{
+ "source": "CODE_06 1 page.pdf, page 0",
+ "note": "Accepted windows of the legacy window pipeline on the frozen legacy walls; matched the 24 WA-tagged openings by visual audit (22 Nov 2026). Intervals in MuPDF points along each wall from centerline.a.",
+ "windows": [
+  {
+   "wall": "fr1",
+   "from": 527.16,
+   "to": 561.24
+  },
+  {
+   "wall": "fr1",
+   "from": 416.64,
+   "to": 450.72
+  },
+  {
+   "wall": "fr1",
+   "from": 309,
+   "to": 342.96
+  },
+  {
+   "wall": "fr1",
+   "from": 252.24,
+   "to": 286.32
+  },
+  {
+   "wall": "fr1",
+   "from": 144.6,
+   "to": 178.56
+  },
+  {
+   "wall": "fr1",
+   "from": 36.84,
+   "to": 70.92
+  },
+  {
+   "wall": "fr2",
+   "from": 527.16,
+   "to": 561.24
+  },
+  {
+   "wall": "fr2",
+   "from": 416.64,
+   "to": 450.72
+  },
+  {
+   "wall": "fr2",
+   "from": 309,
+   "to": 342.96
+  },
+  {
+   "wall": "fr2",
+   "from": 252.24,
+   "to": 286.32
+  },
+  {
+   "wall": "fr2",
+   "from": 144.6,
+   "to": 178.56
+  },
+  {
+   "wall": "fr2",
+   "from": 36.84,
+   "to": 70.92
+  },
+  {
+   "wall": "fr22",
+   "from": 62.4,
+   "to": 96.36
+  },
+  {
+   "wall": "fr22",
+   "from": 172.92,
+   "to": 207
+  },
+  {
+   "wall": "fr22",
+   "from": 280.68,
+   "to": 314.64
+  },
+  {
+   "wall": "fr22",
+   "from": 337.32,
+   "to": 371.28
+  },
+  {
+   "wall": "fr22",
+   "from": 445.08,
+   "to": 479.04
+  },
+  {
+   "wall": "fr22",
+   "from": 552.72,
+   "to": 586.8
+  },
+  {
+   "wall": "fr23",
+   "from": 62.4,
+   "to": 96.36
+  },
+  {
+   "wall": "fr23",
+   "from": 172.92,
+   "to": 207
+  },
+  {
+   "wall": "fr23",
+   "from": 280.68,
+   "to": 314.64
+  },
+  {
+   "wall": "fr23",
+   "from": 337.32,
+   "to": 371.28
+  },
+  {
+   "wall": "fr23",
+   "from": 445.08,
+   "to": 479.04
+  },
+  {
+   "wall": "fr23",
+   "from": 552.72,
+   "to": 586.8
+  }
+ ]
+}
