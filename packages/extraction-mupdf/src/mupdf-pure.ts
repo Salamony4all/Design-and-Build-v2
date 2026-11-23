@@ -2091,7 +2091,10 @@ function applyGlassPartitions(r: MuPdfPureResult, page: mupdf.Page, vectors: MuV
     const found = detectGlassPartitions({
       vectors,
       texts,
-      walls: r.accepted.map((w) => ({ id: w.physicalWallId, a: w.centerline.a, b: w.centerline.b, thickness: w.thickness, perimeter: !!w.perimeterContribution })),
+      walls: r.accepted.map((w) => ({
+        id: w.physicalWallId, a: w.centerline.a, b: w.centerline.b, thickness: w.thickness, perimeter: !!w.perimeterContribution,
+        filled: w.evidenceType === 'filled-rect' || w.evidenceType === 'filled-polygon',
+      })),
       scaleMmPerPt: r.scaleMmPerPt,
       within,
     });

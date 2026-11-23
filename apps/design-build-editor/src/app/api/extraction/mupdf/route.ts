@@ -175,8 +175,14 @@ export async function POST(req: NextRequest) {
     req.headers.get('accept')?.includes('text/event-stream');
 
   try {
-    const { extractPureWallResult, toExtractionResult, documentFrameFromPure, runWindowPipeline, runDoorPipeline, collectPageVectors, mupdf, PURE_WINDOW_DEFAULTS, PURE_DOOR_DEFAULTS, acceptedGeometryHash, acceptedEvidenceHash, buildDoorProductionManifest, extractColumnsFromCapturedGeometry, detectCurvedWalls, curvedWallPieces, curvedBandUnder } = await import('design-build-extraction-mupdf');
+    const { extractPureWallResult, toExtractionResult, documentFrameFromPure, runWindowPipeline, runDoorPipeline, collectPageVectors, mupdf, PURE_WINDOW_DEFAULTS, PURE_DOOR_DEFAULTS, acceptedGeometryHash, acceptedEvidenceHash, buildDoorProductionManifest, extractColumnsFromCapturedGeometry, detectCurvedWalls, curvedWallPieces, curvedBandUnder, alongWalls } = await import('design-build-extraction-mupdf');
     const curvedLib = { detectCurvedWalls, curvedWallPieces, curvedBandUnder, documentFrameFromPure };
+    // Glass partitions are walls too: wall completion must not lay solid copies over them.
+    const offGlass = (pureResult: any, walls: any[]) => {
+      const glass = (pureResult.accepted ?? []).filter((w: any) => w.glass)
+        .map((w: any) => ({ a: w.centerline.a, b: w.centerline.b, thickness: w.thickness }));
+      return glass.length ? walls.filter((c) => !alongWalls(glass, c.centrelineStartProjectM, c.centrelineEndProjectM, 2)) : walls;
+    };
     const { createCoordinateFrame } = await import('design-build-coordinate-frame');
     const { captureDoorAnnotations, DEFAULT_ANNOTATION_OPTIONS } = await import('design-build-extraction-annotations');
     const t0 = Date.now();
@@ -313,7 +319,7 @@ export async function POST(req: NextRequest) {
           const wallsResult = curved.dropWallIds.size
             ? { ...result, walls: result.walls.filter((w) => !curved.dropWallIds.has(w.id)) }
             : result;
-          completionWalls = completionWalls.filter((c) => !curved.onCurve(c.centrelineStartProjectM, c.centrelineEndProjectM));
+          completionWalls = offGlass(pureResult, completionWalls.filter((c) => !curved.onCurve(c.centrelineStartProjectM, c.centrelineEndProjectM)));
 
           // STAGE 1 CHUNK: Stream Walls immediately (in under 250ms!)
           await sendChunk({
@@ -900,7 +906,7 @@ export async function POST(req: NextRequest) {
     const wallsResult = curved.dropWallIds.size
       ? { ...result, walls: result.walls.filter((w) => !curved.dropWallIds.has(w.id)) }
       : result;
-    completionWalls = completionWalls.filter((c) => !curved.onCurve(c.centrelineStartProjectM, c.centrelineEndProjectM));
+    completionWalls = offGlass(pureResult, completionWalls.filter((c) => !curved.onCurve(c.centrelineStartProjectM, c.centrelineEndProjectM)));
 
     let guideDataUrl: string | undefined;
     try {

@@ -2,19 +2,26 @@
  * Straight glass partitions and glazed screens, read from the drawing's own linework
  * (no raster, no AI).
  *
- * Two kinds of evidence:
+ * Three kinds of evidence:
  *  1. The drawing's key. A legend entry whose text says glass, glazed or glazing has a
  *     sample line beside it, and that sample's style (colour, line weight, dash, one line
  *     or two lines a set distance apart) is the drawing's own definition of a glass
  *     partition: plan lines drawn in that style are glass. A one-line sample counts only
  *     when it is coloured, because plain black lines draw everything else.
- *  2. Without a key: two hairlines 2–7 cm apart (a glazed screen's frame; solid
- *     partitions are drawn thicker) that run from wall to wall, with no wall, worktop or
- *     desk edge alongside them, and that are not a window in an outside wall.
+ *  2. Without a key: two hairlines 4–7 cm apart (a glazed screen's frame; solid
+ *     partitions are drawn thicker) that run from wall to wall and hold a door or meet a
+ *     doorway, with no wall, worktop or desk edge alongside them, and that are not a window
+ *     in an outside wall.
+ *  3. Glazing bands: a frame drawn as two lines 5–25 cm apart with the glass as a third
+ *     line between them, cut into panels by mullions (at least three, no panel over 4 m),
+ *     as CAD draws curtain walls, shopfronts and window walls, running between walls,
+ *     columns or other glass. Inside a thicker wall it is that wall's window (the window
+ *     stage reads it).
  *
  * Walls the wall detector already read along glass-styled lines are marked glass; the
- * other glass runs become new walls. A run continues through a door drawn in line with
- * it, so the door detector can hang that door in the glass wall.
+ * other glass runs become new walls (curtain walls and shopfronts are often drawn with
+ * no wall read at all). A run continues through a door drawn in line with it, so the
+ * door detector can hang that door in the glass wall.
  *
  * Coordinates are MuPDF page points (y down).
  */
@@ -22,8 +29,16 @@ import type { Bounds, MuVector, Vec2 } from './vector-device';
 import { collectSegments, detectDoorSymbols } from './door-symbols';
 
 export interface GlassText { text: string; x: number; y: number; w: number; h: number }
-export interface GlassHostWall { id: string; a: Vec2; b: Vec2; thickness: number; perimeter?: boolean }
-export type GlassSource = 'legend' | 'double-line';
+export interface GlassHostWall {
+  id: string;
+  a: Vec2;
+  b: Vec2;
+  thickness: number;
+  perimeter?: boolean;
+  /** read from a filled (poché) mass: solid construction, never a glazing frame */
+  filled?: boolean;
+}
+export type GlassSource = 'legend' | 'double-line' | 'glazing-band';
 
 export interface GlassStyle {
   rgb: [number, number, number];
@@ -90,6 +105,18 @@ export interface GlassConfig {
   patternM: number;
   /** a stroke at least this heavy (points) is a wall face */
   heavyStrokePt: number;
+  /** glazing bands (frame, glass, frame): frame depth band, shortest run, widest mullion gap */
+  bandMinSepM: number;
+  bandMaxSepM: number;
+  bandMinRunM: number;
+  bandMullionM: number;
+  /** ...and the longest glass panel between mullions or panel ends */
+  bandMaxPanelM: number;
+  /** a glazing band at least this long needs nothing at its ends (curtain walls between posts) */
+  bandFreeM: number;
+  /** a filled shape this size (each side, metres) where a run ends is a column it meets */
+  columnMinM: number;
+  columnMaxM: number;
   /** a run end this close to a wall face, another glass run or a door jamb is attached */
   attachTolM: number;
   /** a gap this wide in line with a run end, up to a wall or glass run, is a doorway */
@@ -122,9 +149,17 @@ export const GLASS_DEFAULTS: GlassConfig = {
   pairMinMeetDeg: 60,
   patternM: 0.9,
   heavyStrokePt: 0.9,
+  bandMinSepM: 0.05,
+  bandMaxSepM: 0.25,
+  bandMinRunM: 1.5,
+  bandMullionM: 0.15,
+  bandMaxPanelM: 4.0,
+  bandFreeM: 2.5,
+  columnMinM: 0.15,
+  columnMaxM: 1.5,
   attachTolM: 0.15,
   doorGapMinM: 0.6,
-  doorGapMaxM: 1.8,
+  doorGapMaxM: 2.2,
   clearM: 0.75,
   legendMinSepM: 0.015,
   legendMaxSepM: 0.25,
@@ -528,7 +563,7 @@ function freeIntervals(len: number, covers: { lo: number; hi: number }[]): [numb
 
 interface Opening { a: Vec2; b: Vec2 }
 
-type EndHit = { kind: 'wall'; wall: GlassHostWall; collinear: boolean } | { kind: 'glass' } | { kind: 'opening'; far: Vec2 } | { kind: 'gap' } | null;
+type EndHit = { kind: 'wall'; wall: GlassHostWall; collinear: boolean } | { kind: 'glass' } | { kind: 'column' } | { kind: 'opening'; far: Vec2 } | { kind: 'gap' } | null;
 
 export function detectGlassPartitions(
   input: { vectors: MuVector[]; texts: GlassText[]; walls: GlassHostWall[]; scaleMmPerPt: number; within?: Bounds },
@@ -559,6 +594,17 @@ export function detectGlassPartitions(
       leaves.push({ a: s.hinge, b: s.free });
     }
   } catch { /* no doors: runs simply end where they end */ }
+
+  // filled shapes of a column's size: glazing often runs from column to column
+  const columns: Bounds[] = [];
+  for (const v of input.vectors) {
+    if (v.operation !== 'fill-path' || (v.sourceRootId && v.sourceRootId !== v.id)) continue;
+    const rgb = toRgb(v.color);
+    if (Math.min(...rgb) > 0.9) continue;
+    const [x0, y0, x1, y1] = v.bounds;
+    const w = (x1 - x0) * mPerPt, h = (y1 - y0) * mPerPt;
+    if (w >= cfg.columnMinM && h >= cfg.columnMinM && w <= cfg.columnMaxM && h <= cfg.columnMaxM && Math.max(w, h) <= 3 * Math.min(w, h)) columns.push(v.bounds);
+  }
 
   // ---- 1. keyed styles -----------------------------------------------------------------
   const keyed: Run[] = [];
@@ -647,7 +693,7 @@ export function detectGlassPartitions(
   };
   // stairs, tiling, ceiling grids, hatching: several long parallel lines on one side
   const planIdx = directionIndex(plan, (l) => [l.a, l.b], 1 * (Math.PI / 180));
-  const inPattern = (r: { a: Vec2; b: Vec2; len: number; sep: number }) => {
+  const inPattern = (r: { a: Vec2; b: Vec2; len: number; sep: number }, innerPt = r.sep / 2 + 0.6) => {
     const th = foldedAngle(r.a, r.b);
     const u = { x: Math.cos(th), y: Math.sin(th) }, n = { x: -u.y, y: u.x };
     const rho = (dot(r.a, n) + dot(r.b, n)) / 2;
@@ -662,7 +708,7 @@ export function detectGlassPartitions(
         const l = arr[i]!.item;
         if (sinBetween(u, unit(l.a, l.b)) > Math.sin(2 * Math.PI / 180)) continue;
         const off = (dot(l.a, n) + dot(l.b, n)) / 2 - rho;
-        if (Math.abs(off) <= r.sep / 2 + 0.6 || Math.abs(off) > reach) continue;
+        if (Math.abs(off) <= innerPt || Math.abs(off) > reach) continue;
         const la = dot(l.a, u), lb = dot(l.b, u);
         const lo = Math.max(t0, Math.min(la, lb)), hi = Math.min(t1, Math.max(la, lb));
         if (hi <= lo) continue;
@@ -716,6 +762,154 @@ export function detectGlassPartitions(
     }
   }
 
+  // ---- 2b. glazing bands: frame, glass, frame ---------------------------------------------
+  const hairIdx = directionIndex(hair, (l) => [l.a, l.b], 1 * (Math.PI / 180));
+  /** a line along the middle of a frame pair: the glass */
+  const hasGlassLine = (r: Run) => {
+    const th = foldedAngle(r.a, r.b);
+    const u = { x: Math.cos(th), y: Math.sin(th) }, n = { x: -u.y, y: u.x };
+    const rho = (dot(r.a, n) + dot(r.b, n)) / 2;
+    const t0 = Math.min(dot(r.a, u), dot(r.b, u)), t1 = Math.max(dot(r.a, u), dot(r.b, u));
+    const inner = r.sep / 2 - Math.max(0.3, 0.15 * r.sep);
+    let cover = 0;
+    for (const k of [hairIdx.keyOf(th) - 1, hairIdx.keyOf(th), hairIdx.keyOf(th) + 1]) {
+      const arr = hairIdx.buckets.get(k);
+      if (!arr) continue;
+      for (let i = lowerBound(arr, rho - inner - 0.5); i < arr.length && arr[i]!.rho <= rho + inner + 0.5; i++) {
+        const l = arr[i]!.item;
+        if (sinBetween(u, unit(l.a, l.b)) > Math.sin(1.5 * Math.PI / 180)) continue;
+        if (Math.abs((dot(l.a, n) + dot(l.b, n)) / 2 - rho) > inner) continue;
+        const la = dot(l.a, u), lb = dot(l.b, u);
+        cover = Math.max(cover, Math.min(t1, Math.max(la, lb)) - Math.max(t0, Math.min(la, lb)));
+      }
+    }
+    return cover >= 0.5 * (t1 - t0);
+  };
+  const bandPieces = pairLines(
+    hair,
+    Math.max(cfg.pairMinSepPt, pt(cfg.bandMinSepM)),
+    pt(cfg.bandMaxSepM),
+    (p, q) => colourDist(p.rgb, q.rgb) <= 0.1 && Math.max(p.w, q.w) <= 2.5 * Math.max(0.05, Math.min(p.w, q.w)),
+    2,
+  ).filter(hasGlassLine).map((p) => ({ ...p, source: 'glazing-band' as const }));
+  // mullions and panel ends: short lines across the band. A glazing system is cut into
+  // panels; a wall drawn with three lines (faces and a stud or lining line) is not.
+  const shortLines = plan.filter((l) => !l.dashed && l.len <= pt(0.6) && Math.max(...l.rgb) <= 0.6);
+  const cell = 24;
+  const grid = new Map<string, Line[]>();
+  for (const l of shortLines) {
+    const k = `${Math.floor((l.a.x + l.b.x) / 2 / cell)},${Math.floor((l.a.y + l.b.y) / 2 / cell)}`;
+    let arr = grid.get(k);
+    if (!arr) grid.set(k, (arr = []));
+    arr.push(l);
+  }
+  const panelled = (r: Run) => {
+    const u = unit(r.a, r.b), n = { x: -u.y, y: u.x };
+    const pad = r.sep + tol;
+    const x0 = Math.min(r.a.x, r.b.x) - pad, x1 = Math.max(r.a.x, r.b.x) + pad;
+    const y0 = Math.min(r.a.y, r.b.y) - pad, y1 = Math.max(r.a.y, r.b.y) + pad;
+    const at: number[] = [];
+    for (let cx = Math.floor(x0 / cell); cx <= Math.floor(x1 / cell); cx++) {
+      for (let cy = Math.floor(y0 / cell); cy <= Math.floor(y1 / cell); cy++) {
+        for (const l of grid.get(`${cx},${cy}`) ?? []) {
+          if (sinBetween(u, unit(l.a, l.b)) < Math.sin(70 * Math.PI / 180)) continue;
+          if (l.len < 0.5 * r.sep || l.len > 2 * r.sep) continue;
+          const m = lerp(l.a, l.b, 0.5);
+          if (Math.abs(dot(sub(m, r.a), n)) > 0.6 * r.sep) continue;
+          const t = dot(sub(m, r.a), u);
+          if (t < -tol || t > r.len + tol) continue;
+          if (!at.some((x) => Math.abs(x - t) <= Math.max(1, pt(0.03)))) at.push(t);
+        }
+      }
+    }
+    if (at.length < 3) return false;
+    at.sort((p, q) => p - q);
+    const stops = [0, ...at.map((t) => Math.max(0, Math.min(r.len, t))), r.len];
+    for (let i = 1; i < stops.length; i++) if ((stops[i]! - stops[i - 1]!) * mPerPt > cfg.bandMaxPanelM) return false;
+    return true;
+  };
+  const bandRuns = mergeRuns(bandPieces, 1.5, Math.max(1.5, pt(cfg.bandMullionM))).filter((r) => {
+    if (r.len * mPerPt < cfg.bandMinRunM) { reject('band-short', r); return false; }
+    if (!panelled(r)) { reject('band-no-mullions', r); return false; }
+    return true;
+  });
+  const bandWalls = new Map<string, { wall: GlassHostWall; iv: { lo: number; hi: number }[] }>();
+  const bandKept: { r: Run; covers: Cover[] }[] = [];
+  for (const r of bandRuns) {
+    if (nearWet(r)) { reject('band-wc', r); continue; }
+    // the frame's own lines (a frame can be drawn with five) are not a pattern
+    if (inPattern(r, pt(cfg.bandMaxSepM) / 2 + 0.6)) { reject('band-pattern', r); continue; }
+    if ([...leaves, ...openings].some((d) => segDist(r.a, d.a, d.b) <= tol && segDist(r.b, d.a, d.b) <= tol)) { reject('band-door-leaf', r); continue; }
+    const covers = wallCover(r, walls, Math.max(1, r.sep / 2 + 0.5));
+    // a wall no thicker than the frame is the band itself; a thicker one holds it as a window
+    const isBand = (w: GlassHostWall) => !w.filled && w.thickness <= 1.5 * r.sep + 1;
+    const thick = covers.filter((c) => !isBand(c.wall));
+    if (thick.reduce((s2, c) => s2 + (c.hi - c.lo), 0) >= 0.3 * r.len) { reject('band-in-wall', r); continue; }
+    const own = covers.filter((c) => !thick.includes(c));
+    for (const c of own) {
+      const wu = unit(c.wall.a, c.wall.b);
+      const ta = dot(sub(lerp(r.a, r.b, c.lo / r.len), c.wall.a), wu), tb = dot(sub(lerp(r.a, r.b, c.hi / r.len), c.wall.a), wu);
+      let e = bandWalls.get(c.wall.id);
+      if (!e) bandWalls.set(c.wall.id, (e = { wall: c.wall, iv: [] }));
+      e.iv.push({ lo: Math.min(ta, tb), hi: Math.max(ta, tb) });
+    }
+    bandKept.push({ r, covers });
+  }
+  // walls drawn as the band (mostly covered by it): the glazing's own pieces between mullions
+  const bandWallIds = new Set<string>();
+  for (const { wall: w, iv } of bandWalls.values()) {
+    const wl = dist(w.a, w.b);
+    const free = freeIntervals(wl, iv.map((c) => ({ lo: Math.max(0, c.lo), hi: Math.min(wl, c.hi) })));
+    if (wl - free.reduce((s2, [lo, hi]) => s2 + (hi - lo), 0) >= cfg.markWallShare * wl) bandWallIds.add(w.id);
+  }
+  /** a band carried on at both ends by another wall in its own line is a window in that wall */
+  const inWallLine = (a: Vec2, b: Vec2, sep: number) => {
+    const u = unit(a, b);
+    const held = (E: Vec2) => walls.some((w) => {
+      if (bandWallIds.has(w.id) || w.thickness < 0.8 * sep) return false;
+      const wu = unit(w.a, w.b);
+      if (sinBetween(u, wu) > 0.05) return false;
+      const wn = { x: -wu.y, y: wu.x };
+      if (Math.abs(dot(sub(E, w.a), wn)) > w.thickness / 2 + tol) return false;
+      return Math.min(dist(E, w.a), dist(E, w.b)) <= tol + w.thickness / 2;
+    });
+    return held(a) && held(b);
+  };
+  /** collinear band walls end to end form one glazed run: check that run's ends, not each pane's */
+  const bandSpan = (w: GlassHostWall) => {
+    const u = unit(w.a, w.b), n = { x: -u.y, y: u.x };
+    let lo = 0, hi = dist(w.a, w.b);
+    for (let grow = true; grow;) {
+      grow = false;
+      for (const id of bandWallIds) {
+        const o = walls.find((x) => x.id === id)!;
+        if (sinBetween(u, unit(o.a, o.b)) > 0.05 || Math.abs(dot(sub(o.a, w.a), n)) > w.thickness / 2 + tol) continue;
+        const ta = dot(sub(o.a, w.a), u), tb = dot(sub(o.b, w.a), u);
+        const olo = Math.min(ta, tb), ohi = Math.max(ta, tb);
+        if (olo <= hi + tol && olo > hi - 1 && ohi > hi) { hi = ohi; grow = true; }
+        if (ohi >= lo - tol && ohi < lo + 1 && olo < lo) { lo = olo; grow = true; }
+      }
+    }
+    return { a: { x: w.a.x + u.x * lo, y: w.a.y + u.y * lo }, b: { x: w.a.x + u.x * hi, y: w.a.y + u.y * hi } };
+  };
+  for (const { r, covers } of bandKept) {
+    if (inWallLine(r.a, r.b, r.sep)) { reject('band-window', r); continue; }
+    for (const [lo, hi] of freeIntervals(r.len, covers)) {
+      if ((hi - lo) * mPerPt < cfg.bandMinRunM) continue;
+      // frame, glass and mullions are evidence enough: one end met will do
+      const piece: Run = { ...r, a: lerp(r.a, r.b, lo / r.len), b: lerp(r.a, r.b, hi / r.len), len: hi - lo, openings: [], loose: true };
+      if (hasAlongside(piece)) { reject('band-alongside', piece); continue; }
+      candidates.push(piece);
+    }
+  }
+  for (const id of bandWallIds) {
+    const w = walls.find((x) => x.id === id)!;
+    const span = bandSpan(w);
+    if (dist(span.a, span.b) * mPerPt < cfg.bandMinRunM) { reject('band-wall-short', { a: w.a, b: w.b, len: dist(w.a, w.b), sep: w.thickness }); continue; }
+    if (inWallLine(span.a, span.b, w.thickness)) { reject('band-wall-window', { a: w.a, b: w.b, len: dist(w.a, w.b), sep: w.thickness }); continue; }
+    glassWallIds.set(w.id, 'glazing-band');
+  }
+
   // ---- 4. structure: run ends must meet walls, other glass or a door in line ------------
   const endHit = (r: Run, end: 'a' | 'b', glass: Run[]): EndHit => endHitWith(r, end, glass, walls);
   function endHitWith(r: Run, end: 'a' | 'b', glass: Run[], hostWalls: GlassHostWall[]): EndHit {
@@ -734,6 +928,9 @@ export function detectGlassPartitions(
     for (const g of glass) {
       if (g === r) continue;
       if (segDist(E, g.a, g.b) <= Math.max(g.sep, r.sep) / 2 + tol) return { kind: 'glass' };
+    }
+    for (const c of columns) {
+      if (E.x >= c[0] - tol && E.x <= c[2] + tol && E.y >= c[1] - tol && E.y <= c[3] + tol) return { kind: 'column' };
     }
     for (const o of openings) {
       const ou = unit(o.a, o.b);
@@ -768,6 +965,7 @@ export function detectGlassPartitions(
       const face = along - (w.thickness / 2) / Math.abs(den);
       if (face > 0) nearest = Math.min(nearest, face);
     }
+    const nearestWall = nearest;
     for (const g of glass) {
       if (g === r) continue;
       const gu = unit(g.a, g.b);
@@ -775,6 +973,8 @@ export function detectGlassPartitions(
       inLine(g.b, gu, g.sep / 2);
     }
     if (nearest >= gapLo && nearest <= gapHi) return { kind: 'gap' };
+    // glazing carried on past a post or a door to more glass in line: any gap up to a doorway
+    if (nearest < nearestWall && nearest <= gapHi) return { kind: 'gap' };
     return null;
   }
 
@@ -789,7 +989,7 @@ export function detectGlassPartitions(
       const r = pending[i]!;
       const glassNow = [...accepted, ...fresh];
       const ha = endHit(r, 'a', glassNow), hb = endHit(r, 'b', glassNow);
-      const ok = r.loose ? !!(ha || hb) : !!(ha && hb);
+      const ok = (r.loose ? !!(ha || hb) : !!(ha && hb)) || (r.source === 'glazing-band' && r.len * mPerPt >= cfg.bandFreeM);
       if (!ok) continue;
       // in line with outside walls at both ends: a window, not a partition
       if (r.source === 'double-line' && ha?.kind === 'wall' && hb?.kind === 'wall' && ha.collinear && hb.collinear &&
@@ -823,7 +1023,7 @@ export function detectGlassPartitions(
     }
     if (!changed) break;
   }
-  for (const r of pending) reject(r.source === 'legend' ? 'legend-unattached' : 'pair-unattached', r);
+  for (const r of pending) reject(r.source === 'legend' ? 'legend-unattached' : r.source === 'glazing-band' ? 'band-unattached' : 'pair-unattached', r);
 
   for (const [id, iv] of thinCover) {
     const w = walls.find((x) => x.id === id)!;
@@ -919,4 +1119,19 @@ export function detectGlassPartitions(
       rejected,
     },
   };
+}
+
+/**
+ * True when most of the segment a–b lies along one of the walls (parallel, inside its band
+ * plus `tolPt`): a copy of that wall. Wall completion uses it so that it does not lay a
+ * solid wall over a glass one drawn with the same lines.
+ */
+export function alongWalls(walls: { a: Vec2; b: Vec2; thickness: number }[], a: Vec2, b: Vec2, tolPt: number): boolean {
+  if (!a || !b || dist(a, b) < 1e-6) return false;
+  const u = unit(a, b);
+  const samples = [a, lerp(a, b, 0.5), b];
+  return walls.some((w) => {
+    if (dist(w.a, w.b) < 1e-6 || sinBetween(u, unit(w.a, w.b)) > Math.sin(3 * Math.PI / 180)) return false;
+    return samples.filter((p) => segDist(p, w.a, w.b) <= w.thickness / 2 + tolPt).length >= 2;
+  });
 }

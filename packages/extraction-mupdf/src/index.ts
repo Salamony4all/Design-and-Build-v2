@@ -70,7 +70,7 @@ export type { LineageStore, PaintedOperationLineage, SubpathLineage, SegmentLine
 export { collectPageVectors } from './vector-device';
 export { detectCurvedWalls, curvedWallPieces, curvedBandUnder, CURVED_WALL_DEFAULTS } from './curved-walls';
 export type { CurvedWallConfig, CurvedWallSegment, CurvedWallPiece, CurvedPod, CurvedPodDoor, CurvedWallResult, CurvedWallKind } from './curved-walls';
-export { detectGlassPartitions, GLASS_DEFAULTS } from './glass-partitions';
+export { detectGlassPartitions, alongWalls, GLASS_DEFAULTS } from './glass-partitions';
 export type { GlassConfig, GlassHostWall, GlassPartition, GlassResult, GlassSource, GlassStyle, GlassText } from './glass-partitions';
 import * as mupdf from 'mupdf';
 export { mupdf };

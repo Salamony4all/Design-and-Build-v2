@@ -46,6 +46,25 @@ function room() {
 }
 
 const text = (s: string, x: number, y: number, h = 6): GlassText => ({ text: s, x, y, w: s.length * h * 0.5, h });
+
+/** A filled square (a column), centred at (x, y), side in metres. */
+function column(x: number, y: number, sideM = 0.4): MuVector {
+  const h = pt(sideM) / 2;
+  const pts = [{ x: x - h, y: y - h }, { x: x + h, y: y - h }, { x: x + h, y: y + h }, { x: x - h, y: y + h }, { x: x - h, y: y - h }];
+  return {
+    id: `v${nextId++}`, operation: 'fill-path', commands: [], points: pts, subpaths: [pts],
+    bounds: [x - h, y - h, x + h, y + h], color: [0.4, 0.4, 0.4],
+  };
+}
+
+/** A glazing band along y from x0 to x1: frame lines `depthM` apart, a glass line between, mullion ticks every `pitchM`. */
+function band(x0: number, x1: number, y: number, opts: { depthM?: number; pitchM?: number; glass?: boolean } = {}): MuVector[] {
+  const d = pt(opts.depthM ?? 0.1);
+  const out = [H(x0, x1, y - d / 2), H(x0, x1, y + d / 2)];
+  if (opts.glass !== false) out.push(H(x0, x1, y));
+  if (opts.pitchM) for (let x = x0; x <= x1 + 0.01; x += pt(opts.pitchM)) out.push(V(x, y - d / 2, y + d / 2));
+  return out;
+}
 const run = (vectors: MuVector[], texts: GlassText[], walls: GlassHostWall[]) =>
   detectGlassPartitions({ vectors, texts, walls, scaleMmPerPt: SCALE });
 
@@ -173,5 +192,52 @@ describe('glazed screens drawn as two hairlines (no key)', () => {
     const res = run(vectors, [], [...r.walls, solid]);
     expect(res.glassWallIds).toHaveLength(0);
     expect(res.partitions).toHaveLength(0);
+  });
+});
+
+describe('glazing bands: curtain walls, shopfronts and window walls', () => {
+  const y = 300, x0 = 100, x1 = 100 + pt(6);
+  const cols = [column(x0 - pt(0.2), y), column(x1 + pt(0.2), y)];
+
+  it('builds a mullioned band between columns as a glass wall', () => {
+    const res = run([...cols, ...band(x0, x1, y, { pitchM: 1.5 })], [], []);
+    expect(res.partitions).toHaveLength(1);
+    expect(res.partitions[0]!.source).toBe('glazing-band');
+    expect(res.partitions[0]!.lengthM).toBeGreaterThan(5.9);
+    expect(res.partitions[0]!.thicknessM).toBeCloseTo(0.1, 2);
+  });
+
+  it('does not read a wall drawn with three lines and no mullions', () => {
+    expect(run([...cols, ...band(x0, x1, y)], [], []).partitions).toHaveLength(0);
+  });
+
+  it('does not read two lines with mullions but no glass line', () => {
+    expect(run([...cols, ...band(x0, x1, y, { pitchM: 1.5, glass: false })], [], []).partitions).toHaveLength(0);
+  });
+
+  it('leaves a window in a wall line to the window stage', () => {
+    const wx0 = x0 - pt(3), wx1 = x1 + pt(3);
+    const left = wall('w_left', { x: wx0, y }, { x: x0, y }, 0.1), right = wall('w_right', { x: x1, y }, { x: wx1, y }, 0.1);
+    const vectors = [...left.faces, ...right.faces, ...band(x0, x1, y, { pitchM: 1.5 })];
+    expect(run(vectors, [], [left.host, right.host]).partitions).toHaveLength(0);
+  });
+
+  it('marks a detected wall that is the band itself, unless it was read from a filled mass', () => {
+    const vectors = [...cols, ...band(x0, x1, y, { pitchM: 1.5 })];
+    const host: GlassHostWall = { id: 'w_band', a: { x: x0, y }, b: { x: x1, y }, thickness: pt(0.1) };
+    const marked = run(vectors, [], [host]);
+    expect(marked.glassWalls).toEqual([{ id: 'w_band', source: 'glazing-band' }]);
+    expect(marked.partitions).toHaveLength(0);
+    expect(run(vectors, [], [{ ...host, filled: true }]).glassWallIds).toHaveLength(0);
+  });
+});
+
+describe('alongWalls', () => {
+  it('finds copies of a wall and ignores crossing or offset lines', async () => {
+    const { alongWalls } = await import('../src/glass-partitions');
+    const w = [{ a: { x: 0, y: 0 }, b: { x: 100, y: 0 }, thickness: 3 }];
+    expect(alongWalls(w, { x: 10, y: 0.5 }, { x: 90, y: 0.5 }, 1)).toBe(true);
+    expect(alongWalls(w, { x: 50, y: -20 }, { x: 50, y: 20 }, 1)).toBe(false);
+    expect(alongWalls(w, { x: 10, y: 10 }, { x: 90, y: 10 }, 1)).toBe(false);
   });
 });
