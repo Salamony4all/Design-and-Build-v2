@@ -76,13 +76,26 @@ const BodySchema = z.object({
             colour: z.string().max(30),
             kinds: z.array(z.string().max(30)).max(8),
             count: z.number().int().min(1).max(10_000),
-            where: z.string().max(40).optional(),
-            /** The product's own photo stands on a pad in the view (not a solid stand-in). */
+            where: z.string().max(200).optional(),
+            /** The product's own photo stands in the view (not a solid stand-in). */
             photo: z.boolean().optional(),
             image: z.string().max(MAX_PRODUCT_IMAGE_CHARS).optional(),
           }),
         )
         .max(16),
+      /** Stand-ins without a product, by kind. */
+      plain: z
+        .array(
+          z.object({
+            kind: z.string().max(30),
+            count: z.number().int().min(1).max(10_000),
+            where: z.string().max(200).optional(),
+          }),
+        )
+        .max(12)
+        .optional(),
+      /** Stand-ins seen through glass. */
+      behindGlass: z.number().int().min(0).max(10_000).optional(),
     })
     .optional(),
   note: z.string().max(2000).optional(),
@@ -182,7 +195,8 @@ function furnitureRefs(body: Body, firstIndex: number): { furniture?: PromptFurn
       imageIndex: img ? firstIndex + images.length - 1 : undefined,
     };
   });
-  return { furniture: { standIns: f.standIns, products }, images };
+  const plain = (f.plain ?? []).map((k) => ({ kind: k.kind.replace(/[^a-z-]/gi, '').toLowerCase() || 'unknown', count: k.count, where: k.where }));
+  return { furniture: { standIns: f.standIns, products, plain, behindGlass: Math.min(f.behindGlass ?? 0, f.standIns) }, images };
 }
 
 interface GeminiPart {

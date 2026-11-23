@@ -98,6 +98,19 @@ export function productDims(text: string): { w: number; d: number; h?: number } 
   return null;
 }
 
+/**
+ * Height of a product in metres, when its line tells it: a third size ("840 x 800 x
+ * 760 mm"), or its type (coffee tables are low, high-back chairs and bar stools tall).
+ */
+export function productHeight(text: string, dims?: { h?: number }): number | undefined {
+  const h = dims?.h ?? productDims(text)?.h;
+  if (h && h >= 0.2 && h <= 3) return h;
+  if (/\b(coffee|cocktail|low)\s*tables?\b/i.test(text)) return 0.42;
+  if (/\bhigh[\s-]*back(ed)?\b|\bwing\s*back\b|\bwingback\b|\bprivacy\s+(arm)?chairs?\b|\bacoustic\s+(arm)?chairs?\b/i.test(text)) return 1.25;
+  if (/\b(bar|counter|high)\s*(stools?|chairs?)\b/i.test(text)) return 1.0;
+  return undefined;
+}
+
 const COMPATIBLE: Record<string, string[]> = {
   seat: ['seat'],
   sofa: ['sofa', 'seat'],

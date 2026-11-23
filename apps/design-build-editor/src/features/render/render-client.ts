@@ -3,7 +3,7 @@
 // /api/render, score the result against the model's edges, and re-render once
 // with a stricter lock (plus the edge guide) when the geometry drifted.
 
-import { RENDER_TIERS, whereInView, type RenderStyleId, type RenderTierId } from './render-presets';
+import { RENDER_TIERS, spotsWhere, whereInView, type RenderStyleId, type RenderTierId } from './render-presets';
 import { OUTSIDE_OK, fidelityGrade, loadImage, scoreRenderFidelity, type FidelityReport } from './geometry-fidelity';
 import type { PreparedView } from './capture-view';
 import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
@@ -69,6 +69,10 @@ export interface RenderJobResult {
 interface RenderFurniture {
   standIns: number;
   products: { label: string; colour: string; kinds: string[]; count: number; where: string; photo: boolean; image?: string }[];
+  /** Stand-ins without a product, by kind. */
+  plain: { kind: string; count: number; where: string }[];
+  /** Stand-ins seen through glass. */
+  behindGlass: number;
 }
 
 const pictureCache = new Map<string, Promise<string | undefined>>();
@@ -119,7 +123,12 @@ function productPicture(url: string | undefined): Promise<string | undefined> {
 async function furnitureForRender(view: PreparedView): Promise<{ request: RenderFurniture; shown: NonNullable<RenderJobResult['products']> } | null> {
   const f = view.furniture;
   if (!f || f.standIns <= 0) return null;
-  const request: RenderFurniture = { standIns: f.standIns, products: [] };
+  const request: RenderFurniture = {
+    standIns: f.standIns,
+    products: [],
+    plain: (f.plain ?? []).slice(0, 8).map((k) => ({ kind: k.kind, count: k.count, where: spotsWhere(k.spots, k.count).slice(0, 160) })),
+    behindGlass: f.behindGlass ?? 0,
+  };
   const shown: NonNullable<RenderJobResult['products']> = [];
   let pictures = 0;
   for (const g of f.products.slice(0, 12)) {
@@ -127,7 +136,8 @@ async function furnitureForRender(view: PreparedView): Promise<{ request: Render
     if (!ref) continue;
     const image = pictures < MAX_PRODUCT_PICTURES ? await productPicture(ref.imageUrl) : undefined;
     if (image) pictures++;
-    request.products.push({ label: ref.label, colour: ref.colour.name, kinds: g.kinds, count: g.count, where: whereInView(g), photo: g.photo, ...(image ? { image } : {}) });
+    const where = (g.spots?.length ? spotsWhere(g.spots, g.count) : whereInView(g)).slice(0, 160);
+    request.products.push({ label: ref.label, colour: ref.colour.name, kinds: g.kinds, count: g.count, where, photo: g.photo, ...(image ? { image } : {}) });
     shown.push({ id: ref.id, label: ref.label, colour: ref.colour.hex, count: g.count, withPicture: !!image });
   }
   return { request, shown };

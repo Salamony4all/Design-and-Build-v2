@@ -20,7 +20,7 @@ import {
   type RenderStyleId,
   type RenderTierId,
 } from './render-presets';
-import { captureViewForRender, hasRenderableScene, type FrameCrop, type PreparedView } from './capture-view';
+import { captureViewForRender, furnitureSummary, hasRenderableScene, type FrameCrop, type PreparedView } from './capture-view';
 import type { ViewArea } from '../viewer-interaction/view-navigator';
 import { renderPhotoreal, renderStatus, RenderRequestError, type RenderJobResult, type RenderStage } from './render-client';
 import { OUTSIDE_OK, fidelityGrade } from './geometry-fidelity';
@@ -131,6 +131,8 @@ export function RenderStudio({
   const [showLines, setShowLines] = useState(false);
   const [large, setLarge] = useState(false);
   const [noScene, setNoScene] = useState(false);
+  /** Furniture placed from the drawing (and BOQ Flow products on it): the render shows that, not AI furniture. */
+  const [drawn, setDrawn] = useState<{ pieces: number; products: number }>({ pieces: 0, products: 0 });
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => setPrefs(loadRenderPrefs()), []);
@@ -145,6 +147,7 @@ export function RenderStudio({
       /* no matchMedia */
     }
     setNoScene(!hasRenderableScene(getViewerHandle()));
+    setDrawn(furnitureSummary());
     void renderStatus().then(setStatus);
     setViewCtx(getViewContext?.() ?? { interior: false, lensMm: 0 });
     const id = window.setInterval(() => {
@@ -270,7 +273,8 @@ export function RenderStudio({
         const res = await renderPhotoreal(view, {
           style,
           tier: prefs.tier,
-          furnish: prefs.furnish,
+          // Drawn furniture is rendered as it stands; the AI adds none of its own.
+          furnish: prefs.furnish && furnitureSummary().pieces === 0,
           ceiling: prefs.ceiling,
           note,
           signal: ac.signal,
@@ -420,17 +424,29 @@ export function RenderStudio({
                 ))}
               </div>
 
-              <label className={styles.toggle}>
-                <input
-                  type="checkbox"
-                  checked={prefs.furnish}
-                  onChange={(e) => setPrefs((p) => ({ ...p, furnish: e.target.checked }))}
-                />
-                <span className={styles.switch} aria-hidden />
-                <span>
-                  Furnish rooms <small>(AI-placed furniture; walls stay locked)</small>
-                </span>
-              </label>
+              {drawn.pieces > 0 ? (
+                <p className={styles.furnished}>
+                  <span aria-hidden>🪑</span>
+                  <span>
+                    {drawn.products > 0
+                      ? `Furnished with ${drawn.products} product${drawn.products === 1 ? '' : 's'} from BOQ Flow`
+                      : 'Furniture from the drawing'}{' '}
+                    <small>({drawn.pieces} pieces, rendered where the drawing places them)</small>
+                  </span>
+                </p>
+              ) : (
+                <label className={styles.toggle}>
+                  <input
+                    type="checkbox"
+                    checked={prefs.furnish}
+                    onChange={(e) => setPrefs((p) => ({ ...p, furnish: e.target.checked }))}
+                  />
+                  <span className={styles.switch} aria-hidden />
+                  <span>
+                    Furnish rooms <small>(AI-placed furniture; walls stay locked)</small>
+                  </span>
+                </label>
+              )}
 
               {viewCtx.interior && (
                 <label className={styles.toggle}>

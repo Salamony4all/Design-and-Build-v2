@@ -27,6 +27,7 @@ import {
   rasterize,
   type RgbaImage,
 } from './geometry-fidelity';
+import { hideProductPads } from '../furniture/product-cards';
 
 export interface PreparedView {
   /** JPEG data URL of the cropped view (what the model receives as image 1). */
@@ -55,12 +56,22 @@ export interface PreparedView {
   furniture?: FurnitureInView;
 }
 
-/** Furniture stand-ins in a prepared view; rects are normalized to the view. */
+/** A place in a prepared view (normalized: 0,0 top left, 1,1 bottom right). */
+export interface ViewSpot {
+  x: number;
+  y: number;
+}
+
+/** Furniture stand-ins in a prepared view; rects and spots are normalized to the view. */
 export interface FurnitureInView {
   /** All stand-ins in view, with or without a product. */
   standIns: number;
-  /** The stand-ins that carry a BOQ Flow product, most numerous first; `photo` when the product's own photo stands on a pad. */
-  products: { productId: string; count: number; kinds: string[]; photo: boolean; x0: number; y0: number; x1: number; y1: number }[];
+  /** The stand-ins that carry a BOQ Flow product, most numerous first; `photo` when the product's own photo stands there. */
+  products: { productId: string; count: number; kinds: string[]; photo: boolean; x0: number; y0: number; x1: number; y1: number; spots: ViewSpot[] }[];
+  /** The stand-ins without a product, by kind (most numerous first). */
+  plain: { kind: string; count: number; spots: ViewSpot[] }[];
+  /** Stand-ins seen through glass. */
+  behindGlass: number;
 }
 
 /** One furniture stand-in seen on screen, at its centre (normalized canvas coordinates). */
@@ -69,6 +80,8 @@ export interface FurnitureOnScreen {
   productId?: string;
   /** The product's photo stands on a pad here (no solid stand-in). */
   photo?: boolean;
+  /** Seen through glass (a glazed pod or partition). */
+  glass?: boolean;
   x: number;
   y: number;
 }
@@ -319,15 +332,25 @@ function drawnMesh(m: THREE.Mesh): boolean {
   return materialsOf(m).some((mt) => mt.visible !== false && mt.colorWrite !== false && !(mt.transparent && (mt.opacity ?? 1) < 0.05));
 }
 
-/** A mesh that hides what is behind it (glass and other see-through surfaces do not). */
-function opaqueMesh(m: THREE.Mesh): boolean {
-  return materialsOf(m).some(
-    (mt) =>
-      mt.visible !== false &&
-      mt.colorWrite !== false &&
-      !(mt.transparent && (mt.opacity ?? 1) < 0.6) &&
-      !(((mt as THREE.MeshPhysicalMaterial).transmission ?? 0) > 0.2),
+/** A material that lets the eye through (glass and other see-through surfaces, or nothing drawn). */
+function seeThrough(mt: AnyMaterial | null | undefined): boolean {
+  return (
+    !mt ||
+    mt.visible === false ||
+    mt.colorWrite === false ||
+    (!!mt.transparent && (mt.opacity ?? 1) < 0.6) ||
+    ((mt as THREE.MeshPhysicalMaterial).transmission ?? 0) > 0.2
   );
+}
+
+/**
+ * The material a ray hit with: a multi-material mesh (a glass wall with solid cut
+ * edges) is drawn with the material of the face that was hit.
+ */
+function hitMaterial(hit: THREE.Intersection): AnyMaterial | undefined {
+  const mat = (hit.object as THREE.Mesh).material;
+  if (!Array.isArray(mat)) return mat as AnyMaterial | undefined;
+  return (mat[hit.face?.materialIndex ?? 0] ?? mat[0]) as AnyMaterial | undefined;
 }
 
 /** Copy of the WebGL/WebGPU canvas as it is right after a render. */
@@ -511,7 +534,7 @@ function visibleFurniture(v: LiveViewer): FurnitureOnScreen[] {
       if (box.isEmpty()) continue;
       const cx = (box.min.x + box.max.x) / 2;
       const cz = (box.min.z + box.max.z) / 2;
-      let seen: { x: number; y: number } | null = null;
+      let seen: { x: number; y: number; glass: boolean } | null = null;
       for (const y of [box.max.y - 0.02, (box.min.y + box.max.y) / 2]) {
         p.set(cx, y, cz);
         q.copy(p).project(cam);
@@ -522,16 +545,17 @@ function visibleFurniture(v: LiveViewer): FurnitureOnScreen[] {
         if (!targets) {
           const list: THREE.Object3D[] = [];
           v.scene.traverseVisible((m) => {
-            if ((m as THREE.Mesh).isMesh && opaqueMesh(m as THREE.Mesh)) list.push(m);
+            if ((m as THREE.Mesh).isMesh && drawnMesh(m as THREE.Mesh)) list.push(m);
           });
           targets = list;
         }
         ray.set(eye, dir.divideScalar(dist));
         ray.far = dist + 0.5;
         const entry = ray.ray.intersectBox(box, hitBox) ? hitBox.distanceTo(eye) : dist;
-        const first = ray.intersectObjects(targets, false)[0];
-        if (first && first.distance < entry - 0.06) continue; // something stands in front
-        seen = { x: (q.x + 1) / 2, y: (1 - q.y) / 2 };
+        // Glass (a glazed pod, a glass partition) does not hide what stands behind it.
+        const hits = ray.intersectObjects(targets, false).filter((hit) => hit.distance < entry - 0.06);
+        if (hits.some((hit) => !seeThrough(hitMaterial(hit)))) continue; // something stands in front
+        seen = { x: (q.x + 1) / 2, y: (1 - q.y) / 2, glass: hits.length > 0 };
         break;
       }
       if (!seen) continue;
@@ -539,7 +563,9 @@ function visibleFurniture(v: LiveViewer): FurnitureOnScreen[] {
       out.push({
         kind: typeof meta.kind === 'string' ? meta.kind : 'unknown',
         ...(typeof product?.id === 'string' ? { productId: product.id, photo: product.photo === true } : {}),
-        ...seen,
+        x: seen.x,
+        y: seen.y,
+        ...(seen.glass ? { glass: true } : {}),
       });
     }
   } catch {
@@ -594,6 +620,8 @@ export function captureBeautyPass(
     openings?: boolean;
     /** Also list the furniture stand-ins in view. */
     furniture?: boolean;
+    /** Keep the coloured pads under product photos (exports); renders leave them out. */
+    pads?: boolean;
   } = {},
 ): { dataUrl: string; viewKind: ViewKind; focus: NormRect | null } & CaptureExtras {
   const v = resolveViewer(handle);
@@ -603,6 +631,8 @@ export function captureBeautyPass(
   // A viewfinder frame is the subject when given; otherwise the building.
   const focus = opts.subject ?? (opts.frameBuilding === false ? null : buildingScreenRect(v));
   const restoreNodes = hideNonModelNodes();
+  // The pads are a code for the 3D model; a render would draw them as coloured rugs.
+  const restorePads = opts.pads === false ? hideProductPads() : null;
   const removeCeiling = opts.ceiling ? addCaptureCeiling(v.scene) : null;
   const prevRatio = v.gl.getPixelRatio?.();
   let dataUrl = '';
@@ -647,6 +677,7 @@ export function captureBeautyPass(
       }
     }
     removeCeiling?.();
+    restorePads?.();
     restoreNodes();
     v.invalidate?.();
   }
@@ -778,21 +809,35 @@ export async function prepareView(
   };
 }
 
-/** Stand-ins inside the crop, grouped by product (most numerous first), in view coordinates. */
+/** Spots kept per group (enough to say where they stand). */
+const MAX_SPOTS = 24;
+
+/** Stand-ins inside the crop, grouped by product (most numerous first) and the rest by kind, in view coordinates. */
 export function furnitureInView(items: readonly FurnitureOnScreen[], crop: NormRect): FurnitureInView {
   const w = crop.x1 - crop.x0;
   const h = crop.y1 - crop.y0;
   const byProduct = new Map<string, FurnitureInView['products'][number]>();
+  const byKind = new Map<string, FurnitureInView['plain'][number]>();
+  const r3 = (v: number) => Math.round(v * 1000) / 1000;
   let standIns = 0;
+  let behindGlass = 0;
   for (const it of items) {
     const x = (it.x - crop.x0) / w;
     const y = (it.y - crop.y0) / h;
     if (x < 0 || x > 1 || y < 0 || y > 1) continue;
     standIns++;
-    if (!it.productId) continue;
+    if (it.glass) behindGlass++;
+    const spot = { x: r3(x), y: r3(y) };
+    if (!it.productId) {
+      let k = byKind.get(it.kind);
+      if (!k) byKind.set(it.kind, (k = { kind: it.kind, count: 0, spots: [] }));
+      k.count++;
+      if (k.spots.length < MAX_SPOTS) k.spots.push(spot);
+      continue;
+    }
     let g = byProduct.get(it.productId);
     if (!g) {
-      g = { productId: it.productId, count: 0, kinds: [], photo: !!it.photo, x0: x, y0: y, x1: x, y1: y };
+      g = { productId: it.productId, count: 0, kinds: [], photo: !!it.photo, x0: x, y0: y, x1: x, y1: y, spots: [] };
       byProduct.set(it.productId, g);
     }
     g.count++;
@@ -801,14 +846,48 @@ export function furnitureInView(items: readonly FurnitureOnScreen[], crop: NormR
     g.y0 = Math.min(g.y0, y);
     g.x1 = Math.max(g.x1, x);
     g.y1 = Math.max(g.y1, y);
+    if (g.spots.length < MAX_SPOTS) g.spots.push(spot);
   }
-  return { standIns, products: [...byProduct.values()].sort((a, b) => b.count - a.count) };
+  return {
+    standIns,
+    products: [...byProduct.values()].sort((a, b) => b.count - a.count),
+    plain: [...byKind.values()].sort((a, b) => b.count - a.count),
+    behindGlass,
+  };
+}
+
+/** Furniture placed from the drawing, and how many BOQ Flow products it carries. */
+export function furnitureSummary(): { pieces: number; products: number } {
+  try {
+    const { useScene } = getPascalStores() as unknown as {
+      useScene: { getState: () => { nodes: Record<string, { type: string; metadata?: Record<string, unknown> }> } };
+    };
+    let pieces = 0;
+    const products = new Set<string>();
+    for (const n of Object.values(useScene.getState().nodes ?? {})) {
+      if (n.type !== 'item' || n.metadata?.source !== 'plan-furniture') continue;
+      pieces++;
+      const id = (n.metadata.product as { id?: unknown } | undefined)?.id;
+      if (typeof id === 'string') products.add(id);
+    }
+    return { pieces, products: products.size };
+  } catch {
+    return { pieces: 0, products: 0 };
+  }
 }
 
 /** Capture + prepare in one step, for the one-click render button. */
 export async function captureViewForRender(
   handle: ViewerHandle | null,
-  opts: { frameBuilding?: boolean; frame?: FrameCrop | null; viewKind?: ViewKind; lensMm?: number; ceiling?: boolean } = {},
+  opts: {
+    frameBuilding?: boolean;
+    frame?: FrameCrop | null;
+    viewKind?: ViewKind;
+    lensMm?: number;
+    ceiling?: boolean;
+    /** Keep the coloured pads under the product photos (views for the export suite). */
+    pads?: boolean;
+  } = {},
 ): Promise<PreparedView> {
   const frame = opts.frame ?? null;
   const interior = opts.viewKind === 'interior';
@@ -820,6 +899,7 @@ export async function captureViewForRender(
     modelLines: true,
     openings: interior,
     furniture: true,
+    pads: opts.pads === true,
   });
   const view = await prepareView(shot.dataUrl, opts.viewKind ?? shot.viewKind, 1536, frameBuilding ? shot.focus : null, frame, {
     passes: shot.passes,

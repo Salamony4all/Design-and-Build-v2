@@ -57,7 +57,7 @@ import { isEmbedded, useEmbedBridge, countSceneNodes, type EmbedProduct } from '
 import { selectDoorInstallerInput, type RuntimeWallMap } from '@/features/door-pilot/door-boundary';
 import { getPascalStores, ensureBuiltinPluginLoaded, type ViewerHandle } from 'design-build-simplified-viewer-shell';
 import { RenderStudio, loadRenderPrefs } from '@/features/render/RenderStudio';
-import { prepareView, currentViewKind, captureViewForRender, readPlanUnderlay, type PreparedView } from '@/features/render/capture-view';
+import { prepareView, currentViewKind, captureViewForRender, furnitureSummary, readPlanUnderlay, type PreparedView } from '@/features/render/capture-view';
 import { RENDER_COMPLETE_EVENT, renderPhotoreal, type RenderJobResult } from '@/features/render/render-client';
 import { productRefs } from '@/features/furniture/product-refs';
 import { RENDER_TIERS, getRenderStyle, styleFromText, furnishFromText } from '@/features/render/render-presets';
@@ -716,13 +716,26 @@ export default function Home() {
     // node store so the slab is included even when a registry bucket is empty.
     if (out.boxes.length === 0) {
       const storeNodes = core.useScene.getState().nodes as Record<string, { id?: string; type?: string }>;
-      for (const [nid, sn] of Object.entries(storeNodes)) {
-        if (sn?.type && buildingTypes.includes(sn.type)) wanted.add(nid);
+      // The whole model takes every building node; a selection only its own nodes.
+      if (!onlyIds) {
+        for (const [nid, sn] of Object.entries(storeNodes)) {
+          if (sn?.type && buildingTypes.includes(sn.type)) wanted.add(nid);
+        }
       }
+      const regObjects = (reg as { nodes?: Map<string, THREE.Object3D> } | undefined)?.nodes;
+      /** Furniture: the box of its own 3D object (footprint and height), not a point. */
+      const itemBox = (id: string): Aabb | null => {
+        const o = regObjects?.get(id);
+        if (!o) return null;
+        o.updateWorldMatrix(true, true);
+        tmp.setFromObject(o);
+        if (tmp.isEmpty() || !finite(tmp.min) || !finite(tmp.max)) return null;
+        return { min: [tmp.min.x, Math.max(0, tmp.min.y), tmp.min.z], max: [tmp.max.x, tmp.max.y, tmp.max.z] };
+      };
       wanted.forEach((id) => {
         if (seen.has(id)) return;
-        const b = nodeBox(id);
         const sType = storeNodes[id]?.type;
+        const b = (sType === 'item' ? itemBox(id) : null) ?? nodeBox(id);
         if (b) {
           out.boxes.push(b); out.buildingCount++;
           if (sType === 'wall') out.wallCount++;
@@ -3096,7 +3109,8 @@ export default function Home() {
     const prefs = loadRenderPrefs();
     const tier = RENDER_TIERS[prefs.tier];
     const style = styleFromText(o.text);
-    const furnish = prefs.furnish || furnishFromText(o.text);
+    // Furniture placed from the drawing is rendered as it stands: the AI adds none of its own.
+    const furnish = (prefs.furnish || furnishFromText(o.text)) && furnitureSummary().pieces === 0;
     setRenderProgress({ isRendering: true, progress: 0.03, stageName: 'Preparing your 3D view…', snapshotUrl: o.reuseView?.dataUrl ?? o.sourceUrl, modelLabel: tier.modelLabel });
     try {
       const view = o.reuseView ?? (await prepareView(o.sourceUrl as string, currentViewKind(viewerHandleRef.current)));
@@ -3560,7 +3574,8 @@ export default function Home() {
         const cards = await import('@/features/furniture/product-cards');
         const shoot = async (kind: ExportView) => {
           try {
-            views.push({ kind, image: (await captureViewForRender(viewerHandleRef.current, { frameBuilding: true })).dataUrl });
+            // The export keeps the coloured pads: they tie each place to its product in the legend.
+            views.push({ kind, image: (await captureViewForRender(viewerHandleRef.current, { frameBuilding: true, pads: true })).dataUrl });
           } catch {
             // Views are optional in the export.
           }
@@ -3634,6 +3649,33 @@ export default function Home() {
         });
       })();
     },
+    render: () => {
+      // A product picked in BOQ Flow's legend is selected: let go of it before the shot.
+      try {
+        (useViewer.getState() as { setSelection?: (s: { selectedIds: string[] }) => void }).setSelection?.({ selectedIds: [] });
+      } catch {
+        /* viewer store unavailable */
+      }
+      setRenderStudioOpen(true);
+    },
+    // BOQ Flow's product legend: select the pieces carrying a product and frame them
+    // (from the current angle); none frames the whole model again.
+    focusProduct: (productId) => {
+      const nodes = (getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, { type?: string; metadata?: Record<string, unknown> }> }).nodes ?? {};
+      const ids = new Set<string>();
+      if (productId) {
+        for (const [id, n] of Object.entries(nodes)) {
+          if (n?.type !== 'item' || n.metadata?.source !== 'plan-furniture') continue;
+          if ((n.metadata.product as { id?: unknown } | undefined)?.id === productId) ids.add(id);
+        }
+      }
+      try {
+        (useViewer.getState() as { setSelection?: (s: { selectedIds: string[] }) => void }).setSelection?.({ selectedIds: [...ids] });
+      } catch {
+        /* viewer store unavailable */
+      }
+      goToView(viewModeRef.current === 'top' ? 'top' : '3d', { keepAngle: true, ...(ids.size ? { ids } : {}) });
+    },
     ping: () => embedPostRef.current('ready', { hasModel: embedBuildCompleteRef.current }),
   });
   embedPostRef.current = embedPost;
@@ -3659,12 +3701,20 @@ export default function Home() {
       // The products' own photos stand on their pads (kept in place as the scene changes).
       const cards = await import('@/features/furniture/product-cards');
       cards.keepProductCards(() => viewerHandleRef.current?.invalidate());
+      // Lines that are furniture but found no place (the others — finishes, lights… — are not furniture).
+      const { productKind } = await import('@/features/furniture/match-products');
+      const byId = new Map(items.map((p) => [p.id, p]));
+      const unplacedFurnitureIds = res.match.unplacedProductIds.filter((id) => {
+        const p = byId.get(id);
+        return !!p && !!(productKind(p.description) ?? productKind(p.category ?? ''));
+      });
       embedPostRef.current('furnished', {
         withPhotos: res.withPhotos,
         placedPieces: res.placed,
         pieces: f.pieces.length,
         products: res.match.products,
         unplacedProductIds: res.match.unplacedProductIds,
+        unplacedFurnitureIds,
         unmatchedPieces: res.match.unmatchedPieceIds.length,
         colours: productRefs().map((r) => ({ id: r.id, hex: r.colour.hex, name: r.colour.name })),
       });

@@ -53,6 +53,14 @@ describe('parent messages', () => {
     expect(m.items[0]).toMatchObject({ id: 'r1', qty: 5, imageUrl: 'https://cdn.example/sofa.jpg', dims: { w: 3.2, d: 1.2, h: 0.85 } });
     expect(m.items[1]).toMatchObject({ id: 'item_2', qty: 1, imageUrl: undefined, dims: { w: undefined } });
   });
+  it('accepts a render request and product focus (or none), and nothing else', () => {
+    expect(parseParentMessage(msg('render'))).toEqual({ type: 'render' });
+    expect(parseParentMessage(msg('focus-product', { productId: 't0r3' }))).toEqual({ type: 'focus-product', productId: 't0r3' });
+    expect(parseParentMessage(msg('focus-product', { productId: null }))).toEqual({ type: 'focus-product', productId: null });
+    expect(parseParentMessage(msg('focus-product', { productId: 42 }))).toBeNull();
+    expect(parseParentMessage(msg('focus-product', { productId: 'x'.repeat(101) }))).toBeNull();
+    expect(parseParentMessage(msg('focus-product'))).toBeNull();
+  });
   it('keeps whole inline thumbnails and drops broken or oversized ones', () => {
     const thumb = `data:image/jpeg;base64,${'A'.repeat(5000)}`;
     const m = parseParentMessage(msg('products', {

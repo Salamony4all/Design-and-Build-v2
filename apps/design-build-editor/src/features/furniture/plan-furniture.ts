@@ -12,7 +12,7 @@ import { ItemNode } from '@pascal-app/core';
 import type { AnyNode } from '@pascal-app/core';
 import { getPascalStores } from 'design-build-simplified-viewer-shell';
 import { uid } from '@/harness/ai-scene-install/helpers';
-import { matchProducts, type MatchProduct, type MatchResult } from './match-products';
+import { matchProducts, productHeight, type MatchProduct, type MatchResult } from './match-products';
 import { PRODUCT_COLOURS, productLabel, setProductRefs, type ProductColour } from './product-refs';
 import { PAD_TOP_M, hasProductPhoto, loadProductCutouts } from './product-cards';
 
@@ -332,7 +332,9 @@ export async function applyProducts(f: PlanFurniture, products: MatchProduct[]):
       placed++;
       // Inline pictures stay out of the scene (they live in product-refs); links are kept.
       const imageUrl = product.imageUrl && /^https:\/\//i.test(product.imageUrl) ? product.imageUrl : undefined;
-      meta.product = { id: product.id, description: product.description, brand: product.brand, model: product.model, imageUrl, tint, colour: colour?.name, photo };
+      // How tall the product stands (its photo is sized to it): from its line, else its kind's usual height.
+      const heightM = productHeight(product.description, product.dims);
+      meta.product = { id: product.id, description: product.description, brand: product.brand, model: product.model, imageUrl, tint, colour: colour?.name, photo, ...(heightM ? { heightM } : {}) };
     } else delete meta.product;
     const name = product ? productLabel(product) : KIND_LABEL[piece.kind] ?? 'Furniture';
     asset.name = name;

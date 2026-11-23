@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { matchProducts, productDims, productKind, type MatchPiece } from './match-products';
+import { matchProducts, productDims, productHeight, productKind, type MatchPiece } from './match-products';
 
 const piece = (id: string, typeId: string, kind: string, shape: string, widthM: number, depthM: number): MatchPiece => ({ id, typeId, kind, shape, widthM, depthM });
 
@@ -19,6 +19,14 @@ describe('product lines', () => {
     expect(productDims('Desk 1.6x0.8m')).toEqual({ w: 1.6, d: 0.8 });
     expect(productDims('Round table Ø800')).toEqual({ w: 0.8, d: 0.8 });
     expect(productDims('Lounge chair, upholstered')).toBeNull();
+  });
+  it('reads how tall a product is, from its size or its type', () => {
+    expect(productHeight('Lounge armchair, 840 x 800 x 760 mm')).toBe(0.76);
+    expect(productHeight('Chair', { h: 1.1 })).toBe(1.1);
+    expect(productHeight('Coffee table, 1450 x 1060 mm')).toBe(0.42);
+    expect(productHeight('High-back privacy armchair, 700 x 580 mm')).toBe(1.25);
+    expect(productHeight('Bar stool, chrome frame')).toBe(1.0);
+    expect(productHeight('Lounge chair, upholstered')).toBeUndefined();
   });
 });
 

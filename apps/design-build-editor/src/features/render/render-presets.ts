@@ -4,7 +4,7 @@
 // Pure module: no DOM, no Node APIs, so it is safe to import from the API route,
 // the browser and unit tests.
 
-export const RENDER_PROMPT_VERSION = 'geo-lock-v5';
+export const RENDER_PROMPT_VERSION = 'geo-lock-v6';
 
 export type RenderStyleId = 'daylight' | 'golden-hour' | 'overcast' | 'dusk' | 'clay';
 
@@ -379,10 +379,21 @@ export interface PromptFurnitureProduct {
   imageIndex?: number;
 }
 
+/** Stand-ins of one kind that carry no product. */
+export interface PromptPlainFurniture {
+  kind: string;
+  count: number;
+  where?: string;
+}
+
 export interface PromptFurniture {
   /** Stand-ins in view, with or without a product. */
   standIns: number;
   products: readonly PromptFurnitureProduct[];
+  /** Stand-ins without a product, by kind. */
+  plain?: readonly PromptPlainFurniture[];
+  /** Stand-ins seen through glass walls. */
+  behindGlass?: number;
 }
 
 const KIND_NOUN: Record<string, readonly [string, string]> = {
@@ -412,6 +423,36 @@ export function whereInView(r: { x0: number; x1: number }): string {
   if (r.x1 - r.x0 > 0.6) return 'across the view';
   const c = (r.x0 + r.x1) / 2;
   return c < 0.34 ? 'on the left' : c > 0.66 ? 'on the right' : 'in the centre';
+}
+
+/** Part of the view a spot is in (front = near the bottom of the view, back = near the top). */
+export function viewZone(s: { x: number; y: number }): string {
+  const col = s.x < 0.34 ? 'left' : s.x > 0.66 ? 'right' : 'centre';
+  const row = s.y < 0.4 ? 'back' : s.y > 0.72 ? 'front' : '';
+  return row ? `${row} ${col}` : col;
+}
+
+const zonePhrase = (z: string) => (z === 'centre' ? 'in the centre' : z === 'left' || z === 'right' ? `on the ${z}` : `at the ${z}`);
+
+/**
+ * Where a group stands, from its spots: "at the front left", "2 at the back left, 1 in
+ * the centre", or "across the view" when it is spread all over. `count` is the group's
+ * size (spots may be fewer).
+ */
+export function spotsWhere(spots: readonly { x: number; y: number }[], count = spots.length): string {
+  if (!spots.length) return '';
+  const byZone = new Map<string, number>();
+  for (const s of spots) {
+    const z = viewZone(s);
+    byZone.set(z, (byZone.get(z) ?? 0) + 1);
+  }
+  const zones = [...byZone.entries()].sort((a, b) => b[1] - a[1]);
+  if (zones.length === 1) return zonePhrase(zones[0][0]);
+  // Spread wide, the zones still tell two products of one kind apart.
+  if (zones.length > 5) return 'across the view';
+  return spots.length === count
+    ? zones.map(([z, n]) => `${n} ${zonePhrase(z)}`).join(', ')
+    : zones.map(([z]) => zonePhrase(z)).join(', ');
 }
 
 const promptText = (s: string, max: number) => s.replace(/[\s"]+/g, ' ').trim().slice(0, max);
@@ -525,6 +566,8 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   const photoPieces = furniture ? furniture.products.filter((p) => p.photo).reduce((n, p) => n + p.count, 0) : 0;
   if (furniture) {
     const blocks = Math.max(0, furniture.standIns - photoPieces);
+    const coded = furniture.products.filter((p) => !p.photo);
+    const plain = (furniture.plain ?? []).filter((k) => k.count > 0);
     lines.push('');
     lines.push('FURNITURE IN THE MODEL:');
     if (blocks > 0) {
@@ -533,32 +576,57 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
       );
     }
     if (photoPieces > 0) {
+      // The photos stand without their coloured pads: those are a code for the 3D model only.
       lines.push(
-        `Coloured pads on the floor (${photoPieces} in view) each carry a cut-out photo of the real product that stands there, from the project's furniture schedule: the pad is its exact place and footprint, and the photo shows exactly which product it is, with its design, colours and materials. Render each as that real product: a solid three-dimensional piece of furniture at real size, standing on its pad's footprint and turned naturally (chairs towards their table or into the room), never as a flat photo, card or poster, and never with the pad.`,
+        `Cut-out photos stand upright on the floor in image 1 (${photoPieces} in view): each is a real product from the project's furniture schedule, standing exactly where its photo stands, and the photo shows exactly which product it is, with its design, colours and materials. Render each as that real product: a solid three-dimensional piece of furniture at real size, standing on the floor at that spot and turned naturally (chairs towards their table or into the room), never as a flat photo, card, cut-out or poster. Where a photo shows a set of pieces, render the one piece that fits its spot.`,
       );
     }
     lines.push('Never move, merge or leave out a piece, and add no furniture where the input shows open floor.');
-    if (furniture.products.length) {
+    if (furniture.behindGlass && furniture.behindGlass > 0) {
       lines.push(
-        "Coloured stand-ins and pads are specific products from the project's furniture schedule. The colour is only a code that tells which product it is: render the product's own design, materials and colours, never the code colour.",
+        `Some of this furniture (${furniture.behindGlass} in view) stands behind glass walls: every glass wall, glass door and frame stays exactly where it is, clear and unbroken, and that furniture is seen through the glass — never remove or open up the glass to show it.`,
       );
+    }
+    if (furniture.products.length) {
+      if (coded.length) {
+        lines.push(
+          "Coloured stand-ins are specific products from the project's furniture schedule. The colour is only a code that tells which product it is: render the product's own design, materials and colours, never the code colour.",
+        );
+      }
       if (furniture.products.some((p) => p.imageIndex)) {
         lines.push('The pictures attached after the view are catalogue photos of single products: take only the product from each, never its background, text or framing.');
       }
       for (const p of furniture.products) {
-        const where = p.where ? `, ${p.where}` : '';
+        const where = p.where ? `, ${promptText(p.where, 160)}` : '';
         const label = promptText(p.label, 140);
         if (p.photo) {
           const ref = p.imageIndex ? ` — more detail in image ${p.imageIndex}` : '';
-          lines.push(`- The ${promptText(p.colour, 20)} ${p.count === 1 ? 'pad' : 'pads'} (${p.count}${where}): ${label}, ${standInNoun(p.kinds, p.count)} shown by their photo${ref}.`);
+          lines.push(`- ${label}: the ${standInNoun(p.kinds, p.count)} shown by ${p.count === 1 ? 'its photo' : 'their photos'} (${p.count}${where})${ref}.`);
         } else {
           const ref = p.imageIndex ? ` — copy its design, materials and colours from image ${p.imageIndex}` : '';
           lines.push(`- The ${promptText(p.colour, 20)} ${standInNoun(p.kinds, p.count)} (${p.count}${where}): ${label}${ref}.`);
         }
       }
-      if (blocks > furniture.products.filter((p) => !p.photo).reduce((n, p) => n + p.count, 0)) {
-        lines.push('Off-white stand-ins carry no product: render them as simple, neutral contemporary furniture of their kind.');
-      }
+    }
+    const codedCount = coded.reduce((n, p) => n + p.count, 0);
+    if (plain.length) {
+      const placeOf = (where?: string) => {
+        const w = where ? promptText(where, 160) : '';
+        return !w ? '' : /^\d/.test(w) ? ` (${w})` : ` ${w}`;
+      };
+      const list = plain
+        .slice(0, 6)
+        .map((k) => `${k.count} ${standInNoun([k.kind], k.count)}${placeOf(k.where)}`)
+        .join('; ');
+      const kinds = new Set(plain.map((k) => k.kind));
+      const notes = [kinds.has('plant') ? 'plants as real, leafy potted plants' : '', kinds.has('screen') ? 'screens as slim wall-mounted displays' : '']
+        .filter(Boolean)
+        .join(', ');
+      lines.push(
+        `Stand-ins without a product: ${list}. Render each as a simple, neutral contemporary piece of its kind${notes ? ` (${notes})` : ''}.`,
+      );
+    } else if (furniture.products.length && blocks > codedCount) {
+      lines.push('Off-white stand-ins carry no product: render them as simple, neutral contemporary furniture of their kind.');
     }
   }
 
@@ -568,7 +636,7 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   lines.push(`Materials: ${materialsFor(style.materials ?? DEFAULT_MATERIALS, o)}`);
   lines.push(
     furniture
-      ? `Furnishing: only the furniture of the stand-ins${photoPieces ? ' and pads' : ''} above (soft cushions and a few small accessories on it are fine) — nothing else on the floors.`
+      ? `Furnishing: only the furniture of the stand-ins${photoPieces ? ' and photos' : ''} above (soft cushions and a few small accessories on it are fine) — nothing else on the floors, no rugs.`
       : o.furnish
         ? 'Furnishing: furnish each room for its use with realistic furniture standing on the floor inside that room. Furniture goes only inside the rooms of the model — nothing outside its outer walls (no terraces, gardens, plants or outdoor furniture). It must never block, cover or alter any door or window opening, and must not hide wall corners.'
         : o.viewKind === 'interior'

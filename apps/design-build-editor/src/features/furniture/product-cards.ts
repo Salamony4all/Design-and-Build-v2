@@ -1,11 +1,12 @@
 // features/furniture/product-cards.ts
 // Real product photos in the model. A furnished stand-in whose product has a picture
 // becomes a pad in the product's colour with a cut-out of the product's photo standing
-// on it, at the real size of that kind of furniture. The photo turns to face the camera
-// and shortens with the viewing angle as an upright cut-out would; in the top view it
-// lies flat inside the footprint. Cards hang under the item's own 3D object, so they
-// move with it, show in every capture (and so in AI renders), and stay out of the
-// model-line passes, which hide sprites.
+// on it, at the product's own height (or the usual one of its kind). The photo turns to
+// face the camera and shortens with the viewing angle as an upright cut-out would; in
+// the top view it lies flat inside the footprint. Cards hang under the item's own 3D
+// object, so they move with it, show in every capture (AI renders leave the pads out,
+// so they are not drawn as rugs), and stay out of the model-line passes, which hide
+// sprites.
 
 import * as THREE from 'three';
 import { getPascalStores } from 'design-build-simplified-viewer-shell';
@@ -13,6 +14,8 @@ import { getPascalStores } from 'design-build-simplified-viewer-shell';
 /** Height of the coloured pad under a photo, in metres. */
 export const PAD_TOP_M = 0.03;
 const CARD_KEY = 'dbProductCard';
+/** What a card was made for (product, height, footprint): another one is made when it changes. */
+const SIG_KEY = 'dbProductCardSig';
 
 /** Usual height of each kind of furniture, for sizing its photo. */
 const KIND_HEIGHT_M: Record<string, number> = {
@@ -235,10 +238,10 @@ export function hasProductPhoto(productId: string): boolean {
   return cutoutByProduct.has(productId);
 }
 
-/** Standing size: the usual height of its kind, no wider than its footprint allows. */
-function standingSize(kind: string, foot: readonly number[], aspect: number): { w: number; h: number } {
+/** Standing size: the product's height (else the usual one of its kind), no wider than its footprint allows. */
+function standingSize(kind: string, foot: readonly number[], aspect: number, heightM?: number): { w: number; h: number } {
   const footMax = Math.max(0.3, foot[0] || 0, foot[1] || 0);
-  let h = KIND_HEIGHT_M[kind] ?? 0.9;
+  let h = heightM && heightM > 0.15 && heightM < 3.5 ? heightM : KIND_HEIGHT_M[kind] ?? 0.9;
   let w = h * aspect;
   if (w > footMax * 1.1) {
     w = footMax * 1.1;
@@ -255,13 +258,14 @@ function lyingSize(foot: readonly number[], aspect: number): { w: number; h: num
 
 const viewDir = new THREE.Vector3();
 
-function makeCard(productId: string, cut: Cutout, kind: string, foot: readonly number[]): THREE.Sprite {
+function makeCard(productId: string, cut: Cutout, kind: string, foot: readonly number[], heightM: number | undefined, sig: string): THREE.Sprite {
   const card = new THREE.Sprite(cut.material);
   card.name = 'Product photo';
   card.userData[CARD_KEY] = productId;
+  card.userData[SIG_KEY] = sig;
   card.frustumCulled = false;
   card.raycast = () => {}; // never picked: selection and walking go to the model itself
-  const stand = standingSize(kind, foot, cut.aspect);
+  const stand = standingSize(kind, foot, cut.aspect, heightM);
   const lie = lyingSize(foot, cut.aspect);
   card.onBeforeRender = (_renderer, _scene, camera) => {
     camera.getWorldDirection(viewDir);
@@ -308,22 +312,24 @@ export function syncProductCards(): { cards: number; waiting: number } {
     const { useScene, sceneRegistry } = stores();
     for (const n of Object.values(useScene.getState().nodes ?? {})) {
       if (n.type !== 'item' || n.metadata?.source !== 'plan-furniture') continue;
-      const product = n.metadata.product as { id?: string; photo?: boolean } | undefined;
+      const product = n.metadata.product as { id?: string; photo?: boolean; heightM?: number } | undefined;
       const want = product?.id && product.photo ? cutoutByProduct.get(product.id) : undefined;
       const obj = sceneRegistry.nodes.get(n.id);
       if (!obj) {
         if (want) waiting++;
         continue;
       }
+      const foot = Array.isArray(n.metadata.sizeM) ? (n.metadata.sizeM as number[]) : [0.8, 0.8];
+      const heightM = typeof product?.heightM === 'number' ? product.heightM : undefined;
+      const sig = `${product?.id ?? ''}|${heightM ?? ''}|${foot.map((v) => Math.round(v * 100)).join('x')}`;
       const have = obj.children.filter((c) => c.userData[CARD_KEY]);
-      if (want && product?.id && have.length === 1 && have[0].userData[CARD_KEY] === product.id) {
+      if (want && product?.id && have.length === 1 && have[0].userData[SIG_KEY] === sig) {
         cards++;
         continue;
       }
       for (const c of have) obj.remove(c);
       if (want && product?.id) {
-        const foot = Array.isArray(n.metadata.sizeM) ? (n.metadata.sizeM as number[]) : [0.8, 0.8];
-        obj.add(makeCard(product.id, want, String(n.metadata.kind ?? ''), foot));
+        obj.add(makeCard(product.id, want, String(n.metadata.kind ?? ''), foot, heightM, sig));
         cards++;
       }
     }
@@ -342,6 +348,29 @@ export function setProductCardsVisible(visible: boolean): void {
   } catch {
     /* scene not ready */
   }
+}
+
+/**
+ * Take the coloured pads from under the product photos, keeping the photos: AI renders
+ * would draw the pads as rugs and the code colours as upholstery. Returns the undo.
+ */
+export function hideProductPads(): () => void {
+  const hidden: THREE.Object3D[] = [];
+  try {
+    for (const obj of stores().sceneRegistry.nodes.values()) {
+      if (!obj.children.some((c) => c.userData[CARD_KEY])) continue;
+      for (const c of obj.children) {
+        if (c.userData[CARD_KEY] || !c.visible) continue;
+        c.visible = false;
+        hidden.push(c);
+      }
+    }
+  } catch {
+    /* scene not ready */
+  }
+  return () => {
+    for (const o of hidden) o.visible = true;
+  };
 }
 
 let unsubscribe: (() => void) | null = null;

@@ -38,6 +38,10 @@ const PROP_LABEL: Record<string, string> = {
 
 const label = (type: string) => TYPE_LABEL[type] ?? type.charAt(0).toUpperCase() + type.slice(1);
 
+/** "3 walls", "18 pieces of furniture". */
+const countOf = (type: string, n: number) =>
+  type === 'item' ? `${n} ${n === 1 ? 'piece' : 'pieces'} of furniture` : `${n} ${label(type).toLowerCase()}${n > 1 ? 's' : ''}`;
+
 function formatValue(key: string, v: unknown): string | null {
   if (v == null) return null;
   if (typeof v === 'number') {
@@ -61,12 +65,15 @@ export function SelectionPropertiesPanel({ onZoomTo }: { onZoomTo?: () => void }
   if (selected.length > 1) {
     const byType: Record<string, number> = {};
     for (const s of selected) byType[s.nodeType] = (byType[s.nodeType] ?? 0) + 1;
+    // Pieces of one product (BOQ Flow's legend selects them): name the product.
+    const names = new Set(selected.map((s) => (s.nodeType === 'item' ? String(s.editableProperties.name ?? '') : '')));
+    const product = names.size === 1 ? [...names][0] : '';
     return (
       <aside className="db-props glass" aria-label="Selection">
         <div className="db-props__head">
           <div>
-            <h3>{selected.length} elements</h3>
-            <p>{Object.entries(byType).map(([t, n]) => `${n} ${label(t).toLowerCase()}${n > 1 ? 's' : ''}`).join(', ')}</p>
+            <h3>{product || `${selected.length} elements`}</h3>
+            <p>{product ? `${selected.length} pieces in the model` : Object.entries(byType).map(([t, n]) => countOf(t, n)).join(', ')}</p>
           </div>
           <button type="button" className="db-icon-btn" onClick={clearSelection} aria-label="Clear the selection"><X size={16} /></button>
         </div>

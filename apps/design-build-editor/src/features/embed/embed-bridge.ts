@@ -67,6 +67,10 @@ export type ParentMessage =
   | { type: 'plan'; file: Blob; name: string }
   | { type: 'products'; items: EmbedProduct[] }
   | { type: 'artifacts'; requestId: string }
+  /** Open the photoreal render panel. */
+  | { type: 'render' }
+  /** Show where one product stands in the model (null: the whole model again). */
+  | { type: 'focus-product'; productId: string | null }
   | { type: 'ping' };
 
 const str = (v: unknown, max: number): string | undefined =>
@@ -128,6 +132,13 @@ export function parseParentMessage(data: unknown): ParentMessage | null {
       return typeof m.requestId === 'string' && m.requestId.length > 0 && m.requestId.length <= 100
         ? { type: 'artifacts', requestId: m.requestId }
         : null;
+    case 'render':
+      return { type: 'render' };
+    case 'focus-product':
+      if (m.productId === null) return { type: 'focus-product', productId: null };
+      return typeof m.productId === 'string' && m.productId.length > 0 && m.productId.length <= 100
+        ? { type: 'focus-product', productId: m.productId }
+        : null;
     case 'ping':
       return { type: 'ping' };
     default:
@@ -165,6 +176,10 @@ export interface EmbedHandlers {
   plan: (file: Blob, name: string) => void;
   products?: (items: EmbedProduct[]) => void;
   artifacts?: (requestId: string) => void;
+  /** Open the photoreal render panel. */
+  render?: () => void;
+  /** Show where a product stands in the model (null: the whole model). */
+  focusProduct?: (productId: string | null) => void;
   /** The parent asks again whether we are there (for example after it re-opened its modal). */
   ping?: () => void;
 }
@@ -202,6 +217,8 @@ export function useEmbedBridge(enabled: boolean, handlers: EmbedHandlers) {
       if (msg.type === 'plan') h.plan(msg.file, msg.name);
       else if (msg.type === 'products') h.products?.(msg.items);
       else if (msg.type === 'artifacts') h.artifacts?.(msg.requestId);
+      else if (msg.type === 'render') h.render?.();
+      else if (msg.type === 'focus-product') h.focusProduct?.(msg.productId);
       else if (msg.type === 'ping') h.ping?.();
     };
     window.addEventListener('message', onMessage);

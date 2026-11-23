@@ -16,8 +16,10 @@ import {
   isSupportedAspect,
   modelSupportsImageSize,
   nearestAspect,
+  spotsWhere,
   standInNoun,
   styleFromText,
+  viewZone,
   viewfinderRect,
   whereInView,
 } from './render-presets';
@@ -247,6 +249,22 @@ describe('furniture stand-ins and real products', () => {
     expect(whereInView({ x0: 0.1, x1: 0.9 })).toBe('across the view');
   });
 
+  it('says where in the view a group stands, front to back', () => {
+    expect(viewZone({ x: 0.1, y: 0.9 })).toBe('front left');
+    expect(viewZone({ x: 0.5, y: 0.55 })).toBe('centre');
+    expect(viewZone({ x: 0.8, y: 0.2 })).toBe('back right');
+    expect(spotsWhere([{ x: 0.1, y: 0.9 }, { x: 0.2, y: 0.8 }])).toBe('at the front left');
+    expect(spotsWhere([{ x: 0.5, y: 0.5 }])).toBe('in the centre');
+    expect(spotsWhere([{ x: 0.1, y: 0.2 }, { x: 0.15, y: 0.3 }, { x: 0.5, y: 0.6 }])).toBe('2 at the back left, 1 in the centre');
+    expect(spotsWhere([{ x: 0.1, y: 0.2 }, { x: 0.5, y: 0.6 }], 9)).toBe('at the back left, in the centre');
+    expect(spotsWhere([{ x: 0.1, y: 0.2 }, { x: 0.5, y: 0.6 }, { x: 0.9, y: 0.9 }, { x: 0.9, y: 0.1 }])).toBe(
+      '1 at the back left, 1 in the centre, 1 at the front right, 1 at the back right',
+    );
+    const everywhere = [0.1, 0.5, 0.9].flatMap((x) => [0.2, 0.55, 0.9].map((y) => ({ x, y })));
+    expect(spotsWhere(everywhere)).toBe('across the view');
+    expect(spotsWhere([])).toBe('');
+  });
+
   it('turns stand-ins into the schedule\'s products, with their pictures', () => {
     const p = buildGeometryLockPrompt({
       style: 'daylight', viewKind: 'cutaway', furnish: false, withEdgeGuide: true, withPlan: false,
@@ -268,7 +286,7 @@ describe('furniture stand-ins and real products', () => {
     expect(p).not.toMatch(/leave the rooms unfurnished/);
   });
 
-  it('renders the photos standing on pads as the real products', () => {
+  it('renders the product photos as the real products, without pads or code colours', () => {
     const p = buildGeometryLockPrompt({
       style: 'daylight', viewKind: 'cutaway', furnish: false, withEdgeGuide: true, withPlan: false,
       furniture: {
@@ -279,19 +297,46 @@ describe('furniture stand-ins and real products', () => {
         ],
       },
     });
-    expect(p).toMatch(/Coloured pads on the floor \(7 in view\) each carry a cut-out photo of the real product/);
-    expect(p).toMatch(/never as a flat photo, card or poster/);
-    expect(p).toMatch(/- The red pads \(7, in the centre\): Vitra · Repos, chairs shown by their photo — more detail in image 3\./);
+    expect(p).toMatch(/Cut-out photos stand upright on the floor in image 1 \(7 in view\)/);
+    expect(p).toMatch(/never as a flat photo, card, cut-out or poster/);
+    expect(p).toMatch(/render the one piece that fits its spot/);
+    expect(p).toMatch(/- Vitra · Repos: the chairs shown by their photos \(7, in the centre\) — more detail in image 3\./);
+    expect(p).not.toMatch(/\bred\b|\bpads?\b/);
     expect(p).toMatch(/- The blue chairs \(3\): Hay · Revolver\./);
+    expect(p).toMatch(/Coloured stand-ins are specific products/);
     expect(p).toMatch(/plain solid blocks standing on the floor in image 1 are furniture stand-ins placed from the construction drawing \(3 in view\)/);
     expect(p).not.toMatch(/Off-white stand-ins/);
-    expect(p).toMatch(/Furnishing: only the furniture of the stand-ins and pads above/);
+    expect(p).toMatch(/Furnishing: only the furniture of the stand-ins and photos above .* no rugs\./);
     const onlyPhotos = buildGeometryLockPrompt({
       style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false,
       furniture: { standIns: 2, products: [{ label: 'Las · Mia', colour: 'pink', kinds: ['desk'], count: 2, photo: true }] },
     });
     expect(onlyPhotos).not.toMatch(/plain solid blocks/);
-    expect(onlyPhotos).toMatch(/- The pink pads \(2\): Las · Mia, desks shown by their photo\./);
+    expect(onlyPhotos).not.toMatch(/Coloured stand-ins|pink/);
+    expect(onlyPhotos).toMatch(/- Las · Mia: the desks shown by their photos \(2\)\./);
+  });
+
+  it('names the stand-ins without a product by kind and place', () => {
+    const p = buildGeometryLockPrompt({
+      style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false,
+      furniture: {
+        standIns: 9,
+        products: [{ label: 'B&T · Kav', colour: 'red', kinds: ['seat'], count: 2, where: 'in the centre', photo: true }],
+        plain: [
+          { kind: 'plant', count: 4, where: 'at the front right' },
+          { kind: 'sofa', count: 3, where: '2 at the back left, 1 in the centre' },
+        ],
+      },
+    });
+    expect(p).toMatch(/\(7 in view\)/);
+    expect(p).toMatch(/Stand-ins without a product: 4 plants at the front right; 3 sofas \(2 at the back left, 1 in the centre\)\. Render each as a simple, neutral contemporary piece of its kind \(plants as real, leafy potted plants\)\./);
+    expect(p).not.toMatch(/Off-white stand-ins/);
+    expect(p).not.toMatch(/behind glass/);
+    const glass = buildGeometryLockPrompt({
+      style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false,
+      furniture: { standIns: 3, products: [], behindGlass: 2 },
+    });
+    expect(glass).toMatch(/Some of this furniture \(2 in view\) stands behind glass walls: every glass wall, glass door and frame stays exactly where it is/);
   });
 
   it('keeps stand-ins as furniture even without products, and ignores an empty inventory', () => {
