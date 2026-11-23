@@ -123,6 +123,7 @@ export function toExtractionResult(
         sourceStrokeIds: w.sourceStrokeIds ?? [],
         connectivityClass: w.connectivityClass,
         perimeterContribution: w.perimeterContribution,
+        ...(w.glass ? { glass: true, glassSource: w.glassSource, wallClassification: 'GLASS_PARTITION' } : {}),
         provider: 'mupdf-pure',
         approvalState: 'accepted',
       },

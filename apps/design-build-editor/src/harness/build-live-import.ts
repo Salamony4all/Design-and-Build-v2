@@ -135,17 +135,20 @@ export function prepareLiveDrafts(result: ExtractionResult, opts?: PrepareLiveDr
   const wallDrafts: { id: string; physicalWallId: string; node: AnyNode }[] = [];
   for (const w of result.walls) {
     const id = uid('wall');
+    // glass partitions and glazed screens read from the drawing get the glass finish
+    const glass = (w.metadata as { glass?: boolean } | undefined)?.glass === true;
     const node = WallNode.parse({
-      id, name: `Wall ${wallDrafts.length + 1}`, parentId: levelId,
+      id, name: `${glass ? 'Glass partition' : 'Wall'} ${wallDrafts.length + 1}`, parentId: levelId,
       start: [w.startM.x, w.startM.y] as [number, number],
       end: [w.endM.x, w.endM.y] as [number, number],
       height: WALL_HEIGHT,
       thickness: w.thicknessM,
-      materialPreset: 'white',
+      ...(glass ? { material: { preset: 'glass' as const } } : { materialPreset: 'white' }),
       metadata: {
         physicalWallId: w.id,
         confidence: w.provenance.confidence,
         orientationRadians: 0,
+        ...(glass ? { wallClassification: 'GLASS_PARTITION' } : {}),
       },
     }) as AnyNode;
     wallDrafts.push({ id, physicalWallId: w.id, node });

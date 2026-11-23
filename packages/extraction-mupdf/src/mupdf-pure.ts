@@ -20,6 +20,7 @@ import * as mupdf from 'mupdf';
 import { collectSegments, detectDoorSymbols, hostDoorSymbols, type SymbolWall } from './door-symbols';
 import { estimateScale, textsFromStructuredTextJson } from './scale-detection';
 import { detectWallsGeneral, type WallRaster } from './wall-general';
+import { detectGlassPartitions, type GlassSource } from './glass-partitions';
 import {
   collectPageVectors,
   type Bounds,
@@ -108,6 +109,9 @@ export interface PurePhysicalWall extends PureCandidate {
   ownedBy?: string; // physicalWallId of the stronger candidate that owns this primitive
   /** windows the general wall detector found in this wall: intervals (pt) along the centre line from `centerline.a` */
   windowIntervals?: Array<{ from: number; to: number }>;
+  /** a glass partition or glazed screen (glass-partitions.ts): by the drawing's key or two hairlines */
+  glass?: boolean;
+  glassSource?: GlassSource;
 }
 
 export interface RecallDiscrepancy {
@@ -192,6 +196,8 @@ export interface MuPdfPureResult {
   wallEngine?: 'legacy' | 'general';
   /** why that engine was chosen (diagnostic) */
   wallEngineNote?: string;
+  /** glass partitions: walls marked glass, glass walls added, and the key styles used */
+  glass?: { marked: number; added: number; styles: string[]; note?: string };
   review: PurePhysicalWall[];
   rejected: PurePhysicalWall[];
   floatingAccepted: PurePhysicalWall[];
@@ -1946,6 +1952,7 @@ export function extractPureWallResult(
     candidateHash: candHash,
   };
   applyGeneralWallsIfNeeded(pureResult, page, vectors);
+  applyGlassPartitions(pureResult, page, vectors);
 
   if (captureLineage) {
     return {
@@ -2063,6 +2070,73 @@ function applyGeneralWallsIfNeeded(r: MuPdfPureResult, page: mupdf.Page, vectors
   } catch (e) {
     // keep the legacy result
     r.wallEngineNote = `general detector failed: ${String(e).slice(0, 160)}`;
+  }
+}
+
+/**
+ * Glass partitions and glazed screens (glass-partitions.ts). Walls already read along
+ * glass-styled lines are marked glass; glass runs no wall covers become new accepted walls
+ * (thin, never on the perimeter, so no windows are placed in them) that the door stage
+ * can hang doors in. Needs a real scale: glass is told apart by sizes in metres.
+ */
+function applyGlassPartitions(r: MuPdfPureResult, page: mupdf.Page, vectors: MuVector[]): void {
+  if (r.scaleSource === 'fallback' || r.accepted.length < 4) return;
+  try {
+    const json = (page.toStructuredText('preserve-whitespace') as unknown as { asJSON: () => string }).asJSON();
+    const texts = textsFromStructuredTextJson(json);
+    const xs = r.accepted.flatMap((w) => [w.centerline.a.x, w.centerline.b.x]);
+    const ys = r.accepted.flatMap((w) => [w.centerline.a.y, w.centerline.b.y]);
+    const m = 3 / (r.scaleMmPerPt / 1000);
+    const within: Bounds = [Math.min(...xs) - m, Math.min(...ys) - m, Math.max(...xs) + m, Math.max(...ys) + m];
+    const found = detectGlassPartitions({
+      vectors,
+      texts,
+      walls: r.accepted.map((w) => ({ id: w.physicalWallId, a: w.centerline.a, b: w.centerline.b, thickness: w.thickness, perimeter: !!w.perimeterContribution })),
+      scaleMmPerPt: r.scaleMmPerPt,
+      within,
+    });
+    const marked = new Map(found.glassWalls.map((g) => [g.id, g.source]));
+    for (const w of r.accepted) {
+      const source = marked.get(w.physicalWallId);
+      if (!source) continue;
+      w.glass = true;
+      w.glassSource = source;
+      w.positiveEvidence = [...w.positiveEvidence, 'glass-partition'];
+    }
+    const added: PurePhysicalWall[] = found.partitions.map((p) => ({
+      ...withOrientation({
+        id: p.id,
+        evidenceType: 'parallel-face',
+        sourceRootIds: [],
+        sourceSubpathIds: [],
+        sourceStrokeIds: p.sourceOperationIds,
+        centerline: { a: p.a, b: p.b },
+        thickness: p.thicknessPt,
+        length: Math.hypot(p.b.x - p.a.x, p.b.y - p.a.y),
+        confidence: 0.75,
+        evidence: ['glass-partition', p.source, ...(p.openings.length ? ['door-in-line'] : [])],
+      }),
+      physicalWallId: p.id,
+      verdict: 'accepted' as const,
+      networkConnectivity: 1,
+      perimeterContribution: false,
+      genuinelyFloating: false,
+      fusedCandidateIds: [p.id],
+      evidenceTypes: ['parallel-face'] as EvidenceType[],
+      positiveEvidence: ['glass-partition', p.source],
+      negativeEvidence: [],
+      glass: true,
+      glassSource: p.source,
+    }));
+    r.accepted.push(...added);
+    if (r.physicalWalls !== r.accepted) r.physicalWalls.push(...added);
+    r.glass = {
+      marked: marked.size,
+      added: added.length,
+      styles: found.styles.map((s) => s.label.slice(0, 60)),
+    };
+  } catch (e) {
+    r.glass = { marked: 0, added: 0, styles: [], note: `glass detection failed: ${String(e).slice(0, 160)}` };
   }
 }
 
