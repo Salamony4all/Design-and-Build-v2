@@ -40,6 +40,9 @@ export interface CurvedWallConfig {
   podMinCoverDeg: number;
   /** ...or all the dark lines in that wall band together close this much of the circle */
   podBandCoverDeg: number;
+  /** a pod gap this wide (jamb to jamb) with a swing arc on one jamb is a door */
+  podDoorMinM: number;
+  podDoorMaxM: number;
   /** an arc flattened into straight lines: at least this many segments, each turning at most this much */
   polyMinSegments: number;
   polyMaxTurnDeg: number;
@@ -68,6 +71,8 @@ export const CURVED_WALL_DEFAULTS: CurvedWallConfig = {
   podMaxRadiusM: 6.0,
   podMinCoverDeg: 220,
   podBandCoverDeg: 240,
+  podDoorMinM: 0.6,
+  podDoorMaxM: 1.6,
   polyMinSegments: 4,
   polyMaxTurnDeg: 12,
   freeMinLengthM: 1.0,
@@ -109,9 +114,30 @@ export interface CurvedPod {
   segmentIds: string[];
 }
 
+/**
+ * A door in a pod's ring. Pascal curved walls cannot hold openings, so the door hangs in
+ * a short straight wall across the gap, jamb to jamb on the ring's centreline.
+ * hingeSide and swingDirection follow the door detector: 'left' = hinge at start;
+ * 'inward' = the leaf opens towards (−u.y, u.x) of u = start→end (page frame).
+ */
+export interface CurvedPodDoor {
+  id: string;
+  podId: string;
+  start: Vec2;
+  end: Vec2;
+  widthM: number;
+  thicknessM: number;
+  /** kind of the pod walls on both sides (glass only if both are glass) */
+  kind: CurvedWallKind;
+  hingeSide: 'left' | 'right';
+  swingDirection: 'inward' | 'outward';
+  sourceOperationIds: string[];
+}
+
 export interface CurvedWallResult {
   segments: CurvedWallSegment[];
   pods: CurvedPod[];
+  podDoors: CurvedPodDoor[];
   diagnostics: {
     circularPieces: number;
     polylineArcs: number;
@@ -121,6 +147,7 @@ export interface CurvedWallResult {
     facePairs: number;
     freeFormWalls: number;
     singleLineWalls: number;
+    podDoors: number;
     segments: number;
     pods: number;
   };
@@ -751,7 +778,8 @@ export function detectCurvedWalls(
   const empty: CurvedWallResult = {
     segments: [],
     pods: [],
-    diagnostics: { circularPieces: 0, polylineArcs: 0, chains: 0, rings: 0, freeRuns: 0, facePairs: 0, freeFormWalls: 0, singleLineWalls: 0, segments: 0, pods: 0 },
+    podDoors: [],
+    diagnostics: { circularPieces: 0, polylineArcs: 0, chains: 0, rings: 0, freeRuns: 0, facePairs: 0, freeFormWalls: 0, singleLineWalls: 0, podDoors: 0, segments: 0, pods: 0 },
   };
   if (!(mPerPt > 0) || !Number.isFinite(mPerPt)) return empty;
   const M = (pt: number) => pt * mPerPt;
@@ -830,6 +858,51 @@ export function detectCurvedWalls(
           singleLine++;
         }
       }
+    }
+  }
+
+  // Doors in pod gaps: a door-sized gap with a swing arc centred on one jamb whose other
+  // end reaches the other jamb. The door hangs in a straight wall across the gap.
+  interface RawDoor { g: Group; start: Vec2; end: Vec2; widthPt: number; t: number; kind: CurvedWallKind; hingeSide: 'left' | 'right'; sign: 1 | -1; ops: string[] }
+  const rawDoors: RawDoor[] = [];
+  for (const g of podGroups) {
+    const covered = mergeIntervals(g.members.map((s) => [s.a0, s.a1] as Interval));
+    const rm = median(g.members.map((s) => (s.rIn + s.rOut) / 2));
+    const at = (a: number) => ({ x: g.c.x + rm * Math.cos(a), y: g.c.y + rm * Math.sin(a) });
+    for (const [g0, g1] of mergeIntervals(subtract([[0, TAU]], covered))) {
+      const L = 2 * rm * Math.sin((g1 - g0) / 2);
+      if (M(L) < cfg.podDoorMinM || M(L) > cfg.podDoorMaxM) continue;
+      const A = at(g0), B = at(g1);
+      const near = Math.max(0.12 / mPerPt, 0.2 * L);
+      let found: { side: 'left' | 'right'; hinge: Vec2; free: Vec2; op: string } | null = null;
+      for (const ch of chains) {
+        if (Math.abs(ch.r - L) > 0.2 * L) continue;
+        const sweep = coverage(ch.iv);
+        if (sweep < 45 * DEG || sweep > 125 * DEG) continue;
+        for (const [hinge, other, side] of [[A, B, 'left'], [B, A, 'right']] as const) {
+          if (dist(ch.c, hinge) > near) continue;
+          const lo = ch.iv[0]![0], hi = ch.iv[ch.iv.length - 1]![1];
+          const e0 = { x: ch.c.x + ch.r * Math.cos(lo), y: ch.c.y + ch.r * Math.sin(lo) };
+          const e1 = { x: ch.c.x + ch.r * Math.cos(hi), y: ch.c.y + ch.r * Math.sin(hi) };
+          const d0 = dist(e0, other), d1 = dist(e1, other);
+          if (Math.min(d0, d1) > near) continue;
+          found = { side, hinge, free: d0 < d1 ? e1 : e0, op: ch.op };
+          break;
+        }
+        if (found) break;
+      }
+      if (!found) continue;
+      const touching = g.members.filter((s) => [s.a0, s.a1].some((a) => [g0, g1].some((e) => Math.abs(wrapPi(a - e)) < 2 * DEG)));
+      const kind: CurvedWallKind = touching.length > 0 && touching.every((s) => s.kind === 'glass') ? 'glass' : 'solid';
+      const t = touching.length ? Math.max(...touching.map((s) => s.rOut - s.rIn)) : cfg.defaultSolidThicknessM / mPerPt;
+      const ux = (B.x - A.x) / L, uy = (B.y - A.y) / L;
+      const fx = found.free.x - found.hinge.x, fy = found.free.y - found.hinge.y;
+      rawDoors.push({
+        g, start: A, end: B, widthPt: L, t, kind,
+        hingeSide: found.side,
+        sign: ux * fy - uy * fx > 0 ? 1 : -1,
+        ops: [...new Set([found.op, ...touching.flatMap((s) => s.ops)])].sort(),
+      });
     }
   }
 
@@ -917,9 +990,24 @@ export function detectCurvedWalls(
       segmentIds: mine.map((s) => s.id),
     };
   });
+  const podDoors: CurvedPodDoor[] = rawDoors
+    .sort((a, b) => order(a.start, b.start))
+    .map((d, i) => ({
+      id: `pd_${i + 1}`,
+      podId: podIds.get(d.g)!,
+      start: d.start,
+      end: d.end,
+      widthM: M(d.widthPt),
+      thicknessM: M(d.t),
+      kind: d.kind,
+      hingeSide: d.hingeSide,
+      swingDirection: d.sign > 0 ? 'inward' : 'outward',
+      sourceOperationIds: d.ops,
+    }));
   return {
     segments,
     pods,
+    podDoors,
     diagnostics: {
       circularPieces: pieces,
       polylineArcs,
@@ -929,6 +1017,7 @@ export function detectCurvedWalls(
       facePairs: pairs,
       freeFormWalls: free.length,
       singleLineWalls: singleLine,
+      podDoors: podDoors.length,
       segments: segments.length,
       pods: pods.length,
     },

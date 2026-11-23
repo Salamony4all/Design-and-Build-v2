@@ -333,6 +333,33 @@ describe('curved walls from drawing arcs', () => {
     expect(r.pods[0]!.enclosedDeg).toBeLessThan(304);
   });
 
+  it('hangs a door in a pod gap that has a swing arc, and leaves a bare gap open', () => {
+    const r = pt(2.5), r2 = pt(2.55), rm = (r + r2) / 2;
+    const g0 = deg(260), g1 = deg(280);
+    const ring = (rr: number) => arcCommands(C.x, C.y, rr, g1 - deg(360), g0);
+    const A = { x: C.x + rm * Math.cos(g0), y: C.y + rm * Math.sin(g0) };
+    const B = { x: C.x + rm * Math.cos(g1), y: C.y + rm * Math.sin(g1) };
+    const L = Math.hypot(B.x - A.x, B.y - A.y);
+    // swing arc centred on A (the hinge): from the closed leaf (towards B) to the open leaf (into the pod)
+    const closed = Math.atan2(B.y - A.y, B.x - A.x);
+    const swing = arcCommands(A.x, A.y, L, closed, closed + deg(90));
+    const open = { x: A.x + L * Math.cos(closed + deg(90)), y: A.y + L * Math.sin(closed + deg(90)) };
+    const leaf = [{ op: 'M', ...A }, { op: 'L', ...open }];
+    const withDoor = detectCurvedWalls({ vectors: [stroke(ring(r), 0.3), stroke(ring(r2), 0.3), stroke(swing, 0.25), stroke(leaf, 0.5)], scaleMmPerPt: SCALE });
+    expect(withDoor.pods).toHaveLength(1);
+    expect(withDoor.podDoors).toHaveLength(1);
+    const d = withDoor.podDoors[0]!;
+    expect(d.podId).toBe('pod_1');
+    expect(d.kind).toBe('glass');
+    expect(d.widthM).toBeCloseTo(L * M_PER_PT, 2);
+    // the door detector's convention: hinge at the start = left; leaf opening towards (-u.y, u.x) = inward
+    expect(d.hingeSide).toBe('left');
+    expect(d.swingDirection).toBe('inward');
+    const bare = detectCurvedWalls({ vectors: [stroke(ring(r), 0.3), stroke(ring(r2), 0.3)], scaleMmPerPt: SCALE });
+    expect(bare.pods).toHaveLength(1);
+    expect(bare.podDoors).toHaveLength(0);
+  });
+
   it('drops straight walls that copy a free-form wall', () => {
     const A = pt(4), B = pt(2.5), half = pt(0.1);
     const vectors = [

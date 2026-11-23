@@ -34,6 +34,8 @@ export type LiveDoorContract = {
   sourceSegmentIds: string[];
   sourceOperationIds: string[];
   provenance?: { sourcePrimitiveIds?: string[]; confidence?: number; extractionType?: string; note?: string };
+  /** a glazed leaf (e.g. the door of a glass pod) */
+  glazed?: boolean;
 };
 
 export type LiveDoorInstallResult = {
@@ -190,6 +192,9 @@ export function installLiveDoors(ctx: LiveDoorInstallerContext, doors: LiveDoorC
       thresholdHeight: PILOT_DEFAULTS.thresholdHeight,
       hingesSide: dr.hingeSide,
       swingDirection: dr.swingDirection,
+      ...(dr.glazed
+        ? { segments: [{ type: 'glass', heightRatio: 1, columnRatios: [1], dividerThickness: 0.03, panelDepth: 0.01, panelInset: 0.04 }] }
+        : {}),
       position: localPosition,
       rotation: localRotation,
     } as never);

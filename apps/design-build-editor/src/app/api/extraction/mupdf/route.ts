@@ -40,7 +40,7 @@ function curvedWallsFor(
   pureResult: any,
   geometryHash: string,
 ) {
-  const none = { walls: [] as any[], pods: [] as any[], dropWallIds: new Set<string>(), onCurve: (_a?: Pt, _b?: Pt) => false };
+  const none = { walls: [] as any[], pods: [] as any[], doorSpecs: [] as any[], dropWallIds: new Set<string>(), onCurve: (_a?: Pt, _b?: Pt) => false };
   // curved walls are matched in metres: without a real scale there is nothing to match
   if (pureResult.scaleSource === 'fallback') return none;
   try {
@@ -62,7 +62,37 @@ function curvedWallsFor(
       pageWidthM: frameIn.widthM,
       pageHeightM: frameIn.heightM,
     });
-    const walls = lib.curvedWallPieces(found.segments, (x, y) => cf.toPascal(x, y)).map((p) => ({ ...p, sourceHash: geometryHash }));
+    const walls: any[] = lib.curvedWallPieces(found.segments, (x, y) => cf.toPascal(x, y)).map((p) => ({ ...p, sourceHash: geometryHash }));
+    // Doors in pod gaps: a straight wall across the gap holds an ordinary door (Pascal
+    // curved walls cannot hold openings). The door uses the door installer's contract.
+    const doorSpecs: any[] = [];
+    for (const d of found.podDoors) {
+      const [sx, sy] = cf.toPascal(d.start.x, d.start.y);
+      const [ex, ey] = cf.toPascal(d.end.x, d.end.y);
+      walls.push({
+        id: d.id, segmentId: d.id, podId: d.podId, kind: d.kind, role: 'pod-door',
+        start: { x: sx, y: sy }, end: { x: ex, y: ey }, curveOffset: 0,
+        thicknessM: d.thicknessM, lengthM: d.widthM, sourceOperationIds: d.sourceOperationIds, sourceHash: geometryHash,
+      });
+      const margin = Math.min(0.02, d.widthM * 0.02);
+      doorSpecs.push({
+        id: d.id,
+        doorAssemblyId: d.id,
+        wallId: d.id,
+        doorType: 'POD_SWING',
+        intervalStartM: margin,
+        intervalEndM: d.widthM - margin,
+        widthM: d.widthM - 2 * margin,
+        hingeSide: d.hingeSide,
+        swingDirection: d.swingDirection,
+        evidenceMode: 'GEOMETRY_ONLY',
+        annotationIds: [],
+        sourceSegmentIds: [],
+        sourceOperationIds: d.sourceOperationIds,
+        glazed: d.kind === 'glass',
+        provenance: { confidence: 0.85, extractionType: 'curved-pod-door', note: d.podId },
+      });
+    }
     const pods = found.pods.map((p) => {
       const [x, y] = cf.toPascal(p.center.x, p.center.y);
       return { ...p, centerPascal: { x, y } };
@@ -73,8 +103,8 @@ function curvedWallsFor(
     for (const w of pureResult.accepted ?? []) {
       if (onCurve(w.centerline?.a, w.centerline?.b)) dropWallIds.add(w.physicalWallId);
     }
-    console.log(`[MuPdfRoute] Curved walls: ${found.segments.length} arcs -> ${walls.length} walls, ${pods.length} pods, ${dropWallIds.size} straight duplicates dropped.`);
-    return { walls, pods, dropWallIds, onCurve };
+    console.log(`[MuPdfRoute] Curved walls: ${found.segments.length} arcs -> ${walls.length} walls, ${pods.length} pods, ${doorSpecs.length} pod doors, ${dropWallIds.size} straight duplicates dropped.`);
+    return { walls, pods, doorSpecs, dropWallIds, onCurve };
   } catch (e) {
     console.warn('[MuPdfRoute] curved wall detection skipped:', e);
     return none;
@@ -424,7 +454,7 @@ export async function POST(req: NextRequest) {
           // STAGE 3 CHUNK: Stream Doors
           await sendChunk({
             type: 'stage-doors',
-            acceptedDoors: doorSpecs,
+            acceptedDoors: [...doorSpecs, ...curved.doorSpecs],
             reviewDoors: doorAudit?.review ?? 0,
             doorAudit,
             doorManifest,
@@ -923,7 +953,7 @@ export async function POST(req: NextRequest) {
       guideDataUrl,
       windowSpecs,
       windowAudit,
-      acceptedDoors: doorSpecs,
+      acceptedDoors: [...doorSpecs, ...curved.doorSpecs],
       reviewDoors: doorAudit?.review ?? 0,
       doorAudit,
       doorManifest: (typeof doorManifest !== 'undefined') ? doorManifest : undefined,

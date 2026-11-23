@@ -1727,9 +1727,11 @@ export default function Home() {
         const id = `wall_${c.id}`;
         if (drafts.initialShell.nodes[id]) continue;
         const glass = c.kind === 'glass';
+        const doorWall = c.role === 'pod-door';
+        const label = doorWall ? 'Door wall' : glass ? 'Glass partition' : 'Curved wall';
         const node = WallNode.parse({
           id,
-          name: `${glass ? 'Glass partition' : 'Curved wall'} ${curvedIds.length + 1}${c.podId ? ` (${String(c.podId).replace('_', ' ')})` : ''}`,
+          name: `${label} ${curvedIds.length + 1}${c.podId ? ` (${String(c.podId).replace('_', ' ')})` : ''}`,
           parentId: levelId,
           start: [c.start.x, c.start.y] as [number, number],
           end: [c.end.x, c.end.y] as [number, number],
@@ -1743,7 +1745,7 @@ export default function Home() {
             physicalWallId: c.id,
             curvedWallId: c.segmentId,
             podId: c.podId ?? null,
-            wallClassification: glass ? 'GLASS_PARTITION' : 'CURVED_WALL',
+            wallClassification: doorWall ? 'POD_DOOR_WALL' : glass ? 'GLASS_PARTITION' : 'CURVED_WALL',
             sourceHash: c.sourceHash ?? '',
             sourceOperationIds: c.sourceOperationIds ?? [],
             automaticExtraction: true,
