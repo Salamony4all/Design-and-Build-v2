@@ -59,6 +59,18 @@ describe('matchProducts', () => {
     expect(r.unmatchedPieceIds).toHaveLength(pieces.length);
   });
 
+  it('gives a custom item the drawn type it was set on, before any line', () => {
+    const r = matchProducts(pieces, [
+      { id: 'sofa', description: 'Curved Modular Lounge Sofa (~3200 × 1200 × 850 mm)', qty: 5 },
+      { id: 'custom', description: 'Custom curved bench', qty: 5, typeId: 'ft_sofa' },
+      { id: 'lost', description: 'Custom piece', qty: 1, typeId: 'ft_missing' },
+    ]);
+    expect(r.byPiece.s1).toBe('custom');
+    expect(r.products.find((m) => m.productId === 'custom')).toMatchObject({ placed: 5, typeIds: ['ft_sofa'] });
+    expect(r.byPiece.l1).toBe('sofa');
+    expect(r.unplacedProductIds).toEqual(['lost']);
+  });
+
   it('never gives one drawn type to two lines', () => {
     const r = matchProducts(pieces, [
       { id: 'a', description: 'Lounge chair', qty: 18 },

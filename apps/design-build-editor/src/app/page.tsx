@@ -1059,6 +1059,10 @@ export default function Home() {
     recenterLens(260);
   }, [recenterLens]);
 
+  /** The render panel set a parallel (isometric) camera; it goes back to perspective after. */
+  const parallelSetRef = useRef(false);
+  const enterWalkRef = useRef<() => void>(() => {});
+
   /**
    * Walk mode: stand at eye height on the floor you are looking at, facing the
    * same way, with a wide lens. Drag to look, two fingers to move, pinch for
@@ -1066,6 +1070,13 @@ export default function Home() {
    */
   const enterWalk = useCallback(() => {
     const h = viewerHandleRef.current;
+    if ((h?.camera as { isOrthographicCamera?: boolean } | undefined)?.isOrthographicCamera) {
+      // Walking needs a perspective camera (the render panel may have set an isometric one).
+      (useViewer.getState() as { setCameraMode?: (m: 'perspective') => void }).setCameraMode?.('perspective');
+      parallelSetRef.current = false;
+      window.setTimeout(() => enterWalkRef.current(), 220);
+      return;
+    }
     const cam = h?.camera as THREE.PerspectiveCamera | undefined;
     const canvas = (h?.gl as { domElement?: HTMLCanvasElement } | undefined)?.domElement;
     if (!h || !h.scene || !cam?.isPerspectiveCamera || !canvas) return;
@@ -1149,6 +1160,29 @@ export default function Home() {
       750,
     );
   }, [collectBuildingBoxes, measureViewArea, fovForLens, setWalkLensMm]);
+  enterWalkRef.current = enterWalk;
+
+  /** Projection of the live camera: parallel when it is orthographic (an isometric view). */
+  const viewerProjection = useCallback((): 'perspective' | 'parallel' => {
+    const cam = viewerHandleRef.current?.camera as { isOrthographicCamera?: boolean } | undefined;
+    return cam?.isOrthographicCamera ? 'parallel' : 'perspective';
+  }, []);
+
+  /**
+   * Isometric renders: a parallel camera at the isometric angle, framing the building
+   * (parallel lines stay parallel, so the render keeps the model's true edges); back to
+   * perspective keeps the angle.
+   */
+  const setViewerProjection = useCallback((p: 'perspective' | 'parallel') => {
+    const v = useViewer.getState() as { cameraMode?: string; setCameraMode?: (m: 'perspective' | 'orthographic') => void };
+    if (!v.setCameraMode) return;
+    if (p === 'parallel' && viewModeRef.current === 'walk') return;
+    const want = p === 'parallel' ? 'orthographic' : 'perspective';
+    if (v.cameraMode !== want) v.setCameraMode(want);
+    parallelSetRef.current = p === 'parallel';
+    // The viewer swaps its camera on the next frame: frame the building once it has.
+    window.setTimeout(() => goToView('3d', p === 'parallel' ? {} : { keepAngle: true }), 220);
+  }, [goToView]);
 
   /** Lens button: steps through 14 / 18 / 24 / 35 mm. */
   const stepWalkLens = useCallback(() => {
@@ -3458,6 +3492,10 @@ export default function Home() {
   const [completionDismissed, setCompletionDismissed] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [renderStudioOpen, setRenderStudioOpen] = useState(false);
+  // An isometric camera set for a render goes back to perspective when the panel closes.
+  useEffect(() => {
+    if (!renderStudioOpen && parallelSetRef.current) setViewerProjection('perspective');
+  }, [renderStudioOpen, setViewerProjection]);
   // "New plan" asks once inline ("Discard this model?") instead of a blocking dialog.
   const [confirmNew, setConfirmNew] = useState(false);
   const startOver = useCallback(() => {
@@ -3547,6 +3585,23 @@ export default function Home() {
   const embedBuildCompleteRef = useRef(false);
   embedBuildCompleteRef.current = isBuildComplete;
   const embedPostRef = useRef<(type: string, payload?: Record<string, unknown>) => void>(() => {});
+  /** Select the drawn pieces that match and frame them (null: the whole model again). */
+  const focusFurniture = (match: ((meta: Record<string, unknown>) => boolean) | null) => {
+    const nodes = (getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, { type?: string; metadata?: Record<string, unknown> }> }).nodes ?? {};
+    const ids = new Set<string>();
+    if (match) {
+      for (const [id, n] of Object.entries(nodes)) {
+        if (n?.type !== 'item' || n.metadata?.source !== 'plan-furniture') continue;
+        if (match(n.metadata)) ids.add(id);
+      }
+    }
+    try {
+      (useViewer.getState() as { setSelection?: (s: { selectedIds: string[] }) => void }).setSelection?.({ selectedIds: [...ids] });
+    } catch {
+      /* viewer store unavailable */
+    }
+    goToView(viewModeRef.current === 'top' ? 'top' : '3d', { keepAngle: true, ...(ids.size ? { ids } : {}) });
+  };
   const embedPost = useEmbedBridge(embedded, {
     plan: (file, name) => {
       const pdf = file instanceof File ? file : new File([file], name, { type: 'application/pdf' });
@@ -3660,22 +3715,9 @@ export default function Home() {
     },
     // BOQ Flow's product legend: select the pieces carrying a product and frame them
     // (from the current angle); none frames the whole model again.
-    focusProduct: (productId) => {
-      const nodes = (getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, { type?: string; metadata?: Record<string, unknown> }> }).nodes ?? {};
-      const ids = new Set<string>();
-      if (productId) {
-        for (const [id, n] of Object.entries(nodes)) {
-          if (n?.type !== 'item' || n.metadata?.source !== 'plan-furniture') continue;
-          if ((n.metadata.product as { id?: unknown } | undefined)?.id === productId) ids.add(id);
-        }
-      }
-      try {
-        (useViewer.getState() as { setSelection?: (s: { selectedIds: string[] }) => void }).setSelection?.({ selectedIds: [...ids] });
-      } catch {
-        /* viewer store unavailable */
-      }
-      goToView(viewModeRef.current === 'top' ? 'top' : '3d', { keepAngle: true, ...(ids.size ? { ids } : {}) });
-    },
+    focusProduct: (productId) =>
+      focusFurniture(productId ? (meta) => (meta.product as { id?: unknown } | undefined)?.id === productId : null),
+    focusType: (typeId) => focusFurniture(typeId ? (meta) => meta.typeId === typeId : null),
     ping: () => embedPostRef.current('ready', { hasModel: embedBuildCompleteRef.current }),
   });
   embedPostRef.current = embedPost;
@@ -3733,7 +3775,8 @@ export default function Home() {
         console.log(`[plan-furniture] ${r.installed} pieces placed from the drawing.`);
         embedPostRef.current('furniture-ready', {
           pieces: r.installed,
-          schedule: (f.types ?? []).map((t) => ({ kind: t.kind, shape: t.shape, widthM: t.widthM, depthM: t.depthM, count: t.count })),
+          // typeId lets BOQ Flow set a custom item on one drawn type (a piece with no product line).
+          schedule: (f.types ?? []).map((t) => ({ typeId: t.id, kind: t.kind, shape: t.shape, widthM: t.widthM, depthM: t.depthM, count: t.count })),
         });
         await furnishWithProducts();
       } catch (e) {
@@ -4223,6 +4266,8 @@ export default function Home() {
               {viewerVisible && !proMode && (
                 <RenderStudio
                   getViewContext={() => ({ interior: viewModeRef.current === 'walk', lensMm: walkLensRef.current })}
+                  getProjection={viewerProjection}
+                  onProjectionChange={setViewerProjection}
                   getFreeArea={measureScreenArea}
                   onFinderChange={onFinderChange}
                   open={renderStudioOpen}

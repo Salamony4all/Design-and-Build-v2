@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   ALLOWED_RENDER_MODELS,
+  REFERENCE_BUDGET,
   RENDER_FRAMES,
   RENDER_TIERS,
   SUPPORTED_ASPECTS,
@@ -12,10 +13,12 @@ import {
   describeOpenings,
   frameAspect,
   furnishFromText,
+  imageList,
   isRenderFrame,
   isSupportedAspect,
   modelSupportsImageSize,
   nearestAspect,
+  referencePlan,
   spotsWhere,
   standInNoun,
   styleFromText,
@@ -57,6 +60,19 @@ describe('tiers', () => {
     for (const t of Object.values(RENDER_TIERS)) expect(ALLOWED_RENDER_MODELS.has(t.model)).toBe(true);
     expect(RENDER_TIERS.fast.model).toBe('gemini-3.1-flash-lite-image');
     expect(RENDER_TIERS.fast.approxUsd).toBeLessThan(0.05);
+  });
+
+  it('sends more references with the models made for them', () => {
+    expect(referencePlan('fast', 0, 9)).toEqual({ looks: 0, products: 4 });
+    expect(referencePlan('fast', 3, 9)).toEqual({ looks: 1, products: 3 });
+    expect(referencePlan('balanced', 2, 12)).toEqual({ looks: 2, products: 8 });
+    expect(referencePlan('balanced', 0, 12)).toEqual({ looks: 0, products: 10 });
+    expect(referencePlan('pro', 3, 12)).toEqual({ looks: 3, products: 6 });
+    expect(referencePlan('pro', 0, 2)).toEqual({ looks: 0, products: 2 });
+    // With the view and the line drawing, never past the 14 images a request takes.
+    for (const b of Object.values(REFERENCE_BUDGET)) expect(b.total + 2).toBeLessThanOrEqual(14);
+    expect(imageList([5])).toBe('image 5');
+    expect(imageList([5, 6, 7])).toBe('images 5, 6 and 7');
   });
 
   it('knows which models take imageSize', () => {
@@ -337,6 +353,35 @@ describe('furniture stand-ins and real products', () => {
       furniture: { standIns: 3, products: [], behindGlass: 2 },
     });
     expect(glass).toMatch(/Some of this furniture \(2 in view\) stands behind glass walls: every glass wall, glass door and frame stays exactly where it is/);
+  });
+
+  it('keeps a parallel (isometric) view free of perspective', () => {
+    const p = buildGeometryLockPrompt({ style: 'daylight', viewKind: 'cutaway', furnish: false, withEdgeGuide: true, withPlan: false, lineGuide: true, parallel: true });
+    expect(p).toMatch(/parallel projection \(axonometric, like an isometric drawing\)/);
+    expect(p).toMatch(/no vanishing points/);
+    expect(p).not.toMatch(/same viewpoint, perspective, focal length/);
+    const persp = buildGeometryLockPrompt({ style: 'daylight', viewKind: 'cutaway', furnish: false, withEdgeGuide: true, withPlan: false });
+    expect(persp).not.toMatch(/parallel projection/);
+  });
+
+  it('follows look references for materials and mood only, numbered after the product pictures', () => {
+    const p = buildGeometryLockPrompt({
+      style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: true, withPlan: false, lineGuide: true,
+      furniture: { standIns: 2, products: [{ label: 'Las · Mia', colour: 'pink', kinds: ['desk'], count: 2, photo: true, imageIndex: 3 }] },
+      looks: [4, 5],
+    });
+    expect(p).toMatch(/LOOK REFERENCES: Images 4 and 5 are pictures the client chose for the look\. Take only their materials, colours, finishes, textures and mood/);
+    expect(p).toMatch(/Glass walls, glass doors and windows stay clear glass\. Never copy their layout, architecture, walls, doors, windows, furniture, camera angle or any text/);
+    expect(p).toMatch(/The product pictures \(image 3\) are catalogue photos of single products/);
+    expect(p).toMatch(/Materials: as in the look references \(images 4 and 5\); for any surface they do not show: walls in smooth warm-white painted plaster/);
+    const one = buildGeometryLockPrompt({ style: 'dusk', viewKind: 'cutaway', furnish: false, withEdgeGuide: false, withPlan: false, looks: [2] });
+    expect(one).toMatch(/Turn image 1/);
+    expect(one).toMatch(/LOOK REFERENCES: Image 2 is a picture the client chose for the look\. Take only its materials/);
+    expect(one).toMatch(/Materials: as in the look reference \(image 2\); for any surface it does not show/);
+    // A white presentation model ignores them.
+    const clay = buildGeometryLockPrompt({ style: 'clay', viewKind: 'cutaway', furnish: false, withEdgeGuide: false, withPlan: false, looks: [2] });
+    expect(clay).not.toMatch(/LOOK REFERENCES/);
+    expect(clay).toMatch(/Turn this image/);
   });
 
   it('keeps stand-ins as furniture even without products, and ignores an empty inventory', () => {

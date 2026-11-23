@@ -12,11 +12,14 @@ import { loadRegistry, getProvider, getApiKey } from 'design-build-provider-regi
 import { readRequestProvider, type RequestProvider } from '@/features/providers/request-provider';
 import {
   ALLOWED_RENDER_MODELS,
+  MAX_LOOK_REFERENCES,
   RENDER_PROMPT_VERSION,
   RENDER_TIERS,
   buildGeometryLockPrompt,
+  getRenderStyle,
   isSupportedAspect,
   modelSupportsImageSize,
+  referencePlan,
   type PromptFurniture,
   type RenderTierId,
 } from '@/features/render/render-presets';
@@ -29,10 +32,8 @@ const SERVER_SENTINEL = '__SERVER_RESOLVED_FROM_ENV__';
 const DEFAULT_GEMINI_BASE = 'https://generativelanguage.googleapis.com';
 const DATA_URL = /^data:(image\/(?:png|jpeg|webp));base64,([A-Za-z0-9+/=]+)$/;
 const MAX_IMAGE_CHARS = 6_000_000; // ~4.4 MB of image bytes per image
-/** Product pictures are small catalogue thumbnails. */
+/** Product pictures and look references are small thumbnails. */
 const MAX_PRODUCT_IMAGE_CHARS = 1_500_000;
-/** At most this many product pictures go with one render. */
-const MAX_PRODUCT_IMAGES = 4;
 
 const BodySchema = z.object({
   image: z.string().max(MAX_IMAGE_CHARS),
@@ -49,6 +50,10 @@ const BodySchema = z.object({
   ceilingInView: z.boolean().optional(),
   /** The edge guide is a line drawing made from the 3D model. */
   lineGuide: z.boolean().optional(),
+  /** The view is a parallel projection (orthographic camera, e.g. isometric). */
+  parallel: z.boolean().optional(),
+  /** Look references: pictures whose materials, colours and mood the render follows. */
+  looks: z.array(z.string().max(MAX_PRODUCT_IMAGE_CHARS)).max(MAX_LOOK_REFERENCES).optional(),
   fovDeg: z.object({ h: z.number().min(1).max(179), v: z.number().min(1).max(179) }).optional(),
   pitchDeg: z.number().min(-90).max(90).optional(),
   /** Doors and windows in view, from the 3D scene (normalized to the image). */
@@ -174,16 +179,25 @@ function parseDataUrl(s: string | undefined): { mimeType: string; data: string }
   return m ? { mimeType: m[1], data: m[2] } : null;
 }
 
+/** Look references the tier takes (none for the white presentation model), as sent. */
+function lookRefs(body: Body): { mimeType: string; data: string }[] {
+  if (getRenderStyle(body.style).materials) return [];
+  const looks = (body.looks ?? []).map(parseDataUrl).filter((x): x is { mimeType: string; data: string } => !!x);
+  return looks.slice(0, referencePlan(body.tier as RenderTierId, looks.length, 0).looks);
+}
+
 /**
  * The furniture facts for the prompt, and the product pictures that go with them
- * (numbered after the view, the edge map and the plan, in the order sent).
+ * (numbered after the view, the edge map and the plan, in the order sent). The tier's
+ * reference budget, less the look references, caps the pictures.
  */
-function furnitureRefs(body: Body, firstIndex: number): { furniture?: PromptFurniture; images: { mimeType: string; data: string }[] } {
+function furnitureRefs(body: Body, firstIndex: number, looks: number): { furniture?: PromptFurniture; images: { mimeType: string; data: string }[] } {
   const f = body.furniture;
   if (!f || f.standIns <= 0) return { images: [] };
+  const maxImages = referencePlan(body.tier as RenderTierId, looks, Number.MAX_SAFE_INTEGER).products;
   const images: { mimeType: string; data: string }[] = [];
   const products = f.products.map((p) => {
-    const img = images.length < MAX_PRODUCT_IMAGES ? parseDataUrl(p.image) : null;
+    const img = images.length < maxImages ? parseDataUrl(p.image) : null;
     if (img) images.push(img);
     return {
       label: p.label,
@@ -237,7 +251,14 @@ function upstreamMessage(j: GeminiResponse): string {
   return (j.error?.message ?? '').replace(/\s+/g, ' ').slice(0, 300);
 }
 
-async function saveDebug(id: string, body: Body, prompt: string, out: { mimeType: string; data: string } | null, meta: Record<string, unknown>) {
+async function saveDebug(
+  id: string,
+  body: Body,
+  prompt: string,
+  out: { mimeType: string; data: string } | null,
+  meta: Record<string, unknown>,
+  refs: { mimeType: string; data: string }[] = [],
+) {
   const dir = path.join(process.cwd(), '.data', 'render-debug');
   await fs.mkdir(dir, { recursive: true });
   const write = (name: string, d: { data: string } | null) => (d ? fs.writeFile(path.join(dir, `${id}-${name}`), Buffer.from(d.data, 'base64')) : Promise.resolve());
@@ -248,6 +269,7 @@ async function saveDebug(id: string, body: Body, prompt: string, out: { mimeType
     write('edges.png', parseDataUrl(body.edgeGuide)),
     write('plan.jpg', parseDataUrl(body.plan)),
     write(`output.${ext(out?.mimeType)}`, out),
+    ...refs.map((r, i) => write(`ref-${i + 1}.${ext(r.mimeType)}`, r)),
     fs.writeFile(path.join(dir, `${id}-meta.json`), JSON.stringify({ ...meta, prompt }, null, 2)),
   ]);
 }
@@ -274,7 +296,11 @@ export async function POST(req: NextRequest) {
   if (!isSupportedAspect(body.aspectRatio)) return fail(400, 'RENDER_BAD_REQUEST', `Unsupported aspect ratio ${body.aspectRatio}.`);
   const edge = parseDataUrl(body.edgeGuide);
   const plan = body.furnish ? parseDataUrl(body.plan) : null;
-  const refs = furnitureRefs(body, 2 + (edge ? 1 : 0) + (plan ? 1 : 0));
+  const looks = lookRefs(body);
+  const firstRef = 2 + (edge ? 1 : 0) + (plan ? 1 : 0);
+  const refs = furnitureRefs(body, firstRef, looks.length);
+  // Look references come after the product pictures.
+  const lookNumbers = looks.map((_, i) => firstRef + refs.images.length + i);
 
   const tier = RENDER_TIERS[body.tier as RenderTierId];
   const model = body.model && ALLOWED_RENDER_MODELS.has(body.model) ? body.model : tier.model;
@@ -297,9 +323,10 @@ export async function POST(req: NextRequest) {
         style: body.style, viewKind: body.viewKind, furnish: body.furnish, withEdgeGuide: !!edge,
         withPlan: !!plan, note: body.note, strict: body.strict, lensMm: body.lensMm, ceiling: body.ceiling,
         ceilingInView: body.ceilingInView, lineGuide: body.lineGuide && !!edge, fovDeg: body.fovDeg, pitchDeg: body.pitchDeg,
-        openings: body.openings, furniture: refs.furniture,
+        openings: body.openings, furniture: refs.furniture, parallel: body.parallel, looks: lookNumbers,
       }),
       productImages: refs.images.length,
+      lookImages: looks.length,
     });
   }
 
@@ -324,6 +351,8 @@ export async function POST(req: NextRequest) {
     pitchDeg: body.pitchDeg,
     openings: body.openings,
     furniture: refs.furniture,
+    parallel: body.parallel,
+    looks: lookNumbers,
   });
 
   // Images first, in the order the prompt numbers them; the instruction last.
@@ -331,6 +360,7 @@ export async function POST(req: NextRequest) {
   if (edge) parts.push({ inlineData: edge });
   if (plan) parts.push({ inlineData: plan });
   for (const img of refs.images) parts.push({ inlineData: img });
+  for (const img of looks) parts.push({ inlineData: img });
   parts.push({ text: prompt });
 
   const baseImageConfig: Record<string, string> = { aspectRatio: body.aspectRatio };
@@ -405,9 +435,9 @@ export async function POST(req: NextRequest) {
     await saveDebug(renderId, body, prompt, out, {
       model, tier: tier.id, style: body.style, aspectRatio: body.aspectRatio, viewKind: body.viewKind,
       furnish: body.furnish, strict: body.strict, attempt: body.attempt, ms, finishReason: cand?.finishReason,
-      standIns: body.furniture?.standIns ?? 0, productImages: refs.images.length,
+      standIns: body.furniture?.standIns ?? 0, productImages: refs.images.length, lookImages: looks.length, parallel: !!body.parallel,
       usage: resp.json.usageMetadata, text, promptVersion: RENDER_PROMPT_VERSION, provider: g.providerLabel, skipped,
-    }).catch(() => undefined);
+    }, [...refs.images, ...looks]).catch(() => undefined);
   }
 
   if (!out) {

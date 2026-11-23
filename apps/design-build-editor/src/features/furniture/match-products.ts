@@ -29,6 +29,8 @@ export interface MatchProduct {
   model?: string;
   imageUrl?: string;
   dims?: { w?: number; d?: number; h?: number };
+  /** A custom item set on one drawn type (its pieces take it, whatever their kind). */
+  typeId?: string;
 }
 
 export interface ProductMatch {
@@ -135,8 +137,24 @@ export function matchProducts(pieces: MatchPiece[], products: MatchProduct[]): M
     t.pieceIds.push(p.id);
   }
 
+  const byPiece: Record<string, string> = {};
+  const placed = new Map<string, ProductMatch>();
+  for (const p of products) placed.set(p.id, { productId: p.id, qty: Math.max(1, p.qty), placed: 0, typeIds: [] });
+  const usedTypes = new Set<string>();
+  // Items set on a drawn type by hand (custom pieces with their own picture) take it first.
+  for (const product of products) {
+    const t = product.typeId ? types.get(product.typeId) : undefined;
+    if (!t || usedTypes.has(t.typeId)) continue;
+    const m = placed.get(product.id)!;
+    usedTypes.add(t.typeId);
+    m.typeIds.push(t.typeId);
+    m.placed += t.pieceIds.length;
+    for (const id of t.pieceIds) byPiece[id] = product.id;
+  }
+
   const candidates: { score: number; product: MatchProduct; type: TypeGroup }[] = [];
   for (const product of products) {
+    if (product.typeId) continue;
     const text = `${product.category ?? ''} ${product.description}`;
     // The line's own words first (the BOQ text), then its catalogue category.
     const kind = productKind(product.description) ?? productKind(`${product.category ?? ''}`);
@@ -162,10 +180,6 @@ export function matchProducts(pieces: MatchPiece[], products: MatchProduct[]): M
   }
   candidates.sort((a, b) => b.score - a.score);
 
-  const byPiece: Record<string, string> = {};
-  const placed = new Map<string, ProductMatch>();
-  for (const p of products) placed.set(p.id, { productId: p.id, qty: Math.max(1, p.qty), placed: 0, typeIds: [] });
-  const usedTypes = new Set<string>();
   for (const c of candidates) {
     if (c.score < 1 || usedTypes.has(c.type.typeId)) continue;
     const m = placed.get(c.product.id)!;

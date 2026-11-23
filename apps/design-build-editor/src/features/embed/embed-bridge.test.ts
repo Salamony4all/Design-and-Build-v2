@@ -53,6 +53,22 @@ describe('parent messages', () => {
     expect(m.items[0]).toMatchObject({ id: 'r1', qty: 5, imageUrl: 'https://cdn.example/sofa.jpg', dims: { w: 3.2, d: 1.2, h: 0.85 } });
     expect(m.items[1]).toMatchObject({ id: 'item_2', qty: 1, imageUrl: undefined, dims: { w: undefined } });
   });
+  it('reads a drawn-type focus, and refuses odd type ids', () => {
+    expect(parseParentMessage(msg('focus-type', { typeId: 'ft_15' }))).toEqual({ type: 'focus-type', typeId: 'ft_15' });
+    expect(parseParentMessage(msg('focus-type', { typeId: null }))).toEqual({ type: 'focus-type', typeId: null });
+    expect(parseParentMessage(msg('focus-type', { typeId: 'a b' }))).toBeNull();
+    expect(parseParentMessage(msg('focus-type', {}))).toBeNull();
+  });
+  it('keeps the drawn type a custom item is set on, and nothing odd', () => {
+    const m = parseParentMessage(msg('products', {
+      items: [
+        { id: 'c1', description: 'Custom curved sofa', qty: 5, typeId: 'ft_15' },
+        { id: 'c2', description: 'Custom table', qty: 1, typeId: 'ft 15; drop' },
+      ],
+    }));
+    if (m?.type !== 'products') throw new Error('expected products');
+    expect(m.items.map((p) => p.typeId)).toEqual(['ft_15', undefined]);
+  });
   it('accepts a render request and product focus (or none), and nothing else', () => {
     expect(parseParentMessage(msg('render'))).toEqual({ type: 'render' });
     expect(parseParentMessage(msg('focus-product', { productId: 't0r3' }))).toEqual({ type: 'focus-product', productId: 't0r3' });

@@ -4,7 +4,7 @@
 // Pure module: no DOM, no Node APIs, so it is safe to import from the API route,
 // the browser and unit tests.
 
-export const RENDER_PROMPT_VERSION = 'geo-lock-v6';
+export const RENDER_PROMPT_VERSION = 'geo-lock-v7';
 
 export type RenderStyleId = 'daylight' | 'golden-hour' | 'overcast' | 'dusk' | 'clay';
 
@@ -109,6 +109,35 @@ export const RENDER_TIERS: Readonly<Record<RenderTierId, RenderTier>> = {
     etaSec: 40,
   },
 };
+
+/**
+ * Reference pictures one render may carry besides the view and its line drawing, per
+ * tier. Nano Banana 2 takes up to 10 object pictures (14 images in all), Pro up to 6
+ * objects and 14 in all; the Lite model is not made for many references, so it gets few.
+ */
+export const REFERENCE_BUDGET: Readonly<Record<RenderTierId, { total: number; products: number; looks: number }>> = {
+  fast: { total: 4, products: 4, looks: 1 },
+  balanced: { total: 10, products: 10, looks: 2 },
+  pro: { total: 9, products: 6, looks: 3 },
+};
+
+/** Look references at most, across tiers (what the panel lets you add). */
+export const MAX_LOOK_REFERENCES = 3;
+
+/** How many look references and product pictures to send: the client's looks first, products fill the rest. */
+export function referencePlan(tier: RenderTierId, looksWanted: number, productsWanted: number): { looks: number; products: number } {
+  const b = REFERENCE_BUDGET[tier] ?? REFERENCE_BUDGET.fast;
+  const looks = Math.max(0, Math.min(looksWanted, b.looks));
+  const products = Math.max(0, Math.min(productsWanted, b.products, b.total - looks));
+  return { looks, products };
+}
+
+/** "image 5", "images 5 and 6", "images 5, 6 and 7". */
+export function imageList(indices: readonly number[]): string {
+  const n = [...indices];
+  if (n.length <= 1) return `image ${n[0] ?? ''}`.trim();
+  return `images ${n.slice(0, -1).join(', ')} and ${n[n.length - 1]}`;
+}
 
 /** Image models the render route may call (tier models plus known aliases). */
 export const ALLOWED_RENDER_MODELS: ReadonlySet<string> = new Set([
@@ -353,6 +382,10 @@ export interface GeometryLockPromptOptions {
   ceilingInView?: boolean;
   /** Image 2 is a line drawing made from the 3D model (not an edge map of the picture). */
   lineGuide?: boolean;
+  /** The view is a parallel (orthographic, e.g. isometric) projection, not a perspective. */
+  parallel?: boolean;
+  /** Numbers of the attached look references (materials, colours and mood to follow). */
+  looks?: readonly number[];
   /** Angles the input covers, in degrees. */
   fovDeg?: { h: number; v: number };
   /** Camera pitch in degrees (positive = looking up). */
@@ -494,7 +527,9 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   const style = getRenderStyle(o.style);
   const note = clampNote(o.note);
   const furniture = o.furniture && o.furniture.standIns > 0 ? o.furniture : null;
-  const imageRefs = o.withEdgeGuide || o.withPlan || !!furniture?.products.some((p) => p.imageIndex);
+  // A white presentation model takes no materials from elsewhere.
+  const looks = style.materials ? [] : (o.looks ?? []).filter((n) => n > 1);
+  const imageRefs = o.withEdgeGuide || o.withPlan || looks.length > 0 || !!furniture?.products.some((p) => p.imageIndex);
   const lines: string[] = [];
 
   lines.push(
@@ -503,7 +538,14 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
 
   lines.push('');
   lines.push('GEOMETRY LOCK (identical to the input, pixel-aligned):');
-  lines.push('1. Camera: same viewpoint, perspective, focal length, framing and crop. Do not zoom, pan, rotate, tilt or re-compose.');
+  if (o.parallel && o.viewKind !== 'interior') {
+    lines.push('1. Camera: same viewpoint, angle, framing and crop. Do not zoom, pan, rotate, tilt or re-compose.');
+    lines.push(
+      '   This is a parallel projection (axonometric, like an isometric drawing), not a perspective photograph: parallel edges stay parallel and vertical edges stay vertical across the whole image, and equal heights stay equal near and far — no vanishing points, no perspective convergence and no lens distortion. Keep it a parallel projection.',
+    );
+  } else {
+    lines.push('1. Camera: same viewpoint, perspective, focal length, framing and crop. Do not zoom, pan, rotate, tilt or re-compose.');
+  }
   if (o.viewKind === 'interior') {
     const mm = o.lensMm && o.lensMm > 0 ? Math.round(o.lensMm) : 0;
     const lens = mm ? `${mm < 17 ? 'an ultra-wide' : 'a wide'} ${mm} mm lens (full-frame equivalent)` : 'a wide-angle lens';
@@ -562,6 +604,13 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
       `Image ${o.withEdgeGuide ? 3 : 2} is the 2D floor plan of this building, for reference only: use it to understand what each room is (kitchen, bathroom, bedroom, living) and where furniture goes. Never draw the plan, its text, dimensions or hatching.`,
     );
   }
+  if (looks.length) {
+    lines.push('');
+    const which = imageList(looks);
+    lines.push(
+      `LOOK REFERENCES: ${which.charAt(0).toUpperCase()}${which.slice(1)} ${looks.length === 1 ? 'is a picture' : 'are pictures'} the client chose for the look. Take only ${looks.length === 1 ? 'its' : 'their'} materials, colours, finishes, textures and mood, and apply them to the surfaces of this model. Glass walls, glass doors and windows stay clear glass. Never copy ${looks.length === 1 ? 'its' : 'their'} layout, architecture, walls, doors, windows, furniture, camera angle or any text.`,
+    );
+  }
 
   const photoPieces = furniture ? furniture.products.filter((p) => p.photo).reduce((n, p) => n + p.count, 0) : 0;
   if (furniture) {
@@ -593,8 +642,9 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
           "Coloured stand-ins are specific products from the project's furniture schedule. The colour is only a code that tells which product it is: render the product's own design, materials and colours, never the code colour.",
         );
       }
-      if (furniture.products.some((p) => p.imageIndex)) {
-        lines.push('The pictures attached after the view are catalogue photos of single products: take only the product from each, never its background, text or framing.');
+      const productImages = furniture.products.map((p) => p.imageIndex).filter((n): n is number => !!n);
+      if (productImages.length) {
+        lines.push(`The product pictures (${imageList(productImages)}) are catalogue photos of single products: take only the product from each, never its background, text or framing.`);
       }
       for (const p of furniture.products) {
         const where = p.where ? `, ${promptText(p.where, 160)}` : '';
@@ -633,7 +683,12 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   lines.push('');
   lines.push('CHANGE ONLY: surface materials, textures, lighting, shadows, reflections and photographic realism.');
   lines.push(`Lighting: ${style.lighting}`);
-  lines.push(`Materials: ${materialsFor(style.materials ?? DEFAULT_MATERIALS, o)}`);
+  const materials = materialsFor(style.materials ?? DEFAULT_MATERIALS, o);
+  lines.push(
+    looks.length
+      ? `Materials: as in the look reference${looks.length === 1 ? '' : 's'} (${imageList(looks)}); for any surface ${looks.length === 1 ? 'it does' : 'they do'} not show: ${materials.charAt(0).toLowerCase()}${materials.slice(1)}`
+      : `Materials: ${materials}`,
+  );
   lines.push(
     furniture
       ? `Furnishing: only the furniture of the stand-ins${photoPieces ? ' and photos' : ''} above (soft cushions and a few small accessories on it are fine) — nothing else on the floors, no rugs.`

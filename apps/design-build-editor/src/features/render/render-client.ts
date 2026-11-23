@@ -3,7 +3,7 @@
 // /api/render, score the result against the model's edges, and re-render once
 // with a stricter lock (plus the edge guide) when the geometry drifted.
 
-import { RENDER_TIERS, spotsWhere, whereInView, type RenderStyleId, type RenderTierId } from './render-presets';
+import { RENDER_TIERS, getRenderStyle, referencePlan, spotsWhere, whereInView, type RenderStyleId, type RenderTierId } from './render-presets';
 import { OUTSIDE_OK, fidelityGrade, loadImage, scoreRenderFidelity, type FidelityReport } from './geometry-fidelity';
 import type { PreparedView } from './capture-view';
 import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
@@ -11,9 +11,6 @@ import { productRef } from '@/features/furniture/product-refs';
 
 /** Window event fired after each finished render (detail: RenderJobResult). */
 export const RENDER_COMPLETE_EVENT = 'db:render-complete';
-
-/** Product pictures sent with one render (the most numerous products in view first). */
-const MAX_PRODUCT_PICTURES = 4;
 
 export type RenderStageKey = 'capture' | 'send' | 'render' | 'check' | 'retry' | 'done';
 
@@ -45,6 +42,11 @@ export interface RenderJobOptions {
   debugSave?: boolean;
   /** Interior views: close the open-top rooms with a plain ceiling (default on). */
   ceiling?: boolean;
+  /**
+   * Look references (JPEG data URLs): pictures whose materials, colours and mood the
+   * render follows. As many go as the tier takes; product pictures fill the rest.
+   */
+  looks?: readonly string[];
 }
 
 export interface RenderJobResult {
@@ -63,6 +65,8 @@ export interface RenderJobResult {
   approxUsd: number;
   /** BOQ Flow products shown in the view (their stand-ins were rendered as them). */
   products?: { id: string; label: string; colour: string; count: number; withPicture: boolean }[];
+  /** Look references sent with the render. */
+  looks?: number;
 }
 
 /** What the render route needs to turn the stand-ins in view into furniture and products. */
@@ -119,8 +123,38 @@ function productPicture(url: string | undefined): Promise<string | undefined> {
   return job;
 }
 
-/** The stand-ins in view, named by product (with pictures for the main ones). */
-async function furnitureForRender(view: PreparedView): Promise<{ request: RenderFurniture; shown: NonNullable<RenderJobResult['products']> } | null> {
+/**
+ * A picture the client picked as a look reference, as a JPEG data URL of at most
+ * `maxSide` px (enough for materials and mood; keeps the request small). Null when
+ * the file is not a readable picture.
+ */
+export async function lookReference(file: Blob, maxSide = 768): Promise<string | null> {
+  if (!file.type.startsWith('image/')) return null;
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await loadImage(url);
+    const scale = Math.min(1, maxSide / Math.max(img.width, img.height, 1));
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(img.width * scale));
+    c.height = Math.max(1, Math.round(img.height * scale));
+    const ctx = c.getContext('2d');
+    if (!ctx) return null;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.82);
+  } catch {
+    return null;
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+/** The stand-ins in view, named by product (with pictures for the main ones, up to `maxPictures`). */
+async function furnitureForRender(
+  view: PreparedView,
+  maxPictures: number,
+): Promise<{ request: RenderFurniture; shown: NonNullable<RenderJobResult['products']> } | null> {
   const f = view.furniture;
   if (!f || f.standIns <= 0) return null;
   const request: RenderFurniture = {
@@ -134,7 +168,7 @@ async function furnitureForRender(view: PreparedView): Promise<{ request: Render
   for (const g of f.products.slice(0, 12)) {
     const ref = productRef(g.productId);
     if (!ref) continue;
-    const image = pictures < MAX_PRODUCT_PICTURES ? await productPicture(ref.imageUrl) : undefined;
+    const image = pictures < maxPictures ? await productPicture(ref.imageUrl) : undefined;
     if (image) pictures++;
     const where = (g.spots?.length ? spotsWhere(g.spots, g.count) : whereInView(g)).slice(0, 160);
     request.products.push({ label: ref.label, colour: ref.colour.name, kinds: g.kinds, count: g.count, where, photo: g.photo, ...(image ? { image } : {}) });
@@ -212,6 +246,7 @@ async function postRender(
   strict: boolean,
   withEdges: boolean,
   furniture: RenderFurniture | undefined,
+  looks: readonly string[],
 ): Promise<ApiOk> {
   const res = await fetch('/api/render', {
     method: 'POST',
@@ -236,8 +271,10 @@ async function postRender(
           }
         : {}),
       ...(withEdges && view.lineGuide ? { lineGuide: true } : {}),
+      ...(view.parallel ? { parallel: true } : {}),
       furnish: o.furnish,
       ...(furniture ? { furniture } : {}),
+      ...(looks.length ? { looks } : {}),
       note: o.note,
       strict,
       attempt,
@@ -271,7 +308,13 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
   const minScore = o.minScore ?? 0.6;
   let attempts = 0;
   let best: { api: ApiOk; fidelity: FidelityReport } | null = null;
-  const furniture = await furnitureForRender(view);
+  // Each tier takes so many reference pictures: the client's looks first, then products.
+  // A white presentation model takes no looks.
+  const lookUrls = getRenderStyle(o.style).materials ? [] : (o.looks ?? []).filter((u) => /^data:image\/(png|jpeg|webp);base64,/i.test(u));
+  const productsInView = view.furniture?.products.length ?? 0;
+  const plan = referencePlan(o.tier, lookUrls.length, productsInView);
+  const looks = lookUrls.slice(0, plan.looks);
+  const furniture = await furnitureForRender(view, plan.products);
 
   const run = async (strict: boolean, withEdges: boolean, base: number, cap: number) => {
     attempts++;
@@ -279,7 +322,7 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
     const stop = pacer(o, base, cap, tier.etaSec, strict ? 'Re-rendering with a stricter geometry lock…' : `Rendering photoreal with ${tier.modelLabel}…`);
     let api: ApiOk;
     try {
-      api = await postRender(view, o, attempts, strict, withEdges, furniture?.request);
+      api = await postRender(view, o, attempts, strict, withEdges, furniture?.request, looks);
     } finally {
       stop();
     }
@@ -292,9 +335,10 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
     return fidelity;
   };
 
-  // Inside views send the model's own line drawing from the start: a room seen
-  // with an ultra-wide lens is where image models most often redraw walls.
-  const first = await run(false, !!o.edgeGuideFirst || (view.viewKind === 'interior' && !!view.lineGuide), 0.1, 0.78);
+  // The model's own line drawing goes from the start, for every view: its lines are the
+  // clay model's true edges (wall corners, tops, openings), which the image model must
+  // trace. A picture's edge map (no model lines) only goes with the stricter retry.
+  const first = await run(false, !!o.edgeGuideFirst || !!view.lineGuide, 0.1, 0.78);
   // Structure outside the model is a hard geometry error, whatever the score.
   if ((o.autoRetry ?? true) && (first.score < minScore || first.outside > OUTSIDE_OK) && !o.signal?.aborted) {
     o.onStage?.({
@@ -330,6 +374,7 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
     elapsedMs: Math.round(performance.now() - t0),
     approxUsd: b.api.model === 'dry-run' ? 0 : tier.approxUsd * attempts,
     ...(furniture?.shown.length ? { products: furniture.shown } : {}),
+    ...(looks.length ? { looks: looks.length } : {}),
   };
   if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent(RENDER_COMPLETE_EVENT, { detail: result }));
   return result;

@@ -52,6 +52,8 @@ export interface PreparedView {
   pitchDeg?: number;
   /** A plain ceiling was added on top of the walls for the capture. */
   ceilingInView?: boolean;
+  /** Parallel projection (orthographic camera, e.g. an isometric view): no perspective to keep. */
+  parallel?: boolean;
   /** Furniture stand-ins in the view (from the drawing), grouped by the product they carry. */
   furniture?: FurnitureInView;
 }
@@ -599,6 +601,8 @@ export interface CaptureExtras {
   furniture: FurnitureOnScreen[] | null;
   camera: CameraFacts | null;
   ceilingInView: boolean;
+  /** The live camera is orthographic. */
+  parallel: boolean;
 }
 
 /**
@@ -636,7 +640,14 @@ export function captureBeautyPass(
   const removeCeiling = opts.ceiling ? addCaptureCeiling(v.scene) : null;
   const prevRatio = v.gl.getPixelRatio?.();
   let dataUrl = '';
-  const extras: CaptureExtras = { passes: null, openings: null, furniture: null, camera: cameraFacts(v), ceilingInView: !!removeCeiling };
+  const extras: CaptureExtras = {
+    passes: null,
+    openings: null,
+    furniture: null,
+    camera: cameraFacts(v),
+    ceilingInView: !!removeCeiling,
+    parallel: (v.camera as THREE.OrthographicCamera).isOrthographicCamera === true,
+  };
   try {
     const cssW = Math.max(canvas.clientWidth, 1);
     const cssH = Math.max(canvas.clientHeight, 1);
@@ -805,6 +816,7 @@ export async function prepareView(
     ...(openings ? { openings } : {}),
     ...(cam ? { fovDeg: cropFieldOfView(cam.fovDeg, cam.aspect, cam.principal, norm), pitchDeg: cam.pitchDeg } : {}),
     ...(extras.ceilingInView ? { ceilingInView: true } : {}),
+    ...(extras.parallel ? { parallel: true } : {}),
     ...(furniture && furniture.standIns > 0 ? { furniture } : {}),
   };
 }
@@ -907,6 +919,7 @@ export async function captureViewForRender(
     furniture: shot.furniture,
     camera: shot.camera,
     ceilingInView: shot.ceilingInView,
+    parallel: shot.parallel,
     centreOnCamera: !frame && !frameBuilding,
   });
   return opts.lensMm ? { ...view, lensMm: opts.lensMm } : view;

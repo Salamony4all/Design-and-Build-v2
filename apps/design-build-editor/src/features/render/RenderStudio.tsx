@@ -10,6 +10,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { ViewerHandle } from 'design-build-simplified-viewer-shell';
 import {
+  MAX_LOOK_REFERENCES,
+  REFERENCE_BUDGET,
   RENDER_FRAMES,
   RENDER_STYLES,
   RENDER_TIERS,
@@ -22,7 +24,7 @@ import {
 } from './render-presets';
 import { captureViewForRender, furnitureSummary, hasRenderableScene, type FrameCrop, type PreparedView } from './capture-view';
 import type { ViewArea } from '../viewer-interaction/view-navigator';
-import { renderPhotoreal, renderStatus, RenderRequestError, type RenderJobResult, type RenderStage } from './render-client';
+import { lookReference, renderPhotoreal, renderStatus, RenderRequestError, type RenderJobResult, type RenderStage } from './render-client';
 import { OUTSIDE_OK, fidelityGrade } from './geometry-fidelity';
 import { CompareSlider } from './CompareSlider';
 import styles from './RenderStudio.module.css';
@@ -50,7 +52,13 @@ export interface RenderStudioProps {
    * camera's lens on it, so the framed shot keeps a natural perspective.
    */
   onFinderChange?: (rect: { x: number; y: number; w: number; h: number } | null) => void;
+  /** Projection of the live camera: parallel for an isometric (orthographic) view. */
+  getProjection?: () => Projection;
+  /** Switch the camera to an isometric parallel view, or back to perspective. */
+  onProjectionChange?: (p: Projection) => void;
 }
+
+type Projection = 'perspective' | 'parallel';
 
 type Phase = 'form' | 'running' | 'result' | 'error';
 
@@ -113,11 +121,14 @@ export function RenderStudio({
   getViewContext,
   getFreeArea,
   onFinderChange,
+  getProjection,
+  onProjectionChange,
 }: RenderStudioProps) {
   const setOpen = onOpenChange;
   const [phase, setPhase] = useState<Phase>('form');
   const [prefs, setPrefs] = useState<Prefs>({ style: 'daylight', tier: 'fast', furnish: false, frameBuilding: true, frame: 'screen', ceiling: true });
   const [viewCtx, setViewCtx] = useState<{ interior: boolean; lensMm: number }>({ interior: false, lensMm: 0 });
+  const [projection, setProjection] = useState<Projection>('perspective');
   /** Phones: fold the panel to a slim bar so the viewfinder gets the screen. */
   const [compact, setCompact] = useState(false);
   /** Viewfinder rectangle, in canvas pixels (left/top relative to the canvas). */
@@ -133,7 +144,26 @@ export function RenderStudio({
   const [noScene, setNoScene] = useState(false);
   /** Furniture placed from the drawing (and BOQ Flow products on it): the render shows that, not AI furniture. */
   const [drawn, setDrawn] = useState<{ pieces: number; products: number }>({ pieces: 0, products: 0 });
+  /** Look references: pictures whose materials, colours and mood the render follows (kept while the page is open). */
+  const [looks, setLooks] = useState<{ id: string; url: string; name: string }[]>([]);
+  const [lookError, setLookError] = useState<string | null>(null);
+  const lookInputRef = useRef<HTMLInputElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  const addLooks = useCallback(async (files: FileList | null) => {
+    if (!files?.length) return;
+    setLookError(null);
+    const room = MAX_LOOK_REFERENCES - looks.length;
+    const picked = [...files].slice(0, Math.max(0, room));
+    const added: { id: string; url: string; name: string }[] = [];
+    for (const f of picked) {
+      const url = await lookReference(f);
+      if (url) added.push({ id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`, url, name: f.name });
+    }
+    if (added.length < picked.length) setLookError('Some files were not pictures we can read (use JPEG, PNG or WebP).');
+    else if (files.length > picked.length) setLookError(`Up to ${MAX_LOOK_REFERENCES} look references.`);
+    if (added.length) setLooks((old) => [...old, ...added].slice(0, MAX_LOOK_REFERENCES));
+  }, [looks.length]);
 
   useEffect(() => setPrefs(loadRenderPrefs()), []);
   useEffect(() => savePrefs(prefs), [prefs]);
@@ -150,12 +180,15 @@ export function RenderStudio({
     setDrawn(furnitureSummary());
     void renderStatus().then(setStatus);
     setViewCtx(getViewContext?.() ?? { interior: false, lensMm: 0 });
+    setProjection(getProjection?.() ?? 'perspective');
     const id = window.setInterval(() => {
       const c = getViewContext?.();
       if (c) setViewCtx((old) => (old.interior === c.interior && Math.round(old.lensMm) === Math.round(c.lensMm) ? old : c));
+      const p = getProjection?.();
+      if (p) setProjection(p);
     }, 500);
     return () => window.clearInterval(id);
-  }, [open, getViewerHandle, getViewContext]);
+  }, [open, getViewerHandle, getViewContext, getProjection]);
 
   // Viewfinder: the largest frame of the chosen format in the free part of the
   // 3D view, clear of this panel. The render is exactly what is inside it.
@@ -277,6 +310,7 @@ export function RenderStudio({
           furnish: prefs.furnish && furnitureSummary().pieces === 0,
           ceiling: prefs.ceiling,
           note,
+          looks: looks.map((l) => l.url),
           signal: ac.signal,
           onStage: (s) => report(s, view.dataUrl),
           debugSave: DEV_DEBUG_SAVE,
@@ -300,7 +334,7 @@ export function RenderStudio({
         onRenderProgress?.({ active: false });
       }
     },
-    [prefs, note, getViewerHandle, onRenderProgress, onRenderComplete, result, getViewContext, frameCrop],
+    [prefs, note, looks, getViewerHandle, onRenderProgress, onRenderComplete, result, getViewContext, frameCrop],
   );
 
   const tier = RENDER_TIERS[prefs.tier];
@@ -310,6 +344,19 @@ export function RenderStudio({
 
   const lensLabel = viewCtx.interior && viewCtx.lensMm ? `${Math.round(viewCtx.lensMm)} mm` : null;
   const showCompact = compact && phase === 'form';
+  const budget = REFERENCE_BUDGET[prefs.tier];
+  const clayLook = !!RENDER_STYLES.find((s) => s.id === prefs.style)?.materials;
+  const moreLooks = Object.values(RENDER_TIERS)
+    .filter((t) => REFERENCE_BUDGET[t.id].looks > budget.looks)
+    .map((t) => `${t.label} takes ${REFERENCE_BUDGET[t.id].looks}`)
+    .join(', ');
+  const lookNote = !looks.length
+    ? null
+    : clayLook
+      ? 'Not used for the white Clay model.'
+      : looks.length > budget.looks
+        ? `${tier.label} uses the first ${budget.looks === 1 ? 'one' : budget.looks}${moreLooks ? `; ${moreLooks}` : ''}.`
+        : null;
 
   return (
     <>
@@ -390,6 +437,34 @@ export function RenderStudio({
 
               {!showCompact && (
               <>
+              {onProjectionChange && !viewCtx.interior && (
+                <>
+                  <div className={styles.label}>Projection</div>
+                  <div className={`${styles.segment} ${styles.segment2}`} role="radiogroup" aria-label="Projection">
+                    {(['perspective', 'parallel'] as const).map((p) => (
+                      <button
+                        key={p}
+                        type="button"
+                        role="radio"
+                        aria-checked={projection === p}
+                        className={`${styles.segBtn} ${projection === p ? styles.active : ''}`}
+                        onClick={() => {
+                          setProjection(p);
+                          onProjectionChange(p);
+                        }}
+                        title={
+                          p === 'parallel'
+                            ? 'Parallel isometric view of the whole model: no perspective, every edge stays true'
+                            : 'The camera as you see it'
+                        }
+                      >
+                        <span>{p === 'parallel' ? 'Isometric' : 'Perspective'}</span>
+                        <small>{p === 'parallel' ? 'parallel, true edges' : 'as you see it'}</small>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
               <div className={styles.label}>Look</div>
               <div className={styles.styleGrid}>
                 {RENDER_STYLES.map((s) => (
@@ -423,6 +498,51 @@ export function RenderStudio({
                   </button>
                 ))}
               </div>
+              {prefs.tier === 'fast' && drawn.products > 0 && (
+                <p className={styles.hint}>
+                  Products render truest on <button type="button" className={styles.linkBtn} onClick={() => setPrefs((p) => ({ ...p, tier: 'balanced' }))}>Balanced</button>: it
+                  takes up to {REFERENCE_BUDGET.balanced.products} product photos (Fast {REFERENCE_BUDGET.fast.products}).
+                </p>
+              )}
+
+              <div className={styles.label}>
+                Look references <small className={styles.labelNote}>optional · materials &amp; mood only, never the layout</small>
+              </div>
+              <div className={styles.lookRow}>
+                {looks.map((l, i) => (
+                  <figure key={l.id} className={`${styles.lookThumb} ${i >= budget.looks || clayLook ? styles.lookIdle : ''}`} title={l.name}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={l.url} alt={`Look reference ${i + 1}`} />
+                    <button
+                      type="button"
+                      className={styles.lookRemove}
+                      onClick={() => setLooks((old) => old.filter((x) => x.id !== l.id))}
+                      aria-label={`Remove look reference ${i + 1}`}
+                    >
+                      ✕
+                    </button>
+                  </figure>
+                ))}
+                {looks.length < MAX_LOOK_REFERENCES && (
+                  <button type="button" className={styles.lookAdd} onClick={() => lookInputRef.current?.click()}>
+                    <span aria-hidden>＋</span>
+                    <small>Add picture</small>
+                  </button>
+                )}
+                <input
+                  ref={lookInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  multiple
+                  hidden
+                  onChange={(e) => {
+                    void addLooks(e.target.files);
+                    e.target.value = '';
+                  }}
+                />
+              </div>
+              {lookNote && <p className={styles.hint}>{lookNote}</p>}
+              {lookError && <p className={styles.warn}>{lookError}</p>}
 
               {drawn.pieces > 0 ? (
                 <p className={styles.furnished}>
@@ -568,6 +688,7 @@ export function RenderStudio({
               <p className={styles.meta}>
                 {result.modelLabel} · {(result.elapsedMs / 1000).toFixed(1)}s
                 {result.attempts > 1 ? ` · ${result.attempts} attempts` : ''} · ~${result.approxUsd.toFixed(2)}
+                {result.looks ? ` · ${result.looks} look reference${result.looks === 1 ? '' : 's'}` : ''}
               </p>
               <div className={styles.label}>Try another look (same view)</div>
               <div className={styles.styleRow}>

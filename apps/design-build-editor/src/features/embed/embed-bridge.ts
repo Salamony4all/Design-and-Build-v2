@@ -61,6 +61,8 @@ export interface EmbedProduct {
   imageUrl?: string;
   /** Size in metres when BOQ Flow knows it (width, depth, height). */
   dims?: { w?: number; d?: number; h?: number };
+  /** A custom item: the drawn furniture type it stands in for (from `furniture-ready`). */
+  typeId?: string;
 }
 
 export type ParentMessage =
@@ -71,7 +73,11 @@ export type ParentMessage =
   | { type: 'render' }
   /** Show where one product stands in the model (null: the whole model again). */
   | { type: 'focus-product'; productId: string | null }
+  /** Show where the pieces of one drawn furniture type stand (null: the whole model again). */
+  | { type: 'focus-type'; typeId: string | null }
   | { type: 'ping' };
+
+const TYPE_ID = /^[\w-]{1,40}$/;
 
 const str = (v: unknown, max: number): string | undefined =>
   typeof v === 'string' && v.trim() ? v.trim().slice(0, max) : undefined;
@@ -106,6 +112,7 @@ function parseProduct(v: unknown, i: number): EmbedProduct | null {
     model: str(p.model, 300),
     imageUrl: productPicture(p.imageUrl),
     dims: dims ? { w: metres(dims.w), d: metres(dims.d), h: metres(dims.h) } : undefined,
+    typeId: typeof p.typeId === 'string' && TYPE_ID.test(p.typeId) ? p.typeId : undefined,
   };
 }
 
@@ -139,6 +146,9 @@ export function parseParentMessage(data: unknown): ParentMessage | null {
       return typeof m.productId === 'string' && m.productId.length > 0 && m.productId.length <= 100
         ? { type: 'focus-product', productId: m.productId }
         : null;
+    case 'focus-type':
+      if (m.typeId === null) return { type: 'focus-type', typeId: null };
+      return typeof m.typeId === 'string' && TYPE_ID.test(m.typeId) ? { type: 'focus-type', typeId: m.typeId } : null;
     case 'ping':
       return { type: 'ping' };
     default:
@@ -180,6 +190,8 @@ export interface EmbedHandlers {
   render?: () => void;
   /** Show where a product stands in the model (null: the whole model). */
   focusProduct?: (productId: string | null) => void;
+  /** Show where the pieces of a drawn furniture type stand (null: the whole model). */
+  focusType?: (typeId: string | null) => void;
   /** The parent asks again whether we are there (for example after it re-opened its modal). */
   ping?: () => void;
 }
@@ -219,6 +231,7 @@ export function useEmbedBridge(enabled: boolean, handlers: EmbedHandlers) {
       else if (msg.type === 'artifacts') h.artifacts?.(msg.requestId);
       else if (msg.type === 'render') h.render?.();
       else if (msg.type === 'focus-product') h.focusProduct?.(msg.productId);
+      else if (msg.type === 'focus-type') h.focusType?.(msg.typeId);
       else if (msg.type === 'ping') h.ping?.();
     };
     window.addEventListener('message', onMessage);
