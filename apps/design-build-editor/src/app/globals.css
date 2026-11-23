@@ -2994,8 +2994,8 @@ button { cursor: pointer; }
    ≤720 px wide   phones (portrait): toolbar sits above the prompt bar, the
                   selection card becomes a bottom sheet, the build card spans
                   the width under the header
-   ≤520 px tall   phones on their side: slim header, toolbar top-left,
-                  compact cards
+   ≤520 px tall   phones on their side (wider than tall): slim header,
+                  toolbar top-left, compact cards
    ========================================================================= */
 @media (max-width: 1180px) {
   .db-bc, .db-bc-pill, .db-export { top: 122px; }
@@ -3061,7 +3061,7 @@ button { cursor: pointer; }
   .pro-overlay__top-toolbar .db-toolbar.is-horizontal button { flex: none; }
 }
 
-@media (max-height: 520px) {
+@media (max-height: 520px) and (min-aspect-ratio: 5/4) {
   .db-header { height: 46px; padding: 0 10px; }
   .db-brand span:last-child { display: none; }
   .db-mark { width: 28px; height: 28px; border-radius: 8px; font-size: 11px; }
@@ -3106,7 +3106,7 @@ button { cursor: pointer; }
   .db-dialog.db-ais { max-height: calc(100dvh - 12px); }
   .db-gemini-left-drawer { top: 52px; bottom: calc(var(--db-dock-top, 56px) + 6px); }
 }
-@media (max-height: 520px) and (max-width: 760px) {
+@media (max-height: 520px) and (max-width: 760px) and (min-aspect-ratio: 5/4) {
   .db-toolbar--main .db-tb-desk { display: none; }
 }
 @media (max-width: 374px) {
@@ -3121,7 +3121,7 @@ button { cursor: pointer; }
   .db-gemini-input { font-size: 16px; }
   .db-props .db-icon-btn { width: 34px; height: 34px; }
 }
-@media (pointer: coarse) and (max-height: 520px) {
+@media (pointer: coarse) and (max-height: 520px) and (min-aspect-ratio: 5/4) {
   .db-toolbar.is-horizontal button { min-width: 36px; min-height: 36px; }
 }
 
@@ -3148,3 +3148,71 @@ button { cursor: pointer; }
   animation: db-embed-spin 0.9s linear infinite;
 }
 @keyframes db-embed-spin { to { transform: rotate(360deg); } }
+
+/* ── Renders open: one composer (the Renders thread's), and on phones the view
+   toolbar moves to the top, above the Renders sheet. ── */
+.db-chat-slot.is-hidden { display: none; }
+@media (max-width: 720px) {
+  .db-stage.has-render .db-toolbar--main.is-horizontal { top: 58px; bottom: auto; }
+  .db-stage.has-render .db-nav-hint { display: none; }
+}
+
+/* The render progress strip in the prompt bar opens Renders. */
+button.db-render-strip { font: inherit; color: inherit; text-align: left; cursor: pointer; }
+button.db-render-strip:disabled { cursor: default; }
+
+/* ── Walk mode: the stick (touch screens) ── */
+.db-walkpad {
+  position: absolute;
+  left: calc(16px + env(safe-area-inset-left, 0px));
+  bottom: calc(var(--db-dock-top, 76px) + 16px);
+  z-index: 27;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  touch-action: none;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.db-walkpad__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  background: radial-gradient(circle, rgba(23, 33, 56, 0.08) 0%, rgba(23, 33, 56, 0.26) 100%);
+  box-shadow: 0 6px 22px rgba(16, 24, 48, 0.22);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.db-walkpad__knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffffff, #eef2ff);
+  box-shadow: 0 3px 12px rgba(16, 24, 48, 0.3), inset 0 0 0 2px rgba(45, 102, 246, 0.35);
+  transition: transform 160ms var(--ease, ease-out);
+}
+.db-walkpad.is-active .db-walkpad__ring { border-color: #fff; }
+@media (pointer: fine) {
+  .db-walkpad { display: none; }
+}
+@media (max-width: 720px) {
+  /* Above the view toolbar, which sits above the prompt bar. */
+  .db-walkpad { bottom: calc(var(--db-dock-top, 66px) + 62px); left: calc(12px + env(safe-area-inset-left, 0px)); width: 104px; height: 104px; }
+  .db-nav-hint--walk { bottom: calc(var(--db-dock-top, 66px) + 176px); }
+}
+@media (max-height: 520px) and (min-aspect-ratio: 5/4) {
+  .db-walkpad { bottom: calc(var(--db-dock-top, 56px) + 10px); width: 96px; height: 96px; }
+}
+
+/* ── Inside BOQ Flow's modal on a phone: a slimmer header, more room for the model. ── */
+@media (max-width: 720px) {
+  .db-stage.is-embedded .db-header { height: 46px; }
+  .db-stage.is-embedded.has-render .db-toolbar--main.is-horizontal { top: 52px; }
+}

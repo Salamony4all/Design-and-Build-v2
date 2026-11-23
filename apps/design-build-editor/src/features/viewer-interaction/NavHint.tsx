@@ -7,7 +7,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Hand, X } from 'lucide-react';
 
-const KEYS = { orbit: 'db.hint.nav.v1', walk: 'db.hint.walk.v1' } as const;
+const KEYS = { orbit: 'db.hint.nav.v1', walk: 'db.hint.walk.v2' } as const;
 
 const TIPS = {
   orbit: {
@@ -15,7 +15,7 @@ const TIPS = {
     mouse: ['Drag to turn', 'Scroll to zoom', 'Right-drag to move', 'Double-click to focus'],
   },
   walk: {
-    touch: ['Drag to look around', 'Two fingers to move', 'Pinch for a wider lens', 'Double-tap to walk there'],
+    touch: ['Drag to look around', 'Stick to walk', 'Tap the floor to go there', 'Pinch for the lens'],
     mouse: ['Drag to look around', 'Right-drag or scroll to move', 'W A S D to walk', 'Double-click to walk there'],
   },
 } as const;
@@ -62,7 +62,7 @@ export function NavHint({ visible, variant = 'orbit' }: { visible: boolean; vari
   if (!show || !visible) return null;
   const tips = touch ? TIPS[variant].touch : TIPS[variant].mouse;
   return (
-    <div className="db-nav-hint" role="status">
+    <div className={`db-nav-hint ${variant === 'walk' ? 'db-nav-hint--walk' : ''}`} role="status">
       <Hand size={15} aria-hidden />
       <span>
         {tips.map((t, i) => (

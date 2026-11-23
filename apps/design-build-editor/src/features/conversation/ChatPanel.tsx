@@ -1,10 +1,12 @@
 // features/conversation/ChatPanel.tsx
 // Start screen (upload a plan or start from scratch), then a bottom prompt bar
-// with an activity drawer. Build progress lives in the build card (top right).
+// with an activity drawer. Build progress lives in the build card (top right);
+// renders live in the Renders thread (the prompt bar shows a render's progress
+// while that thread is closed, and opens it on a tap).
 // MUST NOT import: MuPDF, Pascal schemas, useScene, scene mutation bridges, rendering-provider HTTP.
 
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Sparkles, MessageSquare, PanelLeftClose, PanelLeft, AlertTriangle, X } from 'lucide-react';
 import type { ChatCommand, ChatEvent, AttachmentRef } from 'design-build-conversation-core';
 import { MessageList } from './MessageList';
@@ -67,10 +69,18 @@ export interface ChatPanelProps {
   onTakeSnapshot?: () => Promise<AttachmentRef | AttachmentRef[] | null>;
   /** Opens the photoreal render panel (set once a model is built). */
   onQuickRender?: () => void;
+  /** Opens the Renders thread (from the render progress strip). */
+  onOpenRenders?: () => void;
+  /** The Activity drawer opened or closed. */
+  onDrawerChange?: (open: boolean) => void;
 }
 
 export function ChatPanel(props: ChatPanelProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { onDrawerChange } = props;
+  useEffect(() => {
+    onDrawerChange?.(drawerOpen);
+  }, [drawerOpen, onDrawerChange]);
   const [dismissedError, setDismissedError] = useState(-1);
   const [method, setMethod] = useState<'geometric' | 'ai'>(props.method ?? 'geometric');
   const handleMethod = (m: 'geometric' | 'ai') => { setMethod(m); props.onMethodChange?.(m); };
@@ -131,12 +141,20 @@ export function ChatPanel(props: ChatPanelProps) {
 
         <div className={`db-gemini-dock-root ${isBusy ? 'is-working' : ''}`}>
           {rp?.isRendering && (
-            <div className="db-render-strip" role="status" aria-live="polite">
+            <button
+              type="button"
+              className="db-render-strip"
+              role="status"
+              aria-live="polite"
+              onClick={props.onOpenRenders}
+              disabled={!props.onOpenRenders}
+              title="Open Renders"
+            >
               <Sparkles size={14} className="db-render-strip__icon" aria-hidden />
               <span className="db-render-strip__text">{rp.stageName || 'Rendering your view…'}</span>
               <span className="db-render-strip__pct">{renderPercent}%</span>
               <span className="db-render-strip__bar" aria-hidden><span style={{ width: `${renderPercent}%` }} /></span>
-            </div>
+            </button>
           )}
 
           {errorEvent && errorEvent.type === 'error' && (

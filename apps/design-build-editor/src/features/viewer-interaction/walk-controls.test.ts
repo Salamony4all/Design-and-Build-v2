@@ -119,26 +119,89 @@ describe('WalkControls', () => {
     expect(look.z).toBeLessThan(-0.99);
   });
 
-  it('walks on a quick double tap, by input time, and not on two slow taps', async () => {
+  it('walks on one tap on a touch screen, and ignores taps while it walks there', async () => {
+    const pick = vi.fn(() => ({ point: new THREE.Vector3(10, 0, 8), normal: new THREE.Vector3(0, 1, 0) }));
+    let finish: () => void = () => {};
+    const glides: unknown[] = [];
+    const { host } = fakeHost({
+      pick,
+      glide: (to) => {
+        glides.push(to);
+        return new Promise<void>((r) => { finish = r; });
+      },
+    });
+    const w = new WalkControls(host) as unknown as { active: boolean; onDown: (e: unknown) => void; onUp: (e: unknown) => void };
+    w.active = true;
+    const ev = (id: number, timeStamp: number) => ({ pointerId: id, clientX: 200, clientY: 440, pointerType: 'touch', buttons: 0, timeStamp });
+    w.onDown(ev(1, 1000));
+    w.onUp(ev(1, 1150));
+    expect(pick).toHaveBeenCalledTimes(1);
+    expect(glides).toHaveLength(1);
+    // A second tap while gliding there is not a second walk.
+    w.onDown(ev(2, 1300));
+    w.onUp(ev(2, 1400));
+    expect(pick).toHaveBeenCalledTimes(1);
+    finish();
+    await Promise.resolve();
+    await Promise.resolve();
+    // A long press is not a tap.
+    w.onDown(ev(3, 3000));
+    w.onUp(ev(3, 3600));
+    expect(pick).toHaveBeenCalledTimes(1);
+  });
+
+  it('walks on a quick double click with a mouse, by input time, and not on two slow clicks', async () => {
     const pick = vi.fn(() => ({ point: new THREE.Vector3(10, 0, 8), normal: new THREE.Vector3(0, 1, 0) }));
     const { host, glides } = fakeHost({ pick });
     const w = new WalkControls(host) as unknown as { active: boolean; onDown: (e: unknown) => void; onUp: (e: unknown) => void };
     w.active = true;
-    const ev = (id: number, timeStamp: number) => ({ pointerId: id, clientX: 200, clientY: 440, pointerType: 'touch', buttons: 0, timeStamp });
-    // Second press 200 ms after the first release (presses of 150 ms, as a busy phone reports them).
+    const ev = (id: number, timeStamp: number) => ({ pointerId: id, clientX: 200, clientY: 440, pointerType: 'mouse', buttons: 0, timeStamp });
+    // Second press 200 ms after the first release (presses of 150 ms, as a busy computer reports them).
     w.onDown(ev(1, 1000));
     w.onUp(ev(1, 1150));
+    expect(pick).toHaveBeenCalledTimes(0);
     w.onDown(ev(2, 1350));
     w.onUp(ev(2, 1500));
     await Promise.resolve();
     expect(pick).toHaveBeenCalledTimes(1);
     expect(glides).toHaveLength(1);
-    // A longer pause than DOUBLE_TAP_MS: two single taps.
+    // A longer pause than DOUBLE_TAP_MS: two single clicks.
     w.onDown(ev(3, 3000));
     w.onUp(ev(3, 3100));
     w.onDown(ev(4, 3100 + DOUBLE_TAP_MS + 50));
     w.onUp(ev(4, 3100 + DOUBLE_TAP_MS + 120));
     expect(pick).toHaveBeenCalledTimes(1);
+  });
+
+  it('walks with the on-screen stick, faster the further it is tilted, and stops when let go', () => {
+    const { host, camera } = fakeHost();
+    camera.position.set(5, EYE_HEIGHT, 10);
+    camera.quaternion.copy(quaternionFromYawPitch(0, 0));
+    camera.updateMatrixWorld();
+    const frames: FrameRequestCallback[] = [];
+    const g = globalThis as unknown as { requestAnimationFrame?: (cb: FrameRequestCallback) => number };
+    const prevRaf = g.requestAnimationFrame;
+    g.requestAnimationFrame = (cb) => { frames.push(cb); return frames.length; };
+    const now = vi.spyOn(performance, 'now').mockReturnValue(0);
+    try {
+      const w = new WalkControls(host);
+      (w as unknown as { active: boolean }).active = true;
+      w.setStick(1, 0);
+      frames.shift()?.(100); // 0.1 s at full tilt, facing −Z
+      const full = 10 - w.position.z;
+      expect(full).toBeGreaterThan(0.15);
+      w.setStick(0.5, 0);
+      frames.shift()?.(200);
+      expect(10 - full - w.position.z).toBeCloseTo(full / 2, 6);
+      w.setStick(0, 0);
+      const z = w.position.z;
+      frames.shift()?.(300);
+      expect(w.position.z).toBe(z);
+      expect(frames).toHaveLength(0);
+    } finally {
+      g.requestAnimationFrame = prevRaf;
+      now.mockRestore();
+    }
   });
 
   it('snaps a nearly level view to level', () => {

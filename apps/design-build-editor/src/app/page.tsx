@@ -38,6 +38,7 @@ import { ProviderSettingsPanel } from '@/features/conversation/ProviderSelector'
 import { SlidersHorizontal } from 'lucide-react';
 import { AiExtractionControls, useAiProviderRegistry } from '@/features/ai-extraction';
 import { ViewerToolbar } from '@/features/viewer-interaction/ViewerToolbar';
+import { WalkPad } from '@/features/viewer-interaction/WalkPad';
 import { SelectionPropertiesPanel } from '@/features/viewer-interaction/SelectionPropertiesPanel';
 import { KeyboardElementControls } from '@/features/viewer-interaction/KeyboardElementControls';
 import { BuildProgressRail } from '@/features/progressive-build/BuildProgressRail';
@@ -56,11 +57,10 @@ import { ExportRail, filterCommercialNodes } from '@/features/project-export/Exp
 import { isEmbedded, useEmbedBridge, countSceneNodes, type EmbedProduct } from '@/features/embed/embed-bridge';
 import { selectDoorInstallerInput, type RuntimeWallMap } from '@/features/door-pilot/door-boundary';
 import { getPascalStores, ensureBuiltinPluginLoaded, type ViewerHandle } from 'design-build-simplified-viewer-shell';
-import { RenderStudio, loadRenderPrefs } from '@/features/render/RenderStudio';
-import { prepareView, currentViewKind, captureViewForRender, furnitureSummary, readPlanUnderlay, type PreparedView } from '@/features/render/capture-view';
-import { RENDER_COMPLETE_EVENT, renderPhotoreal, type RenderJobResult } from '@/features/render/render-client';
+import { RenderStudio, type RenderProgressInfo } from '@/features/render/RenderStudio';
+import { captureViewForRender, readPlanUnderlay } from '@/features/render/capture-view';
+import { RENDER_COMPLETE_EVENT, type RenderJobResult } from '@/features/render/render-client';
 import { productRefs } from '@/features/furniture/product-refs';
-import { RENDER_TIERS, getRenderStyle, styleFromText, furnishFromText } from '@/features/render/render-presets';
 import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
 import { useEditorMode } from '@/features/pro/useEditorMode';
 import { ProEditorLazy } from '@/features/pro/ProEditorLazy';
@@ -3112,105 +3112,37 @@ export default function Home() {
   const lastRenderRef = useRef<RenderJobResult | null>(null);
   const getViewerHandle = useCallback(() => viewerHandleRef.current, []);
 
+  // Renders live in one place, the Renders thread; the last one is kept for reference.
   const handleRenderComplete = useCallback((r: RenderJobResult) => {
     lastRenderRef.current = r;
-    const pct = Math.round(r.fidelity.score * 100);
-    push({
-      type: 'message',
-      role: 'assistant',
-      id: nid(),
-      text: `Photoreal render ready — ${getRenderStyle(r.style).label}, geometry match ${pct}% (${r.modelLabel}). Drag the Compare slider to check every wall and opening.`,
-      renderResult: {
-        renderId: r.renderId,
-        status: 'done',
-        progress: 1,
-        previewUrl: r.imageUrl,
-        downloadUrl: r.imageUrl,
-        snapshotUrl: r.view.dataUrl,
-        planUrl: r.planDataUrl,
-        overlayUrl: r.view.edgeOverlayUrl,
-        message: `${r.modelLabel} geometry-locked render`,
-        providerId: r.model,
-        modelLabel: r.modelLabel,
-        styleId: r.style,
-        fidelity: r.fidelity.score,
-        mimeType: r.mimeType,
-      },
-    });
-  }, [push]);
+  }, []);
 
-  const runChatRender = useCallback(async (o: { sourceUrl?: string; reuseView?: PreparedView; text: string }) => {
-    const prefs = loadRenderPrefs();
-    const tier = RENDER_TIERS[prefs.tier];
-    const style = styleFromText(o.text);
-    // Furniture placed from the drawing is rendered as it stands: the AI adds none of its own.
-    const furnish = (prefs.furnish || furnishFromText(o.text)) && furnitureSummary().pieces === 0;
-    setRenderProgress({ isRendering: true, progress: 0.03, stageName: 'Preparing your 3D view…', snapshotUrl: o.reuseView?.dataUrl ?? o.sourceUrl, modelLabel: tier.modelLabel });
-    try {
-      const view = o.reuseView ?? (await prepareView(o.sourceUrl as string, currentViewKind(viewerHandleRef.current)));
-      const r = await renderPhotoreal(view, {
-        style,
-        tier: prefs.tier,
-        furnish,
-        ceiling: prefs.ceiling,
-        note: o.text,
-        onStage: (st) => setRenderProgress({ isRendering: true, progress: st.progress, stageName: st.label, snapshotUrl: view.dataUrl, modelLabel: tier.modelLabel }),
-        debugSave: process.env.NODE_ENV !== 'production',
-      });
-      handleRenderComplete(r);
-    } catch (e) {
-      push({ type: 'error', message: e instanceof Error ? e.message : String(e) });
-    } finally {
-      setRenderProgress((prev) => ({ ...prev, isRendering: false, progress: 0, stageName: '' }));
-    }
-  }, [push, handleRenderComplete]);
+  // A prompt for a render (typed in the main prompt bar) goes to the Renders thread.
+  const [renderRequest, setRenderRequest] = useState<{ id: number; text: string } | null>(null);
+  // The Renders thread's progress shows in the prompt bar while the thread is closed.
+  const onStudioProgress = useCallback((p: RenderProgressInfo) => {
+    setRenderProgress(
+      p.active
+        ? { isRendering: true, progress: p.stage?.progress ?? 0.03, stageName: p.stage?.label ?? 'Rendering your view…', snapshotUrl: p.snapshotUrl, modelLabel: p.modelLabel }
+        : { isRendering: false, progress: 0, stageName: '' },
+    );
+  }, []);
 
   const onCommand = useCallback((cmd: ChatCommand) => {
     if (cmd.type === 'send-message') {
-      const snapshotAtt = cmd.attachments?.find((a) => a.kind === 'image' && a.name.toLowerCase().includes('3d view'))
-        ?? cmd.attachments?.find((a) => a.kind === 'image');
-      const planAtt = cmd.attachments?.find((a) => a.id !== snapshotAtt?.id && (
-        a.name.toLowerCase().includes('plan') ||
-        a.name.toLowerCase().includes('drawing') ||
-        a.name.toLowerCase().includes('guide') ||
-        a.kind === 'pdf'
-      ));
-
-      push({ type: 'message', role: 'user', id: nid(), text: cmd.text, attachments: cmd.attachments });
-
-      if (snapshotAtt) {
-        // Real geometry-locked render of the attached 3D snapshot.
-        let snapshotUrl: string | undefined = snapshotAtt.dataUrl;
-        if (!snapshotUrl) {
-          const file = attachmentRepository.get(snapshotAtt.id);
-          if (file) snapshotUrl = URL.createObjectURL(file);
-        }
-        if (snapshotUrl) void runChatRender({ sourceUrl: snapshotUrl, text: cmd.text });
-        else push({ type: 'error', message: 'Could not read the 3D snapshot. Capture it again and resend.' });
-      } else if (lastRenderRef.current && RENDER_TWEAK.test(cmd.text)) {
-        // Follow-up on the last render ("golden hour", "marble floors"…): same view, new look.
-        void runChatRender({ reuseView: lastRenderRef.current.view, text: cmd.text });
-      } else if (RENDER_TWEAK.test(cmd.text) && sceneHasWallsNow()) {
-        // A render request with no earlier render: capture the current view, then render it.
-        void (async () => {
-          try {
-            const rp = loadRenderPrefs();
-            const walking = viewModeRef.current === 'walk';
-            const view = await captureViewForRender(viewerHandleRef.current, {
-              frameBuilding: rp.frameBuilding,
-              ...(walking ? { viewKind: 'interior' as const, lensMm: walkLensRef.current, ceiling: rp.ceiling } : {}),
-            });
-            await runChatRender({ reuseView: view, text: cmd.text });
-          } catch (e) {
-            push({ type: 'error', message: e instanceof Error ? e.message : 'Could not capture the 3D view. Try the Render button.' });
-          }
-        })();
-      } else {
-        const reply = sceneHasWallsNow()
-          ? 'I can render this model: try "golden hour with oak floors", or press Render. To work on another plan, upload it with +.'
-          : 'Upload a floor plan with + and I will build the 3D model.';
-        setTimeout(() => push({ type: 'message', role: 'assistant', id: nid(), text: reply }), 250);
+      // Renders live in one place: a render prompt (or a 3D snapshot) goes to the
+      // Renders thread, which renders it with its own settings and keeps it there.
+      const wantsRender = RENDER_TWEAK.test(cmd.text) || !!cmd.attachments?.some((a) => a.kind === 'image');
+      if (wantsRender && sceneHasWallsNow()) {
+        setRenderStudioOpen(true);
+        setRenderRequest({ id: Date.now(), text: cmd.text });
+        return;
       }
+      push({ type: 'message', role: 'user', id: nid(), text: cmd.text, attachments: cmd.attachments });
+      const reply = sceneHasWallsNow()
+        ? 'I can render this model: press ✨ Render, or describe it, e.g. "golden hour with oak floors". To work on another plan, upload it with +.'
+        : 'Upload a floor plan with + and I will build the 3D model.';
+      setTimeout(() => push({ type: 'message', role: 'assistant', id: nid(), text: reply }), 250);
     }
     if (cmd.type === 'start-frozen-import') {
       // The sample is a real vector PDF run through the same pipeline as an upload.
@@ -3263,7 +3195,7 @@ export default function Home() {
       push({ type: 'render-started', renderId: 'mock-render-1' });
       setTimeout(() => push({ type: 'render-complete', result: { renderId: 'mock-render-1', status: 'done', progress: 1, providerId: selection.render, message: 'Mock render complete' } }), 1200);
     }
-  }, [push, selection, startFrozenImport, runLiveGeometricExtraction, runChatRender]);
+  }, [push, selection, startFrozenImport, runLiveGeometricExtraction]);
 
   const onSelectModel = useCallback((slot: 'chat' | 'extraction' | 'render', id: string) => {
     setSelection((s) => ({ ...s, [slot]: id }));
@@ -3492,6 +3424,10 @@ export default function Home() {
   const [completionDismissed, setCompletionDismissed] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [renderStudioOpen, setRenderStudioOpen] = useState(false);
+  /** The Renders thread is folded to a bar (phones: to frame the shot). */
+  const [studioFolded, setStudioFolded] = useState(false);
+  /** The Activity drawer of the prompt bar is open. */
+  const [activityOpen, setActivityOpen] = useState(false);
   // An isometric camera set for a render goes back to perspective when the panel closes.
   useEffect(() => {
     if (!renderStudioOpen && parallelSetRef.current) setViewerProjection('perspective');
@@ -3571,6 +3507,11 @@ export default function Home() {
       ? (aiSettled ? 'project-ready' : (progActive ? 'building' : 'idle'))
       : terminalState,
   };
+
+  // Walk mode's on-screen stick drives the walk controls.
+  const onWalkStick = useCallback((fwd: number, side: number) => {
+    walkRef.current?.controls.setStick(fwd, side);
+  }, []);
 
   // ── BOQ Flow express mode ──────────────────────────────────────────────────
   // Inside BOQ Flow's "Design & Build" modal (an iframe, ?embed=boqflow) the plan
@@ -3806,6 +3747,36 @@ export default function Home() {
     window.addEventListener(RENDER_COMPLETE_EVENT, onRender);
     return () => window.removeEventListener(RENDER_COMPLETE_EVENT, onRender);
   }, [embedded]);
+  // What the user is doing here, for BOQ Flow's modal: it tucks its status away
+  // while the user chats, types a prompt or watches a render come in.
+  const [composing, setComposing] = useState(false);
+  useEffect(() => {
+    if (!embedded) return;
+    const isField = (t: EventTarget | null) =>
+      t instanceof HTMLElement &&
+      (t.tagName === 'TEXTAREA' || t.isContentEditable || (t instanceof HTMLInputElement && /^(text|search)$/i.test(t.type)));
+    const onIn = (e: FocusEvent) => {
+      if (isField(e.target)) setComposing(true);
+    };
+    const onOut = (e: FocusEvent) => {
+      if (isField(e.target)) setComposing(false);
+    };
+    document.addEventListener('focusin', onIn);
+    document.addEventListener('focusout', onOut);
+    return () => {
+      document.removeEventListener('focusin', onIn);
+      document.removeEventListener('focusout', onOut);
+    };
+  }, [embedded]);
+  useEffect(() => {
+    if (!embedded) return;
+    embedPost('ui', {
+      panel: renderStudioOpen ? (studioFolded ? 'renders-folded' : 'renders') : activityOpen ? 'activity' : null,
+      composing,
+      rendering: renderProgress.isRendering,
+      walking: viewMode === 'walk',
+    });
+  }, [embedded, embedPost, renderStudioOpen, studioFolded, activityOpen, composing, renderProgress.isRendering, viewMode]);
   const embedEventsSeen = useRef(0);
   useEffect(() => {
     if (!embedded) return;
@@ -4158,7 +4129,14 @@ export default function Home() {
   }), [onCommand, events, selection, onSelectModel, docked, importing, extractionBusy, buildProgress, aiExtractionControls, aiRegistry.canRunAiExtraction]);
 
   return (
-    <main className={embedded ? 'db-stage is-embedded' : 'db-stage'}>
+    <main
+      className={[
+        'db-stage',
+        embedded ? 'is-embedded' : '',
+        renderStudioOpen ? 'has-render' : '',
+        renderStudioOpen && studioFolded ? 'has-render-folded' : '',
+      ].filter(Boolean).join(' ')}
+    >
       <div className="db-aurora a1" aria-hidden />
       <div className="db-aurora a2" aria-hidden />
 
@@ -4275,6 +4253,9 @@ export default function Home() {
                   getViewerHandle={getViewerHandle}
                   onOpenSettings={() => setSettingsOpen(true)}
                   onRenderComplete={handleRenderComplete}
+                  onRenderProgress={onStudioProgress}
+                  request={renderRequest}
+                  onFoldChange={setStudioFolded}
                 />
               )}
             </PascalViewerShell>
@@ -4331,6 +4312,8 @@ export default function Home() {
       {/* One-time tip on moving around the model. */}
       <NavHint visible={!!readyKey && docked && sceneHasWalls && !proMode && !proMounting && !settingsOpen && viewMode !== 'walk'} />
       <NavHint variant="walk" visible={viewMode === 'walk' && !proMode && !proMounting && !settingsOpen} />
+      {/* Walk mode on a touch screen: a stick to walk with (a tap on the floor walks there too). */}
+      {viewMode === 'walk' && !proMode && !proMounting && !renderStudioOpen && <WalkPad onStick={onWalkStick} />}
 
       {/* Viewer toolbar: shown once there is a model to look at. */}
       {!proMode && !proMounting && docked && sceneHasWalls && (
@@ -4447,7 +4430,7 @@ export default function Home() {
       )}
 
       {!proMode && !proMounting && (
-      <div className="db-chat-slot">
+      <div className={`db-chat-slot ${renderStudioOpen ? 'is-hidden' : ''}`}>
         <ChatPanel
           {...props}
           method={extractMethod}
@@ -4458,6 +4441,8 @@ export default function Home() {
           onQuickRender={sceneHasWalls ? () => setRenderStudioOpen(true) : undefined}
           renderProgress={renderProgress}
           extractionProgress={extractionProgress}
+          onOpenRenders={sceneHasWalls ? () => setRenderStudioOpen(true) : undefined}
+          onDrawerChange={setActivityOpen}
         />
       </div>
       )}

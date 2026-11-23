@@ -1,10 +1,11 @@
 // features/viewer-interaction/walk-controls.ts
 // Walk mode for the 3D viewer: stand inside the model at eye height and look
-// around like a photographer. One finger (or the mouse) turns the view, two
-// fingers drag the floor to move and pinch to change the lens, right-drag or
-// the wheel moves on a computer, W A S D walk, and a double tap walks to that
-// spot (a floor) or up to it (a wall). The orbit controls are switched off
-// meanwhile. Pure Three.js + DOM.
+// around like a photographer. One finger (or the mouse) turns the view, a tap
+// on a touch screen (a double click with a mouse) walks to that spot (a floor)
+// or up to it (a wall), the on-screen stick walks (setStick), two fingers drag
+// the floor and pinch to change the lens, right-drag or the wheel moves on a
+// computer, and W A S D walk. The orbit controls are switched off meanwhile.
+// Pure Three.js + DOM.
 
 import * as THREE from 'three';
 import { MAX_LENS_MM, MIN_LENS_MM, type Aabb } from './view-navigator';
@@ -16,6 +17,8 @@ export const MAX_PITCH = THREE.MathUtils.degToRad(80);
 export const LEVEL_SNAP = THREE.MathUtils.degToRad(3);
 const WALK_SPEED = 1.4;
 const RUN_SPEED = 3.5;
+/** The on-screen stick at full tilt (metres per second): a brisk walk, slower near the centre. */
+const STICK_SPEED = 2.2;
 /** Distance kept from a wall when a double tap walks up to it. */
 const WALL_STANDOFF = 0.9;
 
@@ -209,8 +212,10 @@ export interface WalkHost {
 
 interface PointerInfo { x: number; y: number; type: string; buttons: number }
 
-/** Longest gap between the first release and the second press of a double tap. */
+/** Longest gap between the first release and the second press of a double click. */
 export const DOUBLE_TAP_MS = 300;
+/** Longest press that still counts as a tap. */
+const TAP_MS = 350;
 
 /** When the input happened (falls back to now for synthetic events). */
 function eventTime(e: Event): number {
@@ -224,9 +229,13 @@ export class WalkControls {
   private active = false;
   private pointers = new Map<number, PointerInfo>();
   private pinch: { d0: number; lens0: number; cx: number; cy: number } | null = null;
-  private down: { x: number; y: number; t: number; moved: boolean; multi: boolean } | null = null;
+  private down: { x: number; y: number; t: number; moved: boolean; multi: boolean; touch: boolean } | null = null;
   private lastTap: { x: number; y: number; t: number } | null = null;
+  /** A tap's walk is under way: taps meanwhile are ignored, so one tap is one walk. */
+  private going = false;
   private keys = new Set<string>();
+  /** On-screen stick: forward and right, each −1…1. */
+  private stick = { fwd: 0, side: 0 };
   private raf = 0;
   private lastFrame = 0;
 
@@ -270,6 +279,7 @@ export class WalkControls {
     this.pointers.clear();
     this.pinch = null;
     this.keys.clear();
+    this.stick = { fwd: 0, side: 0 };
     cancelAnimationFrame(this.raf);
     this.raf = 0;
   }
@@ -321,10 +331,39 @@ export class WalkControls {
     return this.host.glide({ position: this.position.clone(), quaternion: quaternionFromYawPitch(this.yaw, this.pitch) }, 420);
   }
 
-  /** Double tap: walk to a floor spot, or up to a wall and face it. */
+  /** A tap (double click): walk to a floor spot, or up to a wall and face it. */
   async goTo(clientX: number, clientY: number): Promise<void> {
     const hit = this.host.pick(clientX, clientY);
     if (!hit) return;
+    this.going = true;
+    try {
+      await this.walkTo(hit);
+    } finally {
+      this.going = false;
+    }
+  }
+
+  /**
+   * The on-screen stick: forward and right, each −1…1 (0, 0 stops). Walks at a
+   * speed that follows the tilt, relative to where the camera faces.
+   */
+  setStick(fwd: number, side: number): void {
+    const f = Number.isFinite(fwd) ? THREE.MathUtils.clamp(fwd, -1, 1) : 0;
+    const r = Number.isFinite(side) ? THREE.MathUtils.clamp(side, -1, 1) : 0;
+    const was = Math.hypot(this.stick.fwd, this.stick.side) > 0.05;
+    this.stick = { fwd: f, side: r };
+    if (!this.active || Math.hypot(f, r) <= 0.05) return;
+    if (!was && this.keys.size === 0) {
+      this.host.onUserMove?.();
+      this.syncFromCamera();
+    }
+    if (!this.raf) {
+      this.lastFrame = performance.now();
+      this.raf = requestAnimationFrame(this.tick);
+    }
+  }
+
+  private async walkTo(hit: { point: THREE.Vector3; normal: THREE.Vector3 | null }): Promise<void> {
     this.syncFromCamera();
     const floorY = this.host.floorY();
     const t = walkTargetFor(hit, this.position, floorY);
@@ -359,7 +398,7 @@ export class WalkControls {
     }
     this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, type: e.pointerType, buttons: e.buttons });
     if (this.pointers.size === 1) {
-      this.down = { x: e.clientX, y: e.clientY, t: eventTime(e), moved: false, multi: false };
+      this.down = { x: e.clientX, y: e.clientY, t: eventTime(e), moved: false, multi: false, touch: e.pointerType === 'touch' || e.pointerType === 'pen' };
     } else if (this.pointers.size === 2) {
       const [a, b] = [...this.pointers.values()];
       this.pinch = { d0: Math.max(10, Math.hypot(a.x - b.x, a.y - b.y)), lens0: this.host.getLens(), cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2 };
@@ -420,11 +459,17 @@ export class WalkControls {
       this.lastTap = null;
       return;
     }
-    // Input time, not handler time: a busy frame must not split a double tap.
+    // Input time, not handler time: a busy frame must not split a double click.
     const now = eventTime(e);
-    if (now - d.t > 350) { this.lastTap = null; return; }
+    if (now - d.t > TAP_MS) { this.lastTap = null; return; }
+    // Touch: one tap walks there (taps during that walk are ignored).
+    if (d.touch) {
+      this.lastTap = null;
+      if (!this.going) void this.goTo(e.clientX, e.clientY);
+      return;
+    }
     const lt = this.lastTap;
-    // Double tap: the second press starts soon after the first release, close to it.
+    // Mouse: a double click (the second press soon after the first release, close to it).
     if (lt && d.t - lt.t < DOUBLE_TAP_MS && Math.hypot(e.clientX - lt.x, e.clientY - lt.y) < 30) {
       this.lastTap = null;
       void this.goTo(e.clientX, e.clientY);
@@ -483,13 +528,22 @@ export class WalkControls {
     this.lastFrame = now;
     const fwd = (this.keys.has('w') ? 1 : 0) - (this.keys.has('s') ? 1 : 0);
     const side = (this.keys.has('d') ? 1 : 0) - (this.keys.has('a') ? 1 : 0);
-    if (!this.active || (fwd === 0 && side === 0)) {
+    const tilt = Math.min(1, Math.hypot(this.stick.fwd, this.stick.side));
+    if (!this.active || ((fwd === 0 && side === 0) && tilt <= 0.05)) {
       this.raf = 0;
       return;
     }
-    const speed = (this.keys.has('shift') ? RUN_SPEED : WALK_SPEED) * dt;
-    const n = Math.hypot(fwd, side);
-    this.moveBy((fwd / n) * speed, (side / n) * speed);
+    if (fwd !== 0 || side !== 0) {
+      // Keys: a steady walk (Shift runs).
+      const speed = (this.keys.has('shift') ? RUN_SPEED : WALK_SPEED) * dt;
+      const n = Math.hypot(fwd, side);
+      this.moveBy((fwd / n) * speed, (side / n) * speed);
+    } else {
+      // Stick: as fast as it is tilted.
+      const n = Math.hypot(this.stick.fwd, this.stick.side);
+      const speed = STICK_SPEED * tilt * dt;
+      this.moveBy((this.stick.fwd / n) * speed, (this.stick.side / n) * speed);
+    }
     this.raf = requestAnimationFrame(this.tick);
   };
 }
