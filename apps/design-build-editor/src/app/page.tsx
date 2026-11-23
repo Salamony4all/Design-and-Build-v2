@@ -199,6 +199,9 @@ const MOCK_MODELS = {
 
 // ---- module-scope dev diagnostics (not referenced by UI; tree-shaken in prod
 // because all access is behind NODE_ENV !== 'production') ----
+// 1×1 transparent picture: the guide's placeholder until the drawing's own picture arrives
+const BLANK_GUIDE_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGBgAAAABQABpfZFQAAAAABJRU5ErkJggg==';
+
 const DIAG = {
   importState: 'idle' as Code06Status['importState'],
   currentStage: 'none',
@@ -521,6 +524,17 @@ export default function Home() {
   const liveResultRef = useRef<import('design-build-extraction-contracts').ExtractionResult | null>(null);
   const activeRunModeRef = useRef<'ai' | 'geometric' | null>(null);
   const activeGuideAttachmentRef = useRef<AttachmentRef | null>(null);
+  // The drawing under the model. A streamed import draws the walls before the server's
+  // picture of the drawing arrives, so it goes onto the guide node once both exist
+  // (until then the guide is blank, never another drawing).
+  const liveGuideRef = useRef<{ nodeId: string | null; url: string | null }>({ nodeId: null, url: null });
+  const applyLiveGuide = useCallback(() => {
+    const { nodeId, url } = liveGuideRef.current;
+    if (!nodeId || !url) return;
+    const scene = getPascalStores().useScene.getState();
+    const node = (scene.nodes as Record<string, { url?: string } | undefined>)[nodeId];
+    if (node && node.url !== url) scene.updateNodes([{ id: nodeId, data: { url } }] as never);
+  }, []);
   // M4: actual-runtime elapsed timer. Captures the wall-import start moment and
   // ticks a live elapsed value (not a hardcoded 0).
   const runStartRef = useRef<number | null>(null);
@@ -1211,6 +1225,7 @@ export default function Home() {
         });
         clearInterval(iv);
         DIAG.readinessOutcome = 'READY';
+        applyLiveGuide();
         DIAG.importState = 'completed';
         DIAG.importOk = true;
         DIAG.committedWalls = walls.length;
@@ -1646,8 +1661,9 @@ export default function Home() {
     const core = getPascalStores();
     await ensureBuiltinPluginLoaded();
 
-    const guideDataUrl: string | undefined = guideDataUrlFromServer || '/guide-code06.png';
+    const guideDataUrl: string = guideDataUrlFromServer || liveGuideRef.current.url || BLANK_GUIDE_PNG;
     const drafts = prepareLiveDrafts(result, { guideDataUrl });
+    liveGuideRef.current.nodeId = drafts.initialShell.ids.guide;
 
     // --- WALL-COMPLETION INSTALL (MASTER CHECKPOINT §16): wire the detected
     // missing-wall / partition centreline candidates into the staged Pascal build
@@ -2018,6 +2034,7 @@ export default function Home() {
       push({ type: 'extraction-progress', event: { phase: 'document', progress: 0.1, message: 'Locating the building' } });
       push({ type: 'extraction-progress', event: { phase: 'slab', progress: 0.25, message: 'Measuring wall thicknesses' } });
       isStreamingExtractionRef.current = true;
+      liveGuideRef.current = { nodeId: null, url: null };
       bufferedWindowDraftsRef.current = [];
       bufferedDoorDraftsRef.current = [];
       const res = await fetch('/api/extraction/mupdf?stream=true', {
@@ -2144,6 +2161,8 @@ export default function Home() {
                 }
               } else if (chunk.type === 'stage-guide') {
                 if (chunk.guideDataUrl) {
+                  liveGuideRef.current.url = chunk.guideDataUrl;
+                  applyLiveGuide();
                   try {
                     const gres = await fetch(chunk.guideDataUrl);
                     const blob = await gres.blob();

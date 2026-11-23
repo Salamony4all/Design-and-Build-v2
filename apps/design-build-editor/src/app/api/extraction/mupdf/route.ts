@@ -41,8 +41,19 @@ function curvedWallsFor(
   geometryHash: string,
 ) {
   const none = { walls: [] as any[], pods: [] as any[], dropWallIds: new Set<string>(), onCurve: (_a?: Pt, _b?: Pt) => false };
+  // curved walls are matched in metres: without a real scale there is nothing to match
+  if (pureResult.scaleSource === 'fallback') return none;
   try {
-    const found = lib.detectCurvedWalls({ vectors, scaleMmPerPt: pureResult.scaleMmPerPt });
+    // Only inside the building's extent (straight walls plus 3 m): not title blocks, logos or legends.
+    const accepted: any[] = pureResult.accepted ?? [];
+    let within: [number, number, number, number] | undefined;
+    if (accepted.length >= 4) {
+      const xs = accepted.flatMap((w) => [w.centerline.a.x, w.centerline.b.x]);
+      const ys = accepted.flatMap((w) => [w.centerline.a.y, w.centerline.b.y]);
+      const m = 3 / (pureResult.scaleMmPerPt / 1000);
+      within = [Math.min(...xs) - m, Math.min(...ys) - m, Math.max(...xs) + m, Math.max(...ys) + m];
+    }
+    const found = lib.detectCurvedWalls({ vectors, scaleMmPerPt: pureResult.scaleMmPerPt, within });
     if (found.segments.length === 0) return none;
     const frameIn = lib.documentFrameFromPure(pureResult);
     const cf = createCoordinateFrame({
