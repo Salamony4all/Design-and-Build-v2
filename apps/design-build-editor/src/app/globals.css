@@ -3109,8 +3109,10 @@ button { cursor: pointer; }
 @media (max-height: 520px) and (max-width: 760px) and (min-aspect-ratio: 5/4) {
   .db-toolbar--main .db-tb-desk { display: none; }
 }
+/* Narrow phones: Walk keeps its name (it is easy to miss as an icon); the zoom
+   buttons give way, since pinching zooms. */
 @media (max-width: 374px) {
-  .db-toolbar--main .db-seg__walk span { display: none; }
+  .db-toolbar--main .db-tb-zoom { display: none; }
 }
 
 /* Touch screens: fingers need bigger targets than a mouse pointer, and iOS

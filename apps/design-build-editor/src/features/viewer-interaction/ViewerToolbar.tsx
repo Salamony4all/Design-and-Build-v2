@@ -163,9 +163,9 @@ export function ViewerToolbar({
 
       {onZoomOut && onZoomIn && viewMode !== 'walk' && (
         <>
-          <div className="sep" />
-          <ToolButton label="Zoom out (−)" onClick={onZoomOut}><ZoomOut size={18} /></ToolButton>
-          <ToolButton label="Zoom in (+)" onClick={onZoomIn}><ZoomIn size={18} /></ToolButton>
+          <div className="sep db-tb-zoom" />
+          <ToolButton label="Zoom out (−)" onClick={onZoomOut} className="db-tb-zoom"><ZoomOut size={18} /></ToolButton>
+          <ToolButton label="Zoom in (+)" onClick={onZoomIn} className="db-tb-zoom"><ZoomIn size={18} /></ToolButton>
         </>
       )}
 
