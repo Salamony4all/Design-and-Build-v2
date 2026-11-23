@@ -31,6 +31,8 @@ export interface MuVector {
   /** stroke width as drawn on the page (line width x CTM scale), in points */
   strokeWidthPt?: number;
   dashes?: number[];
+  /** CAD layer (optional content group) the path was drawn on, when the PDF keeps layers. */
+  layer?: string;
 }
 
 export interface PaintedOperationLineage {
@@ -361,16 +363,25 @@ export function collectPageVectors(page: any, captureLineage = false, pageNumber
     });
   };
 
+  // CAD layers: MuPDF reports optional-content groups as nested layers.
+  const layers: string[] = [];
+  const layerOf = (): { layer?: string } => (layers.length ? { layer: layers[layers.length - 1] } : {});
   const device = new mupdf.Device({
+    beginLayer(name: string) {
+      layers.push(String(name ?? ''));
+    },
+    endLayer() {
+      layers.pop();
+    },
     fillPath(path: any, evenOdd: boolean, ctm: number[], _cs: any, color: number[], alpha: number) {
-      add('fill-path', path, ctm, { evenOdd, color: [...color], alpha });
+      add('fill-path', path, ctm, { evenOdd, color: [...color], alpha, ...layerOf() });
     },
     strokePath(path: any, stroke: any, ctm: number[], _cs: any, color: number[], alpha: number) {
       // strokeWidth is the raw PDF line width (user space). strokeWidthPt is the width
       // as drawn on the page, so pens are comparable across views with different CTMs.
       const lw = stroke.getLineWidth();
       const ctmScale = Math.sqrt(Math.abs((ctm[0] ?? 1) * (ctm[3] ?? 1) - (ctm[1] ?? 0) * (ctm[2] ?? 0))) || 1;
-      add('stroke-path', path, ctm, { color: [...color], alpha, strokeWidth: lw, strokeWidthPt: lw * ctmScale, dashes: stroke.getDashes() });
+      add('stroke-path', path, ctm, { color: [...color], alpha, strokeWidth: lw, strokeWidthPt: lw * ctmScale, dashes: stroke.getDashes(), ...layerOf() });
     },
   });
   page.runPageContents(device, mupdf.Matrix.identity);

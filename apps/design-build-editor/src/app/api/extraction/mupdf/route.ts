@@ -29,6 +29,72 @@ type MupdfLib = typeof import('design-build-extraction-mupdf');
 type Pt = { x: number; y: number };
 
 /**
+ * Loose furniture, fittings and fixtures read from the drawing's furniture layers,
+ * with each footprint in Pascal metres (x, z). Never fatal: a failure, a drawing
+ * without layers or without a real scale only means no furniture.
+ */
+function furnitureFor(
+  lib: Pick<MupdfLib, 'detectFurniture' | 'furnitureTextsFromStructuredText' | 'documentFrameFromPure'>,
+  createCoordinateFrame: typeof import('design-build-coordinate-frame').createCoordinateFrame,
+  vectors: any[],
+  page: any,
+  pureResult: any,
+) {
+  const none = { pieces: [] as any[], types: [] as any[], layers: [] as string[] };
+  if (pureResult.scaleSource === 'fallback') return none;
+  try {
+    const accepted: any[] = pureResult.accepted ?? [];
+    let within: [number, number, number, number] | undefined;
+    if (accepted.length >= 4) {
+      const xs = accepted.flatMap((w) => [w.centerline.a.x, w.centerline.b.x]);
+      const ys = accepted.flatMap((w) => [w.centerline.a.y, w.centerline.b.y]);
+      const m = 1 / (pureResult.scaleMmPerPt / 1000);
+      within = [Math.min(...xs) - m, Math.min(...ys) - m, Math.max(...xs) + m, Math.max(...ys) + m];
+    }
+    let texts: any[] = [];
+    try {
+      texts = lib.furnitureTextsFromStructuredText(page.toStructuredText('preserve-whitespace').asJSON());
+    } catch {
+      texts = [];
+    }
+    const found = lib.detectFurniture({ vectors, scaleMmPerPt: pureResult.scaleMmPerPt, within, texts });
+    if (!found.pieces.length) return { ...none, layers: found.layers };
+    const frameIn = lib.documentFrameFromPure(pureResult);
+    const cf = createCoordinateFrame({
+      pageBoundsPt: frameIn.pageBoundsPt,
+      scaleMmPerPt: frameIn.scaleMmPerPt,
+      pageWidthM: frameIn.widthM,
+      pageHeightM: frameIn.heightM,
+    });
+    const toM = (p: Pt) => {
+      const [x, y] = cf.toPascal(p.x, p.y);
+      return { x: Math.round(x * 1000) / 1000, y: Math.round(y * 1000) / 1000 };
+    };
+    const pieces = found.pieces.map((p: any) => ({
+      id: p.id,
+      typeId: p.typeId,
+      layer: p.layer,
+      family: p.family,
+      kind: p.kind,
+      shape: p.shape,
+      widthM: p.widthM,
+      depthM: p.depthM,
+      heightM: p.heightM,
+      areaM2: p.areaM2,
+      angle: p.angle,
+      ...(p.label ? { label: p.label } : {}),
+      centerM: toM(p.center),
+      outlineM: p.outline.map(toM),
+    }));
+    console.log(`[MuPdfRoute] Furniture: ${pieces.length} pieces in ${found.types.length} types from ${found.layers.length} layers (${found.diagnostics.ms} ms).`);
+    return { pieces, types: found.types, layers: found.layers };
+  } catch (e) {
+    console.warn('[MuPdfRoute] furniture detection skipped:', e);
+    return none;
+  }
+}
+
+/**
  * Curved walls, glass partitions and pods read from the drawing's own arcs, cut into
  * Pascal walls (start, end, curveOffset). Straight walls read from the same curves are
  * dropped in their favour. Never fatal: a failure only means no curved walls.
@@ -175,8 +241,9 @@ export async function POST(req: NextRequest) {
     req.headers.get('accept')?.includes('text/event-stream');
 
   try {
-    const { extractPureWallResult, toExtractionResult, documentFrameFromPure, runWindowPipeline, runDoorPipeline, collectPageVectors, mupdf, PURE_WINDOW_DEFAULTS, PURE_DOOR_DEFAULTS, acceptedGeometryHash, acceptedEvidenceHash, buildDoorProductionManifest, extractColumnsFromCapturedGeometry, detectCurvedWalls, curvedWallPieces, curvedBandUnder, alongWalls } = await import('design-build-extraction-mupdf');
+    const { extractPureWallResult, toExtractionResult, documentFrameFromPure, runWindowPipeline, runDoorPipeline, collectPageVectors, mupdf, PURE_WINDOW_DEFAULTS, PURE_DOOR_DEFAULTS, acceptedGeometryHash, acceptedEvidenceHash, buildDoorProductionManifest, extractColumnsFromCapturedGeometry, detectCurvedWalls, curvedWallPieces, curvedBandUnder, alongWalls, detectFurniture, furnitureTextsFromStructuredText } = await import('design-build-extraction-mupdf');
     const curvedLib = { detectCurvedWalls, curvedWallPieces, curvedBandUnder, documentFrameFromPure };
+    const furnitureLib = { detectFurniture, furnitureTextsFromStructuredText, documentFrameFromPure };
     // Glass partitions are walls too: wall completion must not lay solid copies over them.
     const offGlass = (pureResult: any, walls: any[]) => {
       const glass = (pureResult.accepted ?? []).filter((w: any) => w.glass)
@@ -512,6 +579,13 @@ export async function POST(req: NextRequest) {
               type: 'stage-guide',
               guideDataUrl,
             });
+          }
+
+          // STAGE 5 CHUNK: furniture, fittings and fixtures from the drawing's furniture layers
+          // (after the walls, windows and doors, so the model is never held back by it).
+          const furniture = furnitureFor(furnitureLib, createCoordinateFrame, captured.vectors as any[], page, pureResult);
+          if (furniture.pieces.length) {
+            await sendChunk({ type: 'stage-furniture', furniture });
           }
 
           // FINAL CHUNK: Stream complete
@@ -903,6 +977,7 @@ export async function POST(req: NextRequest) {
 
     // Curved walls, glass partitions and pods; straight copies of them are dropped.
     const curved = curvedWallsFor(curvedLib, createCoordinateFrame, captured.vectors as any[], pureResult, geometryHash);
+    const furniture = furnitureFor(furnitureLib, createCoordinateFrame, captured.vectors as any[], page, pureResult);
     const wallsResult = curved.dropWallIds.size
       ? { ...result, walls: result.walls.filter((w) => !curved.dropWallIds.has(w.id)) }
       : result;
@@ -956,6 +1031,7 @@ export async function POST(req: NextRequest) {
       result: wallsResult,
       curvedWalls: curved.walls,
       curvedPods: curved.pods,
+      furniture,
       guideDataUrl,
       windowSpecs,
       windowAudit,

@@ -71,6 +71,8 @@ export { collectPageVectors } from './vector-device';
 export { detectCurvedWalls, curvedWallPieces, curvedBandUnder, CURVED_WALL_DEFAULTS } from './curved-walls';
 export type { CurvedWallConfig, CurvedWallSegment, CurvedWallPiece, CurvedPod, CurvedPodDoor, CurvedWallResult, CurvedWallKind } from './curved-walls';
 export { detectGlassPartitions, alongWalls, GLASS_DEFAULTS } from './glass-partitions';
+export { detectFurniture, classifyPiece, isFurnitureLayer, furnitureFamily, furnitureTextsFromStructuredText, FURNITURE_DEFAULTS } from './furniture-blocks';
+export type { FurnitureConfig, FurnitureFamily, FurnitureKind, FurniturePiece, FurnitureResult, FurnitureShape, FurnitureText, FurnitureType } from './furniture-blocks';
 export type { GlassConfig, GlassHostWall, GlassPartition, GlassResult, GlassSource, GlassStyle, GlassText } from './glass-partitions';
 import * as mupdf from 'mupdf';
 export { mupdf };

@@ -529,6 +529,9 @@ export default function Home() {
   // picture of the drawing arrives, so it goes onto the guide node once both exist
   // (until then the guide is blank, never another drawing).
   const liveGuideRef = useRef<{ nodeId: string | null; url: string | null }>({ nodeId: null, url: null });
+  // Furniture read from the drawing's furniture layers (route stage 'stage-furniture').
+  const planFurnitureRef = useRef<import('@/features/furniture/plan-furniture').PlanFurniture | null>(null);
+  const [planFurnitureTick, setPlanFurnitureTick] = useState(0);
   const applyLiveGuide = useCallback(() => {
     const { nodeId, url } = liveGuideRef.current;
     if (!nodeId || !url) return;
@@ -2076,6 +2079,7 @@ export default function Home() {
             try {
               const chunk = JSON.parse(line);
               if (chunk.type === 'stage-walls') {
+                planFurnitureRef.current = null;
                 extractedResult = chunk.result;
                 extractedCompletionWalls = chunk.completionWalls || [];
                 const extractedCurvedWalls: any[] = chunk.curvedWalls || [];
@@ -2104,6 +2108,9 @@ export default function Home() {
                   [],
                   extractedCurvedWalls,
                 );
+              } else if (chunk.type === 'stage-furniture') {
+                planFurnitureRef.current = chunk.furniture ?? null;
+                setPlanFurnitureTick((t) => t + 1);
               } else if (chunk.type === 'stage-windows') {
                 const wspecs = chunk.windowSpecs || [];
                 windowCount = wspecs.length;
@@ -3539,6 +3546,7 @@ export default function Home() {
     products: (items) => {
       embedProductsRef.current = items;
       embedPostRef.current('products-received', { count: items.length });
+      void furnishWithProducts();
     },
     artifacts: (requestId) => {
       void (async () => {
@@ -3577,6 +3585,46 @@ export default function Home() {
     const nodes = (getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, unknown> }).nodes;
     embedPost('model-ready', { planName: embedPlanNameRef.current, counts: countSceneNodes(nodes) });
   }, [embedded, embedPost, isBuildComplete]);
+  // Furniture: once the model is complete, the drawn pieces go in as stand-ins, then
+  // BOQ Flow's products (when any have arrived) are attached to the pieces they match.
+  const furnitureInstalledRef = useRef<import('@/features/furniture/plan-furniture').PlanFurniture | null>(null);
+  const furnishWithProducts = useCallback(async () => {
+    const f = furnitureInstalledRef.current;
+    const items = embedProductsRef.current;
+    if (!f || !items.length) return;
+    try {
+      const mod = await import('@/features/furniture/plan-furniture');
+      const res = await mod.applyProducts(f, items);
+      embedPostRef.current('furnished', {
+        placedPieces: res.placed,
+        pieces: f.pieces.length,
+        products: res.match.products,
+        unplacedProductIds: res.match.unplacedProductIds,
+        unmatchedPieces: res.match.unmatchedPieceIds.length,
+      });
+    } catch (e) {
+      embedPostRef.current('error', { message: `Could not furnish the model: ${e instanceof Error ? e.message : String(e)}` });
+    }
+  }, []);
+  useEffect(() => {
+    const f = planFurnitureRef.current;
+    if (!isBuildComplete || !f || furnitureInstalledRef.current === f) return;
+    furnitureInstalledRef.current = f;
+    void (async () => {
+      try {
+        const mod = await import('@/features/furniture/plan-furniture');
+        const r = await mod.installPlanFurniture(f);
+        console.log(`[plan-furniture] ${r.installed} pieces placed from the drawing.`);
+        embedPostRef.current('furniture-ready', {
+          pieces: r.installed,
+          schedule: (f.types ?? []).map((t) => ({ kind: t.kind, shape: t.shape, widthM: t.widthM, depthM: t.depthM, count: t.count })),
+        });
+        await furnishWithProducts();
+      } catch (e) {
+        console.warn('[plan-furniture] could not place the furniture:', e);
+      }
+    })();
+  }, [isBuildComplete, planFurnitureTick, furnishWithProducts]);
   const embedEventsSeen = useRef(0);
   useEffect(() => {
     if (!embedded) return;
