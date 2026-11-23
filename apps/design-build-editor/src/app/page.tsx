@@ -52,11 +52,12 @@ import { validateStructuralScene, type StructuralValidationResult } from '@/harn
 import { projectLabelFromFiles } from '@/components/dynamic-project-label';
 import { validateEvent } from 'design-build-extraction-ai';
 import type { BuildStage, ProgressiveBuildEvent, FurnitureCandidate } from 'design-build-extraction-ai';
-import { ExportRail } from '@/features/project-export/ExportRail';
+import { ExportRail, filterCommercialNodes } from '@/features/project-export/ExportRail';
+import { isEmbedded, useEmbedBridge, countSceneNodes, type EmbedProduct } from '@/features/embed/embed-bridge';
 import { selectDoorInstallerInput, type RuntimeWallMap } from '@/features/door-pilot/door-boundary';
 import { getPascalStores, ensureBuiltinPluginLoaded, type ViewerHandle } from 'design-build-simplified-viewer-shell';
 import { RenderStudio, loadRenderPrefs } from '@/features/render/RenderStudio';
-import { prepareView, currentViewKind, captureViewForRender, type PreparedView } from '@/features/render/capture-view';
+import { prepareView, currentViewKind, captureViewForRender, readPlanUnderlay, type PreparedView } from '@/features/render/capture-view';
 import { renderPhotoreal, type RenderJobResult } from '@/features/render/render-client';
 import { RENDER_TIERS, getRenderStyle, styleFromText, furnishFromText } from '@/features/render/render-presets';
 import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
@@ -3511,6 +3512,81 @@ export default function Home() {
       : terminalState,
   };
 
+  // ── BOQ Flow express mode ──────────────────────────────────────────────────
+  // Inside BOQ Flow's "Design & Build" modal (an iframe, ?embed=boqflow) the plan
+  // arrives by postMessage, and the progress, the finished model and the files
+  // for BOQ Flow's export suite go back the same way. Decided after mount so the
+  // server render and the first client render agree.
+  const [embedded, setEmbedded] = useState(false);
+  useEffect(() => { setEmbedded(isEmbedded()); }, []);
+  const [embedPlanName, setEmbedPlanName] = useState<string | null>(null);
+  const embedPlanNameRef = useRef<string | null>(null);
+  const embedProductsRef = useRef<EmbedProduct[]>([]);
+  const embedBuildCompleteRef = useRef(false);
+  embedBuildCompleteRef.current = isBuildComplete;
+  const embedPostRef = useRef<(type: string, payload?: Record<string, unknown>) => void>(() => {});
+  const embedPost = useEmbedBridge(embedded, {
+    plan: (file, name) => {
+      const pdf = file instanceof File ? file : new File([file], name, { type: 'application/pdf' });
+      const id = crypto.randomUUID();
+      attachmentRepository.put(id, pdf);
+      setExtractMethod('geometric');
+      embedPlanNameRef.current = name;
+      setEmbedPlanName(name);
+      embedPostRef.current('progress', { stage: 'Reading the drawing', state: 'building', committed: 0, total: 0 });
+      void runLiveGeometricExtraction({ id, kind: 'pdf', name, byteSize: pdf.size, mime: 'application/pdf' });
+    },
+    products: (items) => {
+      embedProductsRef.current = items;
+      embedPostRef.current('products-received', { count: items.length });
+    },
+    artifacts: (requestId) => {
+      void (async () => {
+        const nodes = (getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, unknown> }).nodes ?? {};
+        let view: string | null = null;
+        try {
+          view = (await captureViewForRender(viewerHandleRef.current, { frameBuilding: true })).dataUrl;
+        } catch {
+          // The 3D view is optional in the export.
+        }
+        let planImage: string | null = null;
+        try {
+          planImage = (await readPlanUnderlay(2400)) ?? liveGuideRef.current.url;
+        } catch {
+          planImage = liveGuideRef.current.url;
+        }
+        embedPostRef.current('artifacts', {
+          requestId,
+          planName: embedPlanNameRef.current,
+          planImage,
+          views: view ? [view] : [],
+          scene: JSON.stringify(filterCommercialNodes(nodes)),
+          counts: countSceneNodes(nodes),
+        });
+      })();
+    },
+    ping: () => embedPostRef.current('ready', { hasModel: embedBuildCompleteRef.current }),
+  });
+  embedPostRef.current = embedPost;
+  useEffect(() => {
+    if (!embedded || !embedPlanName) return;
+    embedPost('progress', { stage: buildProgress.stage, state: buildProgress.terminalState, committed: buildProgress.committed, total: buildProgress.total });
+  }, [embedded, embedPlanName, embedPost, buildProgress.stage, buildProgress.terminalState, buildProgress.committed, buildProgress.total]);
+  useEffect(() => {
+    if (!embedded || !isBuildComplete) return;
+    const nodes = (getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, unknown> }).nodes;
+    embedPost('model-ready', { planName: embedPlanNameRef.current, counts: countSceneNodes(nodes) });
+  }, [embedded, embedPost, isBuildComplete]);
+  const embedEventsSeen = useRef(0);
+  useEffect(() => {
+    if (!embedded) return;
+    for (let i = embedEventsSeen.current; i < events.length; i++) {
+      const ev = events[i];
+      if (ev?.type === 'error') embedPost('error', { message: ev.message });
+    }
+    embedEventsSeen.current = events.length;
+  }, [embedded, embedPost, events]);
+
   /** Fit the site lot around the building (Pascal's default lot is a 30 m square at
    *  the origin, which sits off to one side of an imported plan). Not an undo step. */
   const fitSiteToBuilding = useCallback(() => {
@@ -3853,7 +3929,7 @@ export default function Home() {
   }), [onCommand, events, selection, onSelectModel, docked, importing, extractionBusy, buildProgress, aiExtractionControls, aiRegistry.canRunAiExtraction]);
 
   return (
-    <main className="db-stage">
+    <main className={embedded ? 'db-stage is-embedded' : 'db-stage'}>
       <div className="db-aurora a1" aria-hidden />
       <div className="db-aurora a2" aria-hidden />
 
@@ -3863,7 +3939,7 @@ export default function Home() {
           <span>Design &amp; Build Copilot</span>
         </div>
         <div className="db-header-actions">
-          {docked && !extractionBusy && !importing && (
+          {docked && !extractionBusy && !importing && !embedded && (
             <button
               type="button"
               className={`db-header-btn ${confirmNew ? 'is-confirm' : ''}`}
@@ -3886,6 +3962,14 @@ export default function Home() {
       </header>
 
       {!docked && <div className="db-landing-backdrop" aria-hidden />}
+      {embedded && !docked && (
+        <div className="db-embed-wait" role="status" aria-live="polite">
+          <div className="db-embed-wait-card">
+            <span className="db-embed-spinner" aria-hidden />
+            <p>{embedPlanName ? `Reading ${embedPlanName}…` : 'Waiting for the plan from BOQ Flow…'}</p>
+          </div>
+        </div>
+      )}
 
       {/*
         The Viewer mounts when the import starts (viewerVisible, set true in
