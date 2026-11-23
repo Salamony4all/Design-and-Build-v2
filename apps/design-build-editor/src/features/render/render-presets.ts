@@ -359,7 +359,60 @@ export interface GeometryLockPromptOptions {
   pitchDeg?: number;
   /** Doors and windows visible in the input, from the 3D scene. */
   openings?: readonly OpeningInView[];
+  /** Furniture stand-ins in view (pieces placed from the drawing) and the products they carry. */
+  furniture?: PromptFurniture;
 }
+
+/** One product of the furniture schedule, as its stand-ins appear in the view. */
+export interface PromptFurnitureProduct {
+  label: string;
+  /** Colour its stand-ins wear in the view ('red', 'blue', …). */
+  colour: string;
+  /** Kinds of its stand-ins ('seat', 'table', …). */
+  kinds: readonly string[];
+  count: number;
+  /** Where its stand-ins are in the view ('on the left', …). */
+  where?: string;
+  /** Number of the attached picture of the product, when one is sent. */
+  imageIndex?: number;
+}
+
+export interface PromptFurniture {
+  /** Stand-ins in view, with or without a product. */
+  standIns: number;
+  products: readonly PromptFurnitureProduct[];
+}
+
+const KIND_NOUN: Record<string, readonly [string, string]> = {
+  seat: ['chair', 'chairs'],
+  sofa: ['sofa', 'sofas'],
+  table: ['table', 'tables'],
+  'side-table': ['side table', 'side tables'],
+  desk: ['desk', 'desks'],
+  bed: ['bed', 'beds'],
+  storage: ['storage unit', 'storage units'],
+  plant: ['plant', 'plants'],
+  screen: ['screen', 'screens'],
+  sanitary: ['sanitary fitting', 'sanitary fittings'],
+  equipment: ['piece of equipment', 'pieces of equipment'],
+  joinery: ['joinery unit', 'joinery units'],
+};
+
+/** "chair" / "chairs" for stand-ins of one kind, "piece(s)" for a mix. */
+export function standInNoun(kinds: readonly string[], count: number): string {
+  const known = [...new Set(kinds)].map((k) => KIND_NOUN[k]).filter(Boolean);
+  const pair = known.length === 1 ? known[0] : (['piece', 'pieces'] as const);
+  return count === 1 ? pair[0] : pair[1];
+}
+
+/** Where a group of stand-ins sits across the view. */
+export function whereInView(r: { x0: number; x1: number }): string {
+  if (r.x1 - r.x0 > 0.6) return 'across the view';
+  const c = (r.x0 + r.x1) / 2;
+  return c < 0.34 ? 'on the left' : c > 0.66 ? 'on the right' : 'in the centre';
+}
+
+const promptText = (s: string, max: number) => s.replace(/[\s"]+/g, ' ').trim().slice(0, max);
 
 const DEFAULT_MATERIALS =
   'Walls in smooth warm-white painted plaster; cut wall tops as clean flat light-grey sections; floors in light natural oak inside rooms; ' +
@@ -397,7 +450,8 @@ export function clampNote(note: string | undefined, max = 400): string {
 export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   const style = getRenderStyle(o.style);
   const note = clampNote(o.note);
-  const imageRefs = o.withEdgeGuide || o.withPlan;
+  const furniture = o.furniture && o.furniture.standIns > 0 ? o.furniture : null;
+  const imageRefs = o.withEdgeGuide || o.withPlan || !!furniture?.products.some((p) => p.imageIndex);
   const lines: string[] = [];
 
   lines.push(
@@ -466,16 +520,40 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
     );
   }
 
+  if (furniture) {
+    lines.push('');
+    lines.push('FURNITURE IN THE MODEL:');
+    lines.push(
+      `The plain solid blocks standing on the floor in image 1 are furniture stand-ins placed from the construction drawing (${furniture.standIns} in view). Each marks the exact position, footprint, height and orientation of one real piece of furniture: render every stand-in as that real piece, in place and at the same size. Never move, merge or leave out a stand-in, and add no furniture where the input shows open floor.`,
+    );
+    if (furniture.products.length) {
+      lines.push(
+        "Coloured stand-ins are specific products from the project's furniture schedule. The colour is only a code that tells which product it is: render the product's own design, materials and colours, never the code colour.",
+      );
+      if (furniture.products.some((p) => p.imageIndex)) {
+        lines.push('The pictures attached after the view are catalogue photos of single products: take only the product from each, never its background, text or framing.');
+      }
+      for (const p of furniture.products) {
+        const where = p.where ? `, ${p.where}` : '';
+        const ref = p.imageIndex ? ` — copy its design, materials and colours from image ${p.imageIndex}` : '';
+        lines.push(`- The ${promptText(p.colour, 20)} ${standInNoun(p.kinds, p.count)} (${p.count}${where}): ${promptText(p.label, 140)}${ref}.`);
+      }
+      lines.push('Off-white stand-ins carry no product: render them as simple, neutral contemporary furniture of their kind.');
+    }
+  }
+
   lines.push('');
   lines.push('CHANGE ONLY: surface materials, textures, lighting, shadows, reflections and photographic realism.');
   lines.push(`Lighting: ${style.lighting}`);
   lines.push(`Materials: ${materialsFor(style.materials ?? DEFAULT_MATERIALS, o)}`);
   lines.push(
-    o.furnish
-      ? 'Furnishing: furnish each room for its use with realistic furniture standing on the floor inside that room. Furniture goes only inside the rooms of the model — nothing outside its outer walls (no terraces, gardens, plants or outdoor furniture). It must never block, cover or alter any door or window opening, and must not hide wall corners.'
-      : o.viewKind === 'interior'
-        ? 'Furnishing: none. Every room stays completely empty — no furniture, beds, desks, chairs, shelves, rugs or appliances — so the architecture reads clearly.'
-        : 'Furnishing: leave the rooms unfurnished with clean empty floors, so the architecture reads clearly.',
+    furniture
+      ? 'Furnishing: only the furniture of the stand-ins above (soft cushions and a few small accessories on it are fine) — nothing else on the floors.'
+      : o.furnish
+        ? 'Furnishing: furnish each room for its use with realistic furniture standing on the floor inside that room. Furniture goes only inside the rooms of the model — nothing outside its outer walls (no terraces, gardens, plants or outdoor furniture). It must never block, cover or alter any door or window opening, and must not hide wall corners.'
+        : o.viewKind === 'interior'
+          ? 'Furnishing: none. Every room stays completely empty — no furniture, beds, desks, chairs, shelves, rugs or appliances — so the architecture reads clearly.'
+          : 'Furnishing: leave the rooms unfurnished with clean empty floors, so the architecture reads clearly.',
   );
   if (note) {
     lines.push(`Client request (apply only where it changes no geometry): ${note}`);

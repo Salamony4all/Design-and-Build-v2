@@ -13,6 +13,7 @@ import type { AnyNode } from '@pascal-app/core';
 import { getPascalStores } from 'design-build-simplified-viewer-shell';
 import { uid } from '@/harness/ai-scene-install/helpers';
 import { matchProducts, type MatchProduct, type MatchResult } from './match-products';
+import { PRODUCT_COLOURS, productLabel, setProductRefs, type ProductColour } from './product-refs';
 
 export interface PlanFurniturePiece {
   id: string;
@@ -55,9 +56,6 @@ const KIND_LABEL: Record<string, string> = {
   joinery: 'Joinery',
   unknown: 'Furniture',
 };
-
-/** Soft tints that tell products apart in the model and in renders. */
-const PRODUCT_TINTS = ['#d9c6a5', '#a9c4d9', '#c9d9a9', '#d9a9b8', '#b8a9d9', '#a9d9cf', '#d9bfa9', '#c4c4c4', '#e0d29a', '#9fb7c9'];
 
 const THUMB = 'data:image/svg+xml;base64,' + (typeof btoa === 'function'
   ? btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8"><rect width="8" height="8" rx="2" fill="#d9d4cc"/></svg>')
@@ -285,13 +283,21 @@ export interface FurnishResult {
 
 /**
  * Attach BOQ Flow's products to the drawn pieces they match: each matched item takes
- * the product's name and reference, and a tint shared by all pieces of that product.
+ * the product's name and reference, and a colour shared by all pieces of that product
+ * (the products placed most get the first colours, so the main ones never share one).
  */
 export async function applyProducts(f: PlanFurniture, products: MatchProduct[]): Promise<FurnishResult> {
   const match = matchProducts(f.pieces, products);
   const installed = planFurnitureNodes();
-  const tintOf = new Map(products.map((p, i) => [p.id, PRODUCT_TINTS[i % PRODUCT_TINTS.length]]));
   const byId = new Map(products.map((p) => [p.id, p]));
+  const placedLines = match.products.filter((m) => m.placed > 0 && byId.has(m.productId)).sort((a, b) => b.placed - a.placed);
+  const colourOf = new Map<string, ProductColour>(placedLines.map((m, i) => [m.productId, PRODUCT_COLOURS[i % PRODUCT_COLOURS.length]]));
+  setProductRefs(
+    placedLines.map((m) => {
+      const p = byId.get(m.productId)!;
+      return { id: p.id, label: productLabel(p), description: p.description, imageUrl: p.imageUrl, colour: colourOf.get(p.id)! };
+    }),
+  );
   let placed = 0;
   for (const piece of f.pieces) {
     const hit = installed.get(piece.id);
@@ -300,7 +306,8 @@ export async function applyProducts(f: PlanFurniture, products: MatchProduct[]):
     const product = productId ? byId.get(productId) : undefined;
     const meta = { ...(hit.node.metadata as Record<string, unknown>) };
     const asset = { ...(hit.node.asset as Record<string, unknown>) };
-    const tint = product ? tintOf.get(product.id) : undefined;
+    const colour = product ? colourOf.get(product.id) : undefined;
+    const tint = colour?.hex;
     try {
       asset.src = await modelUrl(piece, tint);
     } catch {
@@ -308,9 +315,11 @@ export async function applyProducts(f: PlanFurniture, products: MatchProduct[]):
     }
     if (product) {
       placed++;
-      meta.product = { id: product.id, description: product.description, brand: product.brand, model: product.model, imageUrl: product.imageUrl, tint };
+      // Inline pictures stay out of the scene (they live in product-refs); links are kept.
+      const imageUrl = product.imageUrl && /^https:\/\//i.test(product.imageUrl) ? product.imageUrl : undefined;
+      meta.product = { id: product.id, description: product.description, brand: product.brand, model: product.model, imageUrl, tint, colour: colour?.name };
     } else delete meta.product;
-    const name = product ? [product.brand, product.model].filter(Boolean).join(' · ') || product.description.slice(0, 60) : KIND_LABEL[piece.kind] ?? 'Furniture';
+    const name = product ? productLabel(product) : KIND_LABEL[piece.kind] ?? 'Furniture';
     asset.name = name;
     scene().updateNode(hit.id, { name, metadata: meta, asset });
   }

@@ -16,8 +16,10 @@ import {
   isSupportedAspect,
   modelSupportsImageSize,
   nearestAspect,
+  standInNoun,
   styleFromText,
   viewfinderRect,
+  whereInView,
 } from './render-presets';
 
 describe('aspect ratios', () => {
@@ -230,5 +232,56 @@ describe('inside views: framing and prompt facts', () => {
     const tilted = buildGeometryLockPrompt({ style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false, pitchDeg: 14 });
     expect(tilted).toMatch(/looks up by about 14°/);
     expect(tilted).not.toMatch(/line drawing/);
+  });
+});
+
+describe('furniture stand-ins and real products', () => {
+  it('names stand-ins by kind and place', () => {
+    expect(standInNoun(['seat'], 12)).toBe('chairs');
+    expect(standInNoun(['seat', 'seat'], 1)).toBe('chair');
+    expect(standInNoun(['seat', 'table'], 3)).toBe('pieces');
+    expect(standInNoun(['mystery'], 2)).toBe('pieces');
+    expect(whereInView({ x0: 0.05, x1: 0.2 })).toBe('on the left');
+    expect(whereInView({ x0: 0.4, x1: 0.6 })).toBe('in the centre');
+    expect(whereInView({ x0: 0.7, x1: 0.95 })).toBe('on the right');
+    expect(whereInView({ x0: 0.1, x1: 0.9 })).toBe('across the view');
+  });
+
+  it('turns stand-ins into the schedule\'s products, with their pictures', () => {
+    const p = buildGeometryLockPrompt({
+      style: 'daylight', viewKind: 'cutaway', furnish: false, withEdgeGuide: true, withPlan: false,
+      furniture: {
+        standIns: 20,
+        products: [
+          { label: 'Vitra · Eames "Plastic" Chair', colour: 'red', kinds: ['seat'], count: 12, where: 'across the view', imageIndex: 3 },
+          { label: 'Narbutas · Nova table', colour: 'blue', kinds: ['table'], count: 1, where: 'on the left' },
+        ],
+      },
+    });
+    expect(p).toMatch(/Turn image 1/);
+    expect(p).toMatch(/furniture stand-ins placed from the construction drawing \(20 in view\)/);
+    expect(p).toMatch(/- The red chairs \(12, across the view\): Vitra · Eames Plastic Chair — copy its design, materials and colours from image 3\./);
+    expect(p).toMatch(/- The blue table \(1, on the left\): Narbutas · Nova table\./);
+    expect(p).toMatch(/catalogue photos of single products/);
+    expect(p).toMatch(/Off-white stand-ins carry no product/);
+    expect(p).toMatch(/Furnishing: only the furniture of the stand-ins/);
+    expect(p).not.toMatch(/leave the rooms unfurnished/);
+  });
+
+  it('keeps stand-ins as furniture even without products, and ignores an empty inventory', () => {
+    const plain = buildGeometryLockPrompt({
+      style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false,
+      furniture: { standIns: 4, products: [] },
+    });
+    expect(plain).toMatch(/Turn this image/);
+    expect(plain).toMatch(/4 in view/);
+    expect(plain).not.toMatch(/Coloured stand-ins/);
+    expect(plain).not.toMatch(/no furniture, beds, desks/);
+    const none = buildGeometryLockPrompt({
+      style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false,
+      furniture: { standIns: 0, products: [] },
+    });
+    expect(none).not.toMatch(/FURNITURE IN THE MODEL/);
+    expect(none).toMatch(/no furniture, beds, desks/);
   });
 });

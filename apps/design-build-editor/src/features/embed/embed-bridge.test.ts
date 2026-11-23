@@ -53,6 +53,19 @@ describe('parent messages', () => {
     expect(m.items[0]).toMatchObject({ id: 'r1', qty: 5, imageUrl: 'https://cdn.example/sofa.jpg', dims: { w: 3.2, d: 1.2, h: 0.85 } });
     expect(m.items[1]).toMatchObject({ id: 'item_2', qty: 1, imageUrl: undefined, dims: { w: undefined } });
   });
+  it('keeps whole inline thumbnails and drops broken or oversized ones', () => {
+    const thumb = `data:image/jpeg;base64,${'A'.repeat(5000)}`;
+    const m = parseParentMessage(msg('products', {
+      items: [
+        { id: 'a', description: 'Chair', qty: 1, imageUrl: thumb },
+        { id: 'b', description: 'Chair', qty: 1, imageUrl: 'data:image/jpeg;base64,AAA<script>' },
+        { id: 'c', description: 'Chair', qty: 1, imageUrl: `data:image/png;base64,${'A'.repeat(700_000)}` },
+        { id: 'd', description: 'Chair', qty: 1, imageUrl: 'data:image/svg+xml;base64,AAAA' },
+      ],
+    }));
+    if (m?.type !== 'products') throw new Error('expected products');
+    expect(m.items.map((p) => p.imageUrl?.length ?? 0)).toEqual([thumb.length, 0, 0, 0]);
+  });
 });
 
 describe('scene counts', () => {

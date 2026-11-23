@@ -17,6 +17,7 @@ import {
   buildGeometryLockPrompt,
   isSupportedAspect,
   modelSupportsImageSize,
+  type PromptFurniture,
   type RenderTierId,
 } from '@/features/render/render-presets';
 
@@ -28,6 +29,10 @@ const SERVER_SENTINEL = '__SERVER_RESOLVED_FROM_ENV__';
 const DEFAULT_GEMINI_BASE = 'https://generativelanguage.googleapis.com';
 const DATA_URL = /^data:(image\/(?:png|jpeg|webp));base64,([A-Za-z0-9+/=]+)$/;
 const MAX_IMAGE_CHARS = 6_000_000; // ~4.4 MB of image bytes per image
+/** Product pictures are small catalogue thumbnails. */
+const MAX_PRODUCT_IMAGE_CHARS = 1_500_000;
+/** At most this many product pictures go with one render. */
+const MAX_PRODUCT_IMAGES = 4;
 
 const BodySchema = z.object({
   image: z.string().max(MAX_IMAGE_CHARS),
@@ -60,6 +65,24 @@ const BodySchema = z.object({
     .max(60)
     .optional(),
   furnish: z.boolean().default(false),
+  /** Furniture stand-ins in view (placed from the drawing) and the BOQ Flow products they carry. */
+  furniture: z
+    .object({
+      standIns: z.number().int().min(0).max(10_000),
+      products: z
+        .array(
+          z.object({
+            label: z.string().max(300),
+            colour: z.string().max(30),
+            kinds: z.array(z.string().max(30)).max(8),
+            count: z.number().int().min(1).max(10_000),
+            where: z.string().max(40).optional(),
+            image: z.string().max(MAX_PRODUCT_IMAGE_CHARS).optional(),
+          }),
+        )
+        .max(16),
+    })
+    .optional(),
   note: z.string().max(2000).optional(),
   strict: z.boolean().default(false),
   attempt: z.number().int().min(1).max(5).default(1),
@@ -134,6 +157,29 @@ function parseDataUrl(s: string | undefined): { mimeType: string; data: string }
   if (!s) return null;
   const m = DATA_URL.exec(s);
   return m ? { mimeType: m[1], data: m[2] } : null;
+}
+
+/**
+ * The furniture facts for the prompt, and the product pictures that go with them
+ * (numbered after the view, the edge map and the plan, in the order sent).
+ */
+function furnitureRefs(body: Body, firstIndex: number): { furniture?: PromptFurniture; images: { mimeType: string; data: string }[] } {
+  const f = body.furniture;
+  if (!f || f.standIns <= 0) return { images: [] };
+  const images: { mimeType: string; data: string }[] = [];
+  const products = f.products.map((p) => {
+    const img = images.length < MAX_PRODUCT_IMAGES ? parseDataUrl(p.image) : null;
+    if (img) images.push(img);
+    return {
+      label: p.label,
+      colour: p.colour.replace(/[^a-z -]/gi, '').trim() || 'coloured',
+      kinds: p.kinds,
+      count: p.count,
+      where: p.where,
+      imageIndex: img ? firstIndex + images.length - 1 : undefined,
+    };
+  });
+  return { furniture: { standIns: f.standIns, products }, images };
 }
 
 interface GeminiPart {
@@ -211,6 +257,7 @@ export async function POST(req: NextRequest) {
   if (!isSupportedAspect(body.aspectRatio)) return fail(400, 'RENDER_BAD_REQUEST', `Unsupported aspect ratio ${body.aspectRatio}.`);
   const edge = parseDataUrl(body.edgeGuide);
   const plan = body.furnish ? parseDataUrl(body.plan) : null;
+  const refs = furnitureRefs(body, 2 + (edge ? 1 : 0) + (plan ? 1 : 0));
 
   const tier = RENDER_TIERS[body.tier as RenderTierId];
   const model = body.model && ALLOWED_RENDER_MODELS.has(body.model) ? body.model : tier.model;
@@ -233,8 +280,9 @@ export async function POST(req: NextRequest) {
         style: body.style, viewKind: body.viewKind, furnish: body.furnish, withEdgeGuide: !!edge,
         withPlan: !!plan, note: body.note, strict: body.strict, lensMm: body.lensMm, ceiling: body.ceiling,
         ceilingInView: body.ceilingInView, lineGuide: body.lineGuide && !!edge, fovDeg: body.fovDeg, pitchDeg: body.pitchDeg,
-        openings: body.openings,
+        openings: body.openings, furniture: refs.furniture,
       }),
+      productImages: refs.images.length,
     });
   }
 
@@ -258,12 +306,14 @@ export async function POST(req: NextRequest) {
     fovDeg: body.fovDeg,
     pitchDeg: body.pitchDeg,
     openings: body.openings,
+    furniture: refs.furniture,
   });
 
   // Images first, in the order the prompt numbers them; the instruction last.
   const parts: GeminiPart[] = [{ inlineData: view }];
   if (edge) parts.push({ inlineData: edge });
   if (plan) parts.push({ inlineData: plan });
+  for (const img of refs.images) parts.push({ inlineData: img });
   parts.push({ text: prompt });
 
   const baseImageConfig: Record<string, string> = { aspectRatio: body.aspectRatio };
@@ -338,6 +388,7 @@ export async function POST(req: NextRequest) {
     await saveDebug(renderId, body, prompt, out, {
       model, tier: tier.id, style: body.style, aspectRatio: body.aspectRatio, viewKind: body.viewKind,
       furnish: body.furnish, strict: body.strict, attempt: body.attempt, ms, finishReason: cand?.finishReason,
+      standIns: body.furniture?.standIns ?? 0, productImages: refs.images.length,
       usage: resp.json.usageMetadata, text, promptVersion: RENDER_PROMPT_VERSION, provider: g.providerLabel, skipped,
     }).catch(() => undefined);
   }

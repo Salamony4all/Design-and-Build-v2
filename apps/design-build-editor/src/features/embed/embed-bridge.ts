@@ -27,6 +27,9 @@ const PREVIEW_ORIGIN = /^https:\/\/boqv-2-[a-z0-9-]+\.vercel\.app$/;
 
 const MAX_PLAN_BYTES = 60 * 1024 * 1024;
 const MAX_PRODUCTS = 500;
+/** A product picture sent inline (BOQ Flow sends small JPEG thumbnails). */
+const MAX_PICTURE_CHARS = 600_000;
+const INLINE_PICTURE = /^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/;
 
 /** BOQ Flow origins allowed to drive this page (more can be added with NEXT_PUBLIC_DB_EMBED_ORIGINS). */
 export function embedOriginAllowed(origin: string, extra: string = process.env.NEXT_PUBLIC_DB_EMBED_ORIGINS ?? ''): boolean {
@@ -69,6 +72,15 @@ export type ParentMessage =
 const str = (v: unknown, max: number): string | undefined =>
   typeof v === 'string' && v.trim() ? v.trim().slice(0, max) : undefined;
 
+/** A picture link (https) or an inline picture; anything else is dropped. */
+function productPicture(v: unknown): string | undefined {
+  if (typeof v !== 'string') return undefined;
+  const s = v.trim();
+  if (/^https?:\/\//i.test(s)) return s.length <= 2000 ? s : undefined;
+  if (s.startsWith('data:image/')) return s.length <= MAX_PICTURE_CHARS && INLINE_PICTURE.test(s) ? s : undefined;
+  return undefined;
+}
+
 const metres = (v: unknown): number | undefined =>
   typeof v === 'number' && Number.isFinite(v) && v > 0.05 && v < 30 ? v : undefined;
 
@@ -78,7 +90,6 @@ function parseProduct(v: unknown, i: number): EmbedProduct | null {
   const description = str(p.description, 1000);
   if (!description) return null;
   const qty = typeof p.qty === 'number' ? p.qty : Number(p.qty);
-  const imageUrl = str(p.imageUrl, 2000);
   const dims = p.dims && typeof p.dims === 'object' ? (p.dims as Record<string, unknown>) : null;
   return {
     id: str(p.id, 100) ?? `item_${i + 1}`,
@@ -89,8 +100,7 @@ function parseProduct(v: unknown, i: number): EmbedProduct | null {
     category: str(p.category, 200),
     brand: str(p.brand, 200),
     model: str(p.model, 300),
-    // Pictures are links or inline images; anything else is dropped.
-    imageUrl: imageUrl && /^(https?:\/\/|data:image\/)/i.test(imageUrl) ? imageUrl : undefined,
+    imageUrl: productPicture(p.imageUrl),
     dims: dims ? { w: metres(dims.w), d: metres(dims.d), h: metres(dims.h) } : undefined,
   };
 }

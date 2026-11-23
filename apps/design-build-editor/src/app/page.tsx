@@ -58,7 +58,8 @@ import { selectDoorInstallerInput, type RuntimeWallMap } from '@/features/door-p
 import { getPascalStores, ensureBuiltinPluginLoaded, type ViewerHandle } from 'design-build-simplified-viewer-shell';
 import { RenderStudio, loadRenderPrefs } from '@/features/render/RenderStudio';
 import { prepareView, currentViewKind, captureViewForRender, readPlanUnderlay, type PreparedView } from '@/features/render/capture-view';
-import { renderPhotoreal, type RenderJobResult } from '@/features/render/render-client';
+import { RENDER_COMPLETE_EVENT, renderPhotoreal, type RenderJobResult } from '@/features/render/render-client';
+import { productRefs } from '@/features/furniture/product-refs';
 import { RENDER_TIERS, getRenderStyle, styleFromText, furnishFromText } from '@/features/render/render-presets';
 import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
 import { useEditorMode } from '@/features/pro/useEditorMode';
@@ -3551,11 +3552,38 @@ export default function Home() {
     artifacts: (requestId) => {
       void (async () => {
         const nodes = (getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, unknown> }).nodes ?? {};
-        let view: string | null = null;
-        try {
-          view = (await captureViewForRender(viewerHandleRef.current, { frameBuilding: true })).dataUrl;
-        } catch {
-          // The 3D view is optional in the export.
+        // Views for the export suite: the current one, then (unless walking) the plan
+        // from the top and the 3D overview; the camera is put back afterwards.
+        const views: { kind: 'current' | 'top' | 'overview'; image: string }[] = [];
+        const shoot = async (kind: 'current' | 'top' | 'overview') => {
+          try {
+            views.push({ kind, image: (await captureViewForRender(viewerHandleRef.current, { frameBuilding: true })).dataUrl });
+          } catch {
+            // Views are optional in the export.
+          }
+        };
+        const frame = () => new Promise<void>((r) => requestAnimationFrame(() => r()));
+        await shoot('current');
+        const h = viewerHandleRef.current;
+        if (h?.camera && viewModeRef.current !== 'walk') {
+          const pose = currentPose(h);
+          const mode = viewModeRef.current;
+          const framed = autoFramedRef.current;
+          try {
+            goToView('top', { ms: 0 });
+            await frame();
+            await frame();
+            await shoot('top');
+            goToView('3d', { ms: 0 });
+            await frame();
+            await frame();
+            await shoot('overview');
+          } finally {
+            await animateTo(h, pose, 0);
+            viewModeRef.current = mode;
+            setViewMode(mode);
+            autoFramedRef.current = framed;
+          }
         }
         let planImage: string | null = null;
         try {
@@ -3567,7 +3595,7 @@ export default function Home() {
           requestId,
           planName: embedPlanNameRef.current,
           planImage,
-          views: view ? [view] : [],
+          views,
           scene: JSON.stringify(filterCommercialNodes(nodes)),
           counts: countSceneNodes(nodes),
         });
@@ -3601,6 +3629,7 @@ export default function Home() {
         products: res.match.products,
         unplacedProductIds: res.match.unplacedProductIds,
         unmatchedPieces: res.match.unmatchedPieceIds.length,
+        colours: productRefs().map((r) => ({ id: r.id, hex: r.colour.hex, name: r.colour.name })),
       });
     } catch (e) {
       embedPostRef.current('error', { message: `Could not furnish the model: ${e instanceof Error ? e.message : String(e)}` });
@@ -3625,6 +3654,28 @@ export default function Home() {
       }
     })();
   }, [isBuildComplete, planFurnitureTick, furnishWithProducts]);
+  // Each finished render goes to BOQ Flow, where it can be approved for the export suite.
+  useEffect(() => {
+    if (!embedded) return;
+    const onRender = (e: Event) => {
+      const r = (e as CustomEvent<RenderJobResult>).detail;
+      if (!r?.imageUrl) return;
+      embedPostRef.current('render-ready', {
+        renderId: r.renderId,
+        image: r.imageUrl,
+        width: r.view.width,
+        height: r.view.height,
+        viewKind: r.view.viewKind,
+        style: r.style,
+        tier: r.tier,
+        modelLabel: r.modelLabel,
+        score: r.fidelity.score,
+        products: r.products ?? [],
+      });
+    };
+    window.addEventListener(RENDER_COMPLETE_EVENT, onRender);
+    return () => window.removeEventListener(RENDER_COMPLETE_EVENT, onRender);
+  }, [embedded]);
   const embedEventsSeen = useRef(0);
   useEffect(() => {
     if (!embedded) return;

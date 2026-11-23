@@ -51,6 +51,24 @@ export interface PreparedView {
   pitchDeg?: number;
   /** A plain ceiling was added on top of the walls for the capture. */
   ceilingInView?: boolean;
+  /** Furniture stand-ins in the view (from the drawing), grouped by the product they carry. */
+  furniture?: FurnitureInView;
+}
+
+/** Furniture stand-ins in a prepared view; rects are normalized to the view. */
+export interface FurnitureInView {
+  /** All stand-ins in view, with or without a product. */
+  standIns: number;
+  /** The stand-ins that carry a BOQ Flow product, most numerous first. */
+  products: { productId: string; count: number; kinds: string[]; x0: number; y0: number; x1: number; y1: number }[];
+}
+
+/** One furniture stand-in seen on screen, at its centre (normalized canvas coordinates). */
+export interface FurnitureOnScreen {
+  kind: string;
+  productId?: string;
+  x: number;
+  y: number;
 }
 
 /** Flat passes of the live view (surface orientation, object identity) for drawing the model's own edges. */
@@ -299,6 +317,17 @@ function drawnMesh(m: THREE.Mesh): boolean {
   return materialsOf(m).some((mt) => mt.visible !== false && mt.colorWrite !== false && !(mt.transparent && (mt.opacity ?? 1) < 0.05));
 }
 
+/** A mesh that hides what is behind it (glass and other see-through surfaces do not). */
+function opaqueMesh(m: THREE.Mesh): boolean {
+  return materialsOf(m).some(
+    (mt) =>
+      mt.visible !== false &&
+      mt.colorWrite !== false &&
+      !(mt.transparent && (mt.opacity ?? 1) < 0.6) &&
+      !(((mt as THREE.MeshPhysicalMaterial).transmission ?? 0) > 0.2),
+  );
+}
+
 /** Copy of the WebGL/WebGPU canvas as it is right after a render. */
 function snapshotCanvas(src: HTMLCanvasElement): HTMLCanvasElement {
   const c = document.createElement('canvas');
@@ -450,6 +479,73 @@ function visibleOpenings(v: LiveViewer): OpeningOnScreen[] {
   return out;
 }
 
+/**
+ * Furniture stand-ins (pieces placed from the drawing) seen from the camera: one
+ * entry per stand-in whose centre or top is not hidden behind something opaque.
+ */
+function visibleFurniture(v: LiveViewer): FurnitureOnScreen[] {
+  const out: FurnitureOnScreen[] = [];
+  try {
+    const { useScene, sceneRegistry } = getPascalStores() as unknown as {
+      useScene: { getState: () => { nodes: Record<string, { id: string; type: string; metadata?: Record<string, unknown> }> } };
+      sceneRegistry: { nodes: Map<string, THREE.Object3D> };
+    };
+    const cam = v.camera;
+    cam.updateMatrixWorld();
+    (cam as THREE.PerspectiveCamera).updateProjectionMatrix?.();
+    const eye = new THREE.Vector3().setFromMatrixPosition(cam.matrixWorld);
+    let targets: THREE.Object3D[] | null = null;
+    const ray = new THREE.Raycaster();
+    const box = new THREE.Box3();
+    const p = new THREE.Vector3();
+    const q = new THREE.Vector3();
+    const hitBox = new THREE.Vector3();
+    for (const n of Object.values(useScene.getState().nodes ?? {})) {
+      const meta = n.metadata;
+      if (n.type !== 'item' || meta?.source !== 'plan-furniture') continue;
+      const o = sceneRegistry.nodes.get(n.id);
+      if (!o?.visible) continue;
+      box.setFromObject(o);
+      if (box.isEmpty()) continue;
+      const cx = (box.min.x + box.max.x) / 2;
+      const cz = (box.min.z + box.max.z) / 2;
+      let seen: { x: number; y: number } | null = null;
+      for (const y of [box.max.y - 0.02, (box.min.y + box.max.y) / 2]) {
+        p.set(cx, y, cz);
+        q.copy(p).project(cam);
+        if (q.z > 1 || q.z < -1 || Math.abs(q.x) > 1 || Math.abs(q.y) > 1) continue;
+        const dir = p.clone().sub(eye);
+        const dist = dir.length();
+        if (dist < 1e-3) continue;
+        if (!targets) {
+          const list: THREE.Object3D[] = [];
+          v.scene.traverseVisible((m) => {
+            if ((m as THREE.Mesh).isMesh && opaqueMesh(m as THREE.Mesh)) list.push(m);
+          });
+          targets = list;
+        }
+        ray.set(eye, dir.divideScalar(dist));
+        ray.far = dist + 0.5;
+        const entry = ray.ray.intersectBox(box, hitBox) ? hitBox.distanceTo(eye) : dist;
+        const first = ray.intersectObjects(targets, false)[0];
+        if (first && first.distance < entry - 0.06) continue; // something stands in front
+        seen = { x: (q.x + 1) / 2, y: (1 - q.y) / 2 };
+        break;
+      }
+      if (!seen) continue;
+      const product = meta.product as { id?: unknown } | undefined;
+      out.push({
+        kind: typeof meta.kind === 'string' ? meta.kind : 'unknown',
+        ...(typeof product?.id === 'string' ? { productId: product.id } : {}),
+        ...seen,
+      });
+    }
+  } catch {
+    /* no scene data: no inventory */
+  }
+  return out;
+}
+
 function cameraFacts(v: LiveViewer): CameraFacts | null {
   const cam = v.camera as THREE.PerspectiveCamera;
   if (!cam.isPerspectiveCamera) return null;
@@ -472,6 +568,7 @@ function cameraFacts(v: LiveViewer): CameraFacts | null {
 export interface CaptureExtras {
   passes: ModelPasses | null;
   openings: OpeningOnScreen[] | null;
+  furniture: FurnitureOnScreen[] | null;
   camera: CameraFacts | null;
   ceilingInView: boolean;
 }
@@ -493,6 +590,8 @@ export function captureBeautyPass(
     modelLines?: boolean;
     /** Also list the doors and windows in view. */
     openings?: boolean;
+    /** Also list the furniture stand-ins in view. */
+    furniture?: boolean;
   } = {},
 ): { dataUrl: string; viewKind: ViewKind; focus: NormRect | null } & CaptureExtras {
   const v = resolveViewer(handle);
@@ -505,7 +604,7 @@ export function captureBeautyPass(
   const removeCeiling = opts.ceiling ? addCaptureCeiling(v.scene) : null;
   const prevRatio = v.gl.getPixelRatio?.();
   let dataUrl = '';
-  const extras: CaptureExtras = { passes: null, openings: null, camera: cameraFacts(v), ceilingInView: !!removeCeiling };
+  const extras: CaptureExtras = { passes: null, openings: null, furniture: null, camera: cameraFacts(v), ceilingInView: !!removeCeiling };
   try {
     const cssW = Math.max(canvas.clientWidth, 1);
     const cssH = Math.max(canvas.clientHeight, 1);
@@ -536,6 +635,7 @@ export function captureBeautyPass(
       extras.passes = captureModelPasses(v);
     }
     if (opts.openings) extras.openings = visibleOpenings(v);
+    if (opts.furniture) extras.furniture = visibleFurniture(v);
   } finally {
     if (prevRatio && v.gl.setPixelRatio && v.gl.getPixelRatio?.() !== prevRatio) {
       try {
@@ -658,6 +758,7 @@ export async function prepareView(
     }))
     .filter((o) => o.x1 > 0 && o.x0 < 1 && o.y1 > 0 && o.y0 < 1)
     .map((o) => ({ ...o, x0: Math.max(0, o.x0), y0: Math.max(0, o.y0), x1: Math.min(1, o.x1), y1: Math.min(1, o.y1) }));
+  const furniture = extras.furniture ? furnitureInView(extras.furniture, norm) : null;
   const cam = extras.camera;
   return {
     dataUrl,
@@ -671,7 +772,35 @@ export async function prepareView(
     ...(openings ? { openings } : {}),
     ...(cam ? { fovDeg: cropFieldOfView(cam.fovDeg, cam.aspect, cam.principal, norm), pitchDeg: cam.pitchDeg } : {}),
     ...(extras.ceilingInView ? { ceilingInView: true } : {}),
+    ...(furniture && furniture.standIns > 0 ? { furniture } : {}),
   };
+}
+
+/** Stand-ins inside the crop, grouped by product (most numerous first), in view coordinates. */
+export function furnitureInView(items: readonly FurnitureOnScreen[], crop: NormRect): FurnitureInView {
+  const w = crop.x1 - crop.x0;
+  const h = crop.y1 - crop.y0;
+  const byProduct = new Map<string, FurnitureInView['products'][number]>();
+  let standIns = 0;
+  for (const it of items) {
+    const x = (it.x - crop.x0) / w;
+    const y = (it.y - crop.y0) / h;
+    if (x < 0 || x > 1 || y < 0 || y > 1) continue;
+    standIns++;
+    if (!it.productId) continue;
+    let g = byProduct.get(it.productId);
+    if (!g) {
+      g = { productId: it.productId, count: 0, kinds: [], x0: x, y0: y, x1: x, y1: y };
+      byProduct.set(it.productId, g);
+    }
+    g.count++;
+    if (!g.kinds.includes(it.kind)) g.kinds.push(it.kind);
+    g.x0 = Math.min(g.x0, x);
+    g.y0 = Math.min(g.y0, y);
+    g.x1 = Math.max(g.x1, x);
+    g.y1 = Math.max(g.y1, y);
+  }
+  return { standIns, products: [...byProduct.values()].sort((a, b) => b.count - a.count) };
 }
 
 /** Capture + prepare in one step, for the one-click render button. */
@@ -688,10 +817,12 @@ export async function captureViewForRender(
     ceiling: interior && opts.ceiling !== false,
     modelLines: true,
     openings: interior,
+    furniture: true,
   });
   const view = await prepareView(shot.dataUrl, opts.viewKind ?? shot.viewKind, 1536, frameBuilding ? shot.focus : null, frame, {
     passes: shot.passes,
     openings: shot.openings,
+    furniture: shot.furniture,
     camera: shot.camera,
     ceilingInView: shot.ceilingInView,
     centreOnCamera: !frame && !frameBuilding,

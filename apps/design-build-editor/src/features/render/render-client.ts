@@ -3,10 +3,17 @@
 // /api/render, score the result against the model's edges, and re-render once
 // with a stricter lock (plus the edge guide) when the geometry drifted.
 
-import { RENDER_TIERS, type RenderStyleId, type RenderTierId } from './render-presets';
-import { OUTSIDE_OK, fidelityGrade, scoreRenderFidelity, type FidelityReport } from './geometry-fidelity';
+import { RENDER_TIERS, whereInView, type RenderStyleId, type RenderTierId } from './render-presets';
+import { OUTSIDE_OK, fidelityGrade, loadImage, scoreRenderFidelity, type FidelityReport } from './geometry-fidelity';
 import type { PreparedView } from './capture-view';
 import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
+import { productRef } from '@/features/furniture/product-refs';
+
+/** Window event fired after each finished render (detail: RenderJobResult). */
+export const RENDER_COMPLETE_EVENT = 'db:render-complete';
+
+/** Product pictures sent with one render (the most numerous products in view first). */
+const MAX_PRODUCT_PICTURES = 4;
 
 export type RenderStageKey = 'capture' | 'send' | 'render' | 'check' | 'retry' | 'done';
 
@@ -54,6 +61,76 @@ export interface RenderJobResult {
   attempts: number;
   elapsedMs: number;
   approxUsd: number;
+  /** BOQ Flow products shown in the view (their stand-ins were rendered as them). */
+  products?: { id: string; label: string; colour: string; count: number; withPicture: boolean }[];
+}
+
+/** What the render route needs to turn the stand-ins in view into furniture and products. */
+interface RenderFurniture {
+  standIns: number;
+  products: { label: string; colour: string; kinds: string[]; count: number; where: string; image?: string }[];
+}
+
+const pictureCache = new Map<string, Promise<string | undefined>>();
+
+/**
+ * A product picture as a small JPEG data URL: inline pictures (as BOQ Flow sends
+ * them) are used as they are, links are fetched when the host allows it.
+ */
+function productPicture(url: string | undefined): Promise<string | undefined> {
+  if (!url) return Promise.resolve(undefined);
+  let job = pictureCache.get(url);
+  if (!job) {
+    job = (async () => {
+      let objectUrl: string | null = null;
+      try {
+        let src = url;
+        if (/^https:\/\//i.test(url)) {
+          const r = await fetch(url, { mode: 'cors', signal: AbortSignal.timeout(8000) });
+          const blob = r.ok ? await r.blob() : null;
+          if (!blob || !blob.type.startsWith('image/')) return undefined;
+          src = objectUrl = URL.createObjectURL(blob);
+        } else if (!/^data:image\/(png|jpeg|webp);base64,/i.test(url)) {
+          return undefined;
+        }
+        const img = await loadImage(src);
+        const scale = Math.min(1, 512 / Math.max(img.width, img.height, 1));
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(img.width * scale));
+        c.height = Math.max(1, Math.round(img.height * scale));
+        const ctx = c.getContext('2d');
+        if (!ctx) return undefined;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.drawImage(img, 0, 0, c.width, c.height);
+        return c.toDataURL('image/jpeg', 0.85);
+      } catch {
+        return undefined;
+      } finally {
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+      }
+    })();
+    pictureCache.set(url, job);
+  }
+  return job;
+}
+
+/** The stand-ins in view, named by product (with pictures for the main ones). */
+async function furnitureForRender(view: PreparedView): Promise<{ request: RenderFurniture; shown: NonNullable<RenderJobResult['products']> } | null> {
+  const f = view.furniture;
+  if (!f || f.standIns <= 0) return null;
+  const request: RenderFurniture = { standIns: f.standIns, products: [] };
+  const shown: NonNullable<RenderJobResult['products']> = [];
+  let pictures = 0;
+  for (const g of f.products.slice(0, 12)) {
+    const ref = productRef(g.productId);
+    if (!ref) continue;
+    const image = pictures < MAX_PRODUCT_PICTURES ? await productPicture(ref.imageUrl) : undefined;
+    if (image) pictures++;
+    request.products.push({ label: ref.label, colour: ref.colour.name, kinds: g.kinds, count: g.count, where: whereInView(g), ...(image ? { image } : {}) });
+    shown.push({ id: ref.id, label: ref.label, colour: ref.colour.hex, count: g.count, withPicture: !!image });
+  }
+  return { request, shown };
 }
 
 export class RenderRequestError extends Error {
@@ -124,6 +201,7 @@ async function postRender(
   attempt: number,
   strict: boolean,
   withEdges: boolean,
+  furniture: RenderFurniture | undefined,
 ): Promise<ApiOk> {
   const res = await fetch('/api/render', {
     method: 'POST',
@@ -149,6 +227,7 @@ async function postRender(
         : {}),
       ...(withEdges && view.lineGuide ? { lineGuide: true } : {}),
       furnish: o.furnish,
+      ...(furniture ? { furniture } : {}),
       note: o.note,
       strict,
       attempt,
@@ -182,6 +261,7 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
   const minScore = o.minScore ?? 0.6;
   let attempts = 0;
   let best: { api: ApiOk; fidelity: FidelityReport } | null = null;
+  const furniture = await furnitureForRender(view);
 
   const run = async (strict: boolean, withEdges: boolean, base: number, cap: number) => {
     attempts++;
@@ -189,7 +269,7 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
     const stop = pacer(o, base, cap, tier.etaSec, strict ? 'Re-rendering with a stricter geometry lock…' : `Rendering photoreal with ${tier.modelLabel}…`);
     let api: ApiOk;
     try {
-      api = await postRender(view, o, attempts, strict, withEdges);
+      api = await postRender(view, o, attempts, strict, withEdges, furniture?.request);
     } finally {
       stop();
     }
@@ -197,7 +277,7 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
     // Inside a room a ceiling (and its lights) may close the open top: looser
     // limit for new edges, and no empty background to guard.
     const interior = view.viewKind === 'interior';
-    const fidelity = await scoreRenderFidelity(view.dataUrl, api.image, { furnished: o.furnish || interior, ignoreOutside: interior });
+    const fidelity = await scoreRenderFidelity(view.dataUrl, api.image, { furnished: o.furnish || interior || !!furniture, ignoreOutside: interior });
     if (!best || fidelity.score > best.fidelity.score) best = { api, fidelity };
     return fidelity;
   };
@@ -225,7 +305,7 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
 
   const b = best as unknown as { api: ApiOk; fidelity: FidelityReport };
   o.onStage?.({ key: 'done', label: `Done — geometry match ${Math.round(b.fidelity.score * 100)}% (${fidelityGrade(b.fidelity.score)})`, progress: 1 });
-  return {
+  const result: RenderJobResult = {
     renderId: b.api.renderId,
     imageUrl: b.api.image,
     mimeType: b.api.mimeType,
@@ -239,5 +319,8 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
     attempts,
     elapsedMs: Math.round(performance.now() - t0),
     approxUsd: b.api.model === 'dry-run' ? 0 : tier.approxUsd * attempts,
+    ...(furniture?.shown.length ? { products: furniture.shown } : {}),
   };
+  if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent(RENDER_COMPLETE_EVENT, { detail: result }));
+  return result;
 }
