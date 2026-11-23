@@ -14,6 +14,7 @@ import { getPascalStores } from 'design-build-simplified-viewer-shell';
 import { uid } from '@/harness/ai-scene-install/helpers';
 import { matchProducts, type MatchProduct, type MatchResult } from './match-products';
 import { PRODUCT_COLOURS, productLabel, setProductRefs, type ProductColour } from './product-refs';
+import { PAD_TOP_M, hasProductPhoto, loadProductCutouts } from './product-cards';
 
 export interface PlanFurniturePiece {
   id: string;
@@ -100,10 +101,17 @@ function extrudeFootprint(p: PlanFurniturePiece, from: number, to: number, mater
   return new THREE.Mesh(g, material);
 }
 
-/** A stand-in for one piece, centred on its footprint centre, standing on y = 0. */
-export function buildPieceObject(p: PlanFurniturePiece, tint?: string): THREE.Group {
+/**
+ * A stand-in for one piece, centred on its footprint centre, standing on y = 0. With
+ * `pad`, only a thin pad in the product's colour: the product's photo stands on it.
+ */
+export function buildPieceObject(p: PlanFurniturePiece, tint?: string, opts: { pad?: boolean } = {}): THREE.Group {
   const look = lookOf(p.kind, tint);
   const group = new THREE.Group();
+  if (opts.pad) {
+    group.add(extrudeFootprint(p, 0, PAD_TOP_M, mat(look.body, 0.7)));
+    return group;
+  }
   const short = Math.max(0.2, Math.min(p.widthM, p.depthM));
   switch (p.kind) {
     case 'table':
@@ -185,18 +193,18 @@ function ensureBlobFetch(): void {
   }) as typeof fetch;
 }
 
-function signature(p: PlanFurniturePiece, tint?: string): string {
+function signature(p: PlanFurniturePiece, tint?: string, pad = false): string {
   const pts = p.outlineM.map((q) => `${Math.round((q.x - p.centerM.x) * 200)},${Math.round((q.y - p.centerM.y) * 200)}`).join(';');
-  return `${p.kind}|${tint ?? ''}|${Math.round(p.angle * 1000)}|${pts}`;
+  return `${p.kind}|${tint ?? ''}|${pad ? 'pad' : 'body'}|${Math.round(p.angle * 1000)}|${pts}`;
 }
 
-function modelUrl(p: PlanFurniturePiece, tint?: string): Promise<string> {
-  const key = signature(p, tint);
+function modelUrl(p: PlanFurniturePiece, tint?: string, pad = false): Promise<string> {
+  const key = signature(p, tint, pad);
   let url = assetBySignature.get(key);
   if (!url) {
     url = (async () => {
       ensureBlobFetch();
-      const out = (await exporter.parseAsync(buildPieceObject(p, tint), { binary: true })) as ArrayBuffer;
+      const out = (await exporter.parseAsync(buildPieceObject(p, tint, { pad }), { binary: true })) as ArrayBuffer;
       const blobUrl = URL.createObjectURL(new Blob([out], { type: 'model/gltf-binary' }));
       ownBlobUrls.add(blobUrl);
       return blobUrl;
@@ -279,6 +287,8 @@ export async function installPlanFurniture(f: PlanFurniture, opts: { kinds?: Set
 export interface FurnishResult {
   match: MatchResult;
   placed: number;
+  /** Products shown by their own photo in the model. */
+  withPhotos: number;
 }
 
 /**
@@ -298,6 +308,9 @@ export async function applyProducts(f: PlanFurniture, products: MatchProduct[]):
       return { id: p.id, label: productLabel(p), description: p.description, imageUrl: p.imageUrl, colour: colourOf.get(p.id)! };
     }),
   );
+  // Products with a picture stand in the model as their own photo, cut out, on a pad.
+  await loadProductCutouts(placedLines.map((m) => ({ id: m.productId, imageUrl: byId.get(m.productId)?.imageUrl })));
+  const withPhotos = placedLines.filter((m) => hasProductPhoto(m.productId)).length;
   let placed = 0;
   for (const piece of f.pieces) {
     const hit = installed.get(piece.id);
@@ -308,8 +321,10 @@ export async function applyProducts(f: PlanFurniture, products: MatchProduct[]):
     const asset = { ...(hit.node.asset as Record<string, unknown>) };
     const colour = product ? colourOf.get(product.id) : undefined;
     const tint = colour?.hex;
+    const photo = !!product && hasProductPhoto(product.id);
     try {
-      asset.src = await modelUrl(piece, tint);
+      asset.src = await modelUrl(piece, tint, photo);
+      asset.dimensions = boxOf(buildPieceObject(piece, tint, { pad: photo }));
     } catch {
       // keep the untinted stand-in
     }
@@ -317,11 +332,11 @@ export async function applyProducts(f: PlanFurniture, products: MatchProduct[]):
       placed++;
       // Inline pictures stay out of the scene (they live in product-refs); links are kept.
       const imageUrl = product.imageUrl && /^https:\/\//i.test(product.imageUrl) ? product.imageUrl : undefined;
-      meta.product = { id: product.id, description: product.description, brand: product.brand, model: product.model, imageUrl, tint, colour: colour?.name };
+      meta.product = { id: product.id, description: product.description, brand: product.brand, model: product.model, imageUrl, tint, colour: colour?.name, photo };
     } else delete meta.product;
     const name = product ? productLabel(product) : KIND_LABEL[piece.kind] ?? 'Furniture';
     asset.name = name;
     scene().updateNode(hit.id, { name, metadata: meta, asset });
   }
-  return { match, placed };
+  return { match, placed, withPhotos };
 }

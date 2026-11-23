@@ -68,7 +68,7 @@ export interface RenderJobResult {
 /** What the render route needs to turn the stand-ins in view into furniture and products. */
 interface RenderFurniture {
   standIns: number;
-  products: { label: string; colour: string; kinds: string[]; count: number; where: string; image?: string }[];
+  products: { label: string; colour: string; kinds: string[]; count: number; where: string; photo: boolean; image?: string }[];
 }
 
 const pictureCache = new Map<string, Promise<string | undefined>>();
@@ -127,7 +127,7 @@ async function furnitureForRender(view: PreparedView): Promise<{ request: Render
     if (!ref) continue;
     const image = pictures < MAX_PRODUCT_PICTURES ? await productPicture(ref.imageUrl) : undefined;
     if (image) pictures++;
-    request.products.push({ label: ref.label, colour: ref.colour.name, kinds: g.kinds, count: g.count, where: whereInView(g), ...(image ? { image } : {}) });
+    request.products.push({ label: ref.label, colour: ref.colour.name, kinds: g.kinds, count: g.count, where: whereInView(g), photo: g.photo, ...(image ? { image } : {}) });
     shown.push({ id: ref.id, label: ref.label, colour: ref.colour.hex, count: g.count, withPicture: !!image });
   }
   return { request, shown };

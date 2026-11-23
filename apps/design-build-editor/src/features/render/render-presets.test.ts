@@ -268,6 +268,32 @@ describe('furniture stand-ins and real products', () => {
     expect(p).not.toMatch(/leave the rooms unfurnished/);
   });
 
+  it('renders the photos standing on pads as the real products', () => {
+    const p = buildGeometryLockPrompt({
+      style: 'daylight', viewKind: 'cutaway', furnish: false, withEdgeGuide: true, withPlan: false,
+      furniture: {
+        standIns: 10,
+        products: [
+          { label: 'Vitra · Repos', colour: 'red', kinds: ['seat'], count: 7, where: 'in the centre', photo: true, imageIndex: 3 },
+          { label: 'Hay · Revolver', colour: 'blue', kinds: ['seat'], count: 3, photo: false },
+        ],
+      },
+    });
+    expect(p).toMatch(/Coloured pads on the floor \(7 in view\) each carry a cut-out photo of the real product/);
+    expect(p).toMatch(/never as a flat photo, card or poster/);
+    expect(p).toMatch(/- The red pads \(7, in the centre\): Vitra · Repos, chairs shown by their photo — more detail in image 3\./);
+    expect(p).toMatch(/- The blue chairs \(3\): Hay · Revolver\./);
+    expect(p).toMatch(/plain solid blocks standing on the floor in image 1 are furniture stand-ins placed from the construction drawing \(3 in view\)/);
+    expect(p).not.toMatch(/Off-white stand-ins/);
+    expect(p).toMatch(/Furnishing: only the furniture of the stand-ins and pads above/);
+    const onlyPhotos = buildGeometryLockPrompt({
+      style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false,
+      furniture: { standIns: 2, products: [{ label: 'Las · Mia', colour: 'pink', kinds: ['desk'], count: 2, photo: true }] },
+    });
+    expect(onlyPhotos).not.toMatch(/plain solid blocks/);
+    expect(onlyPhotos).toMatch(/- The pink pads \(2\): Las · Mia, desks shown by their photo\./);
+  });
+
   it('keeps stand-ins as furniture even without products, and ignores an empty inventory', () => {
     const plain = buildGeometryLockPrompt({
       style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false,

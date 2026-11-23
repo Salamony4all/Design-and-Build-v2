@@ -3553,9 +3553,12 @@ export default function Home() {
       void (async () => {
         const nodes = (getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, unknown> }).nodes ?? {};
         // Views for the export suite: the current one, then (unless walking) the plan
-        // from the top and the 3D overview; the camera is put back afterwards.
-        const views: { kind: 'current' | 'top' | 'overview'; image: string }[] = [];
-        const shoot = async (kind: 'current' | 'top' | 'overview') => {
+        // from the top with the product photos and without them, and the 3D overview;
+        // the camera is put back afterwards.
+        type ExportView = 'current' | 'top' | 'top-plain' | 'overview';
+        const views: { kind: ExportView; image: string }[] = [];
+        const cards = await import('@/features/furniture/product-cards');
+        const shoot = async (kind: ExportView) => {
           try {
             views.push({ kind, image: (await captureViewForRender(viewerHandleRef.current, { frameBuilding: true })).dataUrl });
           } catch {
@@ -3574,6 +3577,12 @@ export default function Home() {
             await frame();
             await frame();
             await shoot('top');
+            cards.setProductCardsVisible(false);
+            try {
+              await shoot('top-plain');
+            } finally {
+              cards.setProductCardsVisible(true);
+            }
             goToView('3d', { ms: 0 });
             await frame();
             await frame();
@@ -3591,11 +3600,35 @@ export default function Home() {
         } catch {
           planImage = liveGuideRef.current.url;
         }
+        // Where each piece of furniture stands (plan metres), with the product it carries.
+        const placements: Array<{ pieceId: string; kind: string; productId: string | null; x: number; y: number; angleDeg: number; widthM: number; depthM: number }> = [];
+        const furnished = furnitureInstalledRef.current;
+        if (furnished) {
+          const byPiece = new Map(furnished.pieces.map((p) => [p.id, p]));
+          const cm = (v: number) => Math.round(v * 100) / 100;
+          for (const n of Object.values(nodes) as Array<{ type?: string; metadata?: Record<string, unknown> }>) {
+            if (n?.type !== 'item' || n.metadata?.source !== 'plan-furniture') continue;
+            const piece = byPiece.get(String(n.metadata.pieceId));
+            if (!piece) continue;
+            const product = n.metadata.product as { id?: string } | undefined;
+            placements.push({
+              pieceId: piece.id,
+              kind: piece.kind,
+              productId: product?.id ?? null,
+              x: cm(piece.centerM.x),
+              y: cm(piece.centerM.y),
+              angleDeg: Math.round((piece.angle * 180) / Math.PI),
+              widthM: cm(piece.widthM),
+              depthM: cm(piece.depthM),
+            });
+          }
+        }
         embedPostRef.current('artifacts', {
           requestId,
           planName: embedPlanNameRef.current,
           planImage,
           views,
+          placements,
           scene: JSON.stringify(filterCommercialNodes(nodes)),
           counts: countSceneNodes(nodes),
         });
@@ -3623,7 +3656,11 @@ export default function Home() {
     try {
       const mod = await import('@/features/furniture/plan-furniture');
       const res = await mod.applyProducts(f, items);
+      // The products' own photos stand on their pads (kept in place as the scene changes).
+      const cards = await import('@/features/furniture/product-cards');
+      cards.keepProductCards(() => viewerHandleRef.current?.invalidate());
       embedPostRef.current('furnished', {
+        withPhotos: res.withPhotos,
         placedPieces: res.placed,
         pieces: f.pieces.length,
         products: res.match.products,

@@ -373,6 +373,8 @@ export interface PromptFurnitureProduct {
   count: number;
   /** Where its stand-ins are in the view ('on the left', …). */
   where?: string;
+  /** Its own photo, cut out, stands on a coloured pad at each place (instead of a solid stand-in). */
+  photo?: boolean;
   /** Number of the attached picture of the product, when one is sent. */
   imageIndex?: number;
 }
@@ -520,25 +522,43 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
     );
   }
 
+  const photoPieces = furniture ? furniture.products.filter((p) => p.photo).reduce((n, p) => n + p.count, 0) : 0;
   if (furniture) {
+    const blocks = Math.max(0, furniture.standIns - photoPieces);
     lines.push('');
     lines.push('FURNITURE IN THE MODEL:');
-    lines.push(
-      `The plain solid blocks standing on the floor in image 1 are furniture stand-ins placed from the construction drawing (${furniture.standIns} in view). Each marks the exact position, footprint, height and orientation of one real piece of furniture: render every stand-in as that real piece, in place and at the same size. Never move, merge or leave out a stand-in, and add no furniture where the input shows open floor.`,
-    );
+    if (blocks > 0) {
+      lines.push(
+        `The plain solid blocks standing on the floor in image 1 are furniture stand-ins placed from the construction drawing (${blocks} in view). Each marks the exact position, footprint, height and orientation of one real piece of furniture: render every stand-in as that real piece, in place and at the same size.`,
+      );
+    }
+    if (photoPieces > 0) {
+      lines.push(
+        `Coloured pads on the floor (${photoPieces} in view) each carry a cut-out photo of the real product that stands there, from the project's furniture schedule: the pad is its exact place and footprint, and the photo shows exactly which product it is, with its design, colours and materials. Render each as that real product: a solid three-dimensional piece of furniture at real size, standing on its pad's footprint and turned naturally (chairs towards their table or into the room), never as a flat photo, card or poster, and never with the pad.`,
+      );
+    }
+    lines.push('Never move, merge or leave out a piece, and add no furniture where the input shows open floor.');
     if (furniture.products.length) {
       lines.push(
-        "Coloured stand-ins are specific products from the project's furniture schedule. The colour is only a code that tells which product it is: render the product's own design, materials and colours, never the code colour.",
+        "Coloured stand-ins and pads are specific products from the project's furniture schedule. The colour is only a code that tells which product it is: render the product's own design, materials and colours, never the code colour.",
       );
       if (furniture.products.some((p) => p.imageIndex)) {
         lines.push('The pictures attached after the view are catalogue photos of single products: take only the product from each, never its background, text or framing.');
       }
       for (const p of furniture.products) {
         const where = p.where ? `, ${p.where}` : '';
-        const ref = p.imageIndex ? ` — copy its design, materials and colours from image ${p.imageIndex}` : '';
-        lines.push(`- The ${promptText(p.colour, 20)} ${standInNoun(p.kinds, p.count)} (${p.count}${where}): ${promptText(p.label, 140)}${ref}.`);
+        const label = promptText(p.label, 140);
+        if (p.photo) {
+          const ref = p.imageIndex ? ` — more detail in image ${p.imageIndex}` : '';
+          lines.push(`- The ${promptText(p.colour, 20)} ${p.count === 1 ? 'pad' : 'pads'} (${p.count}${where}): ${label}, ${standInNoun(p.kinds, p.count)} shown by their photo${ref}.`);
+        } else {
+          const ref = p.imageIndex ? ` — copy its design, materials and colours from image ${p.imageIndex}` : '';
+          lines.push(`- The ${promptText(p.colour, 20)} ${standInNoun(p.kinds, p.count)} (${p.count}${where}): ${label}${ref}.`);
+        }
       }
-      lines.push('Off-white stand-ins carry no product: render them as simple, neutral contemporary furniture of their kind.');
+      if (blocks > furniture.products.filter((p) => !p.photo).reduce((n, p) => n + p.count, 0)) {
+        lines.push('Off-white stand-ins carry no product: render them as simple, neutral contemporary furniture of their kind.');
+      }
     }
   }
 
@@ -548,7 +568,7 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   lines.push(`Materials: ${materialsFor(style.materials ?? DEFAULT_MATERIALS, o)}`);
   lines.push(
     furniture
-      ? 'Furnishing: only the furniture of the stand-ins above (soft cushions and a few small accessories on it are fine) — nothing else on the floors.'
+      ? `Furnishing: only the furniture of the stand-ins${photoPieces ? ' and pads' : ''} above (soft cushions and a few small accessories on it are fine) — nothing else on the floors.`
       : o.furnish
         ? 'Furnishing: furnish each room for its use with realistic furniture standing on the floor inside that room. Furniture goes only inside the rooms of the model — nothing outside its outer walls (no terraces, gardens, plants or outdoor furniture). It must never block, cover or alter any door or window opening, and must not hide wall corners.'
         : o.viewKind === 'interior'

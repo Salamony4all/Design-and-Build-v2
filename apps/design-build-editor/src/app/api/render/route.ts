@@ -77,6 +77,8 @@ const BodySchema = z.object({
             kinds: z.array(z.string().max(30)).max(8),
             count: z.number().int().min(1).max(10_000),
             where: z.string().max(40).optional(),
+            /** The product's own photo stands on a pad in the view (not a solid stand-in). */
+            photo: z.boolean().optional(),
             image: z.string().max(MAX_PRODUCT_IMAGE_CHARS).optional(),
           }),
         )
@@ -176,6 +178,7 @@ function furnitureRefs(body: Body, firstIndex: number): { furniture?: PromptFurn
       kinds: p.kinds,
       count: p.count,
       where: p.where,
+      photo: p.photo === true,
       imageIndex: img ? firstIndex + images.length - 1 : undefined,
     };
   });

@@ -59,14 +59,16 @@ export interface PreparedView {
 export interface FurnitureInView {
   /** All stand-ins in view, with or without a product. */
   standIns: number;
-  /** The stand-ins that carry a BOQ Flow product, most numerous first. */
-  products: { productId: string; count: number; kinds: string[]; x0: number; y0: number; x1: number; y1: number }[];
+  /** The stand-ins that carry a BOQ Flow product, most numerous first; `photo` when the product's own photo stands on a pad. */
+  products: { productId: string; count: number; kinds: string[]; photo: boolean; x0: number; y0: number; x1: number; y1: number }[];
 }
 
 /** One furniture stand-in seen on screen, at its centre (normalized canvas coordinates). */
 export interface FurnitureOnScreen {
   kind: string;
   productId?: string;
+  /** The product's photo stands on a pad here (no solid stand-in). */
+  photo?: boolean;
   x: number;
   y: number;
 }
@@ -533,10 +535,10 @@ function visibleFurniture(v: LiveViewer): FurnitureOnScreen[] {
         break;
       }
       if (!seen) continue;
-      const product = meta.product as { id?: unknown } | undefined;
+      const product = meta.product as { id?: unknown; photo?: unknown } | undefined;
       out.push({
         kind: typeof meta.kind === 'string' ? meta.kind : 'unknown',
-        ...(typeof product?.id === 'string' ? { productId: product.id } : {}),
+        ...(typeof product?.id === 'string' ? { productId: product.id, photo: product.photo === true } : {}),
         ...seen,
       });
     }
@@ -790,7 +792,7 @@ export function furnitureInView(items: readonly FurnitureOnScreen[], crop: NormR
     if (!it.productId) continue;
     let g = byProduct.get(it.productId);
     if (!g) {
-      g = { productId: it.productId, count: 0, kinds: [], x0: x, y0: y, x1: x, y1: y };
+      g = { productId: it.productId, count: 0, kinds: [], photo: !!it.photo, x0: x, y0: y, x1: x, y1: y };
       byProduct.set(it.productId, g);
     }
     g.count++;
