@@ -27,7 +27,7 @@ import {
   rasterize,
   type RgbaImage,
 } from './geometry-fidelity';
-import { hideProductPads } from '../furniture/product-cards';
+import { hideProductPads, isProductCardMesh } from '../furniture/product-cards';
 
 export interface PreparedView {
   /** JPEG data URL of the cropped view (what the model receives as image 1). */
@@ -62,7 +62,33 @@ export interface PreparedView {
 export interface ViewSpot {
   x: number;
   y: number;
+  /** Which way the piece standing there faces, as seen in the view. */
+  facing?: ViewFacing;
+  /** What told its front ('table' for a seat turned to its table, 'wall', …). */
+  by?: string;
 }
+
+/**
+ * Which way a piece faces as seen in a view: towards or away from the camera, to the
+ * left or right, or turned between them ('-near' towards the camera, '-far' away). Seen
+ * from straight above, by the image instead: 'down' (towards its bottom), 'up', and
+ * the diagonals between them and left or right.
+ */
+export type ViewFacing =
+  | 'camera'
+  | 'away'
+  | 'left'
+  | 'right'
+  | 'left-near'
+  | 'right-near'
+  | 'left-far'
+  | 'right-far'
+  | 'down'
+  | 'up'
+  | 'down-left'
+  | 'down-right'
+  | 'up-left'
+  | 'up-right';
 
 /** Furniture stand-ins in a prepared view; rects and spots are normalized to the view. */
 export interface FurnitureInView {
@@ -84,6 +110,10 @@ export interface FurnitureOnScreen {
   photo?: boolean;
   /** Seen through glass (a glazed pod or partition). */
   glass?: boolean;
+  /** Which way it faces in the view (pieces whose front the drawing shows). */
+  facing?: ViewFacing;
+  /** What told its front ('table', 'chair', 'wall', …). */
+  by?: string;
   x: number;
   y: number;
 }
@@ -385,7 +415,7 @@ function captureModelPasses(v: LiveViewer): ModelPasses | null {
     scene.traverseVisible((o) => {
       const m = o as THREE.Mesh;
       if (m.isMesh) {
-        if (drawnMesh(m)) meshes.push(m);
+        if (drawnMesh(m) && !isProductCardMesh(m)) meshes.push(m);
         else {
           m.visible = false;
           hidden.push(m);
@@ -507,6 +537,45 @@ function visibleOpenings(v: LiveViewer): OpeningOnScreen[] {
 }
 
 /**
+ * How a piece facing the plan angle `facing` (its item's own frame, x and z) looks in
+ * the view: from the camera's side of it, and its front's direction on screen.
+ */
+export function viewFacing(
+  item: THREE.Object3D,
+  facing: number,
+  cam: THREE.Camera,
+  center: THREE.Vector3,
+): ViewFacing {
+  const q = item.getWorldQuaternion(new THREE.Quaternion());
+  const yaw = new THREE.Euler().setFromQuaternion(q, 'YXZ').y;
+  const a = facing - yaw;
+  const f = new THREE.Vector3(Math.cos(a), 0, Math.sin(a));
+  const s0 = center.clone().project(cam);
+  const s1 = center.clone().addScaledVector(f, 0.5).project(cam);
+  const dx = s1.x - s0.x;
+  const dy = s1.y - s0.y; // up the screen
+  const dir = new THREE.Vector3();
+  cam.getWorldDirection(dir);
+  const ortho = (cam as THREE.OrthographicCamera).isOrthographicCamera;
+  const toCam = ortho ? dir.clone().negate() : new THREE.Vector3().setFromMatrixPosition(cam.matrixWorld).sub(center);
+  const flat = Math.hypot(toCam.x, toCam.z);
+  if (flat < 0.25 * toCam.length()) {
+    // From straight above: by the image.
+    const ang = Math.atan2(-dy, dx); // screen angle, y down: 0 right, π/2 down
+    const k = Math.round(ang / (Math.PI / 4));
+    const names: ViewFacing[] = ['right', 'down-right', 'down', 'down-left', 'left', 'up-left', 'up', 'up-right'];
+    return names[((k % 8) + 8) % 8];
+  }
+  const cos = (f.x * toCam.x + f.z * toCam.z) / flat;
+  const side = dx < 0 ? 'left' : 'right';
+  if (cos >= Math.cos(Math.PI / 6)) return 'camera';
+  if (cos <= -Math.cos(Math.PI / 6)) return 'away';
+  if (cos > Math.cos((70 * Math.PI) / 180)) return `${side}-near`;
+  if (cos < -Math.cos((70 * Math.PI) / 180)) return `${side}-far`;
+  return side;
+}
+
+/**
  * Furniture stand-ins (pieces placed from the drawing) seen from the camera: one
  * entry per stand-in whose centre or top is not hidden behind something opaque.
  */
@@ -562,12 +631,21 @@ function visibleFurniture(v: LiveViewer): FurnitureOnScreen[] {
       }
       if (!seen) continue;
       const product = meta.product as { id?: unknown; photo?: unknown } | undefined;
+      let facing: ViewFacing | undefined;
+      if (typeof meta.facing === 'number' && Number.isFinite(meta.facing)) {
+        try {
+          facing = viewFacing(o, meta.facing, cam, new THREE.Vector3(cx, (box.min.y + box.max.y) / 2, cz));
+        } catch {
+          facing = undefined;
+        }
+      }
       out.push({
         kind: typeof meta.kind === 'string' ? meta.kind : 'unknown',
         ...(typeof product?.id === 'string' ? { productId: product.id, photo: product.photo === true } : {}),
         x: seen.x,
         y: seen.y,
         ...(seen.glass ? { glass: true } : {}),
+        ...(facing ? { facing, ...(typeof meta.facingBy === 'string' ? { by: meta.facingBy } : {}) } : {}),
       });
     }
   } catch {
@@ -839,7 +917,7 @@ export function furnitureInView(items: readonly FurnitureOnScreen[], crop: NormR
     if (x < 0 || x > 1 || y < 0 || y > 1) continue;
     standIns++;
     if (it.glass) behindGlass++;
-    const spot = { x: r3(x), y: r3(y) };
+    const spot: ViewSpot = { x: r3(x), y: r3(y), ...(it.facing ? { facing: it.facing, ...(it.by ? { by: it.by } : {}) } : {}) };
     if (!it.productId) {
       let k = byKind.get(it.kind);
       if (!k) byKind.set(it.kind, (k = { kind: it.kind, count: 0, spots: [] }));

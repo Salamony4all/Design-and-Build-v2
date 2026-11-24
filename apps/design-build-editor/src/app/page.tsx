@@ -3612,7 +3612,7 @@ export default function Home() {
           planImage = liveGuideRef.current.url;
         }
         // Where each piece of furniture stands (plan metres), with the product it carries.
-        const placements: Array<{ pieceId: string; kind: string; productId: string | null; x: number; y: number; angleDeg: number; widthM: number; depthM: number }> = [];
+        const placements: Array<{ pieceId: string; kind: string; productId: string | null; x: number; y: number; angleDeg: number; facingDeg: number | null; widthM: number; depthM: number }> = [];
         const furnished = furnitureInstalledRef.current;
         if (furnished) {
           const byPiece = new Map(furnished.pieces.map((p) => [p.id, p]));
@@ -3629,6 +3629,8 @@ export default function Home() {
               x: cm(piece.centerM.x),
               y: cm(piece.centerM.y),
               angleDeg: Math.round((piece.angle * 180) / Math.PI),
+              // which way it faces on the plan (0° right, 90° down the drawing), when the drawing shows it
+              facingDeg: typeof piece.facing === 'number' ? Math.round((((piece.facing * 180) / Math.PI) % 360 + 360) % 360) : null,
               widthM: cm(piece.widthM),
               depthM: cm(piece.depthM),
             });

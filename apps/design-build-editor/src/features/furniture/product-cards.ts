@@ -1,19 +1,24 @@
 // features/furniture/product-cards.ts
 // Real product photos in the model. A furnished stand-in whose product has a picture
 // becomes a pad in the product's colour with a cut-out of the product's photo standing
-// on it, at the product's own height (or the usual one of its kind). The photo turns to
-// face the camera and shortens with the viewing angle as an upright cut-out would; in
-// the top view it lies flat inside the footprint. Cards hang under the item's own 3D
-// object, so they move with it, show in every capture (AI renders leave the pads out,
-// so they are not drawn as rugs), and stay out of the model-line passes, which hide
-// sprites.
+// on it, at the product's own height (or the usual one of its kind). Where the drawing
+// shows which way the piece faces, the photo stands turned that way: it turns towards
+// the camera by at most 45°, so seen from the side it shows at an angle, and from
+// behind it shows as a plain silhouette (the product's back). A piece with no known
+// front turns its photo to the camera. In the top view the photo lies flat inside the
+// footprint, its foot at the piece's front. Cards hang under the item's own 3D object,
+// so they move with it, show in every capture (AI renders leave the pads out, so they
+// are not drawn as rugs), and stay out of the model-line passes.
 
 import * as THREE from 'three';
 import { getPascalStores } from 'design-build-simplified-viewer-shell';
+import { cardNormal } from './card-orientation';
 
 /** Height of the coloured pad under a photo, in metres. */
 export const PAD_TOP_M = 0.03;
 const CARD_KEY = 'dbProductCard';
+/** Marks the photo and silhouette planes of a card (kept out of picking and the model-line passes). */
+const CARD_MESH_KEY = 'dbProductCardMesh';
 /** What a card was made for (product, height, footprint): another one is made when it changes. */
 const SIG_KEY = 'dbProductCardSig';
 
@@ -35,7 +40,10 @@ const KIND_HEIGHT_M: Record<string, number> = {
 
 interface Cutout {
   texture: THREE.Texture;
-  material: THREE.SpriteMaterial;
+  /** The photo, seen from the front. */
+  front: THREE.MeshBasicMaterial;
+  /** Its silhouette in grey, seen from behind. */
+  back: THREE.MeshBasicMaterial;
   /** Width over height of the trimmed photo. */
   aspect: number;
 }
@@ -210,9 +218,24 @@ function cutoutFor(url: string): Promise<Cutout | null> {
         const texture = new THREE.CanvasTexture(canvas);
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.anisotropy = 4;
-        const material = new THREE.SpriteMaterial({ map: texture, transparent: true, alphaTest: 0.08, depthWrite: true, fog: false });
-        material.toneMapped = false;
-        return { texture, material, aspect: canvas.width / Math.max(1, canvas.height) };
+        const front = new THREE.MeshBasicMaterial({ map: texture, transparent: true, alphaTest: 0.08, depthWrite: true, fog: false, side: THREE.FrontSide });
+        front.toneMapped = false;
+        // The back: the same outline in plain grey (seen from behind, mirrored as it should be).
+        const shade = document.createElement('canvas');
+        shade.width = canvas.width;
+        shade.height = canvas.height;
+        const g = shade.getContext('2d');
+        if (g) {
+          g.drawImage(canvas, 0, 0);
+          g.globalCompositeOperation = 'source-in';
+          g.fillStyle = '#8d8780';
+          g.fillRect(0, 0, shade.width, shade.height);
+        }
+        const backTexture = new THREE.CanvasTexture(shade);
+        backTexture.colorSpace = THREE.SRGBColorSpace;
+        const back = new THREE.MeshBasicMaterial({ map: backTexture, transparent: true, alphaTest: 0.08, depthWrite: true, fog: false, side: THREE.BackSide });
+        back.toneMapped = false;
+        return { texture, front, back, aspect: canvas.width / Math.max(1, canvas.height) };
       } catch {
         return null;
       }
@@ -256,36 +279,91 @@ function lyingSize(foot: readonly number[], aspect: number): { w: number; h: num
   return aspect >= 1 ? { w: fit, h: fit / aspect } : { w: fit * aspect, h: fit };
 }
 
-const viewDir = new THREE.Vector3();
+/** Plan angle (x, z) of a world direction. */
+const planAngleOf = (x: number, z: number) => Math.atan2(z, x);
+/** Turn about +Y that brings a plane's +Z normal to the plan angle `a`. */
+const yawFor = (a: number) => Math.PI / 2 - a;
 
-function makeCard(productId: string, cut: Cutout, kind: string, foot: readonly number[], heightM: number | undefined, sig: string): THREE.Sprite {
-  const card = new THREE.Sprite(cut.material);
+const viewDir = new THREE.Vector3();
+const camPos = new THREE.Vector3();
+const cardPos = new THREE.Vector3();
+const camUp = new THREE.Vector3();
+const parentQ = new THREE.Quaternion();
+const wantQ = new THREE.Quaternion();
+const tiltQ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
+const yawQ = new THREE.Quaternion();
+const offset = new THREE.Vector3();
+const yAxis = new THREE.Vector3(0, 1, 0);
+const euler = new THREE.Euler();
+/** One plane, its foot on y = 0 (scaled per card). */
+const CARD_PLANE = new THREE.PlaneGeometry(1, 1).translate(0, 0.5, 0);
+
+function makeCard(productId: string, cut: Cutout, kind: string, foot: readonly number[], heightM: number | undefined, sig: string, facing: number | null): THREE.Group {
+  const card = new THREE.Group();
   card.name = 'Product photo';
   card.userData[CARD_KEY] = productId;
   card.userData[SIG_KEY] = sig;
-  card.frustumCulled = false;
-  card.raycast = () => {}; // never picked: selection and walking go to the model itself
+  const front = new THREE.Mesh(CARD_PLANE, cut.front);
+  const back = new THREE.Mesh(CARD_PLANE, cut.back);
+  for (const m of [front, back]) {
+    m.userData[CARD_MESH_KEY] = true;
+    m.frustumCulled = false;
+    m.raycast = () => {}; // never picked: selection and walking go to the model itself
+    card.add(m);
+  }
   const stand = standingSize(kind, foot, cut.aspect, heightM);
   const lie = lyingSize(foot, cut.aspect);
-  card.onBeforeRender = (_renderer, _scene, camera) => {
+  let lastFrame = -1;
+  const orient = (renderer: unknown, camera: THREE.Camera) => {
+    // both planes call this; once per frame is enough
+    const frame = (renderer as { info?: { render?: { frame?: number } } })?.info?.render?.frame ?? -2;
+    if (frame === lastFrame && frame >= 0) return;
+    lastFrame = frame;
+    const parent = card.parent;
+    if (!parent) return;
+    parent.updateWorldMatrix(true, false);
+    parent.getWorldQuaternion(parentQ);
+    parent.getWorldPosition(cardPos);
+    euler.setFromQuaternion(parentQ, 'YXZ');
+    // the item's own turn (plan furniture stands unturned, but the editor can turn it)
+    const worldFacing = facing === null ? null : facing - euler.y;
     camera.getWorldDirection(viewDir);
-    const down = Math.asin(THREE.MathUtils.clamp(-viewDir.y, -1, 1)); // radians below the horizon
     if (viewDir.y < -0.9) {
-      card.center.set(0.5, 0.5);
-      card.position.set(0, PAD_TOP_M + 0.01, 0);
+      // Top view: flat inside the footprint, the photo's foot towards the piece's front.
+      let up: number;
+      if (worldFacing !== null) up = worldFacing + Math.PI;
+      else {
+        camUp.set(0, 1, 0).applyQuaternion(camera.quaternion);
+        up = planAngleOf(camUp.x, camUp.z);
+      }
+      yawQ.setFromAxisAngle(yAxis, yawFor(up + Math.PI));
+      wantQ.copy(yawQ).multiply(tiltQ);
+      offset.set(-Math.cos(up) * (lie.h / 2), PAD_TOP_M + 0.01, -Math.sin(up) * (lie.h / 2));
       card.scale.set(lie.w, lie.h, 1);
     } else {
-      // An upright cut-out seen from above looks shorter by the cosine of the angle.
-      card.center.set(0.5, 0);
-      card.position.set(0, PAD_TOP_M, 0);
-      card.scale.set(stand.w, stand.h * Math.max(0.35, Math.cos(Math.max(0, down))), 1);
+      camera.getWorldPosition(camPos);
+      const ortho = (camera as THREE.OrthographicCamera).isOrthographicCamera;
+      const toCamera = ortho ? planAngleOf(-viewDir.x, -viewDir.z) : planAngleOf(camPos.x - cardPos.x, camPos.z - cardPos.z);
+      wantQ.setFromAxisAngle(yAxis, yawFor(cardNormal(worldFacing, toCamera)));
+      offset.set(0, PAD_TOP_M, 0);
+      card.scale.set(stand.w, stand.h, 1);
     }
-    card.updateMatrixWorld();
+    // into the item's own frame
+    parentQ.invert();
+    card.quaternion.copy(parentQ).multiply(wantQ);
+    card.position.copy(offset).applyQuaternion(parentQ);
+    card.updateMatrixWorld(true);
   };
+  front.onBeforeRender = (renderer, _scene, camera) => orient(renderer, camera);
+  back.onBeforeRender = (renderer, _scene, camera) => orient(renderer, camera);
   card.scale.set(stand.w, stand.h, 1);
-  card.center.set(0.5, 0);
   card.position.set(0, PAD_TOP_M, 0);
   return card;
+}
+
+/** True for the photo and silhouette planes of a product card. */
+export function isProductCardMesh(o: THREE.Object3D): boolean {
+  return o.userData?.[CARD_MESH_KEY] === true;
 }
 
 interface SceneNode {
@@ -321,7 +399,8 @@ export function syncProductCards(): { cards: number; waiting: number } {
       }
       const foot = Array.isArray(n.metadata.sizeM) ? (n.metadata.sizeM as number[]) : [0.8, 0.8];
       const heightM = typeof product?.heightM === 'number' ? product.heightM : undefined;
-      const sig = `${product?.id ?? ''}|${heightM ?? ''}|${foot.map((v) => Math.round(v * 100)).join('x')}`;
+      const facing = typeof n.metadata.facing === 'number' && Number.isFinite(n.metadata.facing) ? (n.metadata.facing as number) : null;
+      const sig = `${product?.id ?? ''}|${heightM ?? ''}|${foot.map((v) => Math.round(v * 100)).join('x')}|${facing === null ? '' : Math.round(facing * 1000)}`;
       const have = obj.children.filter((c) => c.userData[CARD_KEY]);
       if (want && product?.id && have.length === 1 && have[0].userData[SIG_KEY] === sig) {
         cards++;
@@ -329,7 +408,7 @@ export function syncProductCards(): { cards: number; waiting: number } {
       }
       for (const c of have) obj.remove(c);
       if (want && product?.id) {
-        obj.add(makeCard(product.id, want, String(n.metadata.kind ?? ''), foot, heightM, sig));
+        obj.add(makeCard(product.id, want, String(n.metadata.kind ?? ''), foot, heightM, sig, facing));
         cards++;
       }
     }

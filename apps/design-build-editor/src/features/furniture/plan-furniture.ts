@@ -3,8 +3,11 @@
 // Pascal items. Each piece is a simple stand-in built from its own traced footprint,
 // so the 3D space is furnished exactly where and as big as the plan draws it: seats
 // and sofas as upholstered blocks, tables as a top on a stem, plants as a pot and
-// foliage, screens as a panel. Products chosen in BOQ Flow are then attached to the
-// pieces they match (name, brand, model, picture) and tinted per product.
+// foliage, screens as a panel. A piece whose front the drawing shows (facing) gets
+// it in 3D too: a raised back on seats and sofas, a headboard on beds, a modesty
+// panel and end panels on desks, so it reads the right way round in the model and in
+// renders. Products chosen in BOQ Flow are then attached to the pieces they match
+// (name, brand, model, picture) and tinted per product.
 
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
@@ -15,6 +18,7 @@ import { uid } from '@/harness/ai-scene-install/helpers';
 import { matchProducts, productHeight, type MatchProduct, type MatchResult } from './match-products';
 import { PRODUCT_COLOURS, productLabel, setProductRefs, type ProductColour } from './product-refs';
 import { PAD_TOP_M, hasProductPhoto, loadProductCutouts } from './product-cards';
+import { BACK, SIDE, depthAlong, edgeBands } from './stand-in-bands';
 
 export interface PlanFurniturePiece {
   id: string;
@@ -29,6 +33,14 @@ export interface PlanFurniturePiece {
   areaM2: number;
   angle: number;
   label?: string;
+  /**
+   * Which way the piece faces, from its back to its front, as an angle in the plan
+   * frame (x, y = Pascal z): the open side of a seat or sofa, the user's side of a
+   * desk, the foot of a bed. Absent where the drawing does not tell.
+   */
+  facing?: number;
+  /** What told the front: 'table', 'chair', 'shape', 'curve', 'wall' or 'room'. */
+  facingBy?: string;
   /** Pascal plan metres: x, and y = Pascal z. */
   centerM: { x: number; y: number };
   outlineM: { x: number; y: number }[];
@@ -113,6 +125,7 @@ export function buildPieceObject(p: PlanFurniturePiece, tint?: string, opts: { p
     return group;
   }
   const short = Math.max(0.2, Math.min(p.widthM, p.depthM));
+  const facing = typeof p.facing === 'number' && Number.isFinite(p.facing) ? p.facing : null;
   switch (p.kind) {
     case 'table':
     case 'side-table': {
@@ -146,15 +159,40 @@ export function buildPieceObject(p: PlanFurniturePiece, tint?: string, opts: { p
       break;
     }
     case 'seat':
-    case 'sofa':
-      group.add(extrudeFootprint(p, 0, 0.42, mat(look.body)));
+    case 'sofa': {
+      const body = mat(look.body);
+      group.add(extrudeFootprint(p, 0, 0.42, body));
+      if (facing !== null) {
+        // The back: a band along the back edges, so the seat reads the right way round.
+        const depth = depthAlong(p, facing);
+        const thick = p.kind === 'seat' ? Math.min(0.18, Math.max(0.12, depth * 0.2)) : Math.min(0.25, Math.max(0.15, depth * 0.22));
+        group.add(...edgeBands(p, facing, BACK, thick, 0.42, p.kind === 'seat' ? 0.8 : 0.76, body));
+      }
       break;
-    case 'desk':
-      group.add(extrudeFootprint(p, 0, p.widthM > 2.4 ? 1.05 : 0.75, mat(look.body, 0.7)));
+    }
+    case 'desk': {
+      const tall = p.widthM > 2.4;
+      if (facing === null) {
+        group.add(extrudeFootprint(p, 0, tall ? 1.05 : 0.75, mat(look.body, 0.7)));
+      } else if (tall) {
+        // A counter: the work top on the user's side, a raised top facing the visitors.
+        const body = mat(look.body, 0.7);
+        group.add(extrudeFootprint(p, 0, 0.75, body), ...edgeBands(p, facing, BACK, 0.3, 0.75, 1.05, body));
+      } else {
+        // A desk: the top, a modesty panel at the back and end panels; open at the front, where the user sits.
+        const body = mat(look.body, 0.7);
+        group.add(extrudeFootprint(p, 0.71, 0.75, body));
+        group.add(...edgeBands(p, facing, BACK, 0.025, 0.3, 0.71, body));
+        group.add(...edgeBands(p, facing, SIDE, 0.03, 0, 0.71, body));
+      }
       break;
-    case 'bed':
-      group.add(extrudeFootprint(p, 0, 0.5, mat(look.body)));
+    }
+    case 'bed': {
+      const body = mat(look.body);
+      group.add(extrudeFootprint(p, 0, 0.5, body));
+      if (facing !== null) group.add(...edgeBands(p, facing, BACK, 0.06, 0.5, 1.05, mat(look.accent, 0.7)));
       break;
+    }
     case 'equipment':
       group.add(extrudeFootprint(p, 0, 1.2, mat(look.body, 0.6)));
       break;
@@ -195,7 +233,8 @@ function ensureBlobFetch(): void {
 
 function signature(p: PlanFurniturePiece, tint?: string, pad = false): string {
   const pts = p.outlineM.map((q) => `${Math.round((q.x - p.centerM.x) * 200)},${Math.round((q.y - p.centerM.y) * 200)}`).join(';');
-  return `${p.kind}|${tint ?? ''}|${pad ? 'pad' : 'body'}|${Math.round(p.angle * 1000)}|${pts}`;
+  const facing = typeof p.facing === 'number' ? Math.round(p.facing * 1000) : 'none';
+  return `${p.kind}|${tint ?? ''}|${pad ? 'pad' : 'body'}|${Math.round(p.angle * 1000)}|${facing}|${pts}`;
 }
 
 function modelUrl(p: PlanFurniturePiece, tint?: string, pad = false): Promise<string> {
@@ -273,7 +312,17 @@ export async function installPlanFurniture(f: PlanFurniture, opts: { kinds?: Set
         position: [p.centerM.x, 0, p.centerM.y],
         rotation: [0, 0, 0],
         asset: { id: `plan-${p.id}`, category: 'furniture', name, thumbnail: THUMB, src, dimensions: [w, h, d], offset: [0, 0, 0], rotation: [0, 0, 0], scale: [1, 1, 1] },
-        metadata: { source: PLAN_FURNITURE_SOURCE, pieceId: p.id, typeId: p.typeId, kind: p.kind, shape: p.shape, layer: p.layer, sizeM: [p.widthM, p.depthM] },
+        metadata: {
+          source: PLAN_FURNITURE_SOURCE,
+          pieceId: p.id,
+          typeId: p.typeId,
+          kind: p.kind,
+          shape: p.shape,
+          layer: p.layer,
+          sizeM: [p.widthM, p.depthM],
+          // Plan angle of the piece's front (the item stands unturned, so it is the item's own).
+          ...(typeof p.facing === 'number' ? { facing: p.facing, facingBy: p.facingBy } : {}),
+        },
       } as never) as AnyNode;
       ops.push({ node, parentId });
     } catch (e) {

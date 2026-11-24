@@ -12,6 +12,9 @@
  *  5. Each piece's footprint is traced (strokes rasterised at 2 cm, small holes
  *     filled, outer edge followed) and its kind guessed from its layer, nearby
  *     text, size, shape and how densely it is drawn.
+ *  6. Each piece that has a front is turned the way the drawing shows it facing
+ *     (furniture-facing.ts): seats to their table, desks to their chair, backs to
+ *     walls, seats and bowls drawn to one side.
  *
  * Identical pieces (same kind and size) form a type with a count: the drawing's
  * own furniture schedule, used to check a BOQ and to match products.
@@ -20,6 +23,7 @@
  */
 import type { Bounds, MuVector, Vec2 } from './vector-device';
 import { fitCircle } from './curved-walls';
+import { pieceFacings, type FacingCue, type FacingWall } from './furniture-facing';
 
 export type FurnitureFamily = 'furniture' | 'plant' | 'sanitary' | 'equipment' | 'joinery' | 'fixture';
 export type FurnitureKind =
@@ -78,6 +82,15 @@ export interface FurniturePiece {
   heightM: number;
   /** Text written on or next to the piece (for example "TV 65\""). */
   label?: string;
+  /**
+   * Which way the piece faces, page-space radians (y down), from its back to its front:
+   * the open side of a seat or sofa, the user's side of a desk, the foot of a bed, the
+   * open side of a cabinet, basin or WC. Absent for pieces without a front (tables,
+   * plants) and where the drawing does not tell.
+   */
+  facing?: number;
+  /** What told the front (see furniture-facing.ts). */
+  facingBy?: FacingCue;
   vectorIds: string[];
   /** Shape measures behind the guess (ink per outline length, box fill, solidity, band thickness in m). */
   metrics: { busy: number; fill: number; solidity: number; circularity: number; corners: number; bandM: number };
@@ -533,7 +546,7 @@ const KIND_HEIGHT: Record<FurnitureKind, number> = {
 };
 
 export function detectFurniture(
-  input: { vectors: MuVector[]; scaleMmPerPt: number; within?: Bounds | null; texts?: FurnitureText[] },
+  input: { vectors: MuVector[]; scaleMmPerPt: number; within?: Bounds | null; texts?: FurnitureText[]; walls?: FacingWall[] },
   cfg: FurnitureConfig = FURNITURE_DEFAULTS,
 ): FurnitureResult {
   const t0 = Date.now();
@@ -782,6 +795,7 @@ export function detectFurniture(
   }
 
   const out: FurniturePiece[] = [];
+  const outLines: Vec2[][][] = [];
   for (const m of measured) {
     const hull = convexHull(m.outline);
     const box = minAreaRect(hull);
@@ -811,7 +825,8 @@ export function detectFurniture(
       .sort((p, q) => dist({ x: p.x + p.w / 2, y: p.y + p.h / 2 }, center) - dist({ x: q.x + q.w / 2, y: q.y + q.h / 2 }, center))[0]?.text;
     const busy = inkM / Math.max(perimM, 1e-6); // outline only ≈ 1–2; cushions, arms, seams > 2
     const bandM = (2 * areaM2) / Math.max(perimM, 1e-6); // thickness of a long band (curved sofas)
-    const kind = m.isTop ? (widthM < 0.6 ? 'side-table' : 'table') : classifyPiece({ family, shape, widthM, depthM, busy, circularity, bandM, fill, solidity, label }, cfg);
+    // A round top is a table only on a furniture layer (a planter or a basin can be round too).
+    const kind = m.isTop && family === 'furniture' ? (widthM < 0.6 ? 'side-table' : 'table') : classifyPiece({ family, shape, widthM, depthM, busy, circularity, bandM, fill, solidity, label }, cfg);
     if (!kind) { dropped++; continue; }
     out.push({
       id: `fp_${out.length + 1}`,
@@ -831,6 +846,7 @@ export function detectFurniture(
       vectorIds: m.ids.map((s) => strokes[s].v.id),
       metrics: { busy: r2(busy), fill: r2(fill), solidity: r2(solidity), circularity: r2(circularity), corners, bandM: r2(bandM) },
     });
+    outLines.push(m.ids.flatMap((s) => strokes[s].lines));
   }
 
   // A piece drawn exactly like a labelled screen (same layer and size) is a screen too.
@@ -841,6 +857,20 @@ export function detectFurniture(
       p.heightM = KIND_HEIGHT.screen;
     }
   }
+
+  // Which way each piece faces (seats to their table, desks to their chair, backs to walls…).
+  const facings = pieceFacings(
+    out.map((p, i) => ({ kind: p.kind, shape: p.shape, outline: p.outline, center: p.center, angle: p.angle, widthM: p.widthM, depthM: p.depthM, lines: outLines[i] })),
+    input.walls ?? [],
+    mPerPt,
+  );
+  out.forEach((p, i) => {
+    const f = facings[i];
+    if (f) {
+      p.facing = Math.round(f.angle * 1000) / 1000;
+      p.facingBy = f.by;
+    }
+  });
 
   // Types: same family, kind and shape, sizes within 6 cm.
   const types: FurnitureType[] = [];

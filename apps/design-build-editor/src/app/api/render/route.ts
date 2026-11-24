@@ -81,7 +81,7 @@ const BodySchema = z.object({
             colour: z.string().max(30),
             kinds: z.array(z.string().max(30)).max(8),
             count: z.number().int().min(1).max(10_000),
-            where: z.string().max(200).optional(),
+            where: z.string().max(300).optional(),
             /** The product's own photo stands in the view (not a solid stand-in). */
             photo: z.boolean().optional(),
             image: z.string().max(MAX_PRODUCT_IMAGE_CHARS).optional(),
@@ -94,7 +94,7 @@ const BodySchema = z.object({
           z.object({
             kind: z.string().max(30),
             count: z.number().int().min(1).max(10_000),
-            where: z.string().max(200).optional(),
+            where: z.string().max(300).optional(),
           }),
         )
         .max(12)

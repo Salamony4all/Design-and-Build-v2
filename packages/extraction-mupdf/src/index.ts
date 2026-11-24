@@ -73,6 +73,8 @@ export type { CurvedWallConfig, CurvedWallSegment, CurvedWallPiece, CurvedPod, C
 export { detectGlassPartitions, alongWalls, GLASS_DEFAULTS } from './glass-partitions';
 export { detectFurniture, classifyPiece, isFurnitureLayer, furnitureFamily, furnitureTextsFromStructuredText, FURNITURE_DEFAULTS } from './furniture-blocks';
 export type { FurnitureConfig, FurnitureFamily, FurnitureKind, FurniturePiece, FurnitureResult, FurnitureShape, FurnitureText, FurnitureType } from './furniture-blocks';
+export { pieceFacings, strokeAxis, arcWalls } from './furniture-facing';
+export type { Facing, FacingCue, FacingPiece, FacingWall } from './furniture-facing';
 export type { GlassConfig, GlassHostWall, GlassPartition, GlassResult, GlassSource, GlassStyle, GlassText } from './glass-partitions';
 import * as mupdf from 'mupdf';
 export { mupdf };

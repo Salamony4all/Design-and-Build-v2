@@ -467,25 +467,75 @@ export function viewZone(s: { x: number; y: number }): string {
 
 const zonePhrase = (z: string) => (z === 'centre' ? 'in the centre' : z === 'left' || z === 'right' ? `on the ${z}` : `at the ${z}`);
 
+const FACING_PHRASES: Record<string, string> = {
+  camera: 'facing the camera',
+  away: 'facing away from the camera',
+  left: 'facing left',
+  right: 'facing right',
+  'left-near': 'turned to the left, towards the camera',
+  'right-near': 'turned to the right, towards the camera',
+  'left-far': 'turned to the left, away from the camera',
+  'right-far': 'turned to the right, away from the camera',
+  down: 'facing the bottom of the image',
+  up: 'facing the top of the image',
+  'down-left': 'facing down and to the left',
+  'down-right': 'facing down and to the right',
+  'up-left': 'facing up and to the left',
+  'up-right': 'facing up and to the right',
+};
+
+/** How a piece's facing in the view is said in the prompt ('' when unknown). */
+export function facingPhrase(f: string | undefined): string {
+  return (f && FACING_PHRASES[f]) || '';
+}
+
+type Spot = { x: number; y: number; facing?: string; by?: string };
+
+/**
+ * How a few pieces face, said once: their common way ("facing left"), the way most of
+ * them face ("mostly facing the camera"), seats around tables ("each turned to face its
+ * table"), or '' when they face every way or the drawing does not tell.
+ */
+function groupFacing(list: readonly Spot[]): string {
+  const tally = new Map<string, number>();
+  for (const s of list) {
+    const f = facingPhrase(s.facing);
+    if (f) tally.set(f, (tally.get(f) ?? 0) + 1);
+  }
+  if (!tally.size) return '';
+  const [top, n] = [...tally.entries()].sort((a, b) => b[1] - a[1])[0];
+  if (n === list.length) return top;
+  if (n >= list.length * 0.6) return `mostly ${top}`;
+  if (list.every((s) => s.by === 'table')) return 'each turned to face its table';
+  return '';
+}
+
 /**
  * Where a group stands, from its spots: "at the front left", "2 at the back left, 1 in
  * the centre", or "across the view" when it is spread all over. `count` is the group's
- * size (spots may be fewer).
+ * size (spots may be fewer). Spots that know which way their piece faces add it, place
+ * by place: "2 at the back left, facing the camera; 1 on the right, facing left".
  */
-export function spotsWhere(spots: readonly { x: number; y: number }[], count = spots.length): string {
+export function spotsWhere(spots: readonly Spot[], count = spots.length): string {
   if (!spots.length) return '';
-  const byZone = new Map<string, number>();
+  const byZone = new Map<string, Spot[]>();
   for (const s of spots) {
     const z = viewZone(s);
-    byZone.set(z, (byZone.get(z) ?? 0) + 1);
+    const list = byZone.get(z) ?? [];
+    list.push(s);
+    byZone.set(z, list);
   }
-  const zones = [...byZone.entries()].sort((a, b) => b[1] - a[1]);
-  if (zones.length === 1) return zonePhrase(zones[0][0]);
+  const zones = [...byZone.entries()].sort((a, b) => b[1].length - a[1].length);
+  const all = spots.length === count;
+  const facing = spots.some((s) => facingPhrase(s.facing));
+  const withWay = (place: string, list: readonly Spot[], sep = ', ') => {
+    const f = facing ? groupFacing(list) : '';
+    return f ? `${place}${sep}${f}` : place;
+  };
+  if (zones.length === 1) return withWay(zonePhrase(zones[0][0]), zones[0][1]);
   // Spread wide, the zones still tell two products of one kind apart.
-  if (zones.length > 5) return 'across the view';
-  return spots.length === count
-    ? zones.map(([z, n]) => `${n} ${zonePhrase(z)}`).join(', ')
-    : zones.map(([z]) => zonePhrase(z)).join(', ');
+  if (zones.length > 5) return withWay('across the view', spots, '; ');
+  return zones.map(([z, list]) => withWay(all ? `${list.length} ${zonePhrase(z)}` : zonePhrase(z), list)).join(facing ? '; ' : ', ');
 }
 
 const promptText = (s: string, max: number) => s.replace(/[\s"]+/g, ' ').trim().slice(0, max);
@@ -621,13 +671,13 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
     lines.push('FURNITURE IN THE MODEL:');
     if (blocks > 0) {
       lines.push(
-        `The plain solid blocks standing on the floor in image 1 are furniture stand-ins placed from the construction drawing (${blocks} in view). Each marks the exact position, footprint, height and orientation of one real piece of furniture: render every stand-in as that real piece, in place and at the same size.`,
+        `The plain solid blocks standing on the floor in image 1 are furniture stand-ins placed from the construction drawing (${blocks} in view). Each marks the exact position, footprint, height and orientation of one real piece of furniture: render every stand-in as that real piece, in place, at the same size and facing the same way. A raised back marks the back of a seat, sofa or bed; a desk is open on the side where its user sits.`,
       );
     }
     if (photoPieces > 0) {
       // The photos stand without their coloured pads: those are a code for the 3D model only.
       lines.push(
-        `Cut-out photos stand upright on the floor in image 1 (${photoPieces} in view): each is a real product from the project's furniture schedule, standing exactly where its photo stands, and the photo shows exactly which product it is, with its design, colours and materials. Render each as that real product: a solid three-dimensional piece of furniture at real size, standing on the floor at that spot and turned naturally (chairs towards their table or into the room), never as a flat photo, card, cut-out or poster. Where a photo shows a set of pieces, render the one piece that fits its spot.`,
+        `Cut-out photos stand upright on the floor in image 1 (${photoPieces} in view): each is a real product from the project's furniture schedule, standing exactly where its photo stands, and the photo shows exactly which product it is, with its design, colours and materials. Render each as that real product: a solid three-dimensional piece of furniture at real size, standing on the floor at that spot, never as a flat photo, card, cut-out or poster. Turn each the way it faces in the list below; its photo stands turned with it: a photo seen straight on is a product facing the camera, a photo seen at an angle is a product turned that way, and a plain grey silhouette is a product seen from behind. Where no way is given, turn it naturally (chairs towards their table or into the room). Where a photo shows a set of pieces, render the one piece that fits its spot.`,
       );
     }
     lines.push('Never move, merge or leave out a piece, and add no furniture where the input shows open floor.');
@@ -647,7 +697,7 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
         lines.push(`The product pictures (${imageList(productImages)}) are catalogue photos of single products: take only the product from each, never its background, text or framing.`);
       }
       for (const p of furniture.products) {
-        const where = p.where ? `, ${promptText(p.where, 160)}` : '';
+        const where = p.where ? `, ${promptText(p.where, 240)}` : '';
         const label = promptText(p.label, 140);
         if (p.photo) {
           const ref = p.imageIndex ? ` — more detail in image ${p.imageIndex}` : '';
@@ -661,7 +711,7 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
     const codedCount = coded.reduce((n, p) => n + p.count, 0);
     if (plain.length) {
       const placeOf = (where?: string) => {
-        const w = where ? promptText(where, 160) : '';
+        const w = where ? promptText(where, 240) : '';
         return !w ? '' : /^\d/.test(w) ? ` (${w})` : ` ${w}`;
       };
       const list = plain

@@ -20,6 +20,7 @@ import {
   nearestAspect,
   referencePlan,
   spotsWhere,
+  facingPhrase,
   standInNoun,
   styleFromText,
   viewZone,
@@ -281,6 +282,28 @@ describe('furniture stand-ins and real products', () => {
     expect(spotsWhere([])).toBe('');
   });
 
+  it('says which way the pieces face where the drawing shows it', () => {
+    expect(facingPhrase('camera')).toBe('facing the camera');
+    expect(facingPhrase('left-far')).toBe('turned to the left, away from the camera');
+    expect(facingPhrase(undefined)).toBe('');
+    expect(spotsWhere([{ x: 0.1, y: 0.2, facing: 'camera' }, { x: 0.2, y: 0.3, facing: 'camera' }])).toBe('at the back left, facing the camera');
+    expect(spotsWhere([{ x: 0.1, y: 0.2, facing: 'camera' }, { x: 0.2, y: 0.3, facing: 'camera' }, { x: 0.8, y: 0.5, facing: 'left' }])).toBe(
+      '2 at the back left, facing the camera; 1 on the right, facing left',
+    );
+    // seen from straight above, by the image
+    expect(spotsWhere([{ x: 0.5, y: 0.5, facing: 'down' }])).toBe('in the centre, facing the bottom of the image');
+    // spread all over: how most of them face
+    const many = [0.1, 0.5, 0.9].flatMap((x) => [0.2, 0.55, 0.9].map((y, i) => ({ x, y, facing: i === 2 ? 'left' : 'camera' })));
+    expect(spotsWhere(many)).toBe('across the view; mostly facing the camera');
+    // chairs turned to their tables all around the view
+    const round = [0.1, 0.5, 0.9].flatMap((x) => [0.2, 0.55, 0.9].map((y, i) => ({ x, y, facing: ['left', 'camera', 'right-far'][i], by: 'table' })));
+    expect(spotsWhere(round)).toBe('across the view; each turned to face its table');
+    // place by place, each with its own way
+    expect(spotsWhere([{ x: 0.8, y: 0.2, facing: 'left', by: 'table' }, { x: 0.85, y: 0.25, facing: 'right', by: 'table' }, { x: 0.1, y: 0.5, facing: 'camera' }])).toBe(
+      '2 at the back right, each turned to face its table; 1 on the left, facing the camera',
+    );
+  });
+
   it('turns stand-ins into the schedule\'s products, with their pictures', () => {
     const p = buildGeometryLockPrompt({
       style: 'daylight', viewKind: 'cutaway', furnish: false, withEdgeGuide: true, withPlan: false,
@@ -316,6 +339,9 @@ describe('furniture stand-ins and real products', () => {
     expect(p).toMatch(/Cut-out photos stand upright on the floor in image 1 \(7 in view\)/);
     expect(p).toMatch(/never as a flat photo, card, cut-out or poster/);
     expect(p).toMatch(/render the one piece that fits its spot/);
+    expect(p).toMatch(/Turn each the way it faces in the list below; its photo stands turned with it/);
+    expect(p).toMatch(/a plain grey silhouette is a product seen from behind/);
+    expect(p).toMatch(/facing the same way\. A raised back marks the back of a seat, sofa or bed/);
     expect(p).toMatch(/- Vitra · Repos: the chairs shown by their photos \(7, in the centre\) — more detail in image 3\./);
     expect(p).not.toMatch(/\bred\b|\bpads?\b/);
     expect(p).toMatch(/- The blue chairs \(3\): Hay · Revolver\./);

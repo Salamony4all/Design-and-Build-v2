@@ -160,7 +160,7 @@ async function furnitureForRender(
   const request: RenderFurniture = {
     standIns: f.standIns,
     products: [],
-    plain: (f.plain ?? []).slice(0, 8).map((k) => ({ kind: k.kind, count: k.count, where: spotsWhere(k.spots, k.count).slice(0, 160) })),
+    plain: (f.plain ?? []).slice(0, 8).map((k) => ({ kind: k.kind, count: k.count, where: spotsWhere(k.spots, k.count).slice(0, 240) })),
     behindGlass: f.behindGlass ?? 0,
   };
   const shown: NonNullable<RenderJobResult['products']> = [];
@@ -170,7 +170,7 @@ async function furnitureForRender(
     if (!ref) continue;
     const image = pictures < maxPictures ? await productPicture(ref.imageUrl) : undefined;
     if (image) pictures++;
-    const where = (g.spots?.length ? spotsWhere(g.spots, g.count) : whereInView(g)).slice(0, 160);
+    const where = (g.spots?.length ? spotsWhere(g.spots, g.count) : whereInView(g)).slice(0, 240);
     request.products.push({ label: ref.label, colour: ref.colour.name, kinds: g.kinds, count: g.count, where, photo: g.photo, ...(image ? { image } : {}) });
     shown.push({ id: ref.id, label: ref.label, colour: ref.colour.hex, count: g.count, withPicture: !!image });
   }
