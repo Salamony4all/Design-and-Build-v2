@@ -183,14 +183,25 @@ describe('broad layerless furniture & symbol detection', () => {
     expect(table.widthM).toBeCloseTo(2.4, 1);
   });
 
-  it('accepts recurring layerless CAD blocks even when drawn as simple outlines', () => {
+  it('accepts recurring layerless CAD blocks even when drawn as simple outlines (rules path)', () => {
     // 4 identical simple square stools (0.42 x 0.42) with no layer
     const vectors = [0, 1, 2, 3].map((i) => rect(1 + i * 1.2, 2, 0.42, 0.42));
-    const res = detectFurniture({ vectors, scaleMmPerPt: SCALE });
+    // `broad: 'rules'` is the cluster rule this case was written for. The default reader asks
+    // more of bare outlines than repetition (see the next case).
+    const res = detectFurniture({ vectors, scaleMmPerPt: SCALE, broad: 'rules' });
     // Simple 0.42m outlines have baseKind='side-table' & clusterCount=4 -> accepted!
     expect(res.pieces).toHaveLength(4);
     expect(res.pieces[0].clusterCount).toBe(4);
     expect(res.pieces[0].sourceMode).toBe('broad');
+  });
+
+  it('does not take bare repeated outlines for furniture on repetition alone (default reader)', () => {
+    // The same four squares could as well be columns, plinths or floor boxes: with nothing
+    // drawn in them, no label and no furniture beside them, the reader leaves them out.
+    const vectors = [0, 1, 2, 3].map((i) => rect(1 + i * 1.2, 2, 0.42, 0.42));
+    const res = detectFurniture({ vectors, scaleMmPerPt: SCALE });
+    expect(res.pieces).toHaveLength(0);
+    expect(res.diagnostics.broad?.candidates).toBe(4);
   });
 });
 

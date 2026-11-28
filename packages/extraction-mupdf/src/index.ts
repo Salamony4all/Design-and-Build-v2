@@ -72,6 +72,7 @@ export { detectCurvedWalls, curvedWallPieces, curvedBandUnder, CURVED_WALL_DEFAU
 export type { CurvedWallConfig, CurvedWallSegment, CurvedWallPiece, CurvedPod, CurvedPodDoor, CurvedWallResult, CurvedWallKind } from './curved-walls';
 export { detectGlassPartitions, alongWalls, GLASS_DEFAULTS } from './glass-partitions';
 export { detectFurniture, classifyPiece, isFurnitureLayer, furnitureFamily, furnitureTextsFromStructuredText, FURNITURE_DEFAULTS } from './furniture-blocks';
+export type { BroadPieceRow, FurnitureProbe } from './furniture-blocks';
 export type { ArchitecturalZone, FurnitureConfig, FurnitureFamily, FurnitureKind, FurniturePiece, FurnitureResult, FurnitureShape, FurnitureText, FurnitureType } from './furniture-blocks';
 export {
   acceptBroadCandidate,
@@ -84,6 +85,21 @@ export {
   inferRoomContext,
 } from './furniture-symbols';
 export type { FurnitureSubtype, PieceSubPart, RoomContext, SubPartRole, SymbolFingerprint } from './furniture-symbols';
+export { residualScene, penKey, wallFaceLines, drawnText, RESIDUAL_DEFAULTS } from './furniture-residual';
+export type { ResidualConfig, ResidualInput, ResidualScene, ResidualText, ResidualVector } from './furniture-residual';
+export {
+  readSymbols,
+  decideBroadPiece,
+  notFurniture,
+  predictSymbol,
+  symbolEvidence,
+  SYMBOL_CLASSES,
+  SYMBOL_FEATURES,
+  SYMBOL_READER_DEFAULTS,
+} from './furniture-symbol-reader';
+export type { BroadEvidence, SymbolFamily, SymbolFeature, SymbolPiece, SymbolReaderConfig, SymbolVerdict } from './furniture-symbol-reader';
+export { SYMBOL_MODEL } from './furniture-symbol-model';
+export type { SymbolModel, SymbolTree } from './furniture-symbol-model';
 export { pieceFacings, strokeAxis, arcWalls } from './furniture-facing';
 export type { Facing, FacingCue, FacingPiece, FacingWall } from './furniture-facing';
 export type { GlassConfig, GlassHostWall, GlassPartition, GlassResult, GlassSource, GlassStyle, GlassText } from './glass-partitions';

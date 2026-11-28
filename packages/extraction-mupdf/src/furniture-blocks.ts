@@ -19,6 +19,12 @@
  * Identical pieces (same kind and size) form a type with a count: the drawing's
  * own furniture schedule, used to check a BOQ and to match products.
  *
+ * Drawings that keep no furniture layers are read broadly instead: the linework no
+ * other stage explains (furniture-residual.ts) is traced the same way, and each piece
+ * is kept as a known kind, kept as an unknown custom item or dropped, on the word of
+ * plain rules, a small trained model and the symbol grammar
+ * (furniture-symbol-reader.ts, furniture-symbols.ts).
+ *
  * Coordinates are MuPDF page points (y down).
  */
 import type { Bounds, MuVector, Vec2 } from './vector-device';
@@ -37,6 +43,18 @@ import {
   type PieceSubPart,
   type RoomContext,
 } from './furniture-symbols';
+import { residualScene, RESIDUAL_DEFAULTS, type ResidualScene, type ResidualVector } from './furniture-residual';
+import {
+  decideBroadPiece,
+  endLines,
+  readSymbols,
+  FURNITURE_WORD_RE,
+  SYMBOL_READER_DEFAULTS,
+  type SymbolPiece,
+  type SymbolReaderConfig,
+  type SymbolVerdict,
+} from './furniture-symbol-reader';
+import { SYMBOL_MODEL } from './furniture-symbol-model';
 
 export type FurnitureFamily = 'furniture' | 'plant' | 'sanitary' | 'equipment' | 'joinery' | 'fixture';
 export type FurnitureKind =
@@ -112,6 +130,8 @@ export interface FurniturePiece {
   sourceMode?: 'layer' | 'broad';
   /** Classification confidence (0..1). */
   confidence?: number;
+  /** Broad reading only: the trained model's probability that the piece is furniture at all (0..1). */
+  furnitureP?: number;
   /** Number of recurring instances sharing this CAD block fingerprint on the sheet. */
   clusterCount?: number;
   /** True when bespoke geometry / sub-parts warrant a custom procedural 3D model. */
@@ -161,7 +181,48 @@ export interface FurnitureResult {
   zones?: ArchitecturalZone[];
   /** Furniture-type layers found in the drawing. */
   layers: string[];
-  diagnostics: { strokes: number; zones: number; tableTops: number; splitSets: number; dropped: number; ms: number };
+  diagnostics: {
+    strokes: number;
+    zones: number;
+    tableTops: number;
+    splitSets: number;
+    dropped: number;
+    ms: number;
+    /** Broad reading: pieces traced from the residual linework, and what became of them. */
+    broad?: { candidates: number; known: number; custom: number; model: string; /** Why nothing was read, if so. */ skipped?: 'scale' };
+    /** 12 cm cells too full of separate strokes to be symbols (hatching, stipple); they join nothing. */
+    textureCells?: number;
+  };
+}
+
+/** One piece traced in broad mode, with the evidence for and against it (training data, audits). */
+export interface BroadPieceRow {
+  center: Vec2;
+  outline: Vec2[];
+  widthM: number;
+  depthM: number;
+  angle: number;
+  shape: FurnitureShape;
+  /** Page vectors it is drawn with, and the length each gives it (points). */
+  vectorIds: string[];
+  vectorInk: number[];
+  /** The pen (colour and weight) its linework is drawn in. */
+  pen: string;
+  label?: string;
+  verdict: SymbolVerdict;
+  /** The kind the symbol grammar gives it under each family (null: none fits). */
+  kindByFamily: Record<string, { kind: FurnitureKind; subtype?: FurnitureSubtype } | null>;
+  /** The grammar is sure of it from its parts; a label names furniture. */
+  grammar: boolean;
+  named: boolean;
+  /** Too thin to stand as a piece of its own. */
+  thin: boolean;
+  decision: 'known' | 'custom' | null;
+}
+
+export interface FurnitureProbe {
+  /** Called once with every piece traced in broad mode. */
+  broadPieces?: (rows: BroadPieceRow[]) => void;
 }
 
 export interface FurnitureConfig {
@@ -191,7 +252,7 @@ export const FURNITURE_DEFAULTS: FurnitureConfig = {
 };
 
 /** Layers that hold furniture, fittings or fixtures. */
-export const FURNITURE_LAYER_RE = /furn|mobil|am[eé]nag|seat|chair|sofa|ff&?e|\bffe\b|planter|plant|verdure|v[eé]g[eé]t|eq(ui)?p|eqmp|appliance|casework|millwork|joinery|sanit|plumb|toilet|lavatory|sink|shower|bath\b|kitch|cuisine|wardrobe|cabinet|cupboard|workstation|loose|fixture|fixt/i;
+export const FURNITURE_LAYER_RE = /furn|mobil|am[eé]nag|seat|chair|sofa|ff&?e|\bffe\b|ffande|planter|plant|verdure|v[eé]g[eé]t|eq(ui)?p|eqmp|appliance|casework|millwork|joinery|sanit|plumb|toilet|lavatory|sink|shower|bath\b|kitch|cuisine|culinar|wardrobe|cabinet|cupboard|workstation|loose|fixture|fixt/i;
 /** Layers that are something else even when their name mentions furniture. */
 export const NOT_FURNITURE_LAYER_RE = /menuis|door|porte|window|fen[eê]tre|glaz|vitr|\bwall|mur\b|dim|cotat|text|txt|anno|axe|axis|grid|hatch|hach|ceil|plafond|floor|\bsol\b|stair|escalier|tblock|title|cartouche/i;
 
@@ -199,7 +260,7 @@ export function furnitureFamily(layer: string): FurnitureFamily {
   if (/sanit|plumb|toilet|wc\b/i.test(layer)) return 'sanitary';
   if (/plant|verdure|v[eé]g[eé]t|tree|arbre|landscap/i.test(layer)) return 'plant';
   if (/eq(ui)?p|eqmp|appliance/i.test(layer)) return 'equipment';
-  if (/joinery|casework|millwork|kitch|cuisine/i.test(layer)) return 'joinery';
+  if (/joinery|casework|millwork|kitch|cuisine|culinar/i.test(layer)) return 'joinery';
   if (/fixt/i.test(layer) && !/furn|mobil|am[eé]nag/i.test(layer)) return 'fixture';
   return 'furniture';
 }
@@ -341,7 +402,10 @@ function simplify(pts: Vec2[], tol: number): Vec2[] {
 
 interface Stroke {
   v: MuVector;
+  /** Strokes join into pieces within one layer (broad reading: one pen). */
   layer: string;
+  /** The layer name to report, where `layer` is a pen. */
+  cadLayer?: string;
   family: FurnitureFamily;
   sourceMode: 'layer' | 'broad';
   lines: Vec2[][];
@@ -426,13 +490,29 @@ function arcCoverage(arcs: Arc[]): number {
 
 interface Footprint { outline: Vec2[]; areaPt2: number }
 
+/** Part of segment ab inside the box (Liang–Barsky), or null. */
+function clipSegment(a: Vec2, b: Vec2, x0: number, y0: number, x1: number, y1: number): Vec2[] | null {
+  let t0 = 0, t1 = 1;
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const edges: [number, number][] = [[-dx, a.x - x0], [dx, x1 - a.x], [-dy, a.y - y0], [dy, y1 - a.y]];
+  for (const [p, q] of edges) {
+    if (p === 0) { if (q < 0) return null; continue; }
+    const r = q / p;
+    if (p < 0) { if (r > t1) return null; if (r > t0) t0 = r; } else { if (r < t0) return null; if (r < t1) t1 = r; }
+  }
+  if (t1 - t0 <= 1e-9) return null;
+  return [{ x: a.x + t0 * dx, y: a.y + t0 * dy }, { x: a.x + t1 * dx, y: a.y + t1 * dy }];
+}
+
 /**
  * Rasterise the strokes, fill holes smaller than `holeMaxPt2` (allowing up to 1.85×
  * for compact rectangular furniture spans <= `compactShortSpanPt` such as kitchen
  * islands or dining booths while keeping circular rotunda rings hollow), and follow
  * the outer edge of the largest solid. Returns the outline in page points.
+ * `closers` are lines that close a piece drawn open against them (wall faces: the
+ * back edge of a piece standing at a wall is often the wall's own face).
  */
-function traceFootprint(strokes: Stroke[], res: number, holeMaxPt2: number, compactShortSpanPt = 0): Footprint | null {
+function traceFootprint(strokes: Stroke[], res: number, holeMaxPt2: number, compactShortSpanPt = 0, closers: { a: Vec2; b: Vec2 }[] = []): Footprint | null {
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
   for (const s of strokes) {
     x0 = Math.min(x0, s.bb[0]); y0 = Math.min(y0, s.bb[1]);
@@ -459,6 +539,12 @@ function traceFootprint(strokes: Stroke[], res: number, holeMaxPt2: number, comp
         for (let k = 0; k <= n; k++) mark(gx(a.x + ((b.x - a.x) * k) / n), gy(a.y + ((b.y - a.y) * k) / n));
       }
     }
+  }
+  for (const c of closers) {
+    const cl = clipSegment(c.a, c.b, x0 - res, y0 - res, x1 + res, y1 + res);
+    if (!cl) continue;
+    const n = Math.max(1, Math.ceil(dist(cl[0], cl[1]) / (res * 0.5)));
+    for (let k = 0; k <= n; k++) mark(gx(cl[0].x + ((cl[1].x - cl[0].x) * k) / n), gy(cl[0].y + ((cl[1].y - cl[0].y) * k) / n));
   }
   // Outside: flood from the border through empty cells.
   const q = new Int32Array(W * H);
@@ -559,7 +645,7 @@ const SCREEN_LABEL = /\btv\b|screen|[eé]cran|monitor|display|advert|signage/i;
  * Returns null for marks that are not furniture (lines, thin arcs).
  */
 export function classifyPiece(
-  p: { family: FurnitureFamily; shape: FurnitureShape; widthM: number; depthM: number; busy: number; circularity: number; bandM: number; fill: number; solidity?: number; label?: string },
+  p: { family: FurnitureFamily; shape: FurnitureShape; widthM: number; depthM: number; busy: number; circularity: number; bandM: number; fill: number; solidity?: number; label?: string; endLines?: number },
   cfg: FurnitureConfig = FURNITURE_DEFAULTS,
 ): FurnitureKind | null {
   const { family, shape, widthM: w, depthM: d, busy, circularity, bandM, fill, label } = p;
@@ -586,12 +672,22 @@ export function classifyPiece(
   }
   // Beds wider than a sofa is deep; at sofa depth (up to 1.05 m) a cushioned piece reads as a sofa.
   if (w >= 1.85 && w <= 2.3 && d > 1.05 && d <= 2.1 && busy >= 1.6 && fill >= 0.75) return 'bed';
+  // A bed-sized rectangle with a line across one end (pillows, a folded cover) is a bed,
+  // single ones included; sofas carry their back along the long side, tables nothing.
+  if (w >= 1.85 && w <= 2.3 && d >= 0.8 && d <= 2.1 && (p.endLines ?? 0) >= 1 && fill >= 0.8 && busy < 2.2) return 'bed';
   if (d >= 0.6 && d <= 1.25 && busy >= 2.2) return 'sofa';
   if (w > 4.2) return d >= 0.4 && d <= 1.2 && w <= 8 ? 'desk' : null;
   return d <= 0.9 ? 'desk' : 'table';
 }
 
 // ── main ────────────────────────────────────────────────────────────────────
+
+/** The layer reported for pieces read from a drawing without layers. */
+const BROAD_LAYER = '__broad__';
+/** Separate strokes in one 12 cm cell beyond which the cell is texture (hatching, stipple), not a symbol. */
+const DENSE_CELL_STROKES = 300;
+/** A floor plan is at least a room across: below this (metres, at the scale given) the sheet is not read layer-free. */
+const MIN_PLAN_EXTENT_M = 4;
 
 const KIND_HEIGHT: Record<FurnitureKind, number> = {
   seat: 0.45,
@@ -618,8 +714,19 @@ export function detectFurniture(
     walls?: FacingWall[];
     claimedVectorIds?: ReadonlySet<string> | readonly string[];
     mode?: 'auto' | 'layered' | 'broad';
+    /**
+     * How a drawing without furniture layers is read. 'reader' (default): residual
+     * linework, plain rules, the trained model and the symbol grammar
+     * (furniture-residual.ts, furniture-symbol-reader.ts). 'rules': the symbol grammar
+     * alone, on unclaimed vectors (collectBroadCandidateVectors, acceptBroadCandidate).
+     */
+    broad?: 'reader' | 'rules';
+    /** Doors, where known (hinge and leaf length in points): their swing arcs are set aside. */
+    doors?: { hinge?: Vec2; leafPt?: number }[];
+    reader?: Partial<SymbolReaderConfig>;
   },
   cfg: FurnitureConfig = FURNITURE_DEFAULTS,
+  probe?: FurnitureProbe,
 ): FurnitureResult {
   const t0 = Date.now();
   const mPerPt = input.scaleMmPerPt / 1000;
@@ -634,11 +741,15 @@ export function detectFurniture(
     : undefined;
 
   // Precompute structural wall centerlines for wall-crossing / multi-stall isolation guards.
-  const rawWalls = (input.walls ?? []).filter((w) => dist(w.a, w.b) >= pt(0.35));
+  const rawWalls = (input.walls ?? [])
+    .filter((w) => dist(w.a, w.b) >= pt(0.35))
+    .map((w) => ({ a: w.a, b: w.b, x0: Math.min(w.a.x, w.b.x), y0: Math.min(w.a.y, w.b.y), x1: Math.max(w.a.x, w.b.x), y1: Math.max(w.a.y, w.b.y) }));
   const segMid = (a: Vec2, b: Vec2): Vec2 => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
   const segCrossesWall = (a: Vec2, b: Vec2): boolean => {
     const clearPt = pt(0.08);
+    const sx0 = Math.min(a.x, b.x), sx1 = Math.max(a.x, b.x), sy0 = Math.min(a.y, b.y), sy1 = Math.max(a.y, b.y);
     for (const w of rawWalls) {
+      if (w.x1 < sx0 || w.x0 > sx1 || w.y1 < sy0 || w.y0 > sy1) continue; // boxes apart: cannot cross
       if (!segsIntersect(a, b, w.a, w.b)) continue;
       if (segDist2(a, w.a, w.b) > clearPt * clearPt && segDist2(b, w.a, w.b) > clearPt * clearPt) {
         return true;
@@ -649,7 +760,10 @@ export function detectFurniture(
   const distinctWallsCrossed = (loops: Vec2[][]): number => {
     const clearPt = pt(0.08);
     let count = 0;
+    let lx0 = Infinity, ly0 = Infinity, lx1 = -Infinity, ly1 = -Infinity;
+    for (const l of loops) for (const q of l) { if (q.x < lx0) lx0 = q.x; if (q.x > lx1) lx1 = q.x; if (q.y < ly0) ly0 = q.y; if (q.y > ly1) ly1 = q.y; }
     for (const w of rawWalls) {
+      if (w.x1 < lx0 || w.x0 > lx1 || w.y1 < ly0 || w.y0 > ly1) continue; // boxes apart: cannot cross
       let sidePos = false;
       let sideNeg = false;
       let crosses = false;
@@ -686,11 +800,14 @@ export function detectFurniture(
     if (family === 'sanitary' && spanPt > pt(2.2)) return;
     const f = flatten(v);
     if (!f.lines.length) return;
-    if (v.layer) layers.add(v.layer);
+    // a residual stroke's `layer` is its pen: report the CAD layer it came from, if any
+    const residual = typeof (v as Partial<ResidualVector>).sourceVectorId === 'string';
+    const cadLayer = residual ? (v as ResidualVector).sourceLayer : v.layer;
+    if (cadLayer) layers.add(cadLayer);
     let len = 0;
     for (const l of f.lines) for (let i = 1; i < l.length; i++) len += dist(l[i - 1], l[i]);
     const s = strokes.length;
-    strokes.push({ v, layer, family, sourceMode, lines: f.lines, closed: f.closed, curves: f.curves, bb: b, len });
+    strokes.push({ v, layer, ...(residual ? { cadLayer: cadLayer ?? BROAD_LAYER } : {}), family, sourceMode, lines: f.lines, closed: f.closed, curves: f.curves, bb: b, len });
     if (rawWalls.length && distinctWallsCrossed(f.lines) >= 2) {
       zoneStrokes.add(s);
     }
@@ -733,19 +850,66 @@ export function detectFurniture(
     }
   }
 
-  // 1b. Broad layerless fallback when no CAD furniture layers exist (or mode === 'broad').
+  // 1b. Broad reading when the drawing keeps no furniture layers (or mode === 'broad').
+  let scene: ResidualScene | null = null;
+  let readable = true;
+  const overhead: Stroke[] = [];
   if (mode === 'broad' || (mode !== 'layered' && strokes.length === 0)) {
-    const broadVectors = collectBroadCandidateVectors({
-      vectors: input.vectors,
-      scaleMmPerPt: input.scaleMmPerPt,
-      within,
-      walls: input.walls,
-      claimedVectorIds: claimedSet,
-      maxPieceM: cfg.maxPieceM,
-      excludedLayerRe: NOT_FURNITURE_LAYER_RE,
-    });
-    for (const v of broadVectors) {
-      ingestVector(v, v.layer ?? '__broad__', 'furniture', 'broad');
+    if (input.broad === 'rules') {
+      const broadVectors = collectBroadCandidateVectors({
+        vectors: input.vectors,
+        scaleMmPerPt: input.scaleMmPerPt,
+        within,
+        walls: input.walls,
+        claimedVectorIds: claimedSet,
+        maxPieceM: cfg.maxPieceM,
+        excludedLayerRe: NOT_FURNITURE_LAYER_RE,
+      });
+      for (const v of broadVectors) {
+        ingestVector(v, v.layer ?? BROAD_LAYER, 'furniture', 'broad');
+      }
+    } else {
+      // The linework no other stage explains, one stroke per subpath, its pen as its layer.
+      let claimedRoots: Set<string> | undefined;
+      if (claimedSet) {
+        claimedRoots = new Set<string>();
+        for (const id of claimedSet) claimedRoots.add(String(id).split(':')[0]);
+      }
+      // A sheet whose whole drawing is smaller than a room, at the scale given, is no floor
+      // plan at that scale (a detail, a view, or a scale read wrong): nothing to read.
+      let sx0 = Infinity, sy0 = Infinity, sx1 = -Infinity, sy1 = -Infinity;
+      if (within) [sx0, sy0, sx1, sy1] = within;
+      else for (const v of input.vectors) {
+        const b = v.bounds;
+        if (b[0] < sx0) sx0 = b[0]; if (b[1] < sy0) sy0 = b[1]; if (b[2] > sx1) sx1 = b[2]; if (b[3] > sy1) sy1 = b[3];
+      }
+      readable = Math.max(sx1 - sx0, sy1 - sy0) * mPerPt >= MIN_PLAN_EXTENT_M;
+      if (readable) scene = residualScene(
+        {
+          vectors: input.vectors,
+          scaleMmPerPt: input.scaleMmPerPt,
+          within,
+          texts: input.texts,
+          walls: input.walls,
+          claimedVectorIds: claimedRoots,
+          doors: input.doors,
+          skipLayer: (layer) => NOT_FURNITURE_LAYER_RE.test(layer),
+        },
+        { ...RESIDUAL_DEFAULTS, maxPieceM: cfg.maxPieceM },
+      );
+      for (const v of scene?.strokes ?? []) ingestVector(v, v.layer ?? BROAD_LAYER, 'furniture', 'broad');
+      // Dashed outlines join no piece; one drawn inside a piece is its overhead part, and
+      // a big dashed ring is an overhead feature of its own (a canopy, a bulkhead): a zone.
+      for (const v of scene?.dashed ?? []) {
+        const f = flatten(v);
+        if (f.closed.length) overhead.push({ v, layer: v.layer ?? BROAD_LAYER, family: 'furniture', sourceMode: 'broad', lines: f.lines, closed: f.closed, curves: f.curves, bb: v.bounds, len: 0 });
+        const bw = v.bounds[2] - v.bounds[0], bh = v.bounds[3] - v.bounds[1];
+        if (f.curves.length >= 2 && Math.min(bw, bh) >= pt(cfg.zoneCircleM) && Math.max(bw, bh) <= Math.min(bw, bh) * 1.25) {
+          const at = strokes.length;
+          ingestVector(v, v.layer ?? BROAD_LAYER, 'furniture', 'broad');
+          if (strokes.length > at) zoneStrokes.add(at);
+        }
+      }
     }
   }
 
@@ -810,17 +974,43 @@ export function detectFurniture(
     }
   }
   const edges = new Set<number>();
+  let textureCells = 0;
   for (const arr of segIndex.values()) {
-    for (let i = 0; i < arr.length; i++) {
-      const p = arr[i];
-      for (let j = i + 1; j < arr.length; j++) {
-        const o = arr[j];
-        if (o.s === p.s || strokes[o.s].layer !== strokes[p.s].layer) continue;
-        const key = p.s < o.s ? p.s * n + o.s : o.s * n + p.s;
+    if (arr.length < 2) continue;
+    // a cell's segments come stroke by stroke: pair the strokes, not every two segments
+    const runs: { s: number; from: number; to: number }[] = [];
+    for (let i = 0; i < arr.length; ) {
+      let j = i + 1;
+      while (j < arr.length && arr[j].s === arr[i].s) j++;
+      runs.push({ s: arr[i].s, from: i, to: j });
+      i = j;
+    }
+    if (runs.length < 2) continue;
+    // More separate strokes than any symbol packs into a hand's width: hatching, stipple
+    // or a sheet read at the wrong scale. It joins nothing.
+    if (runs.length > DENSE_CELL_STROKES) { textureCells++; continue; }
+    for (let g = 0; g < runs.length; g++) {
+      const P = runs[g];
+      // Fixtures in adjoining stalls stay apart: no join across a wall. Only sanitary layers and
+      // layer-free linework need it; on furniture and equipment layers it split whole pieces
+      // (a conveyor's 60 slats) wherever the wall reader took their own long lines for a wall.
+      const guarded = strokes[P.s].family === 'sanitary' || strokes[P.s].sourceMode === 'broad';
+      for (let h = g + 1; h < runs.length; h++) {
+        const O = runs[h];
+        if (strokes[O.s].layer !== strokes[P.s].layer) continue;
+        const key = P.s < O.s ? P.s * n + O.s : O.s * n + P.s;
         if (edges.has(key)) continue;
-        if (segSeg2(p.a, p.b, o.a, o.b) <= touch2 && !segCrossesWall(segMid(p.a, p.b), segMid(o.a, o.b))) {
+        let joined = false;
+        for (let i = P.from; i < P.to && !joined; i++) {
+          const p = arr[i];
+          for (let j = O.from; j < O.to; j++) {
+            const o = arr[j];
+            if (segSeg2(p.a, p.b, o.a, o.b) <= touch2 && !(guarded && segCrossesWall(segMid(p.a, p.b), segMid(o.a, o.b)))) { joined = true; break; }
+          }
+        }
+        if (joined) {
           edges.add(key);
-          uf.union(p.s, o.s);
+          uf.union(P.s, O.s);
         }
       }
     }
@@ -911,6 +1101,11 @@ export function detectFurniture(
   }
 
   // 5. Footprints, sub-parts, kinds and types.
+  const closers = scene ? scene.wallFaces : [];
+  const closersNear = (x0: number, y0: number, x1: number, y1: number) => {
+    const m = pt(cfg.rasterM) * 2;
+    return closers.filter((c) => Math.max(c.a.x, c.b.x) >= x0 - m && Math.min(c.a.x, c.b.x) <= x1 + m && Math.max(c.a.y, c.b.y) >= y0 - m && Math.min(c.a.y, c.b.y) <= y1 + m);
+  };
   const res = pt(cfg.rasterM);
   const holeMax = pt(1) * pt(1) * cfg.holeMaxM2;
   const texts = input.texts ?? [];
@@ -923,6 +1118,7 @@ export function detectFurniture(
   interface Measured {
     ids: number[];
     layer: string;
+    cadLayer?: string;
     family: FurnitureFamily;
     sourceMode: 'layer' | 'broad';
     outline: Vec2[];
@@ -946,13 +1142,14 @@ export function detectFurniture(
     const top = tableTops.find((t) => t.strokes.length && t.strokes.every((s) => idSet.has(s)) && Math.max(x1 - x0, y1 - y0) <= t.r * 2 * 1.15);
     const fp = top
       ? { outline: Array.from({ length: 40 }, (_, k) => ({ x: top.c.x + top.r * Math.cos((k / 40) * 2 * Math.PI), y: top.c.y + top.r * Math.sin((k / 40) * 2 * Math.PI) })), areaPt2: Math.PI * top.r * top.r }
-      : traceFootprint(ss, res, holeMax, pt(2.15));
+      : traceFootprint(ss, res, holeMax, pt(2.15), closers.length ? closersNear(x0, y0, x1, y1) : []);
     if (!fp) { dropped++; continue; }
     let perim = 0;
     for (let i = 0; i < fp.outline.length; i++) perim += dist(fp.outline[i], fp.outline[(i + 1) % fp.outline.length]);
     measured.push({
       ids,
       layer: ss[0].layer,
+      ...(ss[0].cadLayer ? { cadLayer: ss[0].cadLayer } : {}),
       family: ss[0].family,
       sourceMode: ss[0].sourceMode,
       outline: fp.outline,
@@ -976,14 +1173,43 @@ export function detectFurniture(
     measured.splice(i, 1);
   }
 
-  const rawOut: FurniturePiece[] = [];
-  const rawLines: Vec2[][][] = [];
-  const fingerprints: ReturnType<typeof computeSymbolFingerprint>[] = [];
+  // Measure every traced piece.
+  interface Geo {
+    m: Measured;
+    hull: Vec2[];
+    angle: number;
+    widthM: number;
+    depthM: number;
+    fill: number;
+    solidity: number;
+    circularity: number;
+    corners: number;
+    shape: FurnitureShape;
+    center: Vec2;
+    label?: string;
+    busy: number;
+    bandM: number;
+    memberStrokes: Stroke[];
+    memberLines: Vec2[][];
+    subParts: PieceSubPart[];
+    room: RoomContext;
+    segmentCount: number;
+    ends: number;
+  }
+  // Broad reading: a room's name only counts when no wall stands between it and the piece.
+  const textsInRoom = (c: Vec2) => {
+    const reach = pt(8);
+    return texts.filter((t) => {
+      const tc = { x: t.x + t.w / 2, y: t.y + t.h / 2 };
+      return Math.abs(tc.x - c.x) <= reach && Math.abs(tc.y - c.y) <= reach && !segCrossesWall(c, tc);
+    });
+  };
+  const geos: Geo[] = [];
   for (const m of measured) {
     const hull = convexHull(m.outline);
     const box = minAreaRect(hull);
     const widthM = box.w * mPerPt, depthM = box.d * mPerPt;
-    const { areaM2, perimM, inkM, family } = m;
+    const { areaM2, perimM, inkM } = m;
     if (widthM < cfg.minPieceM || areaM2 < 0.02) { dropped++; continue; }
     const hullArea = polygonArea(hull) * mPerPt * mPerPt;
     const fill = areaM2 / Math.max(1e-6, widthM * depthM);
@@ -1009,8 +1235,16 @@ export function detectFurniture(
     const busy = inkM / Math.max(perimM, 1e-6); // outline only ≈ 1–2; cushions, arms, seams > 2
     const bandM = (2 * areaM2) / Math.max(perimM, 1e-6); // thickness of a long band (curved sofas)
     const memberStrokes = m.ids.map((s) => strokes[s]);
+    // Broad reading: dashed outlines drawn over the piece are its overhead parts.
+    let partStrokes = memberStrokes;
+    if (m.sourceMode === 'broad' && overhead.length) {
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      for (const q of ol) { if (q.x < x0) x0 = q.x; if (q.x > x1) x1 = q.x; if (q.y < y0) y0 = q.y; if (q.y > y1) y1 = q.y; }
+      const over = overhead.filter((st) => st.bb[2] >= x0 && st.bb[0] <= x1 && st.bb[3] >= y0 && st.bb[1] <= y1);
+      if (over.length) partStrokes = [...memberStrokes, ...over];
+    }
     const subParts = extractSymbolSubParts({
-      strokes: memberStrokes,
+      strokes: partStrokes,
       outline: ol,
       center,
       widthM,
@@ -1018,20 +1252,47 @@ export function detectFurniture(
       angle: box.angle,
       mPerPt,
     });
-    const room = inferRoomContext(center, texts, mPerPt);
+    const room = inferRoomContext(center, scene && m.sourceMode === 'broad' ? textsInRoom(center) : texts, mPerPt);
     // Reject merged blobs whose footprint spans across multiple walls (e.g. adjoining toilet stalls).
     if (widthM > 1.4 && distinctWallsCrossed([[...ol, ol[0]]]) >= 2) {
       dropped++;
       continue;
     }
-    const baseKind = m.isTop && family === 'furniture'
-      ? (widthM < 0.6 ? 'side-table' : 'table')
-      : classifyPiece({ family, shape, widthM, depthM, busy, circularity, bandM, fill, solidity, label }, cfg);
+    const memberLines = memberStrokes.flatMap((st) => st.lines);
     const segmentCount = memberStrokes.reduce(
       (sum, st) => sum + st.lines.reduce((acc, ln) => acc + Math.max(0, ln.length - 1), 0),
       0,
     );
-    const cls = classifySymbol({
+    geos.push({
+      m, hull, angle: box.angle, widthM, depthM, fill, solidity, circularity, corners, shape, center,
+      ...(label ? { label } : {}),
+      busy, bandM, memberStrokes, memberLines, subParts, room, segmentCount,
+      ends: endLines(memberLines, box.angle, hull, depthM, mPerPt),
+    });
+  }
+
+  // Broad reading: plain rules and the trained model say which pieces are furniture at
+  // all, and of which family (furniture-symbol-reader.ts). Copies of one block share one answer.
+  const verdicts = new Map<Geo, SymbolVerdict>();
+  if (scene) {
+    const broad = geos.filter((g) => g.m.sourceMode === 'broad');
+    const symbols: SymbolPiece[] = broad.map((g) => ({
+      outline: g.m.outline, hull: g.hull, center: g.center, widthM: g.widthM, depthM: g.depthM, angle: g.angle,
+      areaM2: g.m.areaM2, perimM: g.m.perimM, inkM: g.m.inkM, fill: g.fill, solidity: g.solidity, circularity: g.circularity,
+      corners: g.corners, busy: g.busy, bandM: g.bandM, shape: g.shape, isTop: g.m.isTop,
+      lines: g.memberLines, vectors: g.memberStrokes.map((st) => st.v), pen: g.m.layer,
+    }));
+    readSymbols(symbols, scene, broad.map((g) => g.label)).forEach((v, i) => verdicts.set(broad[i], v));
+  }
+  const readerCfg: SymbolReaderConfig = { ...SYMBOL_READER_DEFAULTS, ...(input.reader ?? {}) };
+
+  // The kind the symbol grammar gives a piece, taking it to be of a family.
+  const nameOf = (g: Geo, family: FurnitureFamily) => {
+    const { m, shape, widthM, depthM, busy, circularity, bandM, fill, solidity, corners, label, room, subParts } = g;
+    const baseKind = m.isTop && family === 'furniture'
+      ? (widthM < 0.6 ? 'side-table' : 'table')
+      : classifyPiece({ family, shape, widthM, depthM, busy, circularity, bandM, fill, solidity, label, endLines: g.ends }, cfg);
+    return classifySymbol({
       family,
       shape,
       widthM,
@@ -1046,42 +1307,91 @@ export function detectFurniture(
       room,
       subParts,
       baseKind,
-      hasWallBehind: wallFaces.length > 0 && nearWall(center, widthM, depthM),
+      hasWallBehind: wallFaces.length > 0 && nearWall(g.center, widthM, depthM),
       wasSplitFromTable: m.wasSplitChair,
       isTableTop: m.isTop,
       hasSplitChairs: m.hasSplitChairs,
-      segmentCount,
+      segmentCount: g.segmentCount,
     });
-    if (!cls) { dropped++; continue; }
-    const memberLines = memberStrokes.flatMap((st) => st.lines);
-    const hasArcs = memberStrokes.some((st) => st.curves.length > 0);
-    fingerprints.push(computeSymbolFingerprint({ lines: memberLines, center, widthM, depthM, shape, hasArcs, mPerPt }));
+  };
+
+  const rawOut: FurniturePiece[] = [];
+  const rawLines: Vec2[][][] = [];
+  const fingerprints: ReturnType<typeof computeSymbolFingerprint>[] = [];
+  const broadRows: BroadPieceRow[] = [];
+  let broadKnown = 0, broadCustom = 0;
+  for (const g of geos) {
+    const { m, shape, widthM, depthM, busy, bandM, fill, solidity, circularity, corners, label, room, subParts, center } = g;
+    const ol = m.outline;
+    const vectorIds = [...new Set(g.memberStrokes.map((st) => (st.v as Partial<ResidualVector>).sourceVectorId ?? st.v.id))];
+    const verdict = verdicts.get(g);
+    let family = m.family;
+    let named: { kind: FurnitureKind; subtype?: FurnitureSubtype; heightM: number; confidence: number; customModel: boolean } | null;
+    if (verdict) {
+      // The model's family where it is sure; otherwise the grammar speaks for a plain furniture piece.
+      family = verdict.p >= readerCfg.minFamilyP ? verdict.family : 'furniture';
+      const cls = verdict.rejected ? null : nameOf(g, family);
+      const sureParts = subParts.some((sp) => sp.role === 'cistern' || sp.role === 'pillow' || sp.role === 'x-brace' || sp.role === 'overhead');
+      const grammar = !!cls && cls.confidence >= 0.9 && sureParts;
+      const labelled = !!label && FURNITURE_WORD_RE.test(label);
+      const thin = depthM < 0.15 || bandM < 0.12;
+      const decision = decideBroadPiece({ verdict, classified: !!cls, grammar, named: labelled, thin }, readerCfg);
+      if (probe?.broadPieces) {
+        const kindByFamily: BroadPieceRow['kindByFamily'] = {};
+        for (const fam of ['furniture', 'plant', 'sanitary', 'equipment', 'joinery'] as const) {
+          const k = verdict.rejected ? null : nameOf(g, fam);
+          kindByFamily[fam] = k ? { kind: k.kind, subtype: k.subtype } : null;
+        }
+        const ink = new Map<string, number>();
+        for (const st of g.memberStrokes) {
+          const id = (st.v as Partial<ResidualVector>).sourceVectorId ?? st.v.id;
+          ink.set(id, (ink.get(id) ?? 0) + st.len);
+        }
+        broadRows.push({ center, outline: ol, widthM, depthM, angle: g.angle, shape, vectorIds, vectorInk: vectorIds.map((id) => ink.get(id) ?? 0), pen: m.layer, ...(label ? { label } : {}), verdict, kindByFamily, grammar, named: labelled, thin, decision });
+      }
+      if (!decision) { dropped++; continue; }
+      if (decision === 'custom') {
+        // Furniture by the model, but no kind fits: an unknown custom item, built from its own outline.
+        named = { kind: 'unknown', heightM: KIND_HEIGHT.unknown, confidence: verdict.p, customModel: true };
+        broadCustom++;
+      } else {
+        named = cls;
+        broadKnown++;
+      }
+    } else {
+      named = nameOf(g, family);
+    }
+    if (!named) { dropped++; continue; }
+    const hasArcs = g.memberStrokes.some((st) => st.curves.length > 0);
+    fingerprints.push(computeSymbolFingerprint({ lines: g.memberLines, center, widthM, depthM, shape, hasArcs, mPerPt }));
     rawOut.push({
       id: '',
       typeId: '',
-      layer: m.layer,
+      layer: m.cadLayer ?? m.layer,
       family,
-      kind: cls.kind,
-      subtype: cls.subtype,
+      kind: named.kind,
+      ...(named.subtype ? { subtype: named.subtype } : {}),
       ...(room ? { room } : {}),
       sourceMode: m.sourceMode,
-      confidence: Math.round(cls.confidence * 100) / 100,
-      customModel: cls.customModel,
+      confidence: Math.round(named.confidence * 100) / 100,
+      ...(verdict ? { furnitureP: Math.round(verdict.p * 100) / 100 } : {}),
+      customModel: named.customModel,
       ...(subParts.length ? { subParts } : {}),
       shape,
       outline: ol,
       center,
       widthM: Math.round(widthM * 1000) / 1000,
       depthM: Math.round(depthM * 1000) / 1000,
-      angle: box.angle,
-      areaM2: Math.round(areaM2 * 1000) / 1000,
-      heightM: cls.heightM,
+      angle: g.angle,
+      areaM2: Math.round(m.areaM2 * 1000) / 1000,
+      heightM: named.heightM,
       ...(label ? { label } : {}),
-      vectorIds: memberStrokes.map((st) => st.v.id),
+      vectorIds,
       metrics: { busy: r2(busy), fill: r2(fill), solidity: r2(solidity), circularity: r2(circularity), corners, bandM: r2(bandM) },
     });
-    rawLines.push(memberLines);
+    rawLines.push(g.memberLines);
   }
+  if (probe?.broadPieces && scene) probe.broadPieces(broadRows);
 
   // Cluster recurring CAD blocks, propagate strong labels/subtypes, and filter broad noise.
   const clusters = clusterSymbols(fingerprints);
@@ -1107,7 +1417,7 @@ export function detectFurniture(
       p.confidence = best.confidence;
       p.customModel = best.customModel;
     }
-    if (p.sourceMode === 'broad' && !acceptBroadCandidate({ confidence: p.confidence ?? 0, clusterCount: p.clusterCount ?? 1, label: p.label })) {
+    if (p.sourceMode === 'broad' && !scene && !acceptBroadCandidate({ confidence: p.confidence ?? 0, clusterCount: p.clusterCount ?? 1, label: p.label })) {
       dropped++;
       return;
     }
@@ -1221,7 +1531,8 @@ export function detectFurniture(
 
   for (const s of zoneStrokes) {
     const st = strokes[s];
-    for (const loop of st.closed) pushCandidateLoop(loop, st.layer, CEILING_LAYER_RE.test(st.layer));
+    const zoneLayer = st.cadLayer ?? st.layer;
+    for (const loop of st.closed) pushCandidateLoop(loop, zoneLayer, CEILING_LAYER_RE.test(zoneLayer));
   }
   for (const c of circles) {
     const dM = 2 * c.r * mPerPt;
@@ -1232,7 +1543,8 @@ export function detectFurniture(
       x: c.c.x + c.r * Math.cos((k / 36) * 2 * Math.PI),
       y: c.c.y + c.r * Math.sin((k / 36) * 2 * Math.PI),
     }));
-    const firstLayer = c.arcs.length ? strokes[c.arcs[0].s]?.layer : undefined;
+    const firstStroke = c.arcs.length ? strokes[c.arcs[0].s] : undefined;
+    const firstLayer = firstStroke ? firstStroke.cadLayer ?? firstStroke.layer : undefined;
     rawZones.push({
       shape: 'round',
       center: c.c,
@@ -1339,6 +1651,16 @@ export function detectFurniture(
     types,
     ...(zones.length ? { zones } : {}),
     layers: [...layers],
-    diagnostics: { strokes: n, zones: Math.max(zoneStrokes.size, zones.length), tableTops: tableTops.length, splitSets, dropped, ms: Date.now() - t0 },
+    diagnostics: {
+      strokes: n,
+      zones: Math.max(zoneStrokes.size, zones.length),
+      tableTops: tableTops.length,
+      splitSets,
+      dropped,
+      ms: Date.now() - t0,
+      ...(scene ? { broad: { candidates: verdicts.size, known: broadKnown, custom: broadCustom, model: SYMBOL_MODEL.version } } : {}),
+      ...(!readable ? { broad: { candidates: 0, known: 0, custom: 0, model: SYMBOL_MODEL.version, skipped: 'scale' as const } } : {}),
+      ...(textureCells ? { textureCells } : {}),
+    },
   };
 }
