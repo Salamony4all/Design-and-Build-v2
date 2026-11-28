@@ -366,6 +366,10 @@ export function collectPageVectors(page: any, captureLineage = false, pageNumber
   // CAD layers: MuPDF reports optional-content groups as nested layers.
   const layers: string[] = [];
   const layerOf = (): { layer?: string } => (layers.length ? { layer: layers[layers.length - 1] } : {});
+  // MuPDF hands each callback its own handles on the path, pen and colour space. They are
+  // read here and nowhere else, so they are given back at once: left to the garbage
+  // collector they stay in MuPDF's memory until long after the page is done.
+  const release = (...handles: any[]) => { for (const h of handles) h?.destroy?.(); };
   const device = new mupdf.Device({
     beginLayer(name: string) {
       layers.push(String(name ?? ''));
@@ -373,19 +377,26 @@ export function collectPageVectors(page: any, captureLineage = false, pageNumber
     endLayer() {
       layers.pop();
     },
-    fillPath(path: any, evenOdd: boolean, ctm: number[], _cs: any, color: number[], alpha: number) {
+    fillPath(path: any, evenOdd: boolean, ctm: number[], cs: any, color: number[], alpha: number) {
       add('fill-path', path, ctm, { evenOdd, color: [...color], alpha, ...layerOf() });
+      release(path, cs);
     },
-    strokePath(path: any, stroke: any, ctm: number[], _cs: any, color: number[], alpha: number) {
+    strokePath(path: any, stroke: any, ctm: number[], cs: any, color: number[], alpha: number) {
       // strokeWidth is the raw PDF line width (user space). strokeWidthPt is the width
       // as drawn on the page, so pens are comparable across views with different CTMs.
       const lw = stroke.getLineWidth();
       const ctmScale = Math.sqrt(Math.abs((ctm[0] ?? 1) * (ctm[3] ?? 1) - (ctm[1] ?? 0) * (ctm[2] ?? 0))) || 1;
       add('stroke-path', path, ctm, { color: [...color], alpha, strokeWidth: lw, strokeWidthPt: lw * ctmScale, dashes: stroke.getDashes(), ...layerOf() });
+      release(path, stroke, cs);
     },
   });
   page.runPageContents(device, mupdf.Matrix.identity);
   device.close();
+  // Release the device now. mupdf.js keeps a JS device's callbacks (and with them every vector
+  // collected here) in a table until the device is dropped, and its finalizers do not run
+  // while a request is being worked through: a page picker reading several pages would hold
+  // them all.
+  device.destroy();
 
   const res: VectorCollection = {
     vectors,

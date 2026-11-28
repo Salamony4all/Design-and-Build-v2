@@ -38,7 +38,9 @@ function extractMultiPagePlanCandidate(
     try {
       const p = doc.loadPage(i);
       const cap = collectPageVectors(p, false, i);
-      const txt = String(p.toStructuredText('preserve-whitespace').asText?.() ?? '');
+      const st = p.toStructuredText('preserve-whitespace');
+      const txt = String(st.asText?.() ?? '');
+      st.destroy?.();
       const planBoost = /\b(floor\s*plan|proposed\s*ground|ground\s*floor|first\s*floor|layout\s*plan|ga\s*plan|kitchen|wardrobe|banquette|booth)\b/i.test(txt)
         ? 2.5
         : /\b(cover|title\s*sheet|table\s*of\s*contents|general\s*notes|schedule)\b/i.test(txt)
@@ -51,32 +53,27 @@ function extractMultiPagePlanCandidate(
     }
   }
   scored.sort((a, b) => b.score - a.score);
-  const bestIdx = scored[0]?.idx ?? 0;
   // Walls of the likeliest pages; choosePlanPage says which of them is the plan to read.
-  const candidates: { pageIndex: number; wallCount: number; scaled: boolean; wallRaw: any }[] = [];
+  // Only the counts are kept. A page's full wall result, with its audit trail, runs to
+  // hundreds of megabytes: six of them held at once is more than a hosted function has.
+  const candidates: { pageIndex: number; wallCount: number; scaled: boolean }[] = [];
   for (const cand of scored.slice(0, 6)) {
     try {
-      const wallRaw = extractPureWallResult(bytes, cand.idx, undefined, undefined, true);
+      const pure = extractPureWallResult(bytes, cand.idx, undefined, undefined, false);
       candidates.push({
         pageIndex: cand.idx,
-        wallCount: wallRaw?.pureResult?.accepted?.length ?? 0,
-        scaled: wallRaw?.pureResult?.scaleSource !== 'fallback',
-        wallRaw,
+        wallCount: pure?.accepted?.length ?? 0,
+        scaled: pure?.scaleSource !== 'fallback',
       });
     } catch {
       /* skip failing page candidate */
     }
   }
-  const chosen = choosePlanPage(candidates);
-  if (chosen) {
-    const page = doc.loadPage(chosen.pageIndex);
-    const captured = collectPageVectors(page, false, chosen.pageIndex);
-    return { pageIndex: chosen.pageIndex, page, captured, wallRaw: chosen.wallRaw };
-  }
-  const page = doc.loadPage(bestIdx);
-  const captured = collectPageVectors(page, false, bestIdx);
-  const wallRaw = extractPureWallResult(bytes, bestIdx, undefined, undefined, true);
-  return { pageIndex: bestIdx, page, captured, wallRaw };
+  const planIdx = choosePlanPage(candidates)?.pageIndex ?? scored[0]?.idx ?? 0;
+  const page = doc.loadPage(planIdx);
+  const captured = collectPageVectors(page, false, planIdx);
+  const wallRaw = extractPureWallResult(bytes, planIdx, undefined, undefined, true);
+  return { pageIndex: planIdx, page, captured, wallRaw };
 }
 
 type ApiError = { error: string; code: string; detail?: string };

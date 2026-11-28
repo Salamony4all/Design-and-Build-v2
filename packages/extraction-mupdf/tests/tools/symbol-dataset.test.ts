@@ -96,7 +96,7 @@ function planPages(bytes: Uint8Array): number[] {
   const cands: { idx: number; walls: number; scaled: boolean }[] = [];
   for (const cand of ranked.slice(0, 6)) {
     try {
-      const pure = extractPureWallResult(bytes, cand.idx, undefined, undefined, true)?.pureResult as Any | undefined;
+      const pure = extractPureWallResult(bytes, cand.idx, undefined, undefined, false) as Any | undefined;
       const walls: number = pure?.accepted?.length ?? 0;
       if (walls > 0) cands.push({ idx: cand.idx, walls, scaled: pure?.scaleSource !== 'fallback' });
     } catch { /* not a plan page */ }
