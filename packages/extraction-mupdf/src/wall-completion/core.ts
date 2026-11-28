@@ -75,7 +75,20 @@ export function buildSourceOwnershipRegistry(input: WallCompletionInput): Source
   };
 }
 
-/** §6/§5 — detect paired parallel wall faces via spatial hashing. */
+/**
+ * §6/§5 — detect paired parallel wall faces via spatial hashing.
+ *
+ * A drawing can hold hundreds of thousands of line segments (furniture, hatching,
+ * text), and this runs before the first walls are sent, so it is written to do each
+ * piece of work once:
+ *  - a segment shorter than a face can be is in no pair, so it is neither put in the
+ *    grid nor looked at as the first face;
+ *  - a segment's length, midpoint and direction are taken once, not once per pair;
+ *  - what a segment has to do with the existing walls (lies along one, ends at one)
+ *    is asked once per segment, not once per pair it appears in.
+ * The pairs, their order and every value in them are the same as when each pair was
+ * worked out on its own (tests/unit/wall-completion-pairs.test.ts holds that version).
+ */
 export function detectPairedFaces(
   unclaimed: RawSegment[],
   cfg: WallCompletionConfig,
@@ -83,33 +96,63 @@ export function detectPairedFaces(
   existingWalls: AcceptedWall[],
 ): FacePair[] {
   const cell = cfg.cellSizeM;
-  const grid = new Map<string, RawSegment[]>();
+  const n = unclaimed.length;
   const cellKey = (p: Vec2) => `${Math.floor(p.x / cell)}:${Math.floor(p.y / cell)}`;
-  for (const s of unclaimed) {
-    const k = cellKey(segMid(s));
+
+  const lengths = new Float64Array(n);
+  const mids: Vec2[] = new Array(n);
+  for (let i = 0; i < n; i++) {
+    lengths[i] = segLength(unclaimed[i]);
+    mids[i] = segMid(unclaimed[i]);
+  }
+  const dirs: (Vec2 | undefined)[] = new Array(n);
+  const dirOf = (i: number): Vec2 => (dirs[i] ??= segDir(unclaimed[i]));
+
+  // Segments long enough to be a face, by the cell their midpoint is in.
+  const grid = new Map<string, number[]>();
+  for (let i = 0; i < n; i++) {
+    if (lengths[i] < cfg.minFaceLengthM) continue;
+    const k = cellKey(mids[i]);
     const arr = grid.get(k) ?? [];
-    arr.push(s);
+    arr.push(i);
     grid.set(k, arr);
   }
+
+  // 0: not asked yet, 1: lies along an existing wall, 2: does not.
+  const alongWall = new Uint8Array(n);
+  const liesAlongWall = (i: number): boolean => {
+    if (alongWall[i] === 0) alongWall[i] = faceCollinearWithWall(unclaimed[i], existingWalls) ? 1 : 2;
+    return alongWall[i] === 1;
+  };
+  const wallsAtEnds: (string[] | undefined)[] = new Array(n);
+  const wallsAt = (i: number): string[] => (wallsAtEnds[i] ??= connectedExistingWallIds([unclaimed[i]], existingWalls));
+  /** connectedExistingWallIds([s, t]): the walls at s's ends, then those only at t's. */
+  const wallsAtPair = (i: number, j: number): string[] => {
+    const out = new Set<string>(wallsAt(i));
+    for (const id of wallsAt(j)) out.add(id);
+    return [...out];
+  };
+
   const pairs: FacePair[] = [];
   const seenPairs = new Set<string>();
-  for (const s of unclaimed) {
-    const sm = segMid(s);
-    const sk = cellKey(sm);
-    const [cx, cy] = sk.split(':').map(Number);
+  for (let i = 0; i < n; i++) {
+    if (lengths[i] < cfg.minFaceLengthM) continue;
+    const s = unclaimed[i];
+    const sm = mids[i];
+    const cx = Math.floor(sm.x / cell);
+    const cy = Math.floor(sm.y / cell);
     for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
       const arr = grid.get(`${cx + dx}:${cy + dy}`);
       if (!arr) continue;
-      for (const t of arr) {
+      for (const j of arr) {
+        const t = unclaimed[j];
         if (t.id <= s.id) continue; // dedupe unordered pairs deterministically
-        const key = `${s.id}|${t.id}`;
-        if (seenPairs.has(key)) continue;
-        const ds = segDir(s), dt = segDir(t);
+        const ds = dirOf(i), dt = dirOf(j);
         const ang = Math.acos(Math.max(-1, Math.min(1, Math.abs(dot(ds, dt)))));
         if (ang > cfg.maxAngleDiffRad) continue;
-        const sep = distPointToSegLine(segMid(t), s); // approx perpendicular separation
+        const sep = distPointToSegLine(mids[j], s); // approx perpendicular separation
         if (sep < cfg.minSeparationM || sep > cfg.maxSeparationM) continue;
-        if (segLength(s) < cfg.minFaceLengthM || segLength(t) < cfg.minFaceLengthM) continue;
+        // both are at least minFaceLengthM long: shorter segments never get here
         const axis = ds;
         const [a0, a1] = projectOnto(s, axis);
         const [b0, b1] = projectOnto(t, axis);
@@ -118,20 +161,19 @@ export function detectPairedFaces(
         const shorter = Math.min(a1 - a0, b1 - b0) || 1;
         const ratio = ov / shorter;
         if (ratio < cfg.maxOverlapRatio) continue;
+        const key = `${s.id}|${t.id}`;
+        if (seenPairs.has(key)) continue;
         const epCompat = endpointCompatibility(s, t, axis);
-        const thickConsist = 1 - Math.min(1, Math.abs(segLength(s) - segLength(t)) / (segLength(s) + 1e-6));
+        const thickConsist = 1 - Math.min(1, Math.abs(lengths[i] - lengths[j]) / (lengths[i] + 1e-6));
         let classification: CandidateClass = 'MISSING_STRUCTURAL_WALL';
         let confidence = 0.5 + 0.2 * ratio + 0.15 * epCompat + 0.15 * thickConsist;
         // §5/§6 filters — reject furniture/annotation double-line outlines and
         // the double faces of already-accepted walls; require connectivity.
-        const onExistingWall = (faceCollinearWithWall(s, existingWalls) && faceCollinearWithWall(t, existingWalls))
-          ? connectedExistingWallIds([s, t], existingWalls)
-          : [];
+        const connected = wallsAtPair(i, j); // endpoint/junction connectivity
+        if (connected.length > 0 && liesAlongWall(i) && liesAlongWall(j)) continue; // faces belong to an accepted wall
         const closedLoop = isClosedFurnitureLoop(s, t, cfg); // compact closed rectangle
         const nearDoor = protectedOpenings.some((o) => o.openingType === 'DOOR' && segNearOpening([s, t], o, sep));
         const nearWin = protectedOpenings.some((o) => o.openingType === 'WINDOW' && segNearOpening([s, t], o, sep));
-        if (onExistingWall.length > 0) continue; // faces belong to an accepted wall
-        const connected = connectedExistingWallIds([s, t], existingWalls); // endpoint/junction connectivity
         if (closedLoop) { classification = 'FURNITURE_GEOMETRY'; confidence = Math.max(0, confidence - 0.4); }
         else if (nearDoor) classification = 'VERIFIED_DOOR_OPENING';
         else if (nearWin) classification = 'VERIFIED_WINDOW_OPENING';
@@ -152,7 +194,7 @@ export function detectPairedFaces(
         pairs.push({
           faceAId: s.id, faceBId: t.id,
           faceAStart: s.a, faceAEnd: s.b, faceBStart: t.a, faceBEnd: t.b,
-          faceALengthM: segLength(s), faceBLengthM: segLength(t),
+          faceALengthM: lengths[i], faceBLengthM: lengths[j],
           angleDifferenceRad: ang, perpendicularSeparationM: sep,
           projectedOverlapM: ov, overlapRatio: ratio,
           endpointCompatibility: epCompat, thicknessConsistency: thickConsist,
@@ -178,13 +220,21 @@ function endpointCompatibility(s: RawSegment, t: RawSegment, axis: Vec2): number
   return ov / shorter;
 }
 
+/**
+ * dist(p, q) < r. Points more than r (and a margin) apart along x or y alone are
+ * further apart than r whatever the rounding, so the distance is not worked out for them.
+ */
+function closerThan(p: Vec2, q: Vec2, r: number): boolean {
+  return Math.abs(p.x - q.x) < r + 0.01 && Math.abs(p.y - q.y) < r + 0.01 && dist(p, q) < r;
+}
+
 function connectedExistingWallIds(faces: RawSegment[], walls: AcceptedWall[]): string[] {
   const out = new Set<string>();
   for (const f of faces) {
     for (const w of walls) {
       const ends = [w.startM, w.endM];
       for (const e of ends) {
-        if (dist(e, f.a) < 0.25 || dist(e, f.b) < 0.25) out.add(w.physicalWallId);
+        if (closerThan(e, f.a, 0.25) || closerThan(e, f.b, 0.25)) out.add(w.physicalWallId);
       }
     }
   }

@@ -66,6 +66,7 @@ import { RENDER_COMPLETE_EVENT, type RenderJobResult } from '@/features/render/r
 import { productRefs } from '@/features/furniture/product-refs';
 import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
 import { apiErrorMessage } from '@/features/conversation/api-error-message';
+import { fetchDrawingRead } from '@/features/conversation/resilient-read';
 import { useEditorMode } from '@/features/pro/useEditorMode';
 import { ProEditorLazy } from '@/features/pro/ProEditorLazy';
 import { ProOverlay } from '@/features/pro/ProOverlay';
@@ -2113,11 +2114,25 @@ export default function Home() {
           m.clearArchitecturalFeaturesGroup();
         })
         .catch(() => {});
-      const res = await fetch('/api/extraction/mupdf?stream=true', {
-        method: 'POST',
-        headers: { 'content-type': 'application/pdf', 'accept': 'application/x-ndjson' },
-        body: bytes as unknown as BodyInit,
+      // Reading a drawing can take a minute, and a phone drops a waiting connection when
+      // its screen sleeps or the browser goes to the background. The request is then sent
+      // again and the read picked up where it stopped (resilient-read.ts); the server
+      // keeps the read meanwhile.
+      let reconnecting = false;
+      const res = await fetchDrawingRead({
+        request: (signal) => fetch('/api/extraction/mupdf?stream=true', {
+          method: 'POST',
+          headers: { 'content-type': 'application/pdf', 'accept': 'application/x-ndjson' },
+          body: bytes as unknown as BodyInit,
+          signal,
+        }),
         signal: ac.signal,
+        describeFailure: (status, failure) => apiErrorMessage(status, failure, 'Extraction'),
+        onReconnecting: () => {
+          reconnecting = true;
+          setExtractionProgress((prev) => ({ ...prev, stageText: 'Connection lost. Reconnecting…' }));
+          embedPostRef.current('progress', { stage: 'Connection lost. Reconnecting…', state: 'building', committed: 0, total: 0 });
+        },
       });
       DIAG.apiStatus = res.status;
       if (!res.ok) {
@@ -2148,7 +2163,26 @@ export default function Home() {
             if (!line.trim()) continue;
             try {
               const chunk = JSON.parse(line);
-              if (chunk.type === 'stage-walls') {
+              if (chunk.type === 'stage-open') {
+                // The server has the file: at the start, and again after a dropped connection,
+                // where it also says whether the read was still there ("joined", "replay").
+                const text = !reconnecting
+                  ? 'Reading the drawing…'
+                  : chunk.run === 'new' ? 'Reconnected. Reading the drawing again…' : 'Reconnected. Picking up the drawing…';
+                reconnecting = false;
+                // once the walls are in, the build reports its own progress
+                if (!extractedResult) {
+                  setExtractionProgress((prev) => ({ ...prev, stageText: text, progressPercent: Math.max(prev.progressPercent, 18) }));
+                  embedPostRef.current('progress', { stage: text.replace(/…$/, ''), state: 'building', committed: 0, total: 0 });
+                }
+              } else if (chunk.type === 'stage-progress') {
+                // where the read is, between its long steps
+                if (!extractedResult && typeof chunk.message === 'string' && chunk.message) {
+                  const message: string = chunk.message;
+                  setExtractionProgress((prev) => ({ ...prev, stageText: `${message}…`, progressPercent: Math.min(32, Math.max(prev.progressPercent, 18) + 3) }));
+                  embedPostRef.current('progress', { stage: message, state: 'building', committed: 0, total: 0 });
+                }
+              } else if (chunk.type === 'stage-walls') {
                 planFurnitureRef.current = null;
                 extractedResult = chunk.result;
                 extractedCompletionWalls = chunk.completionWalls || [];
@@ -2332,7 +2366,9 @@ export default function Home() {
         return;
       }
       DIAG.extractionState = 'failed';
-      push({ type: 'error', message: `Extraction failed: ${e instanceof Error ? e.message : String(e)}` });
+      // a lost connection that reconnecting did not mend is already worded for the person
+      const worded = e instanceof Error && e.name === 'DrawingReadError';
+      push({ type: 'error', message: worded ? (e as Error).message : `Extraction failed: ${e instanceof Error ? e.message : String(e)}` });
     } finally {
       setExtractionBusy(false);
     }

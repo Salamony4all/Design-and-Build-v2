@@ -3,12 +3,13 @@
 // Does NOT use the legacy Fusion route. Never mutates Pascal. Never imports
 // apps/editor at runtime. Returns the neutral ExtractionResult (or typed errors).
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import type { ExtractionResult } from 'design-build-extraction-contracts';
 import type { MuPdfPureWindowResult, MuPdfPureDoorResult } from 'design-build-extraction-mupdf';
 import { completeWalls } from 'design-build-extraction-mupdf';
 import type { RawSegment, ProtectedOpening } from 'design-build-extraction-mupdf';
 import { choosePlanPage } from './plan-page';
+import { createExtractionRunStore, extractionKey, streamRun, type ExtractionRunStore } from './extraction-runs';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -19,16 +20,33 @@ const ALLOWED_MIME = new Set([
   'application/octet-stream', // some clients send this for .pdf
 ]);
 
-function extractMultiPagePlanCandidate(
+/**
+ * Streamed reads of this server instance, by file: a client whose connection dropped
+ * comes back to the read it started (see extraction-runs.ts). Kept on globalThis so
+ * that every copy of this module in the process shares one store.
+ */
+function extractionRuns(): ExtractionRunStore {
+  const g = globalThis as { __dbExtractionRuns?: ExtractionRunStore };
+  return (g.__dbExtractionRuns ??= createExtractionRunStore());
+}
+
+/**
+ * The page that holds the plan, with its vectors and walls. `step` is called before
+ * each long stretch of work: a streamed answer says there where the read is, which
+ * also keeps the connection from standing silent for the whole read.
+ */
+async function extractMultiPagePlanCandidate(
   doc: any,
   bytes: Uint8Array,
   collectPageVectors: (page: any, skipImages: boolean, pageIndex: number) => any,
   extractPureWallResult: (bytes: Uint8Array, pageIndex: number, a: undefined, b: undefined, c: boolean) => any,
+  step?: (message: string) => Promise<void>,
 ) {
   const count = typeof doc.countPages === 'function' ? doc.countPages() : 1;
   if (count <= 1) {
     const page = doc.loadPage(0);
     const captured = collectPageVectors(page, false, 0);
+    await step?.('Tracing the walls');
     const wallRaw = extractPureWallResult(bytes, 0, undefined, undefined, true);
     return { pageIndex: 0, page, captured, wallRaw };
   }
@@ -57,7 +75,9 @@ function extractMultiPagePlanCandidate(
   // Only the counts are kept. A page's full wall result, with its audit trail, runs to
   // hundreds of megabytes: six of them held at once is more than a hosted function has.
   const candidates: { pageIndex: number; wallCount: number; scaled: boolean }[] = [];
-  for (const cand of scored.slice(0, 6)) {
+  const likeliest = scored.slice(0, 6);
+  for (const [n, cand] of likeliest.entries()) {
+    await step?.(`Finding the plan: sheet ${n + 1} of ${likeliest.length}`);
     try {
       const pure = extractPureWallResult(bytes, cand.idx, undefined, undefined, false);
       candidates.push({
@@ -72,6 +92,7 @@ function extractMultiPagePlanCandidate(
   const planIdx = choosePlanPage(candidates)?.pageIndex ?? scored[0]?.idx ?? 0;
   const page = doc.loadPage(planIdx);
   const captured = collectPageVectors(page, false, planIdx);
+  await step?.(`Tracing the walls of page ${planIdx + 1}`);
   const wallRaw = extractPureWallResult(bytes, planIdx, undefined, undefined, true);
   return { pageIndex: planIdx, page, captured, wallRaw };
 }
@@ -395,26 +416,19 @@ export async function POST(req: NextRequest) {
     const t0 = Date.now();
 
     if (isStream) {
-      const { readable, writable } = new TransformStream();
-      const writer = writable.getWriter();
-      const encoder = new TextEncoder();
-      const sendChunk = async (chunk: unknown) => {
-        try {
-          await writer.write(encoder.encode(JSON.stringify(chunk) + '\n'));
-        } catch {
-          // Client disconnected
-        }
-      };
-
-      (async () => {
+      // The read is kept under the file's own hash. The answer starts at once, the read a
+      // moment later; a request that comes back with the same file after its connection
+      // dropped joins the read, or is sent the finished one.
+      const { run, state } = extractionRuns().open(extractionKey(bytes), async (sendChunk) => {
         try {
           const tPdf0 = Date.now();
           const doc = mupdf.Document.openDocument(bytes as any, 'application/pdf');
-          const { pageIndex, page, captured, wallRaw } = extractMultiPagePlanCandidate(
+          const { pageIndex, page, captured, wallRaw } = await extractMultiPagePlanCandidate(
             doc,
             bytes,
             collectPageVectors,
             extractPureWallResult as any,
+            (message) => sendChunk({ type: 'stage-progress', message }),
           );
           const pageBoundsMupdf: [number, number, number, number] = (() => {
             const b = page.getBounds() as unknown as number[];
@@ -431,11 +445,11 @@ export async function POST(req: NextRequest) {
 
           if (!result.walls || result.walls.length === 0) {
             await sendChunk({ type: 'error', error: 'No building region / walls detected in document.' });
-            await writer.close();
-            return;
+            return false;
           }
 
           // Wall completion calculation
+          await sendChunk({ type: 'stage-progress', message: 'Closing the gaps between walls' });
           let completionWalls: any[] = [];
           let finalizedWallCount = pureResult.accepted.length;
           let wallCompletionHash = '';
@@ -738,16 +752,24 @@ export async function POST(req: NextRequest) {
             ok: true,
             timings: { totalMs: Date.now() - t0 },
           });
-
-          try { await writer.close(); } catch { /* stream already closed by client */ }
+          return true;
         } catch (streamErr) {
           console.error('[MuPdfRoute Stream] internal error:', streamErr);
-          try { await sendChunk({ type: 'error', error: streamErr instanceof Error ? streamErr.message : String(streamErr) }); } catch { /* ignore */ }
-          try { await writer.close(); } catch { /* ignore */ }
+          await sendChunk({ type: 'error', error: streamErr instanceof Error ? streamErr.message : String(streamErr) });
+          return false;
         }
-      })();
+      });
+      // The read goes on to its end when the client has gone, so that it is there when the client comes back.
+      try {
+        after(run.finished);
+      } catch {
+        /* no request scope to extend: the read still runs while this instance does */
+      }
+      if (state !== 'new') {
+        console.log(`[MuPdfRoute] ${state === 'replay' ? 'Sent the finished read again' : 'Joined the read in progress'}, ${Math.round((Date.now() - run.startedAt) / 1000)} s after it started.`);
+      }
 
-      return new Response(readable, {
+      return new Response(streamRun(run, { type: 'stage-open', run: state, elapsedMs: Date.now() - run.startedAt }), {
         headers: {
           'Content-Type': 'application/x-ndjson; charset=utf-8',
           'Cache-Control': 'no-cache, no-transform',
@@ -759,7 +781,7 @@ export async function POST(req: NextRequest) {
     console.log('[MuPdfRoute] Opening PDF once + selecting best floor-plan page...');
     const tPdf0 = Date.now();
     const doc = mupdf.Document.openDocument(bytes as any, 'application/pdf');
-    const { pageIndex, page, captured, wallRaw } = extractMultiPagePlanCandidate(
+    const { pageIndex, page, captured, wallRaw } = await extractMultiPagePlanCandidate(
       doc,
       bytes,
       collectPageVectors,
