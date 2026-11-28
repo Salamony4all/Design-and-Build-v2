@@ -17,8 +17,23 @@ import { getPascalStores } from 'design-build-simplified-viewer-shell';
 import { uid } from '@/harness/ai-scene-install/helpers';
 import { matchProducts, productHeight, type MatchProduct, type MatchResult } from './match-products';
 import { PRODUCT_COLOURS, productLabel, setProductRefs, type ProductColour } from './product-refs';
-import { PAD_TOP_M, hasProductPhoto, loadProductCutouts } from './product-cards';
+import {
+  PAD_TOP_M,
+  buildCustomFurnitureGroup,
+  disposeObject3D,
+  recipeSignature,
+  type CustomModelRecipe,
+  type CustomModelSubPart,
+  type MaterialFinishPreset,
+} from './custom-model-builder';
+import { disposeProductCutouts, hasProductPhoto, loadProductCutouts } from './product-cards';
+import { resolvePascalCatalogAsset } from './pascal-catalog-map';
 import { BACK, SIDE, depthAlong, edgeBands } from './stand-in-bands';
+import {
+  applyArchitecturalFeaturesToScene,
+  installDefaultArchitecturalFeatures,
+  type ArchitecturalZoneInput,
+} from './architectural-features';
 
 export interface PlanFurniturePiece {
   id: string;
@@ -26,6 +41,12 @@ export interface PlanFurniturePiece {
   layer: string;
   family: string;
   kind: string;
+  subtype?: string;
+  room?: string;
+  sourceMode?: 'layer' | 'broad';
+  confidence?: number;
+  clusterCount?: number;
+  customModel?: boolean;
   shape: string;
   widthM: number;
   depthM: number;
@@ -44,11 +65,15 @@ export interface PlanFurniturePiece {
   /** Pascal plan metres: x, and y = Pascal z. */
   centerM: { x: number; y: number };
   outlineM: { x: number; y: number }[];
+  subParts?: CustomModelSubPart[];
 }
+
+export type PlanArchitecturalZone = ArchitecturalZoneInput;
 
 export interface PlanFurniture {
   pieces: PlanFurniturePiece[];
-  types?: { id: string; kind: string; shape: string; widthM: number; depthM: number; count: number }[];
+  types?: { id: string; kind: string; subtype?: string; sourceMode?: 'layer' | 'broad'; customModel?: boolean; shape: string; widthM: number; depthM: number; count: number }[];
+  zones?: PlanArchitecturalZone[];
   layers?: string[];
 }
 
@@ -70,142 +95,118 @@ const KIND_LABEL: Record<string, string> = {
   unknown: 'Furniture',
 };
 
+const SUBTYPE_LABEL: Record<string, string> = {
+  chair: 'Chair',
+  armchair: 'Armchair',
+  stool: 'Stool',
+  sofa: 'Sofa',
+  'l-sofa': 'L-shaped sofa',
+  'curved-sofa': 'Curved sofa',
+  bench: 'Bench',
+  'dining-table': 'Dining table',
+  'meeting-table': 'Meeting table',
+  'coffee-table': 'Coffee table',
+  'side-table': 'Side table',
+  desk: 'Desk',
+  'reception-counter': 'Reception counter',
+  'retail-kiosk': 'Retail display kiosk',
+  'bar-counter': 'Refreshment bar counter',
+  'feature-column': 'Fluted feature column',
+  'slat-screen': 'Architectural slat screen',
+  booth: 'Acoustic dining booth',
+  banquette: 'Built-in banquette',
+  'wall-art': 'Framed wall artwork',
+  'single-bed': 'Single bed',
+  'double-bed': 'Double bed',
+  cabinet: 'Cabinet',
+  wardrobe: 'Wardrobe',
+  credenza: 'Credenza',
+  'kitchen-counter': 'Kitchen counter',
+  island: 'Kitchen island',
+  shelving: 'Shelving',
+  joinery: 'Joinery',
+  wc: 'WC',
+  basin: 'Basin',
+  shower: 'Shower',
+  bathtub: 'Bathtub',
+  urinal: 'Urinal',
+  plant: 'Plant',
+  screen: 'Screen',
+  appliance: 'Appliance',
+  equipment: 'Equipment',
+};
+
 const THUMB = 'data:image/svg+xml;base64,' + (typeof btoa === 'function'
   ? btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8"><rect width="8" height="8" rx="2" fill="#d9d4cc"/></svg>')
   : '');
 
-interface Look { body: string; accent: string }
-
-function lookOf(kind: string, tint?: string): Look {
-  if (tint) return { body: tint, accent: '#8f877e' };
-  switch (kind) {
-    case 'seat':
-    case 'sofa':
-      return { body: '#e7e1d8', accent: '#8f877e' };
-    case 'table':
-    case 'side-table':
-      return { body: '#d8cdbf', accent: '#7d756d' };
-    case 'plant':
-      return { body: '#6f9a63', accent: '#9b8e80' };
-    case 'screen':
-      return { body: '#1f2328', accent: '#3a3f46' };
-    case 'sanitary':
-      return { body: '#f7f7f5', accent: '#c9c9c9' };
-    case 'equipment':
-      return { body: '#c9ced6', accent: '#8a9099' };
-    default:
-      return { body: '#ece8e2', accent: '#9a938b' };
-  }
+export function inferMaterialPreset(product?: Pick<MatchProduct, 'description' | 'category' | 'finishes'>): MaterialFinishPreset | undefined {
+  if (!product) return undefined;
+  const hay = `${product.description ?? ''} ${product.category ?? ''} ${(product.finishes ?? []).map((f) => `${f.role} ${f.name}`).join(' ')}`.toLowerCase();
+  if (/flut|slat|reed/.test(hay) && /wood|oak|walnut|ash|timber/.test(hay)) return 'fluted-wood';
+  if (/marble|calacatta|carrara|travertine/.test(hay)) return 'marble';
+  if (/terrazzo|ceppo/.test(hay)) return 'terrazzo';
+  if (/stone|quartz|silestone|dekton|corian/.test(hay)) return 'stone';
+  if (/boucle/.test(hay)) return 'boucle';
+  if (/velvet/.test(hay)) return 'velvet';
+  if (/leather|aniline/.test(hay)) return 'leather';
+  if (/lacquer|fenix|nano/.test(hay)) return 'matte-lacquer';
+  if (/oak|walnut|timber|wood|veneer/.test(hay)) return 'wood';
+  if (/brass|bronze|pvd|stainless|brushed/.test(hay)) return 'brushed-metal';
+  return undefined;
 }
 
-const mat = (color: string, roughness = 0.8) => new THREE.MeshStandardMaterial({ color, roughness, metalness: 0 });
-
-/** Footprint as a THREE.Shape around the piece centre (shape y = −plan z, so it lies flat after rotating). */
-function footprintShape(p: PlanFurniturePiece): THREE.Shape {
-  const pts = p.outlineM.map((q) => new THREE.Vector2(q.x - p.centerM.x, -(q.y - p.centerM.y)));
-  return new THREE.Shape(pts);
-}
-
-function extrudeFootprint(p: PlanFurniturePiece, from: number, to: number, material: THREE.Material): THREE.Mesh {
-  const g = new THREE.ExtrudeGeometry(footprintShape(p), { depth: Math.max(0.01, to - from), bevelEnabled: false, curveSegments: 1 });
-  g.rotateX(-Math.PI / 2);
-  g.translate(0, from, 0);
-  return new THREE.Mesh(g, material);
+export function toCustomModelRecipe(
+  p: PlanFurniturePiece,
+  tint?: string,
+  opts: {
+    pad?: boolean;
+    heightM?: number;
+    accentTint?: string;
+    tertiaryTint?: string;
+    subtype?: string;
+    materialPreset?: MaterialFinishPreset;
+    glassDoors?: boolean;
+  } = {},
+): CustomModelRecipe {
+  const r3 = (v: number) => Math.round(v * 1000) / 1000;
+  const sub = opts.subtype ?? p.subtype;
+  return {
+    v: 1,
+    kind: p.kind,
+    ...(sub ? { subtype: sub } : {}),
+    shape: p.shape,
+    widthM: r3(p.widthM),
+    depthM: r3(p.depthM),
+    heightM: r3(opts.heightM ?? p.heightM ?? 0.75),
+    angle: r3(p.angle),
+    ...(typeof p.facing === 'number' && Number.isFinite(p.facing) ? { facing: r3(p.facing) } : {}),
+    centerM: { x: r3(p.centerM.x), y: r3(p.centerM.y) },
+    outlineM: p.outlineM.map((q) => ({ x: r3(q.x), y: r3(q.y) })),
+    ...(p.subParts?.length
+      ? {
+          subParts: p.subParts.map((sp) => ({
+            role: sp.role,
+            outlineM: sp.outlineM.map((q) => ({ x: r3(q.x), y: r3(q.y) })),
+            ...(sp.dashed ? { dashed: true } : {}),
+          })),
+        }
+      : {}),
+    ...(tint ? { tint } : {}),
+    ...(opts.accentTint ? { accentTint: opts.accentTint } : {}),
+    ...(opts.tertiaryTint ? { tertiaryTint: opts.tertiaryTint } : {}),
+    ...(opts.materialPreset ? { materialPreset: opts.materialPreset } : {}),
+    ...(opts.glassDoors ? { glassDoors: true } : {}),
+    ...(opts.pad ? { pad: true } : {}),
+  };
 }
 
 /**
  * A stand-in for one piece, centred on its footprint centre, standing on y = 0. With
  * `pad`, only a thin pad in the product's colour: the product's photo stands on it.
  */
-export function buildPieceObject(p: PlanFurniturePiece, tint?: string, opts: { pad?: boolean } = {}): THREE.Group {
-  const look = lookOf(p.kind, tint);
-  const group = new THREE.Group();
-  if (opts.pad) {
-    group.add(extrudeFootprint(p, 0, PAD_TOP_M, mat(look.body, 0.7)));
-    return group;
-  }
-  const short = Math.max(0.2, Math.min(p.widthM, p.depthM));
-  const facing = typeof p.facing === 'number' && Number.isFinite(p.facing) ? p.facing : null;
-  switch (p.kind) {
-    case 'table':
-    case 'side-table': {
-      const h = p.kind === 'table' ? 0.74 : 0.5;
-      group.add(extrudeFootprint(p, h - 0.04, h, mat(look.body, 0.6)));
-      const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, h - 0.04, 16), mat(look.accent, 0.5));
-      stem.position.y = (h - 0.04) / 2;
-      const base = new THREE.Mesh(new THREE.CylinderGeometry(Math.min(0.28, short * 0.3), Math.min(0.28, short * 0.3), 0.02, 24), mat(look.accent, 0.5));
-      base.position.y = 0.01;
-      group.add(stem, base);
-      break;
-    }
-    case 'plant': {
-      const r = short / 2;
-      const pot = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.55, r * 0.42, 0.36, 20), mat(look.accent));
-      pot.position.y = 0.18;
-      const leaves = new THREE.Mesh(new THREE.IcosahedronGeometry(r * 0.95, 1), mat(look.body, 0.9));
-      leaves.scale.set(1, 1.15, 1);
-      leaves.position.y = 0.36 + r * 0.95;
-      group.add(pot, leaves);
-      break;
-    }
-    case 'screen': {
-      const len = p.widthM;
-      const tall = len > 2 ? 1.6 : Math.min(1.1, len * 0.5625);
-      const bottom = len > 2 ? 0.6 : 1.05;
-      const panel = new THREE.Mesh(new THREE.BoxGeometry(len, tall, 0.05), mat(look.body, 0.35));
-      panel.position.y = bottom + tall / 2;
-      panel.rotation.y = -p.angle;
-      group.add(panel);
-      break;
-    }
-    case 'seat':
-    case 'sofa': {
-      const body = mat(look.body);
-      group.add(extrudeFootprint(p, 0, 0.42, body));
-      if (facing !== null) {
-        // The back: a band along the back edges, so the seat reads the right way round.
-        const depth = depthAlong(p, facing);
-        const thick = p.kind === 'seat' ? Math.min(0.18, Math.max(0.12, depth * 0.2)) : Math.min(0.25, Math.max(0.15, depth * 0.22));
-        group.add(...edgeBands(p, facing, BACK, thick, 0.42, p.kind === 'seat' ? 0.8 : 0.76, body));
-      }
-      break;
-    }
-    case 'desk': {
-      const tall = p.widthM > 2.4;
-      if (facing === null) {
-        group.add(extrudeFootprint(p, 0, tall ? 1.05 : 0.75, mat(look.body, 0.7)));
-      } else if (tall) {
-        // A counter: the work top on the user's side, a raised top facing the visitors.
-        const body = mat(look.body, 0.7);
-        group.add(extrudeFootprint(p, 0, 0.75, body), ...edgeBands(p, facing, BACK, 0.3, 0.75, 1.05, body));
-      } else {
-        // A desk: the top, a modesty panel at the back and end panels; open at the front, where the user sits.
-        const body = mat(look.body, 0.7);
-        group.add(extrudeFootprint(p, 0.71, 0.75, body));
-        group.add(...edgeBands(p, facing, BACK, 0.025, 0.3, 0.71, body));
-        group.add(...edgeBands(p, facing, SIDE, 0.03, 0, 0.71, body));
-      }
-      break;
-    }
-    case 'bed': {
-      const body = mat(look.body);
-      group.add(extrudeFootprint(p, 0, 0.5, body));
-      if (facing !== null) group.add(...edgeBands(p, facing, BACK, 0.06, 0.5, 1.05, mat(look.accent, 0.7)));
-      break;
-    }
-    case 'equipment':
-      group.add(extrudeFootprint(p, 0, 1.2, mat(look.body, 0.6)));
-      break;
-    case 'sanitary':
-      group.add(extrudeFootprint(p, 0, 0.42, mat(look.body, 0.3)));
-      break;
-    case 'joinery':
-      group.add(extrudeFootprint(p, 0, 0.9, mat(look.body, 0.7)));
-      break;
-    default:
-      group.add(extrudeFootprint(p, 0, Math.max(0.3, p.heightM || 0.6), mat(look.body)));
-  }
-  return group;
+export function buildPieceObject(p: PlanFurniturePiece, tint?: string, opts: { pad?: boolean; heightM?: number } = {}): THREE.Group {
+  return buildCustomFurnitureGroup(toCustomModelRecipe(p, tint, opts));
 }
 
 const exporter = new GLTFExporter();
@@ -231,22 +232,21 @@ function ensureBlobFetch(): void {
   }) as typeof fetch;
 }
 
-function signature(p: PlanFurniturePiece, tint?: string, pad = false): string {
-  const pts = p.outlineM.map((q) => `${Math.round((q.x - p.centerM.x) * 200)},${Math.round((q.y - p.centerM.y) * 200)}`).join(';');
-  const facing = typeof p.facing === 'number' ? Math.round(p.facing * 1000) : 'none';
-  return `${p.kind}|${tint ?? ''}|${pad ? 'pad' : 'body'}|${Math.round(p.angle * 1000)}|${facing}|${pts}`;
-}
-
-function modelUrl(p: PlanFurniturePiece, tint?: string, pad = false): Promise<string> {
-  const key = signature(p, tint, pad);
+function recipeModelUrl(recipe: CustomModelRecipe): Promise<string> {
+  const key = recipeSignature(recipe);
   let url = assetBySignature.get(key);
   if (!url) {
     url = (async () => {
       ensureBlobFetch();
-      const out = (await exporter.parseAsync(buildPieceObject(p, tint, { pad }), { binary: true })) as ArrayBuffer;
-      const blobUrl = URL.createObjectURL(new Blob([out], { type: 'model/gltf-binary' }));
-      ownBlobUrls.add(blobUrl);
-      return blobUrl;
+      const obj = buildCustomFurnitureGroup(recipe);
+      try {
+        const out = (await exporter.parseAsync(obj, { binary: true })) as ArrayBuffer;
+        const blobUrl = URL.createObjectURL(new Blob([out], { type: 'model/gltf-binary' }));
+        ownBlobUrls.add(blobUrl);
+        return blobUrl;
+      } finally {
+        disposeObject3D(obj);
+      }
     })();
     url.catch(() => assetBySignature.delete(key));
     assetBySignature.set(key, url);
@@ -254,10 +254,31 @@ function modelUrl(p: PlanFurniturePiece, tint?: string, pad = false): Promise<st
   return url;
 }
 
+function modelUrl(p: PlanFurniturePiece, tint?: string, pad = false, heightM?: number): Promise<string> {
+  return recipeModelUrl(toCustomModelRecipe(p, tint, { pad, heightM }));
+}
+
+/** Revoke all generated stand-in GLB blob URLs and clear the in-memory signature cache. */
+export function disposePlanFurnitureAssets(): void {
+  for (const url of ownBlobUrls) {
+    try {
+      URL.revokeObjectURL(url);
+    } catch {
+      /* noop */
+    }
+  }
+  ownBlobUrls.clear();
+  assetBySignature.clear();
+}
+
 function boxOf(obj: THREE.Object3D): [number, number, number] {
-  const b = new THREE.Box3().setFromObject(obj);
-  const s = b.getSize(new THREE.Vector3());
-  return [Math.max(0.01, s.x), Math.max(0.01, s.y), Math.max(0.01, s.z)];
+  try {
+    const b = new THREE.Box3().setFromObject(obj);
+    const s = b.getSize(new THREE.Vector3());
+    return [Math.max(0.01, s.x), Math.max(0.01, s.y), Math.max(0.01, s.z)];
+  } finally {
+    disposeObject3D(obj);
+  }
 }
 
 type SceneState = {
@@ -301,25 +322,46 @@ export async function installPlanFurniture(f: PlanFurniture, opts: { kinds?: Set
     if (opts.kinds && !opts.kinds.has(p.kind)) continue;
     if (!p.outlineM || p.outlineM.length < 3) continue;
     try {
-      const [w, h, d] = boxOf(buildPieceObject(p));
-      const src = await modelUrl(p);
+      const pascalMatch = isArchitectural3DLockedPiece(p) ? null : resolvePascalCatalogAsset(p);
       const id = uid('item');
-      const name = p.label && p.kind === 'screen' ? p.label : KIND_LABEL[p.kind] ?? 'Furniture';
+      const name = p.label && p.kind === 'screen' ? p.label : (p.subtype ? SUBTYPE_LABEL[p.subtype] : undefined) ?? KIND_LABEL[p.kind] ?? 'Furniture';
+      let itemAsset: Record<string, unknown>;
+      let rotation: [number, number, number] = [0, 0, 0];
+      let geometrySpec: CustomModelRecipe | undefined;
+      let catalogId: string | undefined;
+      if (pascalMatch) {
+        itemAsset = pascalMatch.asset as unknown as Record<string, unknown>;
+        rotation = [0, pascalMatch.rotationY, 0];
+        catalogId = pascalMatch.catalogId;
+      } else {
+        const recipe = toCustomModelRecipe(p);
+        const [w, h, d] = boxOf(buildCustomFurnitureGroup(recipe));
+        const src = await recipeModelUrl(recipe);
+        itemAsset = { id: `plan-${p.id}`, category: 'furniture', name, thumbnail: THUMB, src, dimensions: [w, h, d], offset: [0, 0, 0], rotation: [0, 0, 0], scale: [1, 1, 1] };
+        geometrySpec = recipe;
+      }
       const node = ItemNode.parse({
         id,
         name,
         parentId,
         position: [p.centerM.x, 0, p.centerM.y],
-        rotation: [0, 0, 0],
-        asset: { id: `plan-${p.id}`, category: 'furniture', name, thumbnail: THUMB, src, dimensions: [w, h, d], offset: [0, 0, 0], rotation: [0, 0, 0], scale: [1, 1, 1] },
+        rotation,
+        asset: itemAsset,
         metadata: {
           source: PLAN_FURNITURE_SOURCE,
           pieceId: p.id,
           typeId: p.typeId,
           kind: p.kind,
+          ...(p.subtype ? { subtype: p.subtype } : {}),
+          ...(p.room ? { room: p.room } : {}),
+          ...(p.sourceMode ? { sourceMode: p.sourceMode } : {}),
+          ...(p.customModel ? { customModel: true } : {}),
           shape: p.shape,
           layer: p.layer,
           sizeM: [p.widthM, p.depthM],
+          ...(catalogId ? { catalogId } : {}),
+          ...(geometrySpec ? { geometrySpec } : {}),
+          ...(isArchitectural3DLockedPiece(p) ? { architecturalLock: true } : {}),
           // Plan angle of the piece's front (the item stands unturned, so it is the item's own).
           ...(typeof p.facing === 'number' ? { facing: p.facing, facingBy: p.facingBy } : {}),
         },
@@ -330,7 +372,58 @@ export async function installPlanFurniture(f: PlanFurniture, opts: { kinds?: Set
     }
   }
   if (ops.length) scene().createNodes(ops);
+  installDefaultArchitecturalFeatures(f.zones);
   return { installed: ops.length };
+}
+
+/** Rebuild ephemeral blob: GLBs for any ItemNode carrying a saved `geometrySpec` (e.g. after Scene JSON reload). */
+export async function rehydratePlanFurnitureModels(): Promise<number> {
+  let rebuilt = 0;
+  for (const [, hit] of planFurnitureNodes()) {
+    const asset = (hit.node.asset ?? {}) as Record<string, unknown>;
+    const meta = (hit.node.metadata ?? {}) as Record<string, unknown>;
+    const spec = meta.geometrySpec as CustomModelRecipe | undefined;
+    if (!spec || spec.v !== 1) continue;
+    const src = typeof asset.src === 'string' ? asset.src : '';
+    if (src.startsWith('blob:') && ownBlobUrls.has(src)) continue;
+    try {
+      const freshSrc = await recipeModelUrl(spec);
+      const dims = boxOf(buildCustomFurnitureGroup(spec));
+      scene().updateNode(hit.id, { asset: { ...asset, src: freshSrc, dimensions: dims } });
+      rebuilt++;
+    } catch {
+      /* skip unrebuildable spec */
+    }
+  }
+  return rebuilt;
+}
+
+const ARCHITECTURAL_LOCK_SUBTYPES = new Set([
+  'retail-kiosk',
+  'bar-counter',
+  'reception-counter',
+  'kitchen-counter',
+  'island',
+  'booth',
+  'banquette',
+  'wardrobe',
+  'wall-art',
+  'feature-column',
+  'slat-screen',
+]);
+
+/**
+ * True for bespoke architectural joinery, free-standing kiosks, feature columns, and
+ * full-height slat privacy screens whose 3D procedural geometry must NEVER be flattened
+ * to a 3 cm 2D photo cutout pad and whose silhouette edges stay locked in Image 2.
+ */
+export function isArchitectural3DLockedPiece(
+  piece: Pick<PlanFurniturePiece, 'kind' | 'subtype' | 'customModel' | 'heightM'>,
+): boolean {
+  if (piece.kind === 'joinery') return true;
+  if (piece.subtype && ARCHITECTURAL_LOCK_SUBTYPES.has(piece.subtype)) return true;
+  if (piece.kind === 'screen' && ((piece.heightM ?? 0) >= 1.6 || piece.customModel === true)) return true;
+  return false;
 }
 
 export interface FurnishResult {
@@ -338,27 +431,53 @@ export interface FurnishResult {
   placed: number;
   /** Products shown by their own photo in the model. */
   withPhotos: number;
+  /** Architectural Fit-Out / Fabrication product ids bound onto walls, glazing, or ceilings. */
+  handledArchitecturalIds?: string[];
 }
 
+const isSwatchCardUrl = (url?: string): boolean => /\/fitout-v2\/|\/fabrication\//i.test(url || '');
+
 /**
- * Attach BOQ Flow's products to the drawn pieces they match: each matched item takes
- * the product's name and reference, and a colour shared by all pieces of that product
- * (the products placed most get the first colours, so the main ones never share one).
+ * Attach BOQ Flow's products to the drawn pieces they match: each matched loose-furniture
+ * item with a real product photo stands by its own cut-out photo on a subtle anchor pad;
+ * bespoke 3D-locked architectural pieces (kiosks, counters, slat screens, feature columns)
+ * ALWAYS keep full 3D procedural geometry (`pad: false`) while passing any photo as a design
+ * reference; Fit-Out & Fabrication wall/glazing/ceiling items bind directly to scene walls
+ * and overhead ceiling assemblies.
  */
 export async function applyProducts(f: PlanFurniture, products: MatchProduct[]): Promise<FurnishResult> {
+  const archResult = applyArchitecturalFeaturesToScene(f.zones, products);
   const match = matchProducts(f.pieces, products);
   const installed = planFurnitureNodes();
   const byId = new Map(products.map((p) => [p.id, p]));
   const placedLines = match.products.filter((m) => m.placed > 0 && byId.has(m.productId)).sort((a, b) => b.placed - a.placed);
   const colourOf = new Map<string, ProductColour>(placedLines.map((m, i) => [m.productId, PRODUCT_COLOURS[i % PRODUCT_COLOURS.length]]));
-  setProductRefs(
-    placedLines.map((m) => {
+  const lockedProductIds = new Set<string>();
+  for (const piece of f.pieces) {
+    if (!isArchitectural3DLockedPiece(piece)) continue;
+    const pid = match.byPiece[piece.id];
+    if (pid) lockedProductIds.add(pid);
+  }
+  setProductRefs([
+    ...placedLines.map((m) => {
       const p = byId.get(m.productId)!;
-      return { id: p.id, label: productLabel(p), description: p.description, imageUrl: p.imageUrl, colour: colourOf.get(p.id)! };
+      return { id: p.id, label: productLabel(p), description: p.description, imageUrl: p.imageUrl, colour: colourOf.get(p.id)!, finishes: p.finishes };
+    }),
+    ...archResult.architecturalRefs,
+  ]);
+  // Real product photos take priority for loose furniture cutouts; 3D-locked architectural pieces and finish swatches stay 3D.
+  disposeProductCutouts();
+  await loadProductCutouts(
+    placedLines.map((m) => {
+      const p = byId.get(m.productId);
+      const url = p?.imageUrl;
+      const allPiecesForProductAre3DLocked = m.typeIds.length > 0 && lockedProductIds.has(m.productId) && f.pieces.filter((pc) => match.byPiece[pc.id] === m.productId).every(isArchitectural3DLockedPiece);
+      return {
+        id: m.productId,
+        imageUrl: url && !isSwatchCardUrl(url) && !allPiecesForProductAre3DLocked ? url : undefined,
+      };
     }),
   );
-  // Products with a picture stand in the model as their own photo, cut out, on a pad.
-  await loadProductCutouts(placedLines.map((m) => ({ id: m.productId, imageUrl: byId.get(m.productId)?.imageUrl })));
   const withPhotos = placedLines.filter((m) => hasProductPhoto(m.productId)).length;
   let placed = 0;
   for (const piece of f.pieces) {
@@ -366,28 +485,109 @@ export async function applyProducts(f: PlanFurniture, products: MatchProduct[]):
     if (!hit) continue;
     const productId = match.byPiece[piece.id];
     const product = productId ? byId.get(productId) : undefined;
+    const archLocked = isArchitectural3DLockedPiece(piece);
     const meta = { ...(hit.node.metadata as Record<string, unknown>) };
-    const asset = { ...(hit.node.asset as Record<string, unknown>) };
+    if (archLocked) meta.architecturalLock = true;
+    let asset = { ...(hit.node.asset as Record<string, unknown>) };
+    let rotation = Array.isArray(hit.node.rotation) ? [...(hit.node.rotation as [number, number, number])] : [0, 0, 0];
     const colour = product ? colourOf.get(product.id) : undefined;
-    const tint = colour?.hex;
-    const photo = !!product && hasProductPhoto(product.id);
-    try {
-      asset.src = await modelUrl(piece, tint, photo);
-      asset.dimensions = boxOf(buildPieceObject(piece, tint, { pad: photo }));
-    } catch {
-      // keep the untinted stand-in
+    const primaryFinishHex = product?.finishes?.[0]?.hex;
+    const accentFinishHex = product?.finishes?.[1]?.hex;
+    const tertiaryFinishHex = product?.finishes?.[2]?.hex;
+    const tint = primaryFinishHex || colour?.hex;
+    const heightM = product ? productHeight(product.description, product.dims) : undefined;
+    const effectiveSubtype =
+      product?.subtype && (!piece.subtype || ['sofa', 'bench', 'cabinet', 'credenza', 'joinery', 'table', 'dining-table', 'meeting-table', 'screen'].includes(piece.subtype))
+        ? product.subtype
+        : piece.subtype;
+    const effArchLocked = archLocked || isArchitectural3DLockedPiece({ ...piece, subtype: effectiveSubtype });
+    if (effArchLocked) meta.architecturalLock = true;
+    const photo = !!product && !effArchLocked && hasProductPhoto(product.id);
+    const pascalMatch = !photo && !effArchLocked ? resolvePascalCatalogAsset(piece, product) : null;
+    const materialPreset = inferMaterialPreset(product);
+    const glassDoors = !!product && /\b(glass\s*door|smoked\s*glass|fluted\s*glass|vitrine)\b/i.test(product.description);
+    const name = product ? productLabel(product) : (effectiveSubtype ? SUBTYPE_LABEL[effectiveSubtype] : undefined) ?? KIND_LABEL[piece.kind] ?? 'Furniture';
+    if (photo && product) {
+      // Real product photo cutout stands on a thin coloured pad at the exact plan orientation
+      const recipe = toCustomModelRecipe(piece, colour?.hex, { pad: true, subtype: effectiveSubtype, ...(heightM ? { heightM } : {}) });
+      try {
+        const dims = boxOf(buildCustomFurnitureGroup(recipe));
+        const src = await recipeModelUrl(recipe);
+        asset = {
+          id: `plan-${piece.id}`,
+          category: 'furniture',
+          name,
+          thumbnail: THUMB,
+          src,
+          dimensions: dims,
+          offset: [0, 0, 0],
+          rotation: [0, 0, 0],
+          scale: [1, 1, 1],
+        };
+        rotation = [0, 0, 0];
+        meta.geometrySpec = recipe;
+        delete meta.catalogId;
+      } catch {
+        asset.name = name;
+      }
+    } else if (pascalMatch) {
+      asset = { ...pascalMatch.asset, name };
+      rotation = [0, pascalMatch.rotationY, 0];
+      meta.catalogId = pascalMatch.catalogId;
+      delete meta.geometrySpec;
+    } else {
+      const recipe = toCustomModelRecipe(piece, tint, {
+        pad: false,
+        subtype: effectiveSubtype,
+        ...(heightM ? { heightM } : {}),
+        ...(accentFinishHex ? { accentTint: accentFinishHex } : {}),
+        ...(tertiaryFinishHex ? { tertiaryTint: tertiaryFinishHex } : {}),
+        ...(materialPreset ? { materialPreset } : {}),
+        ...(glassDoors ? { glassDoors: true } : {}),
+      });
+      try {
+        asset = {
+          id: `plan-${piece.id}`,
+          category: 'furniture',
+          name,
+          thumbnail: THUMB,
+          src: await recipeModelUrl(recipe),
+          dimensions: boxOf(buildCustomFurnitureGroup(recipe)),
+          offset: [0, 0, 0],
+          rotation: [0, 0, 0],
+          scale: [1, 1, 1],
+        };
+        rotation = [0, 0, 0];
+        meta.geometrySpec = recipe;
+        delete meta.catalogId;
+      } catch {
+        // keep existing stand-in
+      }
+      asset.name = name;
     }
     if (product) {
       placed++;
-      // Inline pictures stay out of the scene (they live in product-refs); links are kept.
-      const imageUrl = product.imageUrl && /^https:\/\//i.test(product.imageUrl) ? product.imageUrl : undefined;
-      // How tall the product stands (its photo is sized to it): from its line, else its kind's usual height.
-      const heightM = productHeight(product.description, product.dims);
-      meta.product = { id: product.id, description: product.description, brand: product.brand, model: product.model, imageUrl, tint, colour: colour?.name, photo, ...(heightM ? { heightM } : {}) };
+      const imageUrl = product.imageUrl && (/^https?:\/\/|^data:image\//i.test(product.imageUrl)) ? product.imageUrl : undefined;
+      meta.product = {
+        id: product.id,
+        description: product.description,
+        brand: product.brand,
+        model: product.model,
+        imageUrl,
+        tint,
+        colour: colour?.name,
+        photo,
+        architecturalLock: archLocked,
+        ...(product.finishes?.length ? { finishes: product.finishes } : {}),
+        ...(heightM ? { heightM } : {}),
+      };
     } else delete meta.product;
-    const name = product ? productLabel(product) : KIND_LABEL[piece.kind] ?? 'Furniture';
-    asset.name = name;
-    scene().updateNode(hit.id, { name, metadata: meta, asset });
+    scene().updateNode(hit.id, { name, rotation, metadata: meta, asset });
   }
-  return { match, placed, withPhotos };
+  return {
+    match,
+    placed,
+    withPhotos,
+    handledArchitecturalIds: [...archResult.handledProductIds],
+  };
 }

@@ -767,7 +767,7 @@ export function ProviderSettingsPanel({ onClose }: { onClose: () => void }) {
                           <span className={`db-ais-card__avatar ${isGemini ? 'is-gemini' : ''}`} aria-hidden>{isGemini ? '✦' : '◈'}</span>
                           <div className="db-ais-card__main">
                             <div className="db-ais-card__title">
-                              <b>{p.label}</b>
+                              <b>{p.label}</b>{' '}
                               <span className={`db-ais-status is-${status}`}>
                                 {status === 'ok' ? 'Working' : status === 'fail' ? 'Key not accepted' : 'Not checked'}
                               </span>

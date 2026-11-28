@@ -51,6 +51,45 @@ interface Cutout {
 const cutoutByUrl = new Map<string, Promise<Cutout | null>>();
 const cutoutByProduct = new Map<string, Cutout>();
 
+/** Dispose all cached product cutout textures/materials and clear caches. */
+export function disposeProductCutouts(): void {
+  const seenTex = new Set<THREE.Texture>();
+  const seenMat = new Set<THREE.Material>();
+  for (const cut of cutoutByProduct.values()) {
+    if (cut.texture && !seenTex.has(cut.texture)) {
+      seenTex.add(cut.texture);
+      cut.texture.dispose();
+    }
+    if (cut.front && !seenMat.has(cut.front)) {
+      seenMat.add(cut.front);
+      cut.front.dispose();
+    }
+    if (cut.back && !seenMat.has(cut.back)) {
+      seenMat.add(cut.back);
+      cut.back.dispose();
+    }
+  }
+  cutoutByProduct.clear();
+  for (const p of cutoutByUrl.values()) {
+    void p.then((cut) => {
+      if (!cut) return;
+      if (cut.texture && !seenTex.has(cut.texture)) {
+        seenTex.add(cut.texture);
+        cut.texture.dispose();
+      }
+      if (cut.front && !seenMat.has(cut.front)) {
+        seenMat.add(cut.front);
+        cut.front.dispose();
+      }
+      if (cut.back && !seenMat.has(cut.back)) {
+        seenMat.add(cut.back);
+        cut.back.dispose();
+      }
+    });
+  }
+  cutoutByUrl.clear();
+}
+
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();

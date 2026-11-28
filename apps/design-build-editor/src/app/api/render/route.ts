@@ -20,6 +20,7 @@ import {
   isSupportedAspect,
   modelSupportsImageSize,
   referencePlan,
+  type PromptArchitecturalContext,
   type PromptFurniture,
   type RenderTierId,
 } from '@/features/render/render-presets';
@@ -38,6 +39,7 @@ const MAX_PRODUCT_IMAGE_CHARS = 1_500_000;
 const BodySchema = z.object({
   image: z.string().max(MAX_IMAGE_CHARS),
   edgeGuide: z.string().max(MAX_IMAGE_CHARS).optional(),
+  depthGuide: z.string().max(MAX_IMAGE_CHARS).optional(),
   plan: z.string().max(MAX_IMAGE_CHARS).optional(),
   style: z.enum(['daylight', 'golden-hour', 'overcast', 'dusk', 'clay']).default('daylight'),
   tier: z.enum(['fast', 'balanced', 'pro']).default('fast'),
@@ -50,6 +52,10 @@ const BodySchema = z.object({
   ceilingInView: z.boolean().optional(),
   /** The edge guide is a line drawing made from the 3D model. */
   lineGuide: z.boolean().optional(),
+  /** Image 2 includes 3-tier depth-weighted edges and a steel-blue 3D perspective floor/millwork mesh frame. */
+  meshFramedGuide: z.boolean().optional(),
+  /** Metric camera-space near..far depth range (in metres) represented by depthGuide. */
+  depthRangeM: z.object({ nearM: z.number().min(0).max(500), farM: z.number().min(0.1).max(1000) }).optional(),
   /** The view is a parallel projection (orthographic camera, e.g. isometric). */
   parallel: z.boolean().optional(),
   /** Look references: pictures whose materials, colours and mood the render follows. */
@@ -84,6 +90,18 @@ const BodySchema = z.object({
             where: z.string().max(300).optional(),
             /** The product's own photo stands in the view (not a solid stand-in). */
             photo: z.boolean().optional(),
+            architecturalLock: z.boolean().optional(),
+            finishes: z
+              .array(
+                z.object({
+                  role: z.string().max(40),
+                  code: z.string().max(40).optional(),
+                  name: z.string().max(80),
+                  hex: z.string().max(20),
+                }),
+              )
+              .max(4)
+              .optional(),
             image: z.string().max(MAX_PRODUCT_IMAGE_CHARS).optional(),
           }),
         )
@@ -101,6 +119,124 @@ const BodySchema = z.object({
         .optional(),
       /** Stand-ins seen through glass. */
       behindGlass: z.number().int().min(0).max(10_000).optional(),
+    })
+    .optional(),
+  architectural: z
+    .object({
+      ceilings: z
+        .array(
+          z.object({
+            label: z.string().max(240),
+            code: z.string().max(40).optional(),
+            shape: z.string().max(30),
+            style: z.string().max(40),
+            where: z.string().max(200).optional(),
+            widthM: z.number().min(0.2).max(50),
+            depthM: z.number().min(0.2).max(50),
+            dropM: z.number().min(0.05).max(3),
+            finishes: z
+              .array(
+                z.object({
+                  role: z.string().max(40),
+                  code: z.string().max(40).optional(),
+                  name: z.string().max(80),
+                  hex: z.string().max(20),
+                }),
+              )
+              .max(4)
+              .optional(),
+            image: z.string().max(MAX_PRODUCT_IMAGE_CHARS).optional(),
+          }),
+        )
+        .max(6)
+        .optional(),
+      wallCladdings: z
+        .array(
+          z.object({
+            label: z.string().max(240),
+            code: z.string().max(40).optional(),
+            style: z.string().max(40),
+            curved: z.boolean(),
+            where: z.string().max(200).optional(),
+            colourHex: z.string().max(20),
+            finishes: z
+              .array(
+                z.object({
+                  role: z.string().max(40),
+                  code: z.string().max(40).optional(),
+                  name: z.string().max(80),
+                  hex: z.string().max(20),
+                }),
+              )
+              .max(4)
+              .optional(),
+            image: z.string().max(MAX_PRODUCT_IMAGE_CHARS).optional(),
+          }),
+        )
+        .max(8)
+        .optional(),
+      glazingExecutions: z
+        .array(
+          z.object({
+            label: z.string().max(240),
+            code: z.string().max(40).optional(),
+            style: z.string().max(40),
+            curved: z.boolean(),
+            where: z.string().max(200).optional(),
+            frameName: z.string().max(80),
+            finishes: z
+              .array(
+                z.object({
+                  role: z.string().max(40),
+                  code: z.string().max(40).optional(),
+                  name: z.string().max(80),
+                  hex: z.string().max(20),
+                }),
+              )
+              .max(4)
+              .optional(),
+            image: z.string().max(MAX_PRODUCT_IMAGE_CHARS).optional(),
+          }),
+        )
+        .max(6)
+        .optional(),
+      wallArtworks: z
+        .array(
+          z.object({
+            label: z.string().max(240),
+            code: z.string().max(40).optional(),
+            style: z.string().max(40),
+            where: z.string().max(200).optional(),
+            widthM: z.number().min(0.2).max(12),
+            heightM: z.number().min(0.2).max(6),
+            frameName: z.string().max(80),
+            finishes: z
+              .array(
+                z.object({
+                  role: z.string().max(40),
+                  code: z.string().max(40).optional(),
+                  name: z.string().max(80),
+                  hex: z.string().max(20),
+                }),
+              )
+              .max(4)
+              .optional(),
+            image: z.string().max(MAX_PRODUCT_IMAGE_CHARS).optional(),
+          }),
+        )
+        .max(6)
+        .optional(),
+      slabFinishes: z
+        .array(
+          z.object({
+            slabId: z.string().max(80).optional(),
+            label: z.string().max(120),
+            description: z.string().max(240),
+            colourHex: z.string().max(20),
+          }),
+        )
+        .max(8)
+        .optional(),
     })
     .optional(),
   note: z.string().max(2000).optional(),
@@ -206,11 +342,61 @@ function furnitureRefs(body: Body, firstIndex: number, looks: number): { furnitu
       count: p.count,
       where: p.where,
       photo: p.photo === true,
+      ...(p.architecturalLock ? { architecturalLock: true } : {}),
+      ...(p.finishes?.length ? { finishes: p.finishes } : {}),
       imageIndex: img ? firstIndex + images.length - 1 : undefined,
     };
   });
   const plain = (f.plain ?? []).map((k) => ({ kind: k.kind.replace(/[^a-z-]/gi, '').toLowerCase() || 'unknown', count: k.count, where: k.where }));
   return { furniture: { standIns: f.standIns, products, plain, behindGlass: Math.min(f.behindGlass ?? 0, f.standIns) }, images };
+}
+
+function architecturalRefs(
+  body: Body,
+  firstIndex: number,
+  looks: number,
+  usedImages: number,
+): { architectural?: PromptArchitecturalContext; images: { mimeType: string; data: string }[] } {
+  const a = body.architectural;
+  if (!a) return { images: [] };
+  const maxTotal = referencePlan(body.tier as RenderTierId, looks, Number.MAX_SAFE_INTEGER).products;
+  const rem = Math.max(0, maxTotal - usedImages);
+  const images: { mimeType: string; data: string }[] = [];
+  const take = (dataUrl?: string) => {
+    if (images.length >= rem) return undefined;
+    const parsed = parseDataUrl(dataUrl);
+    if (!parsed) return undefined;
+    images.push(parsed);
+    return firstIndex + images.length - 1;
+  };
+  const ceilings = (a.ceilings ?? []).map((c) => {
+    const imageIndex = take(c.image);
+    return { ...c, ...(imageIndex ? { imageIndex } : {}) };
+  });
+  const wallCladdings = (a.wallCladdings ?? []).map((w) => {
+    const imageIndex = take(w.image);
+    return { ...w, ...(imageIndex ? { imageIndex } : {}) };
+  });
+  const glazingExecutions = (a.glazingExecutions ?? []).map((g) => {
+    const imageIndex = take(g.image);
+    return { ...g, ...(imageIndex ? { imageIndex } : {}) };
+  });
+  const wallArtworks = (a.wallArtworks ?? []).map((aw) => {
+    const imageIndex = take(aw.image);
+    return { ...aw, ...(imageIndex ? { imageIndex } : {}) };
+  });
+  const slabFinishes = a.slabFinishes ?? [];
+  if (!ceilings.length && !wallCladdings.length && !glazingExecutions.length && !wallArtworks.length && !slabFinishes.length) return { images: [] };
+  return {
+    architectural: {
+      ceilings,
+      wallCladdings,
+      glazingExecutions,
+      ...(wallArtworks.length ? { wallArtworks } : {}),
+      ...(slabFinishes.length ? { slabFinishes } : {}),
+    },
+    images,
+  };
 }
 
 interface GeminiPart {
@@ -267,6 +453,7 @@ async function saveDebug(
   await Promise.all([
     write(`input.${ext(inp?.mimeType)}`, inp),
     write('edges.png', parseDataUrl(body.edgeGuide)),
+    write('depth.png', parseDataUrl(body.depthGuide)),
     write('plan.jpg', parseDataUrl(body.plan)),
     write(`output.${ext(out?.mimeType)}`, out),
     ...refs.map((r, i) => write(`ref-${i + 1}.${ext(r.mimeType)}`, r)),
@@ -295,15 +482,41 @@ export async function POST(req: NextRequest) {
   if (!view) return fail(400, 'RENDER_BAD_REQUEST', 'The 3D view must be a PNG, JPEG or WebP data URL.');
   if (!isSupportedAspect(body.aspectRatio)) return fail(400, 'RENDER_BAD_REQUEST', `Unsupported aspect ratio ${body.aspectRatio}.`);
   const edge = parseDataUrl(body.edgeGuide);
+  const depth = edge ? parseDataUrl(body.depthGuide) : null;
   const plan = body.furnish ? parseDataUrl(body.plan) : null;
   const looks = lookRefs(body);
-  const firstRef = 2 + (edge ? 1 : 0) + (plan ? 1 : 0);
+  const firstRef = 2 + (edge ? 1 : 0) + (depth ? 1 : 0) + (plan ? 1 : 0);
   const refs = furnitureRefs(body, firstRef, looks.length);
-  // Look references come after the product pictures.
-  const lookNumbers = looks.map((_, i) => firstRef + refs.images.length + i);
+  const arch = architecturalRefs(body, firstRef + refs.images.length, looks.length, refs.images.length);
+  const allProductImages = [...refs.images, ...arch.images];
+  // Look references come after the product & architectural pictures.
+  const lookNumbers = looks.map((_, i) => firstRef + allProductImages.length + i);
 
   const tier = RENDER_TIERS[body.tier as RenderTierId];
   const model = body.model && ALLOWED_RENDER_MODELS.has(body.model) ? body.model : tier.model;
+  const promptOpts = {
+    style: body.style,
+    viewKind: body.viewKind,
+    furnish: body.furnish,
+    withEdgeGuide: !!edge,
+    withDepthGuide: !!depth,
+    withPlan: !!plan,
+    note: body.note,
+    strict: body.strict,
+    lensMm: body.lensMm,
+    ceiling: body.ceiling,
+    ceilingInView: body.ceilingInView,
+    lineGuide: body.lineGuide && !!edge,
+    meshFramedGuide: !!body.meshFramedGuide && !!edge,
+    depthRangeM: body.depthRangeM,
+    fovDeg: body.fovDeg,
+    pitchDeg: body.pitchDeg,
+    openings: body.openings,
+    furniture: refs.furniture,
+    architectural: arch.architectural,
+    parallel: body.parallel,
+    looks: lookNumbers,
+  };
 
   if (body.dryRun && process.env.NODE_ENV !== 'production') {
     return NextResponse.json({
@@ -319,13 +532,10 @@ export async function POST(req: NextRequest) {
       ms: 0,
       attempt: body.attempt,
       promptVersion: RENDER_PROMPT_VERSION,
-      prompt: buildGeometryLockPrompt({
-        style: body.style, viewKind: body.viewKind, furnish: body.furnish, withEdgeGuide: !!edge,
-        withPlan: !!plan, note: body.note, strict: body.strict, lensMm: body.lensMm, ceiling: body.ceiling,
-        ceilingInView: body.ceilingInView, lineGuide: body.lineGuide && !!edge, fovDeg: body.fovDeg, pitchDeg: body.pitchDeg,
-        openings: body.openings, furniture: refs.furniture, parallel: body.parallel, looks: lookNumbers,
-      }),
-      productImages: refs.images.length,
+      prompt: buildGeometryLockPrompt(promptOpts),
+      depthGuide: !!depth,
+      meshFramedGuide: promptOpts.meshFramedGuide,
+      productImages: allProductImages.length,
       lookImages: looks.length,
     });
   }
@@ -335,31 +545,14 @@ export async function POST(req: NextRequest) {
     return fail(412, 'RENDER_PROVIDER_NOT_CONFIGURED', 'No Gemini key yet. Add your Gemini provider in AI Studio — it is kept in this browser.');
   }
 
-  const prompt = buildGeometryLockPrompt({
-    style: body.style,
-    viewKind: body.viewKind,
-    furnish: body.furnish,
-    withEdgeGuide: !!edge,
-    withPlan: !!plan,
-    note: body.note,
-    strict: body.strict,
-    lensMm: body.lensMm,
-    ceiling: body.ceiling,
-    ceilingInView: body.ceilingInView,
-    lineGuide: body.lineGuide && !!edge,
-    fovDeg: body.fovDeg,
-    pitchDeg: body.pitchDeg,
-    openings: body.openings,
-    furniture: refs.furniture,
-    parallel: body.parallel,
-    looks: lookNumbers,
-  });
+  const prompt = buildGeometryLockPrompt(promptOpts);
 
   // Images first, in the order the prompt numbers them; the instruction last.
   const parts: GeminiPart[] = [{ inlineData: view }];
   if (edge) parts.push({ inlineData: edge });
+  if (depth) parts.push({ inlineData: depth });
   if (plan) parts.push({ inlineData: plan });
-  for (const img of refs.images) parts.push({ inlineData: img });
+  for (const img of allProductImages) parts.push({ inlineData: img });
   for (const img of looks) parts.push({ inlineData: img });
   parts.push({ text: prompt });
 

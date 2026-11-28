@@ -23,6 +23,13 @@ export const PRODUCT_COLOURS: readonly ProductColour[] = [
   { hex: '#8a5a36', name: 'brown' },
 ];
 
+export interface ProductFinish {
+  role: string;
+  code?: string;
+  name: string;
+  hex: string;
+}
+
 export interface ProductRef {
   id: string;
   /** Brand and model, or the start of the description. */
@@ -30,6 +37,7 @@ export interface ProductRef {
   description: string;
   /** A picture of the product: an inline image or an https link. */
   imageUrl?: string;
+  finishes?: readonly ProductFinish[];
   colour: ProductColour;
 }
 

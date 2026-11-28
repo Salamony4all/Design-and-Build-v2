@@ -18,6 +18,68 @@ const ALLOWED_MIME = new Set([
   'application/octet-stream', // some clients send this for .pdf
 ]);
 
+function extractMultiPagePlanCandidate(
+  doc: any,
+  bytes: Uint8Array,
+  collectPageVectors: (page: any, skipImages: boolean, pageIndex: number) => any,
+  extractPureWallResult: (bytes: Uint8Array, pageIndex: number, a: undefined, b: undefined, c: boolean) => any,
+) {
+  const count = typeof doc.countPages === 'function' ? doc.countPages() : 1;
+  if (count <= 1) {
+    const page = doc.loadPage(0);
+    const captured = collectPageVectors(page, false, 0);
+    const wallRaw = extractPureWallResult(bytes, 0, undefined, undefined, true);
+    return { pageIndex: 0, page, captured, wallRaw };
+  }
+  const limit = Math.min(count, 25);
+  const scored: { idx: number; score: number }[] = [];
+  for (let i = 0; i < limit; i++) {
+    try {
+      const p = doc.loadPage(i);
+      const cap = collectPageVectors(p, false, i);
+      const txt = String(p.toStructuredText('preserve-whitespace').asText?.() ?? '');
+      const planBoost = /\b(floor\s*plan|proposed\s*ground|ground\s*floor|first\s*floor|layout\s*plan|ga\s*plan|kitchen|wardrobe|banquette|booth)\b/i.test(txt)
+        ? 2.5
+        : /\b(cover|title\s*sheet|table\s*of\s*contents|general\s*notes|schedule)\b/i.test(txt)
+          ? 0.4
+          : 1.0;
+      scored.push({ idx: i, score: (cap?.vectors?.length ?? 0) * planBoost });
+      p.destroy?.();
+    } catch {
+      scored.push({ idx: i, score: 0 });
+    }
+  }
+  scored.sort((a, b) => b.score - a.score);
+  const bestIdx = scored[0]?.idx ?? 0;
+  let bestCandidate: { pageIndex: number; page: any; wallRaw: any; count: number; score: number } | null = null;
+  for (const cand of scored.slice(0, 6)) {
+    try {
+      const page = doc.loadPage(cand.idx);
+      const wallRaw = extractPureWallResult(bytes, cand.idx, undefined, undefined, true);
+      const count = wallRaw?.pureResult?.accepted?.length ?? 0;
+      if (
+        count > 0 &&
+        (!bestCandidate || count > bestCandidate.count || (count === bestCandidate.count && cand.score > bestCandidate.score))
+      ) {
+        bestCandidate?.page?.destroy?.();
+        bestCandidate = { pageIndex: cand.idx, page, wallRaw, count, score: cand.score };
+      } else {
+        page.destroy?.();
+      }
+    } catch {
+      /* skip failing page candidate */
+    }
+  }
+  if (bestCandidate) {
+    const captured = collectPageVectors(bestCandidate.page, false, bestCandidate.pageIndex);
+    return { pageIndex: bestCandidate.pageIndex, page: bestCandidate.page, captured, wallRaw: bestCandidate.wallRaw };
+  }
+  const page = doc.loadPage(bestIdx);
+  const captured = collectPageVectors(page, false, bestIdx);
+  const wallRaw = extractPureWallResult(bytes, bestIdx, undefined, undefined, true);
+  return { pageIndex: bestIdx, page, captured, wallRaw };
+}
+
 type ApiError = { error: string; code: string; detail?: string };
 
 function fail(code: string, message: string, status: number, detail?: string) {
@@ -28,12 +90,45 @@ function fail(code: string, message: string, status: number, detail?: string) {
 type MupdfLib = typeof import('design-build-extraction-mupdf');
 type Pt = { x: number; y: number };
 
+function buildClaimedVectorIds(
+  pureResult: any,
+  curvedWalls: any[] = [],
+  windowSpecs: any[] = [],
+  doorSpecs: any[] = [],
+  columnContracts: any[] = [],
+): Set<string> {
+  const claimed = new Set<string>();
+  const add = (id: unknown) => {
+    if (typeof id !== 'string' || !id) return;
+    claimed.add(id.split(':')[0]);
+  };
+  for (const w of pureResult?.accepted ?? []) {
+    for (const id of w?.sourceRootIds ?? []) add(id);
+    for (const id of w?.sourceSubpathIds ?? []) add(id);
+    for (const id of w?.sourceStrokeIds ?? []) add(id);
+  }
+  for (const cw of curvedWalls ?? []) {
+    for (const id of cw?.sourceOperationIds ?? []) add(id);
+  }
+  for (const ws of windowSpecs ?? []) {
+    for (const id of ws?.provenance?.sourcePrimitiveIds ?? []) add(id);
+  }
+  for (const ds of doorSpecs ?? []) {
+    for (const id of ds?.sourceOperationIds ?? []) add(id);
+    for (const id of ds?.sourceSegmentIds ?? []) add(id);
+    for (const id of ds?.provenance?.sourcePrimitiveIds ?? []) add(id);
+  }
+  for (const col of columnContracts ?? []) {
+    for (const id of col?.sourceOperationIds ?? []) add(id);
+  }
+  return claimed;
+}
+
 /**
- * Loose furniture, fittings and fixtures read from the drawing's furniture layers,
- * with each footprint in Pascal metres (x, z) and the way each piece faces (an angle in
- * the same plan frame, read against the straight walls and `extraWalls`: curved walls
- * as chords, page points). Never fatal: a failure, a drawing without layers or without
- * a real scale only means no furniture.
+ * Loose furniture, fittings and fixtures read from the drawing's furniture layers
+ * (or unclaimed interior blocks on layerless drawings), with each footprint in Pascal
+ * metres (x, z), internal sub-parts, subtype classification, and facing direction.
+ * Never fatal: a failure or a drawing without a real scale only means no furniture.
  */
 function furnitureFor(
   lib: Pick<MupdfLib, 'detectFurniture' | 'furnitureTextsFromStructuredText' | 'documentFrameFromPure'>,
@@ -42,8 +137,9 @@ function furnitureFor(
   page: any,
   pureResult: any,
   extraWalls: { a: Pt; b: Pt; t?: number }[] = [],
+  claimedVectorIds?: ReadonlySet<string>,
 ) {
-  const none = { pieces: [] as any[], types: [] as any[], layers: [] as string[] };
+  const none = { pieces: [] as any[], types: [] as any[], zones: [] as any[], layers: [] as string[] };
   if (pureResult.scaleSource === 'fallback') return none;
   try {
     const accepted: any[] = pureResult.accepted ?? [];
@@ -64,8 +160,8 @@ function furnitureFor(
       ...accepted.filter((w) => w?.centerline?.a && w?.centerline?.b).map((w) => ({ a: w.centerline.a, b: w.centerline.b, t: w.thickness })),
       ...extraWalls,
     ];
-    const found = lib.detectFurniture({ vectors, scaleMmPerPt: pureResult.scaleMmPerPt, within, texts, walls });
-    if (!found.pieces.length) return { ...none, layers: found.layers };
+    const found = lib.detectFurniture({ vectors, scaleMmPerPt: pureResult.scaleMmPerPt, within, texts, walls, claimedVectorIds });
+    if (!found.pieces.length && !(found.zones?.length ?? 0)) return { ...none, layers: found.layers };
     const frameIn = lib.documentFrameFromPure(pureResult);
     const cf = createCoordinateFrame({
       pageBoundsPt: frameIn.pageBoundsPt,
@@ -89,6 +185,12 @@ function furnitureFor(
       layer: p.layer,
       family: p.family,
       kind: p.kind,
+      ...(p.subtype ? { subtype: p.subtype } : {}),
+      ...(p.room ? { room: p.room } : {}),
+      ...(p.sourceMode ? { sourceMode: p.sourceMode } : {}),
+      ...(typeof p.confidence === 'number' ? { confidence: p.confidence } : {}),
+      ...(typeof p.clusterCount === 'number' ? { clusterCount: p.clusterCount } : {}),
+      ...(p.customModel ? { customModel: true } : {}),
       shape: p.shape,
       widthM: p.widthM,
       depthM: p.depthM,
@@ -99,10 +201,34 @@ function furnitureFor(
       ...(typeof p.facing === 'number' ? { facing: planAngle(p.center, p.facing), facingBy: p.facingBy } : {}),
       centerM: toM(p.center),
       outlineM: p.outline.map(toM),
+      ...(Array.isArray(p.subParts) && p.subParts.length
+        ? {
+            subParts: p.subParts.map((sp: any) => ({
+              role: sp.role,
+              outlineM: sp.outline.map(toM),
+              ...(sp.dashed ? { dashed: true } : {}),
+            })),
+          }
+        : {}),
+    }));
+    const zones = (found.zones ?? []).map((z: any) => ({
+      id: z.id,
+      kind: z.kind,
+      shape: z.shape,
+      centerM: toM(z.center),
+      widthM: z.widthM,
+      depthM: z.depthM,
+      ...(typeof z.radiusM === 'number' ? { radiusM: z.radiusM } : {}),
+      ...(Array.isArray(z.innerRadiiM) && z.innerRadiiM.length ? { innerRadiiM: z.innerRadiiM } : {}),
+      outlineM: (z.outline ?? []).map(toM),
+      ...(z.label ? { label: z.label } : {}),
+      ...(z.roomContext ? { roomContext: z.roomContext } : {}),
+      ...(z.layer ? { layer: z.layer } : {}),
     }));
     const facing = pieces.filter((p: any) => typeof p.facing === 'number').length;
-    console.log(`[MuPdfRoute] Furniture: ${pieces.length} pieces in ${found.types.length} types from ${found.layers.length} layers, ${facing} facing a known way (${found.diagnostics.ms} ms).`);
-    return { pieces, types: found.types, layers: found.layers };
+    const broadCount = pieces.filter((p: any) => p.sourceMode === 'broad').length;
+    console.log(`[MuPdfRoute] Furniture: ${pieces.length} pieces (${broadCount} broad) in ${found.types.length} types, ${zones.length} zones from ${found.layers.length} layers, ${facing} facing a known way (${found.diagnostics.ms} ms).`);
+    return { pieces, types: found.types, ...(zones.length ? { zones } : {}), layers: found.layers };
   } catch (e) {
     console.warn('[MuPdfRoute] furniture detection skipped:', e);
     return none;
@@ -288,17 +414,20 @@ export async function POST(req: NextRequest) {
         try {
           const tPdf0 = Date.now();
           const doc = mupdf.Document.openDocument(bytes as any, 'application/pdf');
-          const page = doc.loadPage(0);
-          const captured = collectPageVectors(page, false, 0);
+          const { pageIndex, page, captured, wallRaw } = extractMultiPagePlanCandidate(
+            doc,
+            bytes,
+            collectPageVectors,
+            extractPureWallResult as any,
+          );
           const pageBoundsMupdf: [number, number, number, number] = (() => {
             const b = page.getBounds() as unknown as number[];
             return [b[0] ?? 0, b[1] ?? 0, b[2] ?? 0, b[3] ?? 0];
           })();
           const tAnn0 = Date.now();
-          const annCapture = captureDoorAnnotations(page, DEFAULT_ANNOTATION_OPTIONS, undefined, 0);
+          const annCapture = captureDoorAnnotations(page, DEFAULT_ANNOTATION_OPTIONS, undefined, pageIndex);
           const annotationCaptureMs = Date.now() - tAnn0;
 
-          const wallRaw = extractPureWallResult(bytes, 0, undefined, undefined, true) as any;
           const pureResult = wallRaw.pureResult;
           const geometryHash = acceptedGeometryHash(pureResult.accepted);
           const evidenceHash = acceptedEvidenceHash(pureResult.accepted);
@@ -600,9 +729,10 @@ export async function POST(req: NextRequest) {
           }
 
           // STAGE 5 CHUNK: furniture, fittings and fixtures from the drawing's furniture layers
-          // (after the walls, windows and doors, so the model is never held back by it).
-          const furniture = furnitureFor(furnitureLib, createCoordinateFrame, captured.vectors as any[], page, pureResult, curved.facingWalls);
-          if (furniture.pieces.length) {
+          // (or unclaimed interior blocks on layerless drawings; runs after walls, windows and doors).
+          const claimedForFurniture = buildClaimedVectorIds(pureResult, curved.walls, windowSpecs, doorSpecs);
+          const furniture = furnitureFor(furnitureLib, createCoordinateFrame, captured.vectors as any[], page, pureResult, curved.facingWalls, claimedForFurniture);
+          if (furniture.pieces.length || ((furniture as any).zones?.length ?? 0) > 0) {
             await sendChunk({ type: 'stage-furniture', furniture });
           }
 
@@ -613,11 +743,11 @@ export async function POST(req: NextRequest) {
             timings: { totalMs: Date.now() - t0 },
           });
 
-          await writer.close();
+          try { await writer.close(); } catch { /* stream already closed by client */ }
         } catch (streamErr) {
           console.error('[MuPdfRoute Stream] internal error:', streamErr);
-          await sendChunk({ type: 'error', error: streamErr instanceof Error ? streamErr.message : String(streamErr) });
-          await writer.close();
+          try { await sendChunk({ type: 'error', error: streamErr instanceof Error ? streamErr.message : String(streamErr) }); } catch { /* ignore */ }
+          try { await writer.close(); } catch { /* ignore */ }
         }
       })();
 
@@ -630,25 +760,28 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    console.log('[MuPdfRoute] Opening PDF once + capturing vector geometry once...');
+    console.log('[MuPdfRoute] Opening PDF once + selecting best floor-plan page...');
     const tPdf0 = Date.now();
     const doc = mupdf.Document.openDocument(bytes as any, 'application/pdf');
-    const page = doc.loadPage(0);
-    const captured = collectPageVectors(page, false, 0);
+    const { pageIndex, page, captured, wallRaw } = extractMultiPagePlanCandidate(
+      doc,
+      bytes,
+      collectPageVectors,
+      extractPureWallResult as any,
+    );
     const pageBoundsMupdf: [number, number, number, number] = (() => {
       const b = page.getBounds() as unknown as number[];
       return [b[0] ?? 0, b[1] ?? 0, b[2] ?? 0, b[3] ?? 0];
     })();
     // Annotation capture in the SAME single PDF pass (no reopen). PDF open count = 1.
     const tAnn0 = Date.now();
-    const annCapture = captureDoorAnnotations(page, DEFAULT_ANNOTATION_OPTIONS, undefined, 0);
+    const annCapture = captureDoorAnnotations(page, DEFAULT_ANNOTATION_OPTIONS, undefined, pageIndex);
     const annotationCaptureMs = Date.now() - tAnn0;
     const tCaptureMs = Date.now() - tPdf0;
 
     // Walls: frozen wall extractor opens the PDF itself (its internal capture is
     // out of scope / trusted). Windows below REUSE the vectors captured above so
     // the geometric window pipeline never re-opens or re-parses the PDF.
-    const wallRaw = extractPureWallResult(bytes, 0, undefined, undefined, true) as any;
     const pureResult = wallRaw.pureResult;
     const lineageStore = wallRaw.lineageStore;
     const tWallMs = Date.now() - tPdf0;
@@ -995,7 +1128,8 @@ export async function POST(req: NextRequest) {
 
     // Curved walls, glass partitions and pods; straight copies of them are dropped.
     const curved = curvedWallsFor(curvedLib, createCoordinateFrame, captured.vectors as any[], pureResult, geometryHash);
-    const furniture = furnitureFor(furnitureLib, createCoordinateFrame, captured.vectors as any[], page, pureResult, curved.facingWalls);
+    const claimedForFurniture = buildClaimedVectorIds(pureResult, curved.walls, windowSpecs, doorSpecs, columnContracts);
+    const furniture = furnitureFor(furnitureLib, createCoordinateFrame, captured.vectors as any[], page, pureResult, curved.facingWalls, claimedForFurniture);
     const wallsResult = curved.dropWallIds.size
       ? { ...result, walls: result.walls.filter((w) => !curved.dropWallIds.has(w.id)) }
       : result;

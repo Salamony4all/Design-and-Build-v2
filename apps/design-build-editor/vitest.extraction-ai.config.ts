@@ -1,6 +1,11 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { defineConfig } from 'vitest/config';
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+
 export default defineConfig({
-  root: 'C:/Users/Mohamad60025/Desktop/Design-And-Build-Stable-5d93e63',
+  root: repoRoot,
   test: {
     globals: true,
     environment: 'node',

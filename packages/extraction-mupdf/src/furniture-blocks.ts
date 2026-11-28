@@ -24,6 +24,19 @@
 import type { Bounds, MuVector, Vec2 } from './vector-device';
 import { fitCircle } from './curved-walls';
 import { pieceFacings, type FacingCue, type FacingWall } from './furniture-facing';
+import {
+  acceptBroadCandidate,
+  classifySymbol,
+  clusterSymbols,
+  collectBroadCandidateVectors,
+  computeSymbolFingerprint,
+  extractSymbolSubParts,
+  findRectTableTops,
+  inferRoomContext,
+  type FurnitureSubtype,
+  type PieceSubPart,
+  type RoomContext,
+} from './furniture-symbols';
 
 export type FurnitureFamily = 'furniture' | 'plant' | 'sanitary' | 'equipment' | 'joinery' | 'fixture';
 export type FurnitureKind =
@@ -91,6 +104,20 @@ export interface FurniturePiece {
   facing?: number;
   /** What told the front (see furniture-facing.ts). */
   facingBy?: FacingCue;
+  /** Subtype inferred from internal symbol grammar & room context. */
+  subtype?: FurnitureSubtype;
+  /** Room label context near this piece (e.g. 'wc', 'lounge', 'office'). */
+  room?: string;
+  /** Whether the piece was read from an explicit CAD furniture layer or layerless broad detection. */
+  sourceMode?: 'layer' | 'broad';
+  /** Classification confidence (0..1). */
+  confidence?: number;
+  /** Number of recurring instances sharing this CAD block fingerprint on the sheet. */
+  clusterCount?: number;
+  /** True when bespoke geometry / sub-parts warrant a custom procedural 3D model. */
+  customModel?: boolean;
+  /** Internal geometric sub-parts (overhead cabinets, sink/bowl cutouts, cistern, pillows, cushions, X-brace). */
+  subParts?: PieceSubPart[];
   vectorIds: string[];
   /** Shape measures behind the guess (ink per outline length, box fill, solidity, band thickness in m). */
   metrics: { busy: number; fill: number; solidity: number; circularity: number; corners: number; bandM: number };
@@ -100,6 +127,10 @@ export interface FurnitureType {
   id: string;
   family: FurnitureFamily;
   kind: FurnitureKind;
+  subtype?: FurnitureSubtype;
+  room?: string;
+  sourceMode?: 'layer' | 'broad';
+  customModel?: boolean;
   shape: FurnitureShape;
   layer: string;
   widthM: number;
@@ -108,9 +139,26 @@ export interface FurnitureType {
   pieceIds: string[];
 }
 
+export interface ArchitecturalZone {
+  id: string;
+  kind: 'rotunda-canopy' | 'ceiling-bulkhead' | 'feature-zone';
+  shape: 'round' | 'oval' | 'polygon';
+  center: Vec2;
+  widthM: number;
+  depthM: number;
+  radiusM?: number;
+  innerRadiiM?: number[];
+  outline: Vec2[];
+  label?: string;
+  roomContext?: RoomContext;
+  layer?: string;
+}
+
 export interface FurnitureResult {
   pieces: FurniturePiece[];
   types: FurnitureType[];
+  /** Extracted overhead canopies, rotunda rings & feature ceiling/floor zones. */
+  zones?: ArchitecturalZone[];
   /** Furniture-type layers found in the drawing. */
   layers: string[];
   diagnostics: { strokes: number; zones: number; tableTops: number; splitSets: number; dropped: number; ms: number };
@@ -143,7 +191,7 @@ export const FURNITURE_DEFAULTS: FurnitureConfig = {
 };
 
 /** Layers that hold furniture, fittings or fixtures. */
-export const FURNITURE_LAYER_RE = /furn|mobil|am[eé]nag|seat|chair|sofa|ff&?e|planter|plant|verdure|v[eé]g[eé]t|eq(ui)?p|eqmp|appliance|casework|millwork|joinery|sanit|plumb|toilet|fixture|fixt/i;
+export const FURNITURE_LAYER_RE = /furn|mobil|am[eé]nag|seat|chair|sofa|ff&?e|\bffe\b|planter|plant|verdure|v[eé]g[eé]t|eq(ui)?p|eqmp|appliance|casework|millwork|joinery|sanit|plumb|toilet|lavatory|sink|shower|bath\b|kitch|cuisine|wardrobe|cabinet|cupboard|workstation|loose|fixture|fixt/i;
 /** Layers that are something else even when their name mentions furniture. */
 export const NOT_FURNITURE_LAYER_RE = /menuis|door|porte|window|fen[eê]tre|glaz|vitr|\bwall|mur\b|dim|cotat|text|txt|anno|axe|axis|grid|hatch|hach|ceil|plafond|floor|\bsol\b|stair|escalier|tblock|title|cartouche/i;
 
@@ -295,7 +343,10 @@ interface Stroke {
   v: MuVector;
   layer: string;
   family: FurnitureFamily;
+  sourceMode: 'layer' | 'broad';
   lines: Vec2[][];
+  closed: Vec2[][];
+  curves: { p0: Vec2; p1: Vec2; p2: Vec2; p3: Vec2 }[];
   bb: Bounds;
   len: number;
 }
@@ -376,10 +427,12 @@ function arcCoverage(arcs: Arc[]): number {
 interface Footprint { outline: Vec2[]; areaPt2: number }
 
 /**
- * Rasterise the strokes, fill holes smaller than `holeMaxPt2`, and follow the
- * outer edge of the largest solid. Returns the outline in page points.
+ * Rasterise the strokes, fill holes smaller than `holeMaxPt2` (allowing up to 1.85×
+ * for compact rectangular furniture spans <= `compactShortSpanPt` such as kitchen
+ * islands or dining booths while keeping circular rotunda rings hollow), and follow
+ * the outer edge of the largest solid. Returns the outline in page points.
  */
-function traceFootprint(strokes: Stroke[], res: number, holeMaxPt2: number): Footprint | null {
+function traceFootprint(strokes: Stroke[], res: number, holeMaxPt2: number, compactShortSpanPt = 0): Footprint | null {
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
   for (const s of strokes) {
     x0 = Math.min(x0, s.bb[0]); y0 = Math.min(y0, s.bb[1]);
@@ -430,15 +483,26 @@ function traceFootprint(strokes: Stroke[], res: number, holeMaxPt2: number): Foo
     qh = 0; qt = 0;
     q[qt++] = i;
     grid[i] = 3;
+    let hxMin = i % W;
+    let hxMax = hxMin;
+    let hyMin = (i / W) | 0;
+    let hyMax = hyMin;
     while (qh < qt) {
       const j = q[qh++];
       const x = j % W, y = (j / W) | 0;
+      if (x < hxMin) hxMin = x;
+      if (x > hxMax) hxMax = x;
+      if (y < hyMin) hyMin = y;
+      if (y > hyMax) hyMax = y;
       if (x > 0 && grid[j - 1] === 0) { grid[j - 1] = 3; q[qt++] = j - 1; }
       if (x < W - 1 && grid[j + 1] === 0) { grid[j + 1] = 3; q[qt++] = j + 1; }
       if (y > 0 && grid[j - W] === 0) { grid[j - W] = 3; q[qt++] = j - W; }
       if (y < H - 1 && grid[j + W] === 0) { grid[j + W] = 3; q[qt++] = j + W; }
     }
-    const fill = qt <= holeMaxCells ? 1 : 4;
+    const shortSpanPt = Math.min(hxMax - hxMin + 1, hyMax - hyMin + 1) * res;
+    const effectiveMaxCells =
+      compactShortSpanPt > 0 && shortSpanPt <= compactShortSpanPt ? holeMaxCells * 1.85 : holeMaxCells;
+    const fill = qt <= effectiveMaxCells ? 1 : 4;
     for (let k = 0; k < qt; k++) grid[q[k]] = fill;
   }
   // Largest solid component (4-connected over 1s).
@@ -546,7 +610,15 @@ const KIND_HEIGHT: Record<FurnitureKind, number> = {
 };
 
 export function detectFurniture(
-  input: { vectors: MuVector[]; scaleMmPerPt: number; within?: Bounds | null; texts?: FurnitureText[]; walls?: FacingWall[] },
+  input: {
+    vectors: MuVector[];
+    scaleMmPerPt: number;
+    within?: Bounds | null;
+    texts?: FurnitureText[];
+    walls?: FacingWall[];
+    claimedVectorIds?: ReadonlySet<string> | readonly string[];
+    mode?: 'auto' | 'layered' | 'broad';
+  },
   cfg: FurnitureConfig = FURNITURE_DEFAULTS,
 ): FurnitureResult {
   const t0 = Date.now();
@@ -554,24 +626,74 @@ export function detectFurniture(
   const pt = (m: number) => m / mPerPt;
   const within = input.within ?? null;
   const layers = new Set<string>();
+  const mode = input.mode ?? 'auto';
+  const claimedSet = input.claimedVectorIds
+    ? input.claimedVectorIds instanceof Set
+      ? input.claimedVectorIds
+      : new Set(input.claimedVectorIds)
+    : undefined;
 
-  // 1. Strokes on furniture layers.
+  // Precompute structural wall centerlines for wall-crossing / multi-stall isolation guards.
+  const rawWalls = (input.walls ?? []).filter((w) => dist(w.a, w.b) >= pt(0.35));
+  const segMid = (a: Vec2, b: Vec2): Vec2 => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+  const segCrossesWall = (a: Vec2, b: Vec2): boolean => {
+    const clearPt = pt(0.08);
+    for (const w of rawWalls) {
+      if (!segsIntersect(a, b, w.a, w.b)) continue;
+      if (segDist2(a, w.a, w.b) > clearPt * clearPt && segDist2(b, w.a, w.b) > clearPt * clearPt) {
+        return true;
+      }
+    }
+    return false;
+  };
+  const distinctWallsCrossed = (loops: Vec2[][]): number => {
+    const clearPt = pt(0.08);
+    let count = 0;
+    for (const w of rawWalls) {
+      let sidePos = false;
+      let sideNeg = false;
+      let crosses = false;
+      for (const l of loops) {
+        for (let i = 1; i < l.length; i++) {
+          const p = l[i - 1], q = l[i];
+          if (segsIntersect(p, q, w.a, w.b)) crosses = true;
+          const cross = (w.b.x - w.a.x) * (p.y - w.a.y) - (w.b.y - w.a.y) * (p.x - w.a.x);
+          const d2 = segDist2(p, w.a, w.b);
+          if (d2 > clearPt * clearPt) {
+            if (cross > 0) sidePos = true;
+            else if (cross < 0) sideNeg = true;
+          }
+        }
+      }
+      if (crosses && sidePos && sideNeg) {
+        count++;
+        if (count >= 2) return count;
+      }
+    }
+    return count;
+  };
+
+  // 1. Strokes on furniture layers (unless forced to broad-only).
   const strokes: Stroke[] = [];
   const arcs: Arc[] = [];
   const zoneStrokes = new Set<number>();
-  for (const v of input.vectors) {
-    if (v.sourceRootId || !isFurnitureLayer(v.layer)) continue;
+  const ingestVector = (v: MuVector, layer: string, family: FurnitureFamily, sourceMode: 'layer' | 'broad') => {
     const b = v.bounds;
-    if (within && (b[2] < within[0] || b[0] > within[2] || b[3] < within[1] || b[1] > within[3])) continue;
-    if (Math.max(b[2] - b[0], b[3] - b[1]) > pt(cfg.maxPieceM)) continue;
+    if (within && (b[2] < within[0] || b[0] > within[2] || b[3] < within[1] || b[1] > within[3])) return;
+    const spanPt = Math.max(b[2] - b[0], b[3] - b[1]);
+    if (spanPt > pt(cfg.maxPieceM)) return;
+    // Sanitary / plumbing single vectors larger than a full bathtub are shared piping runs, never one fixture.
+    if (family === 'sanitary' && spanPt > pt(2.2)) return;
     const f = flatten(v);
-    if (!f.lines.length) continue;
-    const layer = v.layer as string;
-    layers.add(layer);
+    if (!f.lines.length) return;
+    if (v.layer) layers.add(v.layer);
     let len = 0;
     for (const l of f.lines) for (let i = 1; i < l.length; i++) len += dist(l[i - 1], l[i]);
     const s = strokes.length;
-    strokes.push({ v, layer, family: furnitureFamily(layer), lines: f.lines, bb: b, len });
+    strokes.push({ v, layer, family, sourceMode, lines: f.lines, closed: f.closed, curves: f.curves, bb: b, len });
+    if (rawWalls.length && distinctWallsCrossed(f.lines) >= 2) {
+      zoneStrokes.add(s);
+    }
     // circle arcs (table tops, rugs and zone circles)
     for (const c of f.curves) {
       const samples = [0, 0.25, 0.5, 0.75, 1].map((t) => bez(c.p0, c.p1, c.p2, c.p3, t));
@@ -587,9 +709,43 @@ export function detectFurniture(
       if (mid > sweep) { from = a1; sweep = norm(a0 - a1); }
       if (sweep > 1e-3) arcs.push({ s, c: fit.c, r: fit.r, from, sweep });
     }
-    // big closed outlines with few corners: rugs and zone outlines
+    // big closed outlines with few corners: rugs and zone outlines (never drop beds or conference tables)
     for (const loop of f.closed) {
-      if (loop.length <= 25 && polygonArea(loop) * mPerPt * mPerPt >= cfg.zoneLoopM2 && f.lines.length === 1) zoneStrokes.add(s);
+      if (loop.length <= 25 && f.lines.length === 1) {
+        const areaM2 = polygonArea(loop) * mPerPt * mPerPt;
+        if (areaM2 >= cfg.zoneLoopM2) {
+          const box = minAreaRect(convexHull(loop));
+          const wM = box.w * mPerPt;
+          const dM = box.d * mPerPt;
+          const isBedSized = wM <= 2.35 && dM <= 2.25;
+          const isTableSized = dM <= 2.15 && wM <= 6.0;
+          if (areaM2 >= 6.0 || (!isBedSized && !isTableSized)) zoneStrokes.add(s);
+        }
+      }
+    }
+  };
+
+  if (mode !== 'broad') {
+    for (const v of input.vectors) {
+      if (v.sourceRootId || !isFurnitureLayer(v.layer)) continue;
+      const layer = v.layer as string;
+      ingestVector(v, layer, furnitureFamily(layer), 'layer');
+    }
+  }
+
+  // 1b. Broad layerless fallback when no CAD furniture layers exist (or mode === 'broad').
+  if (mode === 'broad' || (mode !== 'layered' && strokes.length === 0)) {
+    const broadVectors = collectBroadCandidateVectors({
+      vectors: input.vectors,
+      scaleMmPerPt: input.scaleMmPerPt,
+      within,
+      walls: input.walls,
+      claimedVectorIds: claimedSet,
+      maxPieceM: cfg.maxPieceM,
+      excludedLayerRe: NOT_FURNITURE_LAYER_RE,
+    });
+    for (const v of broadVectors) {
+      ingestVector(v, v.layer ?? '__broad__', 'furniture', 'broad');
     }
   }
 
@@ -662,7 +818,7 @@ export function detectFurniture(
         if (o.s === p.s || strokes[o.s].layer !== strokes[p.s].layer) continue;
         const key = p.s < o.s ? p.s * n + o.s : o.s * n + p.s;
         if (edges.has(key)) continue;
-        if (segSeg2(p.a, p.b, o.a, o.b) <= touch2) {
+        if (segSeg2(p.a, p.b, o.a, o.b) <= touch2 && !segCrossesWall(segMid(p.a, p.b), segMid(o.a, o.b))) {
           edges.add(key);
           uf.union(p.s, o.s);
         }
@@ -678,14 +834,27 @@ export function detectFurniture(
     g.push(s);
   }
 
-  // 4. Split chairs from the table top they are pulled up to.
+  // 4. Split chairs from round or rectangular table tops they are pulled up to.
   let splitSets = 0;
   const pieces: number[][] = [];
+  const splitTopSet = new Set<number[]>();
+  const splitChairSet = new Set<number[]>();
   const topsByStroke = new Map<number, number>();
   tableTops.forEach((t, i) => t.strokes.forEach((s) => topsByStroke.set(s, i)));
   for (const g of groups.values()) {
     const tops = [...new Set(g.map((s) => topsByStroke.get(s)).filter((t): t is number => t !== undefined))];
-    if (!tops.length || g.length < 3) { pieces.push(g); continue; }
+    if (!tops.length || g.length < 3) {
+      const rectSplit = findRectTableTops(g, strokes, edges, n, mPerPt);
+      if (rectSplit) {
+        splitSets++;
+        splitTopSet.add(rectSplit.tableParts);
+        for (const ch of rectSplit.chairParts) splitChairSet.add(ch);
+        pieces.push(rectSplit.tableParts, ...rectSplit.chairParts);
+      } else {
+        pieces.push(g);
+      }
+      continue;
+    }
     const topStrokes = new Set(tops.flatMap((t) => tableTops[t].strokes));
     const rest = g.filter((s) => !topStrokes.has(s));
     const local = new UnionFind(n);
@@ -716,6 +885,8 @@ export function detectFurniture(
     }
     if (big.length >= 1) {
       splitSets++;
+      splitTopSet.add(tableParts);
+      for (const ch of big) splitChairSet.add(ch);
       pieces.push(tableParts, ...big);
     } else pieces.push(g);
   }
@@ -739,17 +910,25 @@ export function detectFurniture(
     }
   }
 
-  // 5. Footprints, kinds and types.
+  // 5. Footprints, sub-parts, kinds and types.
   const res = pt(cfg.rasterM);
   const holeMax = pt(1) * pt(1) * cfg.holeMaxM2;
   const texts = input.texts ?? [];
+  const wallFaces = (input.walls ?? []).map((w) => ({ a: w.a, b: w.b, half: (w.t && w.t > 0 ? w.t : pt(0.15)) / 2 }));
+  const nearWall = (c: Vec2, wM: number, dM: number) => {
+    const tol = pt(Math.max(wM, dM) / 2 + 0.35);
+    return wallFaces.some((w) => segDist2(c, w.a, w.b) <= (w.half + tol) ** 2);
+  };
   let dropped = 0;
   interface Measured {
     ids: number[];
     layer: string;
     family: FurnitureFamily;
+    sourceMode: 'layer' | 'broad';
     outline: Vec2[];
     isTop: boolean;
+    hasSplitChairs: boolean;
+    wasSplitChair: boolean;
     areaM2: number;
     perimM: number;
     inkM: number;
@@ -767,7 +946,7 @@ export function detectFurniture(
     const top = tableTops.find((t) => t.strokes.length && t.strokes.every((s) => idSet.has(s)) && Math.max(x1 - x0, y1 - y0) <= t.r * 2 * 1.15);
     const fp = top
       ? { outline: Array.from({ length: 40 }, (_, k) => ({ x: top.c.x + top.r * Math.cos((k / 40) * 2 * Math.PI), y: top.c.y + top.r * Math.sin((k / 40) * 2 * Math.PI) })), areaPt2: Math.PI * top.r * top.r }
-      : traceFootprint(ss, res, holeMax);
+      : traceFootprint(ss, res, holeMax, pt(2.15));
     if (!fp) { dropped++; continue; }
     let perim = 0;
     for (let i = 0; i < fp.outline.length; i++) perim += dist(fp.outline[i], fp.outline[(i + 1) % fp.outline.length]);
@@ -775,8 +954,11 @@ export function detectFurniture(
       ids,
       layer: ss[0].layer,
       family: ss[0].family,
+      sourceMode: ss[0].sourceMode,
       outline: fp.outline,
-      isTop: !!top,
+      isTop: !!top || splitTopSet.has(ids),
+      hasSplitChairs: splitTopSet.has(ids),
+      wasSplitChair: splitChairSet.has(ids),
       areaM2: fp.areaPt2 * mPerPt * mPerPt,
       perimM: perim * mPerPt,
       inkM: ss.reduce((sum, st) => sum + st.len, 0) * mPerPt,
@@ -794,8 +976,9 @@ export function detectFurniture(
     measured.splice(i, 1);
   }
 
-  const out: FurniturePiece[] = [];
-  const outLines: Vec2[][][] = [];
+  const rawOut: FurniturePiece[] = [];
+  const rawLines: Vec2[][][] = [];
+  const fingerprints: ReturnType<typeof computeSymbolFingerprint>[] = [];
   for (const m of measured) {
     const hull = convexHull(m.outline);
     const box = minAreaRect(hull);
@@ -825,15 +1008,66 @@ export function detectFurniture(
       .sort((p, q) => dist({ x: p.x + p.w / 2, y: p.y + p.h / 2 }, center) - dist({ x: q.x + q.w / 2, y: q.y + q.h / 2 }, center))[0]?.text;
     const busy = inkM / Math.max(perimM, 1e-6); // outline only ≈ 1–2; cushions, arms, seams > 2
     const bandM = (2 * areaM2) / Math.max(perimM, 1e-6); // thickness of a long band (curved sofas)
-    // A round top is a table only on a furniture layer (a planter or a basin can be round too).
-    const kind = m.isTop && family === 'furniture' ? (widthM < 0.6 ? 'side-table' : 'table') : classifyPiece({ family, shape, widthM, depthM, busy, circularity, bandM, fill, solidity, label }, cfg);
-    if (!kind) { dropped++; continue; }
-    out.push({
-      id: `fp_${out.length + 1}`,
+    const memberStrokes = m.ids.map((s) => strokes[s]);
+    const subParts = extractSymbolSubParts({
+      strokes: memberStrokes,
+      outline: ol,
+      center,
+      widthM,
+      depthM,
+      angle: box.angle,
+      mPerPt,
+    });
+    const room = inferRoomContext(center, texts, mPerPt);
+    // Reject merged blobs whose footprint spans across multiple walls (e.g. adjoining toilet stalls).
+    if (widthM > 1.4 && distinctWallsCrossed([[...ol, ol[0]]]) >= 2) {
+      dropped++;
+      continue;
+    }
+    const baseKind = m.isTop && family === 'furniture'
+      ? (widthM < 0.6 ? 'side-table' : 'table')
+      : classifyPiece({ family, shape, widthM, depthM, busy, circularity, bandM, fill, solidity, label }, cfg);
+    const segmentCount = memberStrokes.reduce(
+      (sum, st) => sum + st.lines.reduce((acc, ln) => acc + Math.max(0, ln.length - 1), 0),
+      0,
+    );
+    const cls = classifySymbol({
+      family,
+      shape,
+      widthM,
+      depthM,
+      busy,
+      circularity,
+      bandM,
+      fill,
+      solidity,
+      corners,
+      label,
+      room,
+      subParts,
+      baseKind,
+      hasWallBehind: wallFaces.length > 0 && nearWall(center, widthM, depthM),
+      wasSplitFromTable: m.wasSplitChair,
+      isTableTop: m.isTop,
+      hasSplitChairs: m.hasSplitChairs,
+      segmentCount,
+    });
+    if (!cls) { dropped++; continue; }
+    const memberLines = memberStrokes.flatMap((st) => st.lines);
+    const hasArcs = memberStrokes.some((st) => st.curves.length > 0);
+    fingerprints.push(computeSymbolFingerprint({ lines: memberLines, center, widthM, depthM, shape, hasArcs, mPerPt }));
+    rawOut.push({
+      id: '',
       typeId: '',
       layer: m.layer,
       family,
-      kind,
+      kind: cls.kind,
+      subtype: cls.subtype,
+      ...(room ? { room } : {}),
+      sourceMode: m.sourceMode,
+      confidence: Math.round(cls.confidence * 100) / 100,
+      customModel: cls.customModel,
+      ...(subParts.length ? { subParts } : {}),
       shape,
       outline: ol,
       center,
@@ -841,19 +1075,53 @@ export function detectFurniture(
       depthM: Math.round(depthM * 1000) / 1000,
       angle: box.angle,
       areaM2: Math.round(areaM2 * 1000) / 1000,
-      heightM: KIND_HEIGHT[kind],
+      heightM: cls.heightM,
       ...(label ? { label } : {}),
-      vectorIds: m.ids.map((s) => strokes[s].v.id),
+      vectorIds: memberStrokes.map((st) => st.v.id),
       metrics: { busy: r2(busy), fill: r2(fill), solidity: r2(solidity), circularity: r2(circularity), corners, bandM: r2(bandM) },
     });
-    outLines.push(m.ids.flatMap((s) => strokes[s].lines));
+    rawLines.push(memberLines);
   }
+
+  // Cluster recurring CAD blocks, propagate strong labels/subtypes, and filter broad noise.
+  const clusters = clusterSymbols(fingerprints);
+  const clusterBest = new Map<string, FurniturePiece>();
+  rawOut.forEach((p, i) => {
+    p.clusterCount = clusters[i].clusterCount;
+    const cid = clusters[i].clusterId;
+    const prev = clusterBest.get(cid);
+    if (!prev || (p.confidence ?? 0) > (prev.confidence ?? 0) || (!prev.label && p.label)) {
+      clusterBest.set(cid, p);
+    }
+  });
+
+  const out: FurniturePiece[] = [];
+  const outLines: Vec2[][][] = [];
+  rawOut.forEach((p, i) => {
+    const cid = clusters[i].clusterId;
+    const best = clusterBest.get(cid);
+    if (best && best !== p && (best.confidence ?? 0) >= 0.8 && (p.confidence ?? 0) < (best.confidence ?? 0)) {
+      p.kind = best.kind;
+      p.subtype = best.subtype;
+      p.heightM = best.heightM;
+      p.confidence = best.confidence;
+      p.customModel = best.customModel;
+    }
+    if (p.sourceMode === 'broad' && !acceptBroadCandidate({ confidence: p.confidence ?? 0, clusterCount: p.clusterCount ?? 1, label: p.label })) {
+      dropped++;
+      return;
+    }
+    p.id = `fp_${out.length + 1}`;
+    out.push(p);
+    outLines.push(rawLines[i]);
+  });
 
   // A piece drawn exactly like a labelled screen (same layer and size) is a screen too.
   for (const p of out) {
     if (p.kind === 'screen' || p.family !== 'furniture') continue;
     if (out.some((q) => q.kind === 'screen' && q.label && q.layer === p.layer && Math.abs(q.widthM - p.widthM) <= 0.03 && Math.abs(q.depthM - p.depthM) <= 0.03)) {
       p.kind = 'screen';
+      p.subtype = 'screen';
       p.heightM = KIND_HEIGHT.screen;
     }
   }
@@ -872,26 +1140,205 @@ export function detectFurniture(
     }
   });
 
-  // Types: same family, kind and shape, sizes within 6 cm.
+  // Types: same family, kind, subtype and shape, sizes within 6 cm.
   const types: FurnitureType[] = [];
-  const sorted = [...out].sort((p, q) => p.family.localeCompare(q.family) || p.kind.localeCompare(q.kind) || p.shape.localeCompare(q.shape) || p.widthM - q.widthM || p.depthM - q.depthM);
+  const sorted = [...out].sort((p, q) => p.family.localeCompare(q.family) || p.kind.localeCompare(q.kind) || (p.subtype ?? '').localeCompare(q.subtype ?? '') || p.shape.localeCompare(q.shape) || p.widthM - q.widthM || p.depthM - q.depthM);
   for (const p of sorted) {
-    const t = types.find((ty) => ty.family === p.family && ty.kind === p.kind && ty.shape === p.shape && Math.abs(ty.widthM - p.widthM) <= 0.06 && Math.abs(ty.depthM - p.depthM) <= 0.06);
+    const t = types.find((ty) => ty.family === p.family && ty.kind === p.kind && ty.subtype === p.subtype && ty.shape === p.shape && Math.abs(ty.widthM - p.widthM) <= 0.06 && Math.abs(ty.depthM - p.depthM) <= 0.06);
     if (t) {
       t.pieceIds.push(p.id);
       t.count++;
       p.typeId = t.id;
     } else {
       const id = `ft_${types.length + 1}`;
-      types.push({ id, family: p.family, kind: p.kind, shape: p.shape, layer: p.layer, widthM: p.widthM, depthM: p.depthM, count: 1, pieceIds: [p.id] });
+      types.push({
+        id,
+        family: p.family,
+        kind: p.kind,
+        ...(p.subtype ? { subtype: p.subtype } : {}),
+        ...(p.room ? { room: p.room } : {}),
+        ...(p.sourceMode ? { sourceMode: p.sourceMode } : {}),
+        ...(p.customModel ? { customModel: true } : {}),
+        shape: p.shape,
+        layer: p.layer,
+        widthM: p.widthM,
+        depthM: p.depthM,
+        count: 1,
+        pieceIds: [p.id],
+      });
       p.typeId = id;
+    }
+  }
+
+  // 6. Architectural overhead / rotunda / ceiling zone rings & canopies
+  const CEILING_LAYER_RE = /(ceil|rcp|soffit|bulkhead|canopy|plafond|cove)/i;
+  const buildingW = within ? (within[2] - within[0]) * mPerPt : Infinity;
+  const buildingD = within ? (within[3] - within[1]) * mPerPt : Infinity;
+  const rawZones: {
+    shape: 'round' | 'oval' | 'polygon';
+    center: Vec2;
+    widthM: number;
+    depthM: number;
+    radiusM?: number;
+    outline: Vec2[];
+    layer?: string;
+    fromCeilingLayer: boolean;
+  }[] = [];
+
+  const pushCandidateLoop = (loop: Vec2[], layer: string | undefined, fromCeilingLayer: boolean) => {
+    if (loop.length < 4) return;
+    const areaM2 = polygonArea(loop) * mPerPt * mPerPt;
+    if (areaM2 < 3.8 || areaM2 > 250) return;
+    const hull = convexHull(loop);
+    const box = minAreaRect(hull);
+    const wM = box.w * mPerPt;
+    const dM = box.d * mPerPt;
+    if (wM < 2.2 || dM < 2.2 || wM > 18.0 || dM > 18.0) return;
+    if (Number.isFinite(buildingW) && wM > buildingW * 0.75 && dM > buildingD * 0.75) return;
+    const center = polygonCentroid(loop);
+    if (within && (center.x < within[0] || center.x > within[2] || center.y < within[1] || center.y > within[3])) return;
+    let perim = 0;
+    for (let i = 0; i < loop.length; i++) perim += dist(loop[i], loop[(i + 1) % loop.length]);
+    const perimM = perim * mPerPt;
+    const circularity = (4 * Math.PI * areaM2) / Math.max(1e-6, perimM * perimM);
+    const shape: 'round' | 'oval' | 'polygon' =
+      circularity >= 0.78 && wM / Math.max(dM, 1e-6) <= 1.2
+        ? 'round'
+        : circularity >= 0.68
+          ? 'oval'
+          : 'polygon';
+    rawZones.push({
+      shape,
+      center,
+      widthM: r2(wM),
+      depthM: r2(dM),
+      ...(shape === 'round' ? { radiusM: r2((wM + dM) / 4) } : {}),
+      outline: simplify([...loop, loop[0]], pt(0.08)).slice(0, -1),
+      layer,
+      fromCeilingLayer,
+    });
+  };
+
+  for (const s of zoneStrokes) {
+    const st = strokes[s];
+    for (const loop of st.closed) pushCandidateLoop(loop, st.layer, CEILING_LAYER_RE.test(st.layer));
+  }
+  for (const c of circles) {
+    const dM = 2 * c.r * mPerPt;
+    if (dM < Math.max(2.2, cfg.zoneCircleM) || dM > 18.0) continue;
+    if (arcCoverage(c.arcs) < (290 * Math.PI) / 180) continue;
+    if (within && (c.c.x < within[0] || c.c.x > within[2] || c.c.y < within[1] || c.c.y > within[3])) continue;
+    const outline = Array.from({ length: 36 }, (_, k) => ({
+      x: c.c.x + c.r * Math.cos((k / 36) * 2 * Math.PI),
+      y: c.c.y + c.r * Math.sin((k / 36) * 2 * Math.PI),
+    }));
+    const firstLayer = c.arcs.length ? strokes[c.arcs[0].s]?.layer : undefined;
+    rawZones.push({
+      shape: 'round',
+      center: c.c,
+      widthM: r2(dM),
+      depthM: r2(dM),
+      radiusM: r2(c.r * mPerPt),
+      outline,
+      layer: firstLayer,
+      fromCeilingLayer: !!firstLayer && CEILING_LAYER_RE.test(firstLayer),
+    });
+  }
+  for (const v of input.vectors) {
+    if (v.sourceRootId || !v.layer || !CEILING_LAYER_RE.test(v.layer)) continue;
+    const f = flatten(v);
+    for (const loop of f.closed) pushCandidateLoop(loop, v.layer, true);
+  }
+
+  // Cluster concentric rings into unified rotunda / bulkhead zones
+  const zoneClusters: typeof rawZones[] = [];
+  const mergeDistPt = pt(0.8);
+  for (const z of rawZones) {
+    const hit = zoneClusters.find((cl) => dist(cl[0].center, z.center) <= mergeDistPt);
+    if (hit) hit.push(z);
+    else zoneClusters.push([z]);
+  }
+  const zones: ArchitecturalZone[] = [];
+  for (const cl of zoneClusters) {
+    cl.sort((a, b) => b.widthM * b.depthM - a.widthM * a.depthM);
+    const outer = cl[0];
+    const innerRadii = cl
+      .slice(1)
+      .map((z) => z.radiusM ?? r2((z.widthM + z.depthM) / 4))
+      .filter((rad) => rad > 0.3 && rad < (outer.radiusM ?? outer.widthM / 2) - 0.15);
+    const insideJoinery = out.filter(
+      (p) =>
+        (p.kind === 'joinery' || p.shape === 'curved') &&
+        dist(p.center, outer.center) * mPerPt <= Math.max(outer.widthM, outer.depthM) * 0.65,
+    );
+    const roomCtx = inferRoomContext(outer.center, texts, mPerPt);
+    const nearLabel = texts
+      .filter((t) => dist({ x: t.x + t.w / 2, y: t.y + t.h / 2 }, outer.center) * mPerPt <= Math.max(outer.widthM, outer.depthM) * 0.6)
+      .sort((a, b) => dist({ x: a.x, y: a.y }, outer.center) - dist({ x: b.x, y: b.y }, outer.center))[0]?.text;
+    const kind: ArchitecturalZone['kind'] =
+      (outer.shape === 'round' || outer.shape === 'oval') &&
+      (roomCtx === 'retail' || insideJoinery.length >= 2 || outer.fromCeilingLayer || cl.length >= 2)
+        ? 'rotunda-canopy'
+        : outer.fromCeilingLayer
+          ? 'ceiling-bulkhead'
+          : 'feature-zone';
+    zones.push({
+      id: `az_${zones.length + 1}`,
+      kind,
+      shape: outer.shape,
+      center: outer.center,
+      widthM: outer.widthM,
+      depthM: outer.depthM,
+      ...(outer.radiusM ? { radiusM: outer.radiusM } : {}),
+      ...(innerRadii.length ? { innerRadiiM: [...new Set(innerRadii)].sort((a, b) => a - b) } : {}),
+      outline: outer.outline,
+      ...(nearLabel ? { label: nearLabel } : {}),
+      ...(roomCtx ? { roomContext: roomCtx } : {}),
+      ...(outer.layer ? { layer: outer.layer } : {}),
+    });
+  }
+
+  // Kiosk-ring fallback: if >= 3 curved kiosks/counters ring a hub with no canopy zone yet, synthesize one
+  const kioskRingPieces = out.filter(
+    (p) => (p.subtype === 'retail-kiosk' || p.subtype === 'reception-counter') && (p.shape === 'curved' || p.shape === 'free'),
+  );
+  if (kioskRingPieces.length >= 3) {
+    const hub = {
+      x: kioskRingPieces.reduce((s, p) => s + p.center.x, 0) / kioskRingPieces.length,
+      y: kioskRingPieces.reduce((s, p) => s + p.center.y, 0) / kioskRingPieces.length,
+    };
+    const maxEdgeM = Math.max(
+      ...kioskRingPieces.flatMap((p) => p.outline.map((pt0) => dist(pt0, hub) * mPerPt)),
+    );
+    const alreadyCovered = zones.some(
+      (z) => z.kind === 'rotunda-canopy' && dist(z.center, hub) * mPerPt <= 2.5,
+    );
+    if (!alreadyCovered && maxEdgeM >= 1.8 && maxEdgeM <= 8.5) {
+      const rM = r2(maxEdgeM + 0.35);
+      const rPt = pt(rM);
+      zones.push({
+        id: `az_${zones.length + 1}`,
+        kind: 'rotunda-canopy',
+        shape: 'round',
+        center: hub,
+        widthM: r2(rM * 2),
+        depthM: r2(rM * 2),
+        radiusM: rM,
+        outline: Array.from({ length: 36 }, (_, k) => ({
+          x: hub.x + rPt * Math.cos((k / 36) * 2 * Math.PI),
+          y: hub.y + rPt * Math.sin((k / 36) * 2 * Math.PI),
+        })),
+        label: kioskRingPieces.find((p) => p.label)?.label ?? 'Rotunda Canopy',
+        roomContext: 'retail',
+      });
     }
   }
 
   return {
     pieces: out,
     types,
+    ...(zones.length ? { zones } : {}),
     layers: [...layers],
-    diagnostics: { strokes: n, zones: zoneStrokes.size, tableTops: tableTops.length, splitSets, dropped, ms: Date.now() - t0 },
+    diagnostics: { strokes: n, zones: Math.max(zoneStrokes.size, zones.length), tableTops: tableTops.length, splitSets, dropped, ms: Date.now() - t0 },
   };
 }

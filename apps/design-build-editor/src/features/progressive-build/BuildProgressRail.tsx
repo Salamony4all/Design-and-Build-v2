@@ -42,6 +42,7 @@ export interface RailProps {
   /** The build failed or stalled. */
   failed?: boolean;
   onRender?: () => void;
+  onExport?: () => void;
   onCancel?: () => void;
 }
 
@@ -95,6 +96,7 @@ export function BuildProgressRail(p: RailProps) {
       onToggleCollapse={p.onToggleCollapse}
       onCancel={p.onCancel}
       onRender={p.onRender}
+      onExport={p.onExport}
       ariaLabel="Build progress"
     >
       {review > 0 && status !== 'running' ? (

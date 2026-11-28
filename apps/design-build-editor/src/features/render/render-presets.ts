@@ -4,7 +4,7 @@
 // Pure module: no DOM, no Node APIs, so it is safe to import from the API route,
 // the browser and unit tests.
 
-export const RENDER_PROMPT_VERSION = 'geo-lock-v7';
+export const RENDER_PROMPT_VERSION = 'geo-lock-v8-depth-mesh';
 
 export type RenderStyleId = 'daylight' | 'golden-hour' | 'overcast' | 'dusk' | 'clay';
 
@@ -116,7 +116,7 @@ export const RENDER_TIERS: Readonly<Record<RenderTierId, RenderTier>> = {
  * objects and 14 in all; the Lite model is not made for many references, so it gets few.
  */
 export const REFERENCE_BUDGET: Readonly<Record<RenderTierId, { total: number; products: number; looks: number }>> = {
-  fast: { total: 4, products: 4, looks: 1 },
+  fast: { total: 8, products: 8, looks: 1 },
   balanced: { total: 10, products: 10, looks: 2 },
   pro: { total: 9, products: 6, looks: 3 },
 };
@@ -382,6 +382,12 @@ export interface GeometryLockPromptOptions {
   ceilingInView?: boolean;
   /** Image 2 is a line drawing made from the 3D model (not an edge map of the picture). */
   lineGuide?: boolean;
+  /** A camera-space linear Z-depth map (bright near -> dark far) is attached after the edge guide. */
+  withDepthGuide?: boolean;
+  /** Image 2 includes 3-tier depth-weighted edges and a steel-blue 3D perspective floor/millwork mesh frame. */
+  meshFramedGuide?: boolean;
+  /** Metric camera-space near..far depth range (in metres) represented by the depth map. */
+  depthRangeM?: { nearM: number; farM: number };
   /** The view is a parallel (orthographic, e.g. isometric) projection, not a perspective. */
   parallel?: boolean;
   /** Numbers of the attached look references (materials, colours and mood to follow). */
@@ -394,6 +400,70 @@ export interface GeometryLockPromptOptions {
   openings?: readonly OpeningInView[];
   /** Furniture stand-ins in view (pieces placed from the drawing) and the products they carry. */
   furniture?: PromptFurniture;
+  /** Decorative ceiling canopies, gypsum wall claddings & free-form glazing executions in view. */
+  architectural?: PromptArchitecturalContext;
+}
+
+export interface PromptArchitecturalCeiling {
+  label: string;
+  code?: string;
+  shape: string;
+  style: string;
+  where?: string;
+  widthM: number;
+  depthM: number;
+  dropM: number;
+  finishes?: readonly { role: string; code?: string; name: string; hex: string }[];
+  imageIndex?: number;
+}
+
+export interface PromptArchitecturalWallCladding {
+  label: string;
+  code?: string;
+  style: string;
+  curved: boolean;
+  where?: string;
+  colourHex: string;
+  finishes?: readonly { role: string; code?: string; name: string; hex: string }[];
+  imageIndex?: number;
+}
+
+export interface PromptArchitecturalGlazing {
+  label: string;
+  code?: string;
+  style: string;
+  curved: boolean;
+  where?: string;
+  frameName: string;
+  finishes?: readonly { role: string; code?: string; name: string; hex: string }[];
+  imageIndex?: number;
+}
+
+export interface PromptArchitecturalArtwork {
+  label: string;
+  code?: string;
+  style: string;
+  where?: string;
+  widthM: number;
+  heightM: number;
+  frameName: string;
+  finishes?: readonly { role: string; code?: string; name: string; hex: string }[];
+  imageIndex?: number;
+}
+
+export interface PromptArchitecturalSlabFinish {
+  slabId?: string;
+  label: string;
+  description: string;
+  colourHex: string;
+}
+
+export interface PromptArchitecturalContext {
+  ceilings?: readonly PromptArchitecturalCeiling[];
+  wallCladdings?: readonly PromptArchitecturalWallCladding[];
+  glazingExecutions?: readonly PromptArchitecturalGlazing[];
+  wallArtworks?: readonly PromptArchitecturalArtwork[];
+  slabFinishes?: readonly PromptArchitecturalSlabFinish[];
 }
 
 /** One product of the furniture schedule, as its stand-ins appear in the view. */
@@ -408,6 +478,10 @@ export interface PromptFurnitureProduct {
   where?: string;
   /** Its own photo, cut out, stands on a coloured pad at each place (instead of a solid stand-in). */
   photo?: boolean;
+  /** True for 3D-locked custom kiosks, counters, slat screens & feature columns included in Image 2. */
+  architecturalLock?: boolean;
+  /** Official manufacturer finish swatches selected for this item. */
+  finishes?: readonly { role: string; code?: string; name: string; hex: string }[];
   /** Number of the attached picture of the product, when one is sent. */
   imageIndex?: number;
 }
@@ -458,14 +532,25 @@ export function whereInView(r: { x0: number; x1: number }): string {
   return c < 0.34 ? 'on the left' : c > 0.66 ? 'on the right' : 'in the centre';
 }
 
-/** Part of the view a spot is in (front = near the bottom of the view, back = near the top). */
-export function viewZone(s: { x: number; y: number }): string {
+/** Part of the view a spot is in (uses metric camera depth band when `distM` is known, else vertical screen position). */
+export function viewZone(s: { x: number; y: number; distM?: number }): string {
   const col = s.x < 0.34 ? 'left' : s.x > 0.66 ? 'right' : 'centre';
+  if (typeof s.distM === 'number' && Number.isFinite(s.distM) && s.distM > 0) {
+    const band = s.distM < 4.8 ? 'foreground' : s.distM <= 9.0 ? 'midground' : 'background';
+    return `${band} ${col}`;
+  }
   const row = s.y < 0.4 ? 'back' : s.y > 0.72 ? 'front' : '';
   return row ? `${row} ${col}` : col;
 }
 
-const zonePhrase = (z: string) => (z === 'centre' ? 'in the centre' : z === 'left' || z === 'right' ? `on the ${z}` : `at the ${z}`);
+const zonePhrase = (z: string) =>
+  z === 'centre'
+    ? 'in the centre'
+    : z === 'left' || z === 'right'
+      ? `on the ${z}`
+      : /^(foreground|midground|background)\b/.test(z)
+        ? `in the ${z}`
+        : `at the ${z}`;
 
 const FACING_PHRASES: Record<string, string> = {
   camera: 'facing the camera',
@@ -489,7 +574,7 @@ export function facingPhrase(f: string | undefined): string {
   return (f && FACING_PHRASES[f]) || '';
 }
 
-type Spot = { x: number; y: number; facing?: string; by?: string };
+type Spot = { x: number; y: number; distM?: number; facing?: string; by?: string };
 
 /**
  * How a few pieces face, said once: their common way ("facing left"), the way most of
@@ -508,6 +593,14 @@ function groupFacing(list: readonly Spot[]): string {
   if (n >= list.length * 0.6) return `mostly ${top}`;
   if (list.every((s) => s.by === 'table')) return 'each turned to face its table';
   return '';
+}
+
+function distPhrase(list: readonly Spot[]): string {
+  const dists = list.map((s) => s.distM).filter((d): d is number => typeof d === 'number' && Number.isFinite(d) && d > 0);
+  if (!dists.length) return '';
+  const minD = Math.min(...dists);
+  const maxD = Math.max(...dists);
+  return maxD - minD < 0.6 ? ` (~${((minD + maxD) / 2).toFixed(1)} m from camera)` : ` (~${minD.toFixed(1)}–${maxD.toFixed(1)} m from camera)`;
 }
 
 /**
@@ -529,8 +622,9 @@ export function spotsWhere(spots: readonly Spot[], count = spots.length): string
   const all = spots.length === count;
   const facing = spots.some((s) => facingPhrase(s.facing));
   const withWay = (place: string, list: readonly Spot[], sep = ', ') => {
+    const placed = `${place}${distPhrase(list)}`;
     const f = facing ? groupFacing(list) : '';
-    return f ? `${place}${sep}${f}` : place;
+    return f ? `${placed}${sep}${f}` : placed;
   };
   if (zones.length === 1) return withWay(zonePhrase(zones[0][0]), zones[0][1]);
   // Spread wide, the zones still tell two products of one kind apart.
@@ -577,10 +671,39 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   const style = getRenderStyle(o.style);
   const note = clampNote(o.note);
   const furniture = o.furniture && o.furniture.standIns > 0 ? o.furniture : null;
+  const arch = o.architectural;
+  const visibleCeilings = arch?.ceilings ?? [];
+  const visibleCladdings = arch?.wallCladdings ?? [];
+  const visibleGlazing = arch?.glazingExecutions ?? [];
+  const visibleArtworks = arch?.wallArtworks ?? [];
   // A white presentation model takes no materials from elsewhere.
   const looks = style.materials ? [] : (o.looks ?? []).filter((n) => n > 1);
-  const imageRefs = o.withEdgeGuide || o.withPlan || looks.length > 0 || !!furniture?.products.some((p) => p.imageIndex);
+  const hasArchImages =
+    visibleCeilings.some((c) => !!c.imageIndex) ||
+    visibleCladdings.some((w) => !!w.imageIndex) ||
+    visibleGlazing.some((g) => !!g.imageIndex) ||
+    visibleArtworks.some((a) => !!a.imageIndex);
+  const imageRefs =
+    o.withEdgeGuide || o.withDepthGuide || o.withPlan || looks.length > 0 || !!furniture?.products.some((p) => p.imageIndex) || hasArchImages;
   const lines: string[] = [];
+
+  const pushSuspendedCeilingFeatures = () => {
+    for (const c of visibleCeilings.slice(0, 4)) {
+      const where = c.where ? ` (${promptText(c.where, 80)})` : '';
+      const dim = `${c.widthM.toFixed(1)}×${c.depthM.toFixed(1)} m, ${Math.round(c.dropM * 100)} cm drop`;
+      const desc =
+        c.style === 'slatted-ring'
+          ? 'circular slatted timber/acoustic ceiling drum canopy with radial fins, metallic perimeter ring, and warm 2700K recessed LED cove rings'
+          : c.style === 'baffle-cloud'
+            ? 'suspended linear acoustic timber/felt ceiling baffles on concealed dark carrier rails'
+            : 'stepped gypsum coffered perimeter bulkhead with warm 2700K indirect cove lighting';
+      const fin = Array.isArray(c.finishes) && c.finishes.length
+        ? ` | Finishes: ${c.finishes.map((f) => `${promptText(f.name, 40)} (${promptText(f.hex, 12)})`).join(', ')}`
+        : '';
+      const ref = c.imageIndex ? ` — match texture/detail from image ${c.imageIndex}` : '';
+      lines.push(`   - ${promptText(c.label, 120)}${where} [${dim}]: ${desc}${fin}${ref}. Keep its exact overhead silhouette, rings and alignment pixel-locked to image 1 & image 2.`);
+    }
+  };
 
   lines.push(
     `Turn ${imageRefs ? 'image 1' : 'this image'} — a view of a precise 3D architectural model built from measured construction drawings — into a photorealistic architectural visualization of the very same scene. Its geometry is exact and must survive unchanged.`,
@@ -615,7 +738,9 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
   if (o.viewKind === 'interior' && o.openings) lines.push(`   ${describeOpenings(o.openings)}`);
   if (o.viewKind === 'interior') {
     lines.push(
-      '   Blank wall surfaces stay blank: never put a door, window, niche, panel or picture on a wall that shows none in the input — including the large wall surfaces close to the camera.',
+      visibleArtworks.length > 0
+        ? '   Preserve the exact framed/sculptural wall artwork(s) anchored in image 1 and image 2 at their exact wall location, frame proportions and height; keep all other blank wall surfaces completely blank (no extra pictures, niches, doors or windows).'
+        : '   Blank wall surfaces stay blank: never put a door, window, niche, panel or picture on a wall that shows none in the input — including the large wall surfaces close to the camera.',
     );
   }
   lines.push('4. Never add, remove, move, merge, split, resize or straighten any wall, door, window, column, slab or room.');
@@ -624,15 +749,27 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
       '5. This is a roofless cutaway seen from above: keep it open-top. No roof, ceiling, beams, upper floor or extra storey; wall tops stay flat cut sections.',
     );
   } else if (o.viewKind === 'interior') {
-    lines.push(
-      o.ceiling === false
-        ? '5. We stand inside the building. Keep the rooms open above the walls (no ceiling), exactly as in the input.'
-        : o.ceilingInView
+    if (o.ceiling === false) {
+      lines.push('5. We stand inside the building. Keep the rooms open above the walls (no ceiling), exactly as in the input.');
+    } else if (visibleCeilings.length > 0) {
+      lines.push(
+        '5. We stand inside the building. Preserve BOTH the main smooth matte white plaster ceiling plane at the top of the walls AND the exact suspended custom ceiling feature(s) anchored in image 1 and image 2:',
+      );
+      pushSuspendedCeilingFeatures();
+      lines.push('   Outside those suspended features, keep the surrounding ceiling flat smooth plaster with understated recessed architectural downlights.');
+    } else {
+      lines.push(
+        o.ceilingInView
           ? '5. We stand inside the building. The flat ceiling in the input rests on top of the walls: keep it a plain flat white ceiling at exactly that height, with a few small recessed lights. Nothing above or below it: no beams, bulkheads, lowered sections or skylights.'
           : '5. We stand inside the building. The model has no ceilings: close the rooms with a plain flat white ceiling resting exactly on top of the existing walls, with a few simple recessed lights. Add nothing else above the walls: no beams, bulkheads, lowered sections, skylights or upper floors.',
-    );
+      );
+    }
   } else {
     lines.push('5. Show only the building that is in the model: no extra storeys, roof shapes, extensions or neighbouring buildings.');
+    if (visibleCeilings.length > 0 && o.ceiling !== false) {
+      lines.push('   Preserve the exact suspended custom ceiling feature(s) visible overhead, anchored in image 1 and image 2:');
+      pushSuspendedCeilingFeatures();
+    }
   }
   lines.push(
     o.viewKind === 'interior'
@@ -640,18 +777,34 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
       : '6. The model is complete. Everything outside its outer walls is empty background: keep it plain and empty, as in the input. Never add rooms, walls, floors, furniture or buildings outside the model, and never fill or "complete" an empty area.',
   );
 
+  let nextImg = 2;
+  const edgeImg = o.withEdgeGuide ? nextImg++ : 0;
+  const depthImg = o.withDepthGuide ? nextImg++ : 0;
+  const planImg = o.withPlan ? nextImg++ : 0;
+
   if (o.withEdgeGuide) {
     lines.push('');
     lines.push(
-      o.lineGuide
-        ? 'Image 2 is a line drawing made directly from the 3D model, in exactly the same view: every line is a real edge — wall corners, ends and tops, where walls meet the floor (and the ceiling), and door and window frames. Every wall, door and window edge in your render must lie on one of these lines, and none may appear where image 2 has no line. Never draw the lines themselves.'
-        : 'Image 2 is an edge map of the same view (dark lines on white). Each line is a real edge of the model: the wall, door and window edges in your render must sit exactly on these lines. Never draw the lines themselves.',
+      o.meshFramedGuide
+        ? `Image ${edgeImg} is a 3D mesh-framed, depth-weighted line drawing made directly from the 3D model in the exact same view: near foreground edges (<5 m) are thick dark ink, midground edges (5–9 m) are medium slate, and far background walls (>9 m) are lighter grey; the steel-blue 1 m perspective floor grid (with 0.5 m near subdivisions) and 3D wireframe millwork/column cages show exact ground-plane perspective foreshortening, floor contact footprints, and open floor aisles behind freestanding foreground volumes. Every architectural wall, opening, canopy and 3D millwork edge must align to these lines, while the grid lines and wireframe cages are invisible spatial guides — NEVER draw any grid lines, blue lines or wireframe cages in your render.`
+        : o.lineGuide
+          ? `Image ${edgeImg} is a line drawing made directly from the 3D model, in exactly the same view: every line is a real edge — wall corners, ends and tops, where walls meet the floor (and the ceiling), and door and window frames. Every wall, door and window edge in your render must lie on one of these lines, and none may appear where image ${edgeImg} has no line. Never draw the lines themselves.`
+          : `Image ${edgeImg} is an edge map of the same view (dark lines on white). Each line is a real edge of the model: the wall, door and window edges in your render must sit exactly on these lines. Never draw the lines themselves.`,
+    );
+  }
+  if (o.withDepthGuide) {
+    const rangeNote = o.depthRangeM
+      ? ` (spanning ~${o.depthRangeM.nearM.toFixed(1)} m near to ~${o.depthRangeM.farM.toFixed(1)} m far from the camera)`
+      : '';
+    lines.push('');
+    lines.push(
+      `3D SPATIAL DEPTH LOCK (Image ${depthImg}): Image ${depthImg} is the linear camera-space metric Z-depth map of this exact 3D view${rangeNote} — bright white marks the closest foreground surfaces, mid-grey marks midground elements, and dark charcoal marks far background walls. Strictly preserve this front-to-back metric depth separation: freestanding foreground kiosks, islands, columns and suspended ceiling canopies (brighter in Image ${depthImg}) stand metres in front of the darker background walls with real walkable floor space between them — NEVER flatten, paste or merge foreground islands, columns or ceiling rings onto the back wall.`,
     );
   }
   if (o.withPlan) {
     lines.push('');
     lines.push(
-      `Image ${o.withEdgeGuide ? 3 : 2} is the 2D floor plan of this building, for reference only: use it to understand what each room is (kitchen, bathroom, bedroom, living) and where furniture goes. Never draw the plan, its text, dimensions or hatching.`,
+      `Image ${planImg} is the 2D floor plan of this building, for reference only: use it to understand what each room is (kitchen, bathroom, bedroom, living) and where furniture goes. Never draw the plan, its text, dimensions or hatching.`,
     );
   }
   if (looks.length) {
@@ -671,7 +824,7 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
     lines.push('FURNITURE IN THE MODEL:');
     if (blocks > 0) {
       lines.push(
-        `The plain solid blocks standing on the floor in image 1 are furniture stand-ins placed from the construction drawing (${blocks} in view). Each marks the exact position, footprint, height and orientation of one real piece of furniture: render every stand-in as that real piece, in place, at the same size and facing the same way. A raised back marks the back of a seat, sofa or bed; a desk is open on the side where its user sits.`,
+        `The neutral 3D architectural massing stand-ins standing on the floor in image 1 (${blocks} in view) mark only the exact position, CAD footprint, height and facing orientation from the construction drawing — NOT the final style or wood tone. Keep every piece at its exact spot, scale and facing direction, and replace its appearance with the exact silhouette, materials and official finishes of the matched BOQ product reference photos below.`,
       );
     }
     if (photoPieces > 0) {
@@ -689,22 +842,33 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
     if (furniture.products.length) {
       if (coded.length) {
         lines.push(
-          "Coloured stand-ins are specific products from the project's furniture schedule. The colour is only a code that tells which product it is: render the product's own design, materials and colours, never the code colour.",
+          "Matched 3D stand-ins correspond to the real BOQ products and official manufacturer finish books listed below: replace generic stand-in geometry/textures completely with each product's exact catalogue design silhouette, upholstery/veneer texture, and specified finish colours.",
         );
       }
       const productImages = furniture.products.map((p) => p.imageIndex).filter((n): n is number => !!n);
       if (productImages.length) {
-        lines.push(`The product pictures (${imageList(productImages)}) are catalogue photos of single products: take only the product from each, never its background, text or framing.`);
+        const hasArchLock = furniture.products.some((p) => p.architecturalLock);
+        lines.push(
+          hasArchLock
+            ? `The product pictures (${imageList(productImages)}) are authoritative catalogue photos of matched manufacturer products: for loose furniture, prioritize them as the exact design, upholstery & silhouette reference overriding simplified stand-in blocks, whereas for [GEOMETRICALLY LOCKED 3D MILLWORK] items use them strictly for surface materials, veneers, hardware and finishes while keeping their exact 3D volume, curve radius, height and floor footprint locked to image 1 & image 2 (with zero studio white backgrounds or text).`
+            : `The product pictures (${imageList(productImages)}) are authoritative catalogue photos of matched manufacturer products: prioritize them as the exact design, upholstery & silhouette reference for those pieces, overriding any simplified stand-in shape in image 1 while keeping zero studio white backgrounds or text.`,
+        );
       }
       for (const p of furniture.products) {
         const where = p.where ? `, ${promptText(p.where, 240)}` : '';
         const label = promptText(p.label, 140);
+        const finishNote = Array.isArray(p.finishes) && p.finishes.length
+          ? ` | Official finishes: ${p.finishes.map((f) => `${promptText(f.role, 24)} ${promptText(f.code || '', 24)} ${promptText(f.name, 40)} (${promptText(f.hex, 12)})`.replace(/\s+/g, ' ').trim()).join(', ')}`
+          : '';
         if (p.photo) {
           const ref = p.imageIndex ? ` — more detail in image ${p.imageIndex}` : '';
-          lines.push(`- ${label}: the ${standInNoun(p.kinds, p.count)} shown by ${p.count === 1 ? 'its photo' : 'their photos'} (${p.count}${where})${ref}.`);
+          lines.push(`- ${label}: the ${standInNoun(p.kinds, p.count)} shown by ${p.count === 1 ? 'its photo' : 'their photos'} (${p.count}${where})${finishNote}${ref}.`);
+        } else if (p.architecturalLock) {
+          const ref = p.imageIndex ? ` — apply finishes & joinery detail from image ${p.imageIndex}` : '';
+          lines.push(`- [GEOMETRICALLY LOCKED 3D MILLWORK] ${standInNoun(p.kinds, p.count)} (${p.count}${where}): ${label}${finishNote}${ref}. Preserve its exact curved/linear 3D silhouette (kiosks/vitrines, acoustic booths, full-height wardrobes, waterfall kitchen islands, open vertical louvers, or wall artworks) edge-for-edge with image 1 & image 2.`);
         } else {
-          const ref = p.imageIndex ? ` — copy its design, materials and colours from image ${p.imageIndex}` : '';
-          lines.push(`- The ${promptText(p.colour, 20)} ${standInNoun(p.kinds, p.count)} (${p.count}${where}): ${label}${ref}.`);
+          const ref = p.imageIndex ? ` — replace stand-in with exact design silhouette & finish from image ${p.imageIndex}` : '';
+          lines.push(`- ${standInNoun(p.kinds, p.count)} (${p.count}${where}): ${label}${finishNote}${ref}.`);
         }
       }
     }
@@ -719,20 +883,94 @@ export function buildGeometryLockPrompt(o: GeometryLockPromptOptions): string {
         .map((k) => `${k.count} ${standInNoun([k.kind], k.count)}${placeOf(k.where)}`)
         .join('; ');
       const kinds = new Set(plain.map((k) => k.kind));
-      const notes = [kinds.has('plant') ? 'plants as real, leafy potted plants' : '', kinds.has('screen') ? 'screens as slim wall-mounted displays' : '']
+      const notes = [kinds.has('plant') ? 'plants as real, leafy potted plants' : '', kinds.has('screen') ? 'screens as slim front-facing matte displays (never showing rear mounting brackets)' : '']
         .filter(Boolean)
         .join(', ');
       lines.push(
-        `Stand-ins without a product: ${list}. Render each as a simple, neutral contemporary piece of its kind${notes ? ` (${notes})` : ''}.`,
+        `Stand-ins without a matched product: ${list}. Render each as a clean, neutral contemporary architectural piece that harmonizes with the matched BOQ products in the space${notes ? ` (${notes})` : ''}.`,
       );
     } else if (furniture.products.length && blocks > codedCount) {
-      lines.push('Off-white stand-ins carry no product: render them as simple, neutral contemporary furniture of their kind.');
+      lines.push('Off-white stand-ins carry no matched product: render them as clean, neutral contemporary commercial furniture harmonizing with the matched BOQ products.');
+    }
+  }
+
+  if (visibleCladdings.length > 0 || visibleGlazing.length > 0) {
+    lines.push('');
+    lines.push('DECORATIVE WALL CLADDING, GYPSUM PARTITIONS & FREE-FORM GLAZING (PIXEL-LOCKED TO IMAGE 1 & IMAGE 2):');
+    for (const w of visibleCladdings) {
+      const where = w.where ? ` (${promptText(w.where, 100)})` : '';
+      const form = w.curved ? 'curved/free-form gypsum partition walls' : 'feature gypsum partition walls';
+      const styleDesc =
+        w.style === 'fluted-wood'
+          ? 'vertical 25x40 mm fluted natural timber slats over matte black acoustic felt with recessed metallic shadow-gap trims, wrapping smoothly around every wall curve'
+          : w.style === 'acoustic-fabric'
+            ? 'tailored fabric-wrapped acoustic wall panels with crisp shadow-gap joints'
+            : w.style === 'stone-cladding'
+              ? 'honed natural stone / travertine cladding panels with fine tight joints'
+              : w.style === 'metal-inlay'
+                ? 'brushed PVD metallic cladding panels and crisp shadow-gap inlays'
+                : w.style === 'painted-plaster'
+                  ? 'smooth architectural interior paint finish in exact specified colour, keeping crisp wall corners and plaster texture'
+                  : 'book-matched natural timber veneer wall cladding with thin metallic reveal inlays';
+      const fin = Array.isArray(w.finishes) && w.finishes.length
+        ? ` | Finishes: ${w.finishes.map((f) => `${promptText(f.name, 40)} (${promptText(f.hex, 12)})`).join(', ')}`
+        : ` | Colour swatch in image 1: ${promptText(w.colourHex, 12)}`;
+      const ref = w.imageIndex ? ` — reference texture/tone from image ${w.imageIndex}` : '';
+      lines.push(`- Wall cladding${where} on those ${form}: ${promptText(w.label, 120)} — render as ${styleDesc}${fin}${ref}. Do not paint over the clad feature walls as plain white plaster.`);
+    }
+    for (const g of visibleGlazing) {
+      const where = g.where ? ` (${promptText(g.where, 100)})` : '';
+      const form = g.curved ? 'curved pod enclosures and free-form glazed partitions' : 'glazed partition walls';
+      const glassDesc =
+        g.style === 'fluted-glass'
+          ? 'vertical fluted / reeded architectural safety glass (lightly ribbed translucent glass softly diffusing interiors behind) — keep all 3D glazing mullions & curved rails pixel-aligned'
+          : g.style === 'double-glazed-framed'
+            ? 'clear acoustic double-glazed glass panels with clean crisp architectural reflections'
+            : 'clear frameless/slim-channel toughened acoustic glass panels';
+      const ref = g.imageIndex ? ` — match frame & glazing detail from image ${g.imageIndex}` : '';
+      lines.push(`- Free-form / pod glazing${where} (${form}): ${promptText(g.label, 120)} — render with ${glassDesc} set into slim ${promptText(g.frameName, 40)} top/bottom channels and vertical mullions matching the exact 3D bars in image 1 & image 2${ref}.`);
+    }
+  }
+
+  const visibleSlabs = (arch?.slabFinishes ?? []).filter((s) => s.label && s.colourHex);
+  if (visibleSlabs.length > 0) {
+    lines.push('');
+    lines.push('FLOOR SLAB FINISHES (LOCKED TO IMAGE 1 & IMAGE 2):');
+    for (const s of visibleSlabs) {
+      lines.push(
+        `- Floor finish: ${promptText(s.label, 80)} (${promptText(s.colourHex, 12)}) — ${promptText(s.description, 160)}.`,
+      );
+    }
+  }
+
+  if (visibleArtworks.length > 0) {
+    lines.push('');
+    lines.push('WALL ARTWORKS (FRAMED / SCULPTURAL — PIXEL-LOCKED TO IMAGE 1 & IMAGE 2):');
+    for (const a of visibleArtworks) {
+      const where = a.where ? ` (${promptText(a.where, 100)})` : '';
+      const dim = `${a.widthM.toFixed(2)}×${a.heightM.toFixed(2)} m`;
+      const styleDesc =
+        a.style === 'sculptural-relief'
+          ? 'three-dimensional sculptural plaster/wood architectural bas-relief artwork'
+          : a.style === 'triptych-gallery'
+            ? 'curated three-panel gallery triptych framed wall art set'
+            : 'large-format museum-framed fine-art canvas piece';
+      const fin = Array.isArray(a.finishes) && a.finishes.length
+        ? ` | Finishes: ${a.finishes.map((f) => `${promptText(f.name, 40)} (${promptText(f.hex, 12)})`).join(', ')}`
+        : '';
+      const ref = a.imageIndex ? ` — match artwork composition & palette from image ${a.imageIndex}` : '';
+      lines.push(`- Wall artwork${where} [${dim}, ${promptText(a.frameName, 40)}]: ${promptText(a.label, 120)} — render as ${styleDesc}${fin}${ref}, locked to the exact frame outline in image 1 & image 2.`);
     }
   }
 
   lines.push('');
   lines.push('CHANGE ONLY: surface materials, textures, lighting, shadows, reflections and photographic realism.');
   lines.push(`Lighting: ${style.lighting}`);
+  if ((o.withDepthGuide || o.meshFramedGuide) && !o.parallel) {
+    lines.push(
+      'Spatial depth: crisp grounded ambient-occlusion contact shadows where freestanding kiosks, islands, columns and furniture meet the floor; clear floor-plane perspective foreshortening across open aisles; natural multi-plane light falloff separating foreground, midground and background.',
+    );
+  }
   const materials = materialsFor(style.materials ?? DEFAULT_MATERIALS, o);
   lines.push(
     looks.length

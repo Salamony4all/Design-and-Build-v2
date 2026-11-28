@@ -64,8 +64,8 @@ describe('tiers', () => {
   });
 
   it('sends more references with the models made for them', () => {
-    expect(referencePlan('fast', 0, 9)).toEqual({ looks: 0, products: 4 });
-    expect(referencePlan('fast', 3, 9)).toEqual({ looks: 1, products: 3 });
+    expect(referencePlan('fast', 0, 9)).toEqual({ looks: 0, products: 8 });
+    expect(referencePlan('fast', 3, 9)).toEqual({ looks: 1, products: 7 });
     expect(referencePlan('balanced', 2, 12)).toEqual({ looks: 2, products: 8 });
     expect(referencePlan('balanced', 0, 12)).toEqual({ looks: 0, products: 10 });
     expect(referencePlan('pro', 3, 12)).toEqual({ looks: 3, products: 6 });
@@ -316,11 +316,11 @@ describe('furniture stand-ins and real products', () => {
       },
     });
     expect(p).toMatch(/Turn image 1/);
-    expect(p).toMatch(/furniture stand-ins placed from the construction drawing \(20 in view\)/);
-    expect(p).toMatch(/- The red chairs \(12, across the view\): Vitra · Eames Plastic Chair — copy its design, materials and colours from image 3\./);
-    expect(p).toMatch(/- The blue table \(1, on the left\): Narbutas · Nova table\./);
-    expect(p).toMatch(/catalogue photos of single products/);
-    expect(p).toMatch(/Off-white stand-ins carry no product/);
+    expect(p).toMatch(/neutral 3D architectural massing stand-ins .* \(20 in view\)/);
+    expect(p).toMatch(/- chairs \(12, across the view\): Vitra · Eames Plastic Chair — replace stand-in with exact design silhouette & finish from image 3\./);
+    expect(p).toMatch(/- table \(1, on the left\): Narbutas · Nova table\./);
+    expect(p).toMatch(/authoritative catalogue photos of matched manufacturer products/);
+    expect(p).toMatch(/Off-white stand-ins carry no matched product/);
     expect(p).toMatch(/Furnishing: only the furniture of the stand-ins/);
     expect(p).not.toMatch(/leave the rooms unfurnished/);
   });
@@ -341,20 +341,19 @@ describe('furniture stand-ins and real products', () => {
     expect(p).toMatch(/render the one piece that fits its spot/);
     expect(p).toMatch(/Turn each the way it faces in the list below; its photo stands turned with it/);
     expect(p).toMatch(/a plain grey silhouette is a product seen from behind/);
-    expect(p).toMatch(/facing the same way\. A raised back marks the back of a seat, sofa or bed/);
     expect(p).toMatch(/- Vitra · Repos: the chairs shown by their photos \(7, in the centre\) — more detail in image 3\./);
     expect(p).not.toMatch(/\bred\b|\bpads?\b/);
-    expect(p).toMatch(/- The blue chairs \(3\): Hay · Revolver\./);
-    expect(p).toMatch(/Coloured stand-ins are specific products/);
-    expect(p).toMatch(/plain solid blocks standing on the floor in image 1 are furniture stand-ins placed from the construction drawing \(3 in view\)/);
+    expect(p).toMatch(/- chairs \(3\): Hay · Revolver\./);
+    expect(p).toMatch(/Matched 3D stand-ins correspond to the real BOQ products/);
+    expect(p).toMatch(/neutral 3D architectural massing stand-ins .* \(3 in view\)/);
     expect(p).not.toMatch(/Off-white stand-ins/);
     expect(p).toMatch(/Furnishing: only the furniture of the stand-ins and photos above .* no rugs\./);
     const onlyPhotos = buildGeometryLockPrompt({
       style: 'daylight', viewKind: 'interior', furnish: false, withEdgeGuide: false, withPlan: false,
       furniture: { standIns: 2, products: [{ label: 'Las · Mia', colour: 'pink', kinds: ['desk'], count: 2, photo: true }] },
     });
-    expect(onlyPhotos).not.toMatch(/plain solid blocks/);
-    expect(onlyPhotos).not.toMatch(/Coloured stand-ins|pink/);
+    expect(onlyPhotos).not.toMatch(/neutral 3D architectural massing stand-ins/);
+    expect(onlyPhotos).not.toMatch(/Matched 3D stand-ins|pink/);
     expect(onlyPhotos).toMatch(/- Las · Mia: the desks shown by their photos \(2\)\./);
   });
 
@@ -371,7 +370,7 @@ describe('furniture stand-ins and real products', () => {
       },
     });
     expect(p).toMatch(/\(7 in view\)/);
-    expect(p).toMatch(/Stand-ins without a product: 4 plants at the front right; 3 sofas \(2 at the back left, 1 in the centre\)\. Render each as a simple, neutral contemporary piece of its kind \(plants as real, leafy potted plants\)\./);
+    expect(p).toMatch(/Stand-ins without a matched product: 4 plants at the front right; 3 sofas \(2 at the back left, 1 in the centre\)\. Render each as a clean, neutral contemporary architectural piece .* \(plants as real, leafy potted plants\)\./);
     expect(p).not.toMatch(/Off-white stand-ins/);
     expect(p).not.toMatch(/behind glass/);
     const glass = buildGeometryLockPrompt({
@@ -398,7 +397,7 @@ describe('furniture stand-ins and real products', () => {
     });
     expect(p).toMatch(/LOOK REFERENCES: Images 4 and 5 are pictures the client chose for the look\. Take only their materials, colours, finishes, textures and mood/);
     expect(p).toMatch(/Glass walls, glass doors and windows stay clear glass\. Never copy their layout, architecture, walls, doors, windows, furniture, camera angle or any text/);
-    expect(p).toMatch(/The product pictures \(image 3\) are catalogue photos of single products/);
+    expect(p).toMatch(/The product pictures \(image 3\) are authoritative catalogue photos of matched manufacturer products/);
     expect(p).toMatch(/Materials: as in the look references \(images 4 and 5\); for any surface they do not show: walls in smooth warm-white painted plaster/);
     const one = buildGeometryLockPrompt({ style: 'dusk', viewKind: 'cutaway', furnish: false, withEdgeGuide: false, withPlan: false, looks: [2] });
     expect(one).toMatch(/Turn image 1/);
@@ -425,5 +424,151 @@ describe('furniture stand-ins and real products', () => {
     });
     expect(none).not.toMatch(/FURNITURE IN THE MODEL/);
     expect(none).toMatch(/no furniture, beds, desks/);
+  });
+
+  it('locks decorative custom ceilings, fluted gypsum cladding, free-form pod glazing & 3D kiosks cleanly', () => {
+    const p = buildGeometryLockPrompt({
+      style: 'daylight',
+      viewKind: 'interior',
+      furnish: false,
+      withEdgeGuide: true,
+      withPlan: false,
+      lineGuide: true,
+      ceiling: true,
+      ceilingInView: true,
+      furniture: {
+        standIns: 4,
+        products: [
+          {
+            label: 'Custom Fabrication · FAB-KSK-01',
+            colour: 'brown',
+            kinds: ['joinery'],
+            count: 3,
+            where: 'in the centre',
+            architecturalLock: true,
+            imageIndex: 3,
+          },
+        ],
+      },
+      architectural: {
+        ceilings: [
+          {
+            label: 'Circular Slatted Timber & Bronze Rotunda Canopy',
+            code: 'FAB-CLG-01',
+            shape: 'round',
+            style: 'slatted-ring',
+            where: 'at the back centre',
+            widthM: 8.4,
+            depthM: 8.4,
+            dropM: 0.28,
+            finishes: [{ role: 'Fins', name: 'Canaletto Walnut', hex: '#5D3F2E' }],
+            imageIndex: 4,
+          },
+        ],
+        wallCladdings: [
+          {
+            label: 'Autex · WC-FLT-01',
+            code: 'WC-FLT-01',
+            style: 'fluted-wood',
+            curved: true,
+            where: 'on the left',
+            colourHex: '#C29D6E',
+          },
+        ],
+        glazingExecutions: [
+          {
+            label: 'Saint-Gobain · PT-GLS-03',
+            code: 'PT-GLS-03',
+            style: 'fluted-glass',
+            curved: true,
+            where: 'on the right',
+            frameName: 'brushed bronze aluminium',
+          },
+        ],
+      },
+    });
+    expect(p).toMatch(/suspended custom ceiling feature\(s\)/);
+    expect(p).toMatch(/circular slatted timber\/acoustic ceiling drum canopy/);
+    expect(p).not.toMatch(/no beams, bulkheads, lowered sections/);
+    expect(p).toMatch(/\[GEOMETRICALLY LOCKED 3D MILLWORK\]/);
+    expect(p).toMatch(/DECORATIVE WALL CLADDING, GYPSUM PARTITIONS & FREE-FORM GLAZING/);
+    expect(p).toMatch(/fluted natural timber slats/);
+    expect(p).toMatch(/vertical fluted \/ reeded architectural safety glass/);
+  });
+
+  it('classifies spots by metric camera distance when distM is given and preserves legacy fallback without it', () => {
+    expect(viewZone({ x: 0.5, y: 0.62, distM: 3.4 })).toBe('foreground centre');
+    expect(viewZone({ x: 0.15, y: 0.55, distM: 6.5 })).toBe('midground left');
+    expect(viewZone({ x: 0.85, y: 0.45, distM: 12.2 })).toBe('background right');
+    expect(spotsWhere([{ x: 0.5, y: 0.62, distM: 3.4 }])).toBe('in the foreground centre (~3.4 m from camera)');
+    expect(spotsWhere([{ x: 0.2, y: 0.6, distM: 3.1 }, { x: 0.25, y: 0.58, distM: 4.5 }])).toBe('in the foreground left (~3.1–4.5 m from camera)');
+  });
+
+  it('adds 3D mesh-framing, linear Z-depth map lock, eye-level canopy lock & protected millwork refs', () => {
+    const p = buildGeometryLockPrompt({
+      style: 'daylight',
+      viewKind: 'interior',
+      furnish: true,
+      withEdgeGuide: true,
+      withDepthGuide: true,
+      meshFramedGuide: true,
+      depthRangeM: { nearM: 1.8, farM: 15.2 },
+      withPlan: true,
+      lineGuide: true,
+      furniture: {
+        standIns: 2,
+        products: [
+          {
+            label: 'Custom Kiosk',
+            colour: 'brown',
+            kinds: ['joinery'],
+            count: 2,
+            architecturalLock: true,
+            imageIndex: 5,
+          },
+        ],
+      },
+    });
+    expect(p).toMatch(/3D mesh-framed, depth-weighted line drawing/);
+    expect(p).toMatch(/NEVER draw any grid lines/);
+    expect(p).toMatch(/3D SPATIAL DEPTH LOCK \(Image 3\)/);
+    expect(p).toMatch(/~1\.8 m near to ~15\.2 m far/);
+    expect(p).toMatch(/NEVER flatten, paste or merge foreground islands/);
+    expect(p).toMatch(/Image 4 is the 2D floor plan/);
+    expect(p).toMatch(/Spatial depth: crisp grounded ambient-occlusion contact shadows/);
+    expect(p).toMatch(/\[GEOMETRICALLY LOCKED 3D MILLWORK\] items use them strictly for surface materials/);
+
+    const eyeCanopy = buildGeometryLockPrompt({
+      style: 'daylight',
+      viewKind: 'eye-level',
+      furnish: false,
+      withEdgeGuide: true,
+      withPlan: false,
+      architectural: {
+        ceilings: [{ label: 'Rotunda Canopy', shape: 'round', style: 'slatted-ring', widthM: 8.4, depthM: 8.4, dropM: 0.28 }],
+      },
+    });
+    expect(eyeCanopy).toMatch(/Rotunda Canopy/);
+    expect(eyeCanopy).toMatch(/circular slatted timber\/acoustic ceiling drum canopy/);
+
+    const slabPrompt = buildGeometryLockPrompt({
+      style: 'daylight',
+      viewKind: 'cutaway',
+      furnish: false,
+      withEdgeGuide: true,
+      withPlan: false,
+      architectural: {
+        slabFinishes: [
+          {
+            slabId: 'slab-1',
+            label: 'Herringbone Walnut',
+            description: 'Herringbone plank satin hardwood floor',
+            colourHex: '#7d563c',
+          },
+        ],
+      },
+    });
+    expect(slabPrompt).toMatch(/FLOOR SLAB FINISHES \(LOCKED TO IMAGE 1 & IMAGE 2\):/);
+    expect(slabPrompt).toMatch(/Herringbone Walnut \(#7d563c\)/);
   });
 });

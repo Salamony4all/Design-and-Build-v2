@@ -438,3 +438,203 @@ export function maskGuideDataUrl(mask: Uint8Array, width: number, height: number
   ctx.putImageData(out, 0, 0);
   return c.toDataURL('image/png');
 }
+
+/**
+ * Extracts pixels darkened below white from a Z-occluded 3D perspective mesh-grid
+ * render pass so occluded parts behind foreground volumes stay hidden.
+ */
+export function gridLineMask(gridPass: RgbaImage, threshold = 36): Uint8Array {
+  const { width: w, height: h, data } = gridPass;
+  const out = new Uint8Array(w * h);
+  for (let i = 0, p = 0; i < out.length; i++, p += 4) {
+    const minC = Math.min(data[p], data[p + 1], data[p + 2]);
+    out[i] = 255 - minC >= threshold ? 1 : 0;
+  }
+  return out;
+}
+
+/**
+ * Raw pixel generator (pure, testable without DOM Canvas) for `depthMeshGuideDataUrl`:
+ * 3-tier depth-weighted architectural edges + steel-blue 3D perspective floor/millwork mesh frame.
+ */
+export function composeDepthMeshGuidePixels(
+  edgeMaskPx: Uint8Array,
+  gridMask: Uint8Array | null,
+  depthPass: RgbaImage | null,
+  width: number,
+  height: number,
+): Uint8ClampedArray {
+  const len = width * height;
+  const dData = depthPass && depthPass.width === width && depthPass.height === height ? depthPass.data : null;
+  const thickAll = dilate(edgeMaskPx, width, height, Math.max(width, height) > 900 ? 1 : 0);
+
+  let nearDilated: Uint8Array | null = null;
+  if (dData) {
+    const nearRaw = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      if (edgeMaskPx[i] && dData[i * 4] >= 165) nearRaw[i] = 1;
+    }
+    nearDilated = dilate(nearRaw, width, height, 1);
+  }
+
+  const out = new Uint8ClampedArray(len * 4);
+  for (let i = 0, p = 0; i < len; i++, p += 4) {
+    const depth = dData ? dData[p] : 140;
+    const isNearEdge = nearDilated ? nearDilated[i] === 1 : false;
+    const isMidEdge = !isNearEdge && (!dData || depth >= 85 ? thickAll[i] === 1 : edgeMaskPx[i] === 1);
+
+    if (isNearEdge) {
+      out[p] = 10;
+      out[p + 1] = 14;
+      out[p + 2] = 24;
+    } else if (isMidEdge) {
+      if (!dData) {
+        out[p] = 20;
+        out[p + 1] = 20;
+        out[p + 2] = 20;
+      } else if (depth >= 165) {
+        out[p] = 12;
+        out[p + 1] = 16;
+        out[p + 2] = 26;
+      } else if (depth >= 85) {
+        out[p] = 50;
+        out[p + 1] = 58;
+        out[p + 2] = 74;
+      } else {
+        out[p] = 104;
+        out[p + 1] = 114;
+        out[p + 2] = 132;
+      }
+    } else if (gridMask && gridMask[i]) {
+      const t = dData ? depth / 255 : 0.7;
+      out[p] = Math.round(182 - 34 * t);
+      out[p + 1] = Math.round(204 - 22 * t);
+      out[p + 2] = Math.round(232 - 8 * t);
+    } else if (dData) {
+      const t = depth / 255;
+      out[p] = Math.round(238 + 17 * t);
+      out[p + 1] = Math.round(240 + 15 * t);
+      out[p + 2] = Math.round(244 + 11 * t);
+    } else {
+      out[p] = 255;
+      out[p + 1] = 255;
+      out[p + 2] = 255;
+    }
+    out[p + 3] = 255;
+  }
+  return out;
+}
+
+/** Image 2: 3D perspective mesh-framed & depth-weighted line guide PNG data URL. */
+export function depthMeshGuideDataUrl(
+  edgeMaskPx: Uint8Array,
+  gridMask: Uint8Array | null,
+  depthPass: RgbaImage | null,
+  width: number,
+  height: number,
+): string {
+  const c = document.createElement('canvas');
+  c.width = width;
+  c.height = height;
+  const ctx = c.getContext('2d');
+  if (!ctx) throw new Error('2D canvas unavailable');
+  const out = ctx.createImageData(width, height);
+  out.data.set(composeDepthMeshGuidePixels(edgeMaskPx, gridMask, depthPass, width, height));
+  ctx.putImageData(out, 0, 0);
+  return c.toDataURL('image/png');
+}
+
+const SRGB_TO_LINEAR_LUT = (() => {
+  const lut = new Uint8ClampedArray(256);
+  for (let i = 0; i < 256; i++) {
+    lut[i] = i <= 8 ? i : Math.round(Math.pow(i / 255, 2.2) * 255);
+  }
+  return lut;
+})();
+
+/** Converts sRGB-encoded grayscale GPU fog-depth bytes back to linear camera-space proximity (0..255). */
+export function linearizeSrgbDepth(img: RgbaImage): RgbaImage {
+  const { width, height, data } = img;
+  const out = new Uint8ClampedArray(data.length);
+  for (let i = 0, p = 0; i < width * height; i++, p += 4) {
+    const v = SRGB_TO_LINEAR_LUT[Math.round(0.299 * data[p] + 0.587 * data[p + 1] + 0.114 * data[p + 2])];
+    out[p] = v;
+    out[p + 1] = v;
+    out[p + 2] = v;
+    out[p + 3] = 255;
+  }
+  return { width, height, data: out };
+}
+
+/** Pure pixel normalizer for linear camera-space metric Z-depth map (Image 3). */
+export function composeDepthMapPixels(depthPass: RgbaImage): Uint8ClampedArray {
+  const { width: w, height: h, data } = depthPass;
+  const out = new Uint8ClampedArray(w * h * 4);
+  for (let i = 0, p = 0; i < w * h; i++, p += 4) {
+    const lum = Math.round(0.299 * data[p] + 0.587 * data[p + 1] + 0.114 * data[p + 2]);
+    const v = lum <= 8 ? 12 : Math.max(18, Math.min(252, lum));
+    out[p] = v;
+    out[p + 1] = v;
+    out[p + 2] = v;
+    out[p + 3] = 255;
+  }
+  return out;
+}
+
+/** Image 3: grayscale linear camera-space depth map (near bright white -> far dark charcoal). */
+export function depthMapDataUrl(depthPass: RgbaImage): string {
+  const c = document.createElement('canvas');
+  c.width = depthPass.width;
+  c.height = depthPass.height;
+  const ctx = c.getContext('2d');
+  if (!ctx) throw new Error('2D canvas unavailable');
+  const out = ctx.createImageData(depthPass.width, depthPass.height);
+  out.data.set(composeDepthMapPixels(depthPass));
+  ctx.putImageData(out, 0, 0);
+  return c.toDataURL('image/png');
+}
+
+/** Transparent UI inspection overlay showing 3D mesh grid (blue) + near/mid/far edges (gold/cyan/violet). */
+export function depthMeshOverlayDataUrl(
+  edgeMaskPx: Uint8Array,
+  gridMask: Uint8Array | null,
+  depthPass: RgbaImage | null,
+  width: number,
+  height: number,
+): string {
+  const c = document.createElement('canvas');
+  c.width = width;
+  c.height = height;
+  const ctx = c.getContext('2d');
+  if (!ctx) throw new Error('2D canvas unavailable');
+  const out = ctx.createImageData(width, height);
+  const dData = depthPass && depthPass.width === width && depthPass.height === height ? depthPass.data : null;
+  for (let i = 0, p = 0; i < width * height; i++, p += 4) {
+    if (edgeMaskPx[i]) {
+      const depth = dData ? dData[p] : 140;
+      if (depth >= 165) {
+        out.data[p] = 255;
+        out.data[p + 1] = 190;
+        out.data[p + 2] = 40;
+        out.data[p + 3] = 238;
+      } else if (depth >= 85) {
+        out.data[p] = 0;
+        out.data[p + 1] = 215;
+        out.data[p + 2] = 255;
+        out.data[p + 3] = 235;
+      } else {
+        out.data[p] = 135;
+        out.data[p + 1] = 130;
+        out.data[p + 2] = 255;
+        out.data[p + 3] = 225;
+      }
+    } else if (gridMask && gridMask[i]) {
+      out.data[p] = 90;
+      out.data[p + 1] = 175;
+      out.data[p + 2] = 255;
+      out.data[p + 3] = 155;
+    }
+  }
+  ctx.putImageData(out, 0, 0);
+  return c.toDataURL('image/png');
+}

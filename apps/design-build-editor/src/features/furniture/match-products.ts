@@ -15,6 +15,8 @@ export interface MatchPiece {
   id: string;
   typeId: string;
   kind: PieceKind | string;
+  subtype?: string;
+  room?: string;
   shape: string;
   widthM: number;
   depthM: number;
@@ -29,6 +31,11 @@ export interface MatchProduct {
   model?: string;
   imageUrl?: string;
   dims?: { w?: number; d?: number; h?: number };
+  designBuildKind?: PieceKind | string;
+  subtype?: string;
+  shape?: string;
+  placeable3D?: boolean;
+  finishes?: { role: string; code?: string; name: string; hex: string }[];
   /** A custom item set on one drawn type (its pieces take it, whatever their kind). */
   typeId?: string;
 }
@@ -50,21 +57,39 @@ export interface MatchResult {
 
 const KIND_WORDS: [PieceKind, RegExp][] = [
   ['side-table', /\b(side|end|lamp|occasional|nesting|accent)\s*tables?\b/i],
-  ['sofa', /\b(sofas?|settees?|couch(es)?|loveseats?|benches|bench|banquettes?|chaise|sectional)\b/i],
+  ['sofa', /\b(sofas?|settees?|couch(es)?|loveseats?|benches|bench|banquettes?|booths?|chaise|sectional)\b/i],
   ['seat', /\b(chairs?|armchairs?|stools?|seat(ing)?|poufs?|ottomans?|recliners?|tub)\b/i],
   ['desk', /\b(desks?|workstations?|counters?|reception|work\s*tables?|bench\s*desks?)\b/i],
+  ['joinery', /\b(joinery|millwork|panell?ing|cladding|boiserie|kitchen\s*islands?|waterfall\s*islands?|island\s*(?:counters?|units?)|pantry|kitchenette|countertops?|feature\s*walls?|kiosks?)\b/i],
   ['table', /\b(tables?|tops?)\b/i],
   ['bed', /\b(beds?|bunks?|headboards?)\b/i],
-  ['storage', /\b(cabinets?|credenzas?|sideboards?|shelv(es|ing)|shelf|bookcases?|lockers?|wardrobes?|pedestals?|storage|cupboards?|drawers?)\b/i],
+  ['storage', /\b(cabinets?|credenzas?|sideboards?|shelv(es|ing)|shelf|bookcases?|lockers?|wardrobes?|closets?|armoires?|storage|cupboards?|drawers?)\b/i],
   ['plant', /\b(plants?|planters?|greenery|trees?|pots?)\b/i],
-  ['screen', /\b(tv|television|screens?|displays?|monitors?|signage)\b/i],
+  ['screen', /\b(tv|television|screens?|displays?|monitors?|signage|wall\s*art(?:work)?|framed\s*art(?:work)?)\b/i],
   ['sanitary', /\b(wc|toilets?|basins?|sinks?|urinals?|showers?|vanit(y|ies)|bidets?)\b/i],
+  ['equipment', /\b(equipment|appliances?|fridges?|refrigerators?|ovens?|hobs?|dishwashers?|microwaves?|copiers?|printers?)\b/i],
 ];
+
+const VALID_PIECE_KINDS = new Set<PieceKind>([
+  'seat', 'sofa', 'table', 'side-table', 'desk', 'bed', 'storage',
+  'plant', 'screen', 'sanitary', 'equipment', 'joinery',
+]);
 
 /** What a product line is, from its text and category. */
 export function productKind(text: string): PieceKind | null {
   for (const [k, re] of KIND_WORDS) if (re.test(text)) return k;
   return null;
+}
+
+/** Resolve a product's PieceKind from its description, explicit `designBuildKind`, or category. */
+export function resolveProductKind(
+  product: Pick<MatchProduct, 'description' | 'category' | 'designBuildKind'>,
+): PieceKind | null {
+  const fromDesc = productKind(product.description);
+  if (fromDesc) return fromDesc;
+  const dbKind = typeof product.designBuildKind === 'string' ? (product.designBuildKind.trim() as PieceKind) : undefined;
+  if (dbKind && VALID_PIECE_KINDS.has(dbKind)) return dbKind;
+  return productKind(`${product.category ?? ''}`);
 }
 
 /**
@@ -108,6 +133,10 @@ export function productHeight(text: string, dims?: { h?: number }): number | und
   const h = dims?.h ?? productDims(text)?.h;
   if (h && h >= 0.2 && h <= 3) return h;
   if (/\b(coffee|cocktail|low)\s*tables?\b/i.test(text)) return 0.42;
+  if (/\b(wardrobes?|closets?|armoires?)\b/i.test(text)) return 2.2;
+  if (/\b(booths?|acoustic\s*booths?|dining\s*booths?)\b/i.test(text)) return 1.32;
+  if (/\b(banquettes?)\b/i.test(text)) return 0.98;
+  if (/\b((?:kitchen|pantry|waterfall|stone|marble)\s*islands?|island\s*(?:counters?|units?))\b/i.test(text)) return 0.9;
   if (/\bhigh[\s-]*back(ed)?\b|\bwing\s*back\b|\bwingback\b|\bprivacy\s+(arm)?chairs?\b|\bacoustic\s+(arm)?chairs?\b/i.test(text)) return 1.25;
   if (/\b(bar|counter|high)\s*(stools?|chairs?)\b/i.test(text)) return 1.0;
   return undefined;
@@ -116,7 +145,7 @@ export function productHeight(text: string, dims?: { h?: number }): number | und
 const COMPATIBLE: Record<string, string[]> = {
   seat: ['seat'],
   sofa: ['sofa', 'seat'],
-  table: ['table', 'side-table', 'desk'],
+  table: ['table', 'side-table', 'desk', 'joinery'],
   'side-table': ['side-table', 'table'],
   desk: ['desk', 'table'],
   bed: ['bed'],
@@ -124,16 +153,52 @@ const COMPATIBLE: Record<string, string[]> = {
   plant: ['plant'],
   screen: ['screen'],
   sanitary: ['sanitary'],
+  joinery: ['joinery', 'storage', 'desk', 'table'],
+  equipment: ['equipment', 'storage'],
 };
 
-interface TypeGroup { typeId: string; kind: string; shape: string; w: number; d: number; pieceIds: string[] }
+const SUBTYPE_WORDS: [string, RegExp][] = [
+  ['wc', /\b(wc|w\.c\.|toilets?|water\s*closets?|commode)\b/i],
+  ['basin', /\b(basins?|lavator(y|ies)|wash\s*basins?|hand\s*basins?|vanit(y|ies)|sinks?)\b/i],
+  ['shower', /\b(showers?|shower\s*(trays?|enclosures?|cubicles?))\b/i],
+  ['bathtub', /\b(bath\s*tubs?|baths?)\b/i],
+  ['urinal', /\burinals?\b/i],
+  ['wardrobe', /\b(wardrobes?|closets?|armoires?)\b/i],
+  ['credenza', /\b(credenzas?|sideboards?)\b/i],
+  ['shelving', /\b(shelv(es|ing)|shelf|bookcases?|racks?)\b/i],
+  ['coffee-table', /\b(coffee|cocktail|low)\s*tables?\b/i],
+  ['meeting-table', /\b(meeting|conference|boardroom)\s*tables?\b/i],
+  ['dining-table', /\b(dining|canteen|cafe)\s*tables?\b/i],
+  ['stool', /\b(bar\s*)?stools?\b/i],
+  ['chair', /\b(task\s*chairs?|office\s*chairs?|swivel\s*(?:task|mesh|desk|operator)\s*chairs?|ergonomic\s*chairs?|operator\s*chairs?|staff\s*chairs?)\b/i],
+  ['armchair', /\b(armchairs?|lounge\s*chairs?|easy\s*chairs?|recliners?|tub\s*chairs?)\b/i],
+  ['booth', /\b(booths?|acoustic\s*booths?|dining\s*booths?|alcove\s*booths?|diner\s*booths?)\b/i],
+  ['banquette', /\b(banquettes?|built[\s-]*in\s*bench(?:es)?)\b/i],
+  ['bench', /\b(bench(es)?|banquettes?)\b/i],
+  ['retail-kiosk', /\b(retail\s*kiosks?|duty\s*free\s*counters?|vitrine\s*counters?|display\s*kiosks?)\b/i],
+  ['bar-counter', /\b(bar\s*counters?|refreshment\s*bars?|coffee\s*bars?)\b/i],
+  ['slat-screen', /\b(slat\s*(?:privacy\s*)?screens?|vertical\s*louver\s*partitions?)\b/i],
+  ['wall-art', /\b(wall\s*art(?:work)?|framed\s*art(?:work)?|gallery\s*art|bas[\s-]*relief|mural)\b/i],
+  ['reception-counter', /\breception\s*(counters?|desks?)\b/i],
+  ['island', /\b((?:kitchen|pantry|waterfall|stone|marble|hospitality|prep)\s*islands?|island\s*(?:counters?|units?|bars?|tables?))\b/i],
+  ['kitchen-counter', /\b(kitchen|pantry)\s*(counters?|units?|cabinets?)\b/i],
+];
+
+function productSubtype(text: string): string | null {
+  for (const [sub, re] of SUBTYPE_WORDS) if (re.test(text)) return sub;
+  return null;
+}
+
+interface TypeGroup { typeId: string; kind: string; subtype?: string; room?: string; shape: string; w: number; d: number; pieceIds: string[] }
+
+const NON_WC_KINDS = new Set(['seat', 'sofa', 'table', 'side-table', 'desk', 'bed']);
 
 export function matchProducts(pieces: MatchPiece[], products: MatchProduct[]): MatchResult {
   const types = new Map<string, TypeGroup>();
   for (const p of pieces) {
     const key = p.typeId || p.id;
     let t = types.get(key);
-    if (!t) types.set(key, (t = { typeId: key, kind: String(p.kind), shape: p.shape, w: p.widthM, d: p.depthM, pieceIds: [] }));
+    if (!t) types.set(key, (t = { typeId: key, kind: String(p.kind), subtype: p.subtype, ...(p.room ? { room: p.room } : {}), shape: p.shape, w: p.widthM, d: p.depthM, pieceIds: [] }));
     t.pieceIds.push(p.id);
   }
 
@@ -154,17 +219,25 @@ export function matchProducts(pieces: MatchPiece[], products: MatchProduct[]): M
 
   const candidates: { score: number; product: MatchProduct; type: TypeGroup }[] = [];
   for (const product of products) {
-    if (product.typeId) continue;
+    if (product.typeId || product.placeable3D === false) continue;
     const text = `${product.category ?? ''} ${product.description}`;
-    // The line's own words first (the BOQ text), then its catalogue category.
-    const kind = productKind(product.description) ?? productKind(`${product.category ?? ''}`);
+    // The line's own words first (the BOQ text), then its catalogue category, then structured designBuildKind.
+    const kind = resolveProductKind(product);
     if (!kind) continue;
+    const pSub = product.subtype || productSubtype(product.description) || productSubtype(`${product.category ?? ''}`);
     const dims = product.dims?.w && product.dims?.d ? { w: product.dims.w, d: product.dims.d } : productDims(product.description);
     for (const t of types.values()) {
+      if (t.room === 'wc' && NON_WC_KINDS.has(kind)) continue;
       const ok = COMPATIBLE[kind] ?? [kind];
       const rank = ok.indexOf(t.kind);
       if (rank < 0) continue;
       let score = rank === 0 ? 10 : 6;
+      if (pSub && t.subtype) {
+        if (pSub === t.subtype) score += 2.5;
+        else if (t.kind === 'sanitary' || t.kind === 'storage') score -= 4;
+        else if ((pSub === 'chair' && t.subtype === 'armchair') || (pSub === 'armchair' && t.subtype === 'chair')) score -= 3.5;
+        else score -= 1;
+      }
       if (dims) {
         const dw = Math.abs(dims.w - t.w) / Math.max(dims.w, t.w);
         const dd = Math.abs(dims.d - t.d) / Math.max(dims.d, t.d);
@@ -172,9 +245,9 @@ export function matchProducts(pieces: MatchPiece[], products: MatchProduct[]): M
       } else score -= 2;
       const qty = Math.max(1, product.qty);
       score -= (4 * Math.abs(qty - t.pieceIds.length)) / Math.max(qty, t.pieceIds.length);
-      if (/\bcurved|\bc-shaped|\barc\b|\bcrescent/i.test(text) && t.shape === 'curved') score += 3;
-      if (/\bround|\bcircular|\bø|\bdia/i.test(text) && t.shape === 'round') score += 2;
-      if (/\bl-shaped|\bcorner|\bl shape/i.test(text) && t.shape === 'l-shape') score += 3;
+      if ((product.shape === 'curved' || /\bcurved|\bc-shaped|\barc\b|\bcrescent/i.test(text)) && t.shape === 'curved') score += 3;
+      if ((product.shape === 'round' || /\bround|\bcircular|\bø|\bdia/i.test(text)) && t.shape === 'round') score += 2;
+      if ((product.shape === 'l-shape' || /\bl-shaped|\bcorner|\bl shape/i.test(text)) && t.shape === 'l-shape') score += 3;
       candidates.push({ score, product, type: t });
     }
   }
@@ -184,6 +257,7 @@ export function matchProducts(pieces: MatchPiece[], products: MatchProduct[]): M
     if (c.score < 1 || usedTypes.has(c.type.typeId)) continue;
     const m = placed.get(c.product.id)!;
     if (m.placed >= m.qty) continue;
+    if (m.placed > 0 && m.placed + c.type.pieceIds.length > Math.ceil(m.qty * 1.15) + 1) continue;
     usedTypes.add(c.type.typeId);
     m.typeIds.push(c.type.typeId);
     m.placed += c.type.pieceIds.length;

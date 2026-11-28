@@ -46,6 +46,8 @@ export interface ProgressiveBuildV3Props {
   fileName?: string;
   /** Photoreal render shortcut, shown once the model is ready. */
   onRender?: () => void;
+  /** Open the export suite rail once the model is ready. */
+  onExport?: () => void;
   /** Hide while another right-side panel is open. */
   hidden?: boolean;
 }
@@ -115,7 +117,7 @@ export function guideSignalApplicable(
   return true;
 }
 
-export function ProgressiveBuildV3({ active, stages, review, onCancel, onAcceptReview, onRetryFurniture, wallMap, structural, detail, fileName, onRender, hidden }: ProgressiveBuildV3Props) {
+export function ProgressiveBuildV3({ active, stages, review, onCancel, onAcceptReview, onRetryFurniture, wallMap, structural, detail, fileName, onRender, onExport, hidden }: ProgressiveBuildV3Props) {
   const [collapsed, setCollapsed] = React.useState(false);
   const [showReview, setShowReview] = React.useState(false);
   if (!active || hidden) return null;
@@ -172,6 +174,7 @@ export function ProgressiveBuildV3({ active, stages, review, onCancel, onAcceptR
       onToggleCollapse={() => setCollapsed((v) => !v)}
       onCancel={onCancel}
       onRender={onRender}
+      onExport={onExport}
       ariaLabel="AI build progress"
     >
       {review.length > 0 && (

@@ -183,8 +183,7 @@
   border-radius: 12px;
   background: #f8f9fc;
 }
-.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 1px; }
-.chips::-webkit-scrollbar { display: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding-bottom: 1px; }
 .chip {
   flex: none;
   display: inline-flex;
@@ -453,7 +452,7 @@
 .lightbox {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 2147483000;
   display: grid;
   place-items: center;
   padding: 24px;

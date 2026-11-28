@@ -17,6 +17,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@pascal-app/core': path.resolve(__dirname, 'test-stubs/pascal-core.ts'),
+      '@pascal-app/editor/catalog': path.resolve(__dirname, 'node_modules/@pascal-app/editor/src/components/ui/item-catalog/catalog-items.tsx'),
     },
   },
 });

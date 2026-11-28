@@ -36,6 +36,8 @@ import {
 } from 'lucide-react';
 import { useSelectionActionStore } from './selection-action-store';
 import { getSemanticActionsForNode } from './action-matrix';
+import { closeWallGapsAndExtend, syncManualWallTreatmentsToScene } from '../furniture/architectural-features';
+import { notifySceneMutated } from '../viewer-interaction/scene-history';
 
 interface DependencyConfirmationState {
   title: string;
@@ -46,7 +48,8 @@ interface DependencyConfirmationState {
 }
 
 export function SelectionActionBarDOM() {
-  const { screenX, screenY, visible, selectedId, nodeType } = useSelectionActionStore();
+  const { screenX, screenY, visible, selectedId, nodeType, studioExpanded, toggleStudioExpanded } =
+    useSelectionActionStore();
   const node = useScene((s) => (selectedId ? (s.nodes[selectedId as AnyNodeId] ?? null) : null));
   const mode = useEditor((s) => s.mode);
   const isFloorplanHovered = useEditor((s) => s.isFloorplanHovered);
@@ -79,6 +82,8 @@ export function SelectionActionBarDOM() {
           modifiedAt: Date.now(),
         },
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -101,6 +106,8 @@ export function SelectionActionBarDOM() {
           modifiedAt: Date.now(),
         },
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -142,7 +149,9 @@ export function SelectionActionBarDOM() {
 
       const state = useScene.getState();
       state.createNode(duplicate, (item.parentId ?? undefined) as AnyNodeId);
+      state.markDirty?.(newId as AnyNodeId);
       useViewer.getState().setSelection({ selectedIds: [newId] });
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -153,6 +162,7 @@ export function SelectionActionBarDOM() {
       if (!selectedId || !node || node.type !== 'item') return;
       useScene.getState().deleteNode(selectedId as AnyNodeId);
       useViewer.getState().resetSelection();
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -322,6 +332,24 @@ export function SelectionActionBarDOM() {
     [selectedId, node],
   );
 
+  const handleToggleEditFinishes = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      toggleStudioExpanded();
+    },
+    [toggleStudioExpanded],
+  );
+
+  const handleWallCloseGaps = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const ids = useViewer.getState().selection.selectedIds;
+      const targetIds = ids.length > 0 ? ids : selectedId ? [selectedId] : [];
+      if (targetIds.length > 0) closeWallGapsAndExtend(targetIds);
+    },
+    [selectedId],
+  );
+
   // -------------------------------------------------------------
   // SLAB HANDLERS
   // -------------------------------------------------------------
@@ -334,6 +362,8 @@ export function SelectionActionBarDOM() {
       useScene.getState().updateNode(selectedId as AnyNodeId, {
         polygon: newPolygon,
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -358,7 +388,9 @@ export function SelectionActionBarDOM() {
       };
 
       useScene.getState().createNode(duplicate, (slab.parentId ?? undefined) as AnyNodeId);
+      useScene.getState().markDirty?.(newId as AnyNodeId);
       useViewer.getState().setSelection({ selectedIds: [newId] });
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -389,6 +421,8 @@ export function SelectionActionBarDOM() {
       useScene.getState().updateNode(selectedId as AnyNodeId, {
         polygon: newPolygon,
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -419,6 +453,8 @@ export function SelectionActionBarDOM() {
       useScene.getState().updateNode(selectedId as AnyNodeId, {
         polygon: newPolygon,
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -440,6 +476,7 @@ export function SelectionActionBarDOM() {
             useScene.getState().deleteNode(selectedId as AnyNodeId);
             useViewer.getState().resetSelection();
             setDependencyConfirm(null);
+            notifySceneMutated();
           },
         });
         return;
@@ -447,6 +484,7 @@ export function SelectionActionBarDOM() {
 
       useScene.getState().deleteNode(selectedId as AnyNodeId);
       useViewer.getState().resetSelection();
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -454,6 +492,12 @@ export function SelectionActionBarDOM() {
   // -------------------------------------------------------------
   // WALL HANDLERS
   // -------------------------------------------------------------
+  const refreshWallGeometry = useCallback((wallId: string) => {
+    const sceneState = useScene.getState();
+    sceneState.markDirty?.(wallId as AnyNodeId);
+    notifySceneMutated();
+  }, []);
+
   const handleWallNudge = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -463,8 +507,9 @@ export function SelectionActionBarDOM() {
         start: [wall.start[0] + 0.5, wall.start[1] + 0.5],
         end: [wall.end[0] + 0.5, wall.end[1] + 0.5],
       });
+      refreshWallGeometry(selectedId);
     },
-    [selectedId, node],
+    [selectedId, node, refreshWallGeometry],
   );
 
   const handleWallDuplicate = useCallback(
@@ -489,8 +534,9 @@ export function SelectionActionBarDOM() {
 
       useScene.getState().createNode(duplicate, (wall.parentId ?? undefined) as AnyNodeId);
       useViewer.getState().setSelection({ selectedIds: [newId] });
+      refreshWallGeometry(newId);
     },
-    [selectedId, node],
+    [selectedId, node, refreshWallGeometry],
   );
 
   const handleWallRotateLeft = useCallback(
@@ -510,8 +556,9 @@ export function SelectionActionBarDOM() {
         start: [mx - sy, my + sx],
         end: [mx - ey, my + ex],
       });
+      refreshWallGeometry(selectedId);
     },
-    [selectedId, node],
+    [selectedId, node, refreshWallGeometry],
   );
 
   const handleWallRotateRight = useCallback(
@@ -531,8 +578,9 @@ export function SelectionActionBarDOM() {
         start: [mx + sy, my - sx],
         end: [mx + ey, my - ex],
       });
+      refreshWallGeometry(selectedId);
     },
-    [selectedId, node],
+    [selectedId, node, refreshWallGeometry],
   );
 
   const handleWallDelete = useCallback(
@@ -557,6 +605,7 @@ export function SelectionActionBarDOM() {
             state.deleteNode(selectedId as AnyNodeId);
             useViewer.getState().resetSelection();
             setDependencyConfirm(null);
+            notifySceneMutated();
           },
         });
         return;
@@ -564,6 +613,7 @@ export function SelectionActionBarDOM() {
 
       useScene.getState().deleteNode(selectedId as AnyNodeId);
       useViewer.getState().resetSelection();
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -580,6 +630,9 @@ export function SelectionActionBarDOM() {
       useScene.getState().updateNode(selectedId as AnyNodeId, {
         position: [pos[0] + 0.25, pos[1], pos[2]],
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      if (door.parentId) useScene.getState().markDirty?.(door.parentId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -610,8 +663,11 @@ export function SelectionActionBarDOM() {
         state.updateNode(door.parentId as AnyNodeId, {
           children: [...(hostWall.children || []), newId],
         });
+        state.markDirty?.(door.parentId as AnyNodeId);
       }
+      state.markDirty?.(newId as AnyNodeId);
       useViewer.getState().setSelection({ selectedIds: [newId] });
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -624,6 +680,8 @@ export function SelectionActionBarDOM() {
       useScene.getState().updateNode(selectedId as AnyNodeId, {
         hingesSide: door.hingesSide === 'left' ? 'right' : 'left',
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -636,6 +694,8 @@ export function SelectionActionBarDOM() {
       useScene.getState().updateNode(selectedId as AnyNodeId, {
         swingDirection: door.swingDirection === 'inward' ? 'outward' : 'inward',
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -648,6 +708,8 @@ export function SelectionActionBarDOM() {
       useScene.getState().updateNode(selectedId as AnyNodeId, {
         side: door.side === 'front' ? 'back' : 'front',
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -670,6 +732,7 @@ export function SelectionActionBarDOM() {
           state.updateNode(door.parentId as AnyNodeId, {
             children: (oldWall.children || []).filter((id) => id !== selectedId),
           });
+          state.markDirty?.(door.parentId as AnyNodeId);
         }
         state.updateNode(targetWall.id as AnyNodeId, {
           children: [...(targetWall.children || []), selectedId],
@@ -678,6 +741,9 @@ export function SelectionActionBarDOM() {
           parentId: targetWall.id,
           position: [0.5, door.position?.[1] ?? 1.05, 0],
         });
+        state.markDirty?.(targetWall.id as AnyNodeId);
+        state.markDirty?.(selectedId as AnyNodeId);
+        notifySceneMutated();
       }
     },
     [selectedId, node],
@@ -694,9 +760,11 @@ export function SelectionActionBarDOM() {
         state.updateNode(door.parentId as AnyNodeId, {
           children: (host.children || []).filter((id) => id !== selectedId),
         });
+        state.markDirty?.(door.parentId as AnyNodeId);
       }
       state.deleteNode(selectedId as AnyNodeId);
       useViewer.getState().resetSelection();
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -713,6 +781,9 @@ export function SelectionActionBarDOM() {
       useScene.getState().updateNode(selectedId as AnyNodeId, {
         position: [pos[0] + 0.25, pos[1], pos[2]],
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      if (windowNode.parentId) useScene.getState().markDirty?.(windowNode.parentId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -743,8 +814,11 @@ export function SelectionActionBarDOM() {
         state.updateNode(windowNode.parentId as AnyNodeId, {
           children: [...(hostWall.children || []), newId],
         });
+        state.markDirty?.(windowNode.parentId as AnyNodeId);
       }
+      state.markDirty?.(newId as AnyNodeId);
       useViewer.getState().setSelection({ selectedIds: [newId] });
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -757,6 +831,8 @@ export function SelectionActionBarDOM() {
       useScene.getState().updateNode(selectedId as AnyNodeId, {
         side: windowNode.side === 'front' ? 'back' : 'front',
       });
+      useScene.getState().markDirty?.(selectedId as AnyNodeId);
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -778,6 +854,7 @@ export function SelectionActionBarDOM() {
           state.updateNode(windowNode.parentId as AnyNodeId, {
             children: (oldWall.children || []).filter((id) => id !== selectedId),
           });
+          state.markDirty?.(windowNode.parentId as AnyNodeId);
         }
         state.updateNode(targetWall.id as AnyNodeId, {
           children: [...(targetWall.children || []), selectedId],
@@ -786,6 +863,9 @@ export function SelectionActionBarDOM() {
           parentId: targetWall.id,
           position: [0.5, windowNode.position?.[1] ?? 1.5, 0],
         });
+        state.markDirty?.(targetWall.id as AnyNodeId);
+        state.markDirty?.(selectedId as AnyNodeId);
+        notifySceneMutated();
       }
     },
     [selectedId, node],
@@ -802,9 +882,11 @@ export function SelectionActionBarDOM() {
         state.updateNode(windowNode.parentId as AnyNodeId, {
           children: (host.children || []).filter((id) => id !== selectedId),
         });
+        state.markDirty?.(windowNode.parentId as AnyNodeId);
       }
       state.deleteNode(selectedId as AnyNodeId);
       useViewer.getState().resetSelection();
+      notifySceneMutated();
     },
     [selectedId, node],
   );
@@ -872,6 +954,7 @@ export function SelectionActionBarDOM() {
         if (actionId === 'delete') return handleGuideDelete;
         break;
       case 'slab':
+        if (actionId === 'edit-finishes') return handleToggleEditFinishes;
         if (actionId === 'move') return handleSlabMove;
         if (actionId === 'duplicate') return handleSlabDuplicate;
         if (actionId === 'rotate-left-90') return handleSlabRotateLeft;
@@ -879,6 +962,8 @@ export function SelectionActionBarDOM() {
         if (actionId === 'delete') return handleSlabDelete;
         break;
       case 'wall':
+        if (actionId === 'edit-finishes') return handleToggleEditFinishes;
+        if (actionId === 'close-gaps') return handleWallCloseGaps;
         if (actionId === 'nudge') return handleWallNudge;
         if (actionId === 'duplicate') return handleWallDuplicate;
         if (actionId === 'rotate-left-90') return handleWallRotateLeft;
@@ -1092,8 +1177,9 @@ export function SelectionActionBarDOM() {
               const isOpacityActive = action.id === 'opacity' && guidePopover === 'opacity';
               const isNudgeActive = action.id === 'nudge-menu' && guidePopover === 'nudge';
               const isHidden = action.id === 'visibility-toggle' && (node.visible === false);
+              const isEditActive = action.id === 'edit-finishes' && studioExpanded;
 
-              const isActive = isGuideInverted || isOpacityActive || isNudgeActive || isHidden;
+              const isActive = isGuideInverted || isOpacityActive || isNudgeActive || isHidden || isEditActive;
 
               let iconToRender = action.icon;
               if (action.id === 'visibility-toggle' && node.visible === false) {

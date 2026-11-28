@@ -72,7 +72,18 @@ export { detectCurvedWalls, curvedWallPieces, curvedBandUnder, CURVED_WALL_DEFAU
 export type { CurvedWallConfig, CurvedWallSegment, CurvedWallPiece, CurvedPod, CurvedPodDoor, CurvedWallResult, CurvedWallKind } from './curved-walls';
 export { detectGlassPartitions, alongWalls, GLASS_DEFAULTS } from './glass-partitions';
 export { detectFurniture, classifyPiece, isFurnitureLayer, furnitureFamily, furnitureTextsFromStructuredText, FURNITURE_DEFAULTS } from './furniture-blocks';
-export type { FurnitureConfig, FurnitureFamily, FurnitureKind, FurniturePiece, FurnitureResult, FurnitureShape, FurnitureText, FurnitureType } from './furniture-blocks';
+export type { ArchitecturalZone, FurnitureConfig, FurnitureFamily, FurnitureKind, FurniturePiece, FurnitureResult, FurnitureShape, FurnitureText, FurnitureType } from './furniture-blocks';
+export {
+  acceptBroadCandidate,
+  classifySymbol,
+  clusterSymbols,
+  collectBroadCandidateVectors,
+  computeSymbolFingerprint,
+  extractSymbolSubParts,
+  findRectTableTops,
+  inferRoomContext,
+} from './furniture-symbols';
+export type { FurnitureSubtype, PieceSubPart, RoomContext, SubPartRole, SymbolFingerprint } from './furniture-symbols';
 export { pieceFacings, strokeAxis, arcWalls } from './furniture-facing';
 export type { Facing, FacingCue, FacingPiece, FacingWall } from './furniture-facing';
 export type { GlassConfig, GlassHostWall, GlassPartition, GlassResult, GlassSource, GlassStyle, GlassText } from './glass-partitions';

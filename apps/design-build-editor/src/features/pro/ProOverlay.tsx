@@ -294,7 +294,19 @@ export function ProOverlay({ onReturn, onFitProject, onFitSelection, onTopView, 
     useEditor.getState().setMode('select');
     useEditor.getState().setTool(null);
     useEditor.getState().setMovingNode(null);
-    return () => cancelAnimationFrame(r);
+    return () => {
+      cancelAnimationFrame(r);
+      useEditor.getState().setMode('select');
+      useEditor.getState().setTool(null);
+      useEditor.getState().setMovingNode(null);
+      try {
+        const vs = useViewer.getState() as { setCameraDragging?: (d: boolean) => void; setInputDragging?: (d: boolean) => void };
+        vs.setCameraDragging?.(false);
+        vs.setInputDragging?.(false);
+      } catch {
+        /* viewer store unavailable */
+      }
+    };
   }, []);
 
   // Global Escape & Delete keyboard handling

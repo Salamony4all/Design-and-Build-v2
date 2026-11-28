@@ -54,11 +54,14 @@ import { projectLabelFromFiles } from '@/components/dynamic-project-label';
 import { validateEvent } from 'design-build-extraction-ai';
 import type { BuildStage, ProgressiveBuildEvent, FurnitureCandidate } from 'design-build-extraction-ai';
 import { ExportRail, filterCommercialNodes } from '@/features/project-export/ExportRail';
+import { runStandaloneExport, type StandaloneExportKind, type StandaloneRenderEntry } from '@/features/project-export/standalone-export-suite';
+import { computeSceneGeometricTakeoff, synthesizeStandaloneBoqFromTakeoff, type GeometricTakeoff, type StandaloneBoqRow } from '@/features/boq/geometric-takeoff';
+import type { ProjectPlanMetaInput } from '@/features/project-export/dynamic-project-planner';
 import { isEmbedded, useEmbedBridge, countSceneNodes, type EmbedProduct } from '@/features/embed/embed-bridge';
 import { selectDoorInstallerInput, type RuntimeWallMap } from '@/features/door-pilot/door-boundary';
 import { getPascalStores, ensureBuiltinPluginLoaded, type ViewerHandle } from 'design-build-simplified-viewer-shell';
 import { RenderStudio, type RenderProgressInfo } from '@/features/render/RenderStudio';
-import { captureViewForRender, readPlanUnderlay } from '@/features/render/capture-view';
+import { captureViewForRender, isCameraInsideBuilding, readPlanUnderlay } from '@/features/render/capture-view';
 import { RENDER_COMPLETE_EVENT, type RenderJobResult } from '@/features/render/render-client';
 import { productRefs } from '@/features/furniture/product-refs';
 import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
@@ -1143,12 +1146,11 @@ export default function Home() {
     viewModeRef.current = 'walk';
     autoFramedRef.current = false;
     setWalkLens(walkLensRef.current);
-    // Walking is for looking: taps do not select (a selection sheet popping up
-    // on the first tap of a double tap would cover the floor you aim at).
+    // Walk mode stays selectable on desktop click; touch single-taps walk (double-tap walks on desktop).
     try {
       const vs = useViewer.getState() as { setCameraDragging?: (d: boolean) => void; setSelection?: (s: { selectedIds: string[] }) => void };
       vs.setSelection?.({ selectedIds: [] });
-      vs.setCameraDragging?.(true);
+      vs.setCameraDragging?.(false);
       (useViewer as unknown as { setState: (p: Record<string, unknown>) => void }).setState({ hoveredId: null });
     } catch {
       /* viewer store unavailable */
@@ -1989,10 +1991,10 @@ export default function Home() {
     });
     activeStagedHandleRef.current = handle;
     if (bufferedWindowDraftsRef.current.length > 0) {
-      handle.setWindowDrafts(bufferedWindowDraftsRef.current);
+      handle.setWindowDrafts?.(bufferedWindowDraftsRef.current);
     }
     if (bufferedDoorDraftsRef.current.length > 0) {
-      handle.setDoorDrafts(bufferedDoorDraftsRef.current);
+      handle.setDoorDrafts?.(bufferedDoorDraftsRef.current);
     }
 
     handle.onEvent(async (e) => {
@@ -2001,12 +2003,8 @@ export default function Home() {
         const ctl = framingCtl.current;
         ctl.importCompleted = true;
 
-        if (windowDrafts.length > 0 || bufferedWindowDraftsRef.current.length > 0) {
-          DIAG.windowsInstalledNodes = windowDrafts.length || bufferedWindowDraftsRef.current.length;
-        }
-        if (doorDrafts.length > 0 || bufferedDoorDraftsRef.current.length > 0) {
-          DIAG.installedDoors = doorDrafts.length || bufferedDoorDraftsRef.current.length;
-        }
+        DIAG.windowsInstalledNodes = windowDrafts.length || bufferedWindowDraftsRef.current.length;
+        DIAG.installedDoors = doorDrafts.length || bufferedDoorDraftsRef.current.length;
 
         viewerHandleRef.current?.invalidate();
         requestAnimationFrame(() => {
@@ -2089,8 +2087,31 @@ export default function Home() {
       push({ type: 'extraction-progress', event: { phase: 'slab', progress: 0.25, message: 'Measuring wall thicknesses' } });
       isStreamingExtractionRef.current = true;
       liveGuideRef.current = { nodeId: null, url: null };
+      windowSpecsRef.current = [];
+      windowAuditRef.current = null;
+      doorManifestRef.current = null;
+      doorSpecsRef.current = [];
       bufferedWindowDraftsRef.current = [];
       bufferedDoorDraftsRef.current = [];
+      DIAG.originalWallCount = 0;
+      DIAG.completionWallCount = 0;
+      DIAG.finalizedWallCount = 0;
+      DIAG.committedWalls = 0;
+      DIAG.expectedWalls = 0;
+      DIAG.curvedWallCount = 0;
+      DIAG.windowsExtracted = 0;
+      DIAG.windowsEligible = 0;
+      DIAG.windowsInstalledNodes = 0;
+      DIAG.windowInstallResults = null;
+      DIAG.doorsAutoInstallable = 0;
+      DIAG.installedDoors = 0;
+      DIAG.doorInstallResults = null;
+      void import('@/features/furniture/architectural-features')
+        .then((m) => {
+          m.resetArchitecturalFeaturesState();
+          m.clearArchitecturalFeaturesGroup();
+        })
+        .catch(() => {});
       const res = await fetch('/api/extraction/mupdf?stream=true', {
         method: 'POST',
         headers: { 'content-type': 'application/pdf', 'accept': 'application/x-ndjson' },
@@ -2552,21 +2573,20 @@ export default function Home() {
       try {
         const res = await fetch(guideDataUrl);
         const blob = await res.blob();
-        const file = new File([blob], `${source.name.replace(/\.[^/.]+$/, '')}-plan-guide.png`, { type: 'image/png' });
+        const planBase = (fileName || 'ai-plan').replace(/\.[^/.]+$/, '');
+        const file = new File([blob], `${planBase}-plan-guide.png`, { type: 'image/png' });
         const id = crypto.randomUUID();
         attachmentRepository.put(id, file);
         activeGuideAttachmentRef.current = {
           id,
           kind: 'image',
-          name: `Floor Plan Guide (${source.name})`,
+          name: `Floor Plan Guide (${fileName || 'AI Plan'})`,
           byteSize: file.size,
           mime: 'image/png',
         };
       } catch (err) {
         console.warn('Failed to cache AI guide attachment:', err);
       }
-    } else if (source.kind === 'image') {
-      activeGuideAttachmentRef.current = source;
     }
     if (!guideVerified.ok && bytes && bytes.length) {
       // Non-fatal: keep the model; do NOT pass raw/PDF bytes to TextureLoader.
@@ -3189,7 +3209,7 @@ export default function Home() {
       extractionAbortRef.current?.abort();
     }
     if (cmd.type === 'export') {
-      setTimeout(() => push({ type: 'export-ready', kind: cmd.kind, url: `#mock-${cmd.kind}` }), 250);
+      void exportDispatchRef.current?.(cmd.kind as StandaloneExportKind);
     }
     if (cmd.type === 'start-render') {
       push({ type: 'render-started', renderId: 'mock-render-1' });
@@ -3419,7 +3439,19 @@ export default function Home() {
   // RIGHT-SIDE PANEL EXCLUSIVITY: exactly ONE expanded right rail at a time.
   // 'progress' during construction / compact summary after completion;
   // 'export' only when the user explicitly opens the export suite.
+  const exportDispatchRef = useRef<((kind: StandaloneExportKind) => Promise<void>) | null>(null);
   const [rightRail, setRightRail] = useState<'progress' | 'export'>('progress');
+  const [standaloneRenders, setStandaloneRenders] = useState<StandaloneRenderEntry[]>([]);
+  const [standaloneTakeoff, setStandaloneTakeoff] = useState<GeometricTakeoff | null>(null);
+  const [standaloneBoq, setStandaloneBoq] = useState<StandaloneBoqRow[]>([]);
+  const [projectMeta, setProjectMeta] = useState<ProjectPlanMetaInput & { company?: string }>({
+    company: 'Design & Build Studio',
+    currency: 'OMR',
+    vatPercent: 5,
+  });
+  const [exportBusy, setExportBusy] = useState(false);
+  const [exportStatus, setExportStatus] = useState<string | null>(null);
+  const [exportError, setExportError] = useState<string | null>(null);
   // Completion card is nonblocking and dismissible.
   const [completionDismissed, setCompletionDismissed] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -3437,9 +3469,19 @@ export default function Home() {
   const startOver = useCallback(() => {
     if (!confirmNew) {
       setConfirmNew(true);
-      window.setTimeout(() => setConfirmNew(false), 4000);
+      window.setTimeout(() => setConfirmNew(false), 12000);
       return;
     }
+    planFurnitureRef.current = null;
+    furnitureInstalledRef.current = null;
+    void import('@/features/furniture/architectural-features')
+      .then((m) => {
+        m.resetArchitecturalFeaturesState();
+        m.clearArchitecturalFeaturesGroup();
+      })
+      .catch(() => {});
+    void import('@/features/furniture/plan-furniture').then((m) => m.disposePlanFurnitureAssets()).catch(() => {});
+    void import('@/features/furniture/product-cards').then((c) => c.disposeProductCutouts()).catch(() => {});
     window.location.reload();
   }, [confirmNew]);
   // The ✨ Render entry appears as soon as the live scene has walls (any pipeline).
@@ -3636,13 +3678,16 @@ export default function Home() {
             });
           }
         }
+        const { computeSceneGeometricTakeoff } = await import('@/features/boq/geometric-takeoff');
+        const commercialNodes = filterCommercialNodes(nodes);
         embedPostRef.current('artifacts', {
           requestId,
           planName: embedPlanNameRef.current,
           planImage,
           views,
           placements,
-          scene: JSON.stringify(filterCommercialNodes(nodes)),
+          takeoff: computeSceneGeometricTakeoff(commercialNodes, furnitureInstalledRef.current),
+          scene: JSON.stringify(commercialNodes),
           counts: countSceneNodes(nodes),
         });
       })();
@@ -3671,7 +3716,13 @@ export default function Home() {
   useEffect(() => {
     if (!embedded || !isBuildComplete) return;
     const nodes = (getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, unknown> }).nodes;
-    embedPost('model-ready', { planName: embedPlanNameRef.current, counts: countSceneNodes(nodes) });
+    void import('@/features/boq/geometric-takeoff').then(({ computeSceneGeometricTakeoff }) => {
+      embedPost('model-ready', {
+        planName: embedPlanNameRef.current,
+        counts: countSceneNodes(nodes),
+        takeoff: computeSceneGeometricTakeoff(nodes, furnitureInstalledRef.current),
+      });
+    });
   }, [embedded, embedPost, isBuildComplete]);
   // Furniture: once the model is complete, the drawn pieces go in as stand-ins, then
   // BOQ Flow's products (when any have arrived) are attached to the pieces they match.
@@ -3683,15 +3734,17 @@ export default function Home() {
     try {
       const mod = await import('@/features/furniture/plan-furniture');
       const res = await mod.applyProducts(f, items);
-      // The products' own photos stand on their pads (kept in place as the scene changes).
+      // Real BOQ product photos stand on their thin colour pads when available; Pascal .glb & custom joinery handle the rest.
       const cards = await import('@/features/furniture/product-cards');
       cards.keepProductCards(() => viewerHandleRef.current?.invalidate());
-      // Lines that are furniture but found no place (the others — finishes, lights… — are not furniture).
-      const { productKind } = await import('@/features/furniture/match-products');
+      // Lines that are furniture or bespoke joinery (excluding wall/glazing/ceiling finishes already bound onto architecture) that found no place.
+      const { resolveProductKind } = await import('@/features/furniture/match-products');
       const byId = new Map(items.map((p) => [p.id, p]));
+      const archHandled = new Set(res.handledArchitecturalIds ?? []);
       const unplacedFurnitureIds = res.match.unplacedProductIds.filter((id) => {
+        if (archHandled.has(id)) return false;
         const p = byId.get(id);
-        return !!p && !!(productKind(p.description) ?? productKind(p.category ?? ''));
+        return !!p && !!resolveProductKind(p);
       });
       embedPostRef.current('furnished', {
         withPhotos: res.withPhotos,
@@ -3716,10 +3769,30 @@ export default function Home() {
         const mod = await import('@/features/furniture/plan-furniture');
         const r = await mod.installPlanFurniture(f);
         console.log(`[plan-furniture] ${r.installed} pieces placed from the drawing.`);
+        const nodes = (getPascalStores().useScene.getState() as unknown as { nodes?: Record<string, unknown> }).nodes;
+        const { computeSceneGeometricTakeoff } = await import('@/features/boq/geometric-takeoff');
         embedPostRef.current('furniture-ready', {
           pieces: r.installed,
+          takeoff: computeSceneGeometricTakeoff(nodes, f),
           // typeId lets BOQ Flow set a custom item on one drawn type (a piece with no product line).
-          schedule: (f.types ?? []).map((t) => ({ typeId: t.id, kind: t.kind, shape: t.shape, widthM: t.widthM, depthM: t.depthM, count: t.count })),
+          schedule: (f.types ?? []).map((t) => ({
+            typeId: t.id,
+            kind: t.kind,
+            ...(t.subtype ? { subtype: t.subtype } : {}),
+            ...(t.customModel ? { customModel: true } : {}),
+            shape: t.shape,
+            widthM: t.widthM,
+            depthM: t.depthM,
+            count: t.count,
+          })),
+          zones: (f.zones ?? []).map((z) => ({
+            zoneId: z.id,
+            kind: z.kind,
+            shape: z.shape,
+            widthM: z.widthM,
+            depthM: z.depthM,
+            ...(z.label ? { label: z.label } : {}),
+          })),
         });
         await furnishWithProducts();
       } catch (e) {
@@ -3727,12 +3800,23 @@ export default function Home() {
       }
     })();
   }, [isBuildComplete, planFurnitureTick, furnishWithProducts]);
-  // Each finished render goes to BOQ Flow, where it can be approved for the export suite.
+  // Each finished render is kept locally for standalone exports and sent to BOQ Flow when embedded.
   useEffect(() => {
-    if (!embedded) return;
     const onRender = (e: Event) => {
       const r = (e as CustomEvent<RenderJobResult>).detail;
       if (!r?.imageUrl) return;
+      setStandaloneRenders((prev) => [
+        {
+          id: r.renderId,
+          imageUrl: r.imageUrl,
+          viewKind: r.view?.viewKind,
+          style: r.style,
+          modelLabel: r.modelLabel,
+          score: r.fidelity?.score,
+        },
+        ...prev.filter((item) => item.id !== r.renderId),
+      ]);
+      if (!embedded) return;
       embedPostRef.current('render-ready', {
         renderId: r.renderId,
         image: r.imageUrl,
@@ -3749,6 +3833,45 @@ export default function Home() {
     window.addEventListener(RENDER_COMPLETE_EVENT, onRender);
     return () => window.removeEventListener(RENDER_COMPLETE_EVENT, onRender);
   }, [embedded]);
+
+  const computeAndSyncStandaloneTakeoff = useCallback(() => {
+    try {
+      const nodes = filterCommercialNodes((getPascalStores().useScene.getState().nodes ?? {}) as Record<string, unknown>);
+      const t = computeSceneGeometricTakeoff(nodes, planFurnitureRef.current);
+      setStandaloneTakeoff(t);
+      setStandaloneBoq((prev) => (prev.length ? prev : synthesizeStandaloneBoqFromTakeoff(t)));
+    } catch { /* ignore */ }
+  }, []);
+
+  const handleStandaloneExport = useCallback(async (kind: StandaloneExportKind) => {
+    if (exportBusy) return;
+    setExportBusy(true);
+    setExportError(null);
+    setExportStatus(`Preparing ${kind}…`);
+    try {
+      const res = await runStandaloneExport(kind, {
+        viewerHandle: viewerHandleRef.current,
+        projectMeta: {
+          ...projectMeta,
+          projectName: projectMeta.projectName || (DIAG.uploadedFileName ? String(DIAG.uploadedFileName).replace(/\.[^.]+$/, '') : 'Design & Build Project'),
+        },
+        planFileName: DIAG.uploadedFileName ? String(DIAG.uploadedFileName) : undefined,
+        sourcePdfBytes: extractionBytesRef.current,
+        planFurniture: planFurnitureRef.current,
+        boqRows: standaloneBoq,
+        takeoff: standaloneTakeoff,
+        renders: standaloneRenders,
+        onProgress: (msg) => setExportStatus(msg),
+      });
+      setExportStatus(`Saved ${res.filename}`);
+    } catch (err) {
+      setExportError(err instanceof Error ? err.message : String(err));
+      setExportStatus(null);
+    } finally {
+      setExportBusy(false);
+    }
+  }, [exportBusy, projectMeta, standaloneBoq, standaloneTakeoff, standaloneRenders]);
+  exportDispatchRef.current = handleStandaloneExport;
   // What the user is doing here, for BOQ Flow's modal: it tucks its status away
   // while the user chats, types a prompt or watches a render come in.
   const [composing, setComposing] = useState(false);
@@ -3863,6 +3986,14 @@ export default function Home() {
         /* viewer store unavailable */
       }
     };
+    const resetDragState = () => {
+      pressed.clear();
+      down = null;
+      if (dragging) {
+        dragging = false;
+        setDragging(false);
+      }
+    };
     const startDrag = () => {
       if (dragging || proModeRef.current) return;
       dragging = true;
@@ -3876,6 +4007,10 @@ export default function Home() {
       else startDrag();
     };
     const onMove = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse' && e.buttons === 0) {
+        resetDragState();
+        return;
+      }
       if (!down || dragging || e.pointerId !== down.id) return;
       if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) startDrag();
     };
@@ -3884,8 +4019,10 @@ export default function Home() {
       const wasDrag = dragging;
       if (dragging) {
         dragging = false;
-        // After the viewer has seen this release (walk mode keeps taps from selecting).
-        window.setTimeout(() => setDragging(viewModeRef.current === 'walk'), 0);
+        // Allow single-click selection in Walk mode without holding drag state.
+        window.setTimeout(() => setDragging(false), 0);
+      } else {
+        setDragging(false);
       }
       const d = down;
       down = null;
@@ -3924,6 +4061,8 @@ export default function Home() {
     canvas.addEventListener('pointercancel', onUp);
     canvas.addEventListener('dblclick', onDouble);
     canvas.addEventListener('wheel', onWheel, { passive: true });
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('blur', resetDragState);
     return () => {
       canvas.removeEventListener('pointerdown', onDown);
       canvas.removeEventListener('pointermove', onMove);
@@ -3931,7 +4070,9 @@ export default function Home() {
       canvas.removeEventListener('pointercancel', onUp);
       canvas.removeEventListener('dblclick', onDouble);
       canvas.removeEventListener('wheel', onWheel);
-      if (dragging) setDragging(viewModeRef.current === 'walk');
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('blur', resetDragState);
+      if (dragging) setDragging(false);
     };
   }, [viewerEpoch, focusAt]);
 
@@ -3947,6 +4088,19 @@ export default function Home() {
     viewModeRef.current = '3d';
   }, [viewerEpoch, leaveWalk]);
 
+  useEffect(() => {
+    (window as unknown as { __dbWalkModeActive?: boolean }).__dbWalkModeActive = viewMode === 'walk';
+  }, [viewMode]);
+
+  useEffect(() => {
+    const handleSceneInvalidate = () => {
+      setSceneReadyTick((t) => t + 1);
+      viewerHandleRef.current?.invalidate();
+    };
+    window.addEventListener('db:scene-invalidate', handleSceneInvalidate);
+    return () => window.removeEventListener('db:scene-invalidate', handleSceneInvalidate);
+  }, []);
+
   // PRO uses the orbit camera (and its own tools): leave walk mode first.
   useEffect(() => {
     if ((proMode || proMounting) && viewModeRef.current === 'walk') {
@@ -3955,6 +4109,17 @@ export default function Home() {
       viewModeRef.current = '3d';
     }
   }, [proMode, proMounting, leaveWalk]);
+  useEffect(() => {
+    if (!proMode && !proMounting) {
+      try {
+        const vs = useViewer.getState() as { setCameraDragging?: (d: boolean) => void; setInputDragging?: (d: boolean) => void };
+        vs.setCameraDragging?.(false);
+        vs.setInputDragging?.(false);
+      } catch {
+        /* viewer store unavailable */
+      }
+    }
+  }, [proMode, proMounting]);
   useEffect(() => () => walkRef.current?.controls.stop(), []);
 
   // Keyboard: + / − zoom, Q / E turn, T top, H 3D view, F zoom to the selection.
@@ -4245,7 +4410,11 @@ export default function Home() {
               </SelectionActionBarErrorBoundary>
               {viewerVisible && !proMode && (
                 <RenderStudio
-                  getViewContext={() => ({ interior: viewModeRef.current === 'walk', lensMm: walkLensRef.current })}
+                  getViewContext={() =>
+                    viewModeRef.current === 'walk'
+                      ? { interior: true, lensMm: walkLensRef.current }
+                      : isCameraInsideBuilding(viewerHandleRef.current)
+                  }
                   getProjection={viewerProjection}
                   onProjectionChange={setViewerProjection}
                   getFreeArea={measureScreenArea}
@@ -4309,7 +4478,15 @@ export default function Home() {
 
       {/* STANDARD selection properties panel (hidden in PRO — the official
           Inspector overlay owns inspection). */}
-      {!proMode && !proMounting && (<SelectionPropertiesPanel onZoomTo={frameSelection} />)}
+      {!proMode && !proMounting && (
+        <SelectionPropertiesPanel
+          onZoomTo={frameSelection}
+          onInvalidate={() => {
+            setSceneReadyTick((t) => t + 1);
+            viewerHandleRef.current?.invalidate();
+          }}
+        />
+      )}
 
       {/* One-time tip on moving around the model. */}
       <NavHint visible={!!readyKey && docked && sceneHasWalls && !proMode && !proMounting && !settingsOpen && viewMode !== 'walk'} />
@@ -4381,6 +4558,10 @@ export default function Home() {
         done={isBuildComplete}
         failed={DIAG.importState === 'failed' || DIAG.importState === 'stalled'}
         onRender={sceneHasWalls ? () => setRenderStudioOpen(true) : undefined}
+        onExport={!embedded && (isBuildComplete || sceneHasWalls) ? () => {
+          computeAndSyncStandaloneTakeoff();
+          setRightRail('export');
+        } : undefined}
         onCancel={extractionBusy ? () => extractionAbortRef.current?.abort() : undefined}
       />
       )}
@@ -4418,16 +4599,36 @@ export default function Home() {
         fileName={extractionProgress.fileName}
         detail={extractionProgress.isExtracting ? extractionProgress.stageText : undefined}
         onRender={sceneHasWalls ? () => setRenderStudioOpen(true) : undefined}
+        onExport={!embedded && sceneHasWalls ? () => {
+          computeAndSyncStandaloneTakeoff();
+          setRightRail('export');
+        } : undefined}
         hidden={renderStudioOpen}
       />
       )}
 
       {!proMode && !proMounting && (
       <ExportRail
-        visible={isBuildComplete && rightRail === 'export'}
-        onExport={(k) => onCommand({ type: 'export', kind: k as never } as never)}
+        visible={(isBuildComplete || aiSettled || sceneHasWalls) && rightRail === 'export' && !renderStudioOpen}
+        onExport={handleStandaloneExport}
         onClose={() => setRightRail('progress')}
-        disabled
+        projectMeta={projectMeta}
+        onProjectMetaChange={setProjectMeta}
+        takeoff={standaloneTakeoff}
+        boqRows={standaloneBoq}
+        onBoqRowChange={(id, patch) => {
+          setStandaloneBoq((prev) =>
+            prev.map((row) => {
+              if (row.id !== id) return row;
+              const qty = patch.qty ?? row.qty;
+              const rate = patch.rate ?? row.rate;
+              return { ...row, qty, rate, amount: Math.round(qty * rate * 100) / 100 };
+            }),
+          );
+        }}
+        exportStatus={exportStatus}
+        exportError={exportError}
+        busy={exportBusy}
       />
       )}
 

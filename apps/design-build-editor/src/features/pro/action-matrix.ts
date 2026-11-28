@@ -71,6 +71,7 @@ export function getSemanticActionsForNode(
 
     case 'slab':
       return [
+        { id: 'edit-finishes', label: 'Edit Floor Finishes', icon: 'Sliders', enabled: ACTION_FLAGS.PASCAL_SLAB_CONTEXT_ACTIONS, tooltip: 'Edit floor slab finishes & elevation' },
         { id: 'move', label: 'Move Slab', icon: 'Move', enabled: ACTION_FLAGS.PASCAL_SLAB_CONTEXT_ACTIONS, tooltip: 'Move slab boundary (+0.5m offset)' },
         { id: 'duplicate', label: 'Duplicate Slab', icon: 'Copy', enabled: ACTION_FLAGS.PASCAL_SLAB_CONTEXT_ACTIONS, tooltip: 'Duplicate slab' },
         { id: 'rotate-left-90', label: 'Rotate Slab Left', icon: 'RotateCcw', enabled: ACTION_FLAGS.PASCAL_SLAB_CONTEXT_ACTIONS, tooltip: 'Rotate slab 90° CCW around centroid' },
@@ -80,6 +81,8 @@ export function getSemanticActionsForNode(
 
     case 'wall':
       return [
+        { id: 'edit-finishes', label: 'Edit Wall', icon: 'Sliders', enabled: ACTION_FLAGS.PASCAL_WALL_CONTEXT_ACTIONS, tooltip: 'Edit wall finishes, glass & dimensions' },
+        { id: 'close-gaps', label: 'Close Gaps / Extend', icon: 'MoveHorizontal', enabled: ACTION_FLAGS.PASCAL_WALL_CONTEXT_ACTIONS, tooltip: 'Auto-close wall gaps or extend open ends to nearest wall' },
         { id: 'nudge', label: 'Nudge Wall', icon: 'Move', enabled: ACTION_FLAGS.PASCAL_WALL_CONTEXT_ACTIONS, tooltip: 'Nudge wall segment by +0.5m offset' },
         { id: 'duplicate', label: 'Duplicate Wall', icon: 'Copy', enabled: ACTION_FLAGS.PASCAL_WALL_CONTEXT_ACTIONS, tooltip: 'Duplicate wall segment' },
         { id: 'rotate-left-90', label: 'Rotate Wall Left', icon: 'RotateCcw', enabled: ACTION_FLAGS.PASCAL_WALL_CONTEXT_ACTIONS, tooltip: 'Rotate wall 90° CCW around center' },

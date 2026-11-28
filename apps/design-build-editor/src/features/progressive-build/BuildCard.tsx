@@ -39,6 +39,7 @@ export interface BuildCardProps {
   onToggleCollapse: () => void;
   onCancel?: () => void;
   onRender?: () => void;
+  onExport?: () => void;
   onClose?: () => void;
   /** Extra content under the steps (review list). */
   children?: React.ReactNode;
@@ -114,11 +115,18 @@ export function BuildCard(props: BuildCardProps) {
           </button>
         </div>
         {props.children}
-        {props.onRender && (
+        {(props.onRender || props.onExport) && (
           <div className="db-bc__actions">
-            <button type="button" className="db-btn-primary" onClick={props.onRender}>
-              <Sparkles size={14} /> Photoreal render
-            </button>
+            {props.onRender && (
+              <button type="button" className="db-btn-primary" onClick={props.onRender}>
+                <Sparkles size={14} /> Photoreal render
+              </button>
+            )}
+            {props.onExport && (
+              <button type="button" className="db-btn-quiet" onClick={props.onExport}>
+                Export suite
+              </button>
+            )}
           </div>
         )}
       </aside>

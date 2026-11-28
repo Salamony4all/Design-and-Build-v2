@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { dilate, edgeMask, fidelityGrade, geometryFidelity, modelLineMask, type RgbaImage } from './geometry-fidelity';
+import {
+  composeDepthMapPixels,
+  composeDepthMeshGuidePixels,
+  dilate,
+  edgeMask,
+  fidelityGrade,
+  geometryFidelity,
+  gridLineMask,
+  linearizeSrgbDepth,
+  modelLineMask,
+  type RgbaImage,
+} from './geometry-fidelity';
 
 const W = 240;
 const H = 180;
@@ -162,5 +173,100 @@ describe('modelLineMask (edges of the 3D model from flat passes)', () => {
 
   it('rejects passes of different sizes', () => {
     expect(() => modelLineMask({ width: 2, height: 2, data: new Uint8ClampedArray(16) }, { width: 3, height: 2, data: new Uint8ClampedArray(24) })).toThrow();
+  });
+});
+
+describe('depth-weighted & 3D mesh-framed guides', () => {
+  const imgOf = (width: number, height: number, paint: (x: number, y: number) => [number, number, number]): RgbaImage => {
+    const data = new Uint8ClampedArray(width * height * 4);
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const [r, g, b] = paint(x, y);
+        data.set([r, g, b, 255], (y * width + x) * 4);
+      }
+    }
+    return { width, height, data };
+  };
+
+  it('extracts Z-occluded steel-blue grid lines cleanly and ignores white background', () => {
+    const grid = imgOf(6, 4, (x, y) => {
+      if (y === 2) return [30, 58, 95]; // steel-blue 3D grid line
+      if (x === 4 && y === 0) return [240, 242, 245]; // below threshold noise
+      return [255, 255, 255];
+    });
+    const mask = gridLineMask(grid);
+    expect(mask[2 * 6 + 0]).toBe(1);
+    expect(mask[2 * 6 + 5]).toBe(1);
+    expect(mask[0 * 6 + 4]).toBe(0);
+    expect(mask[1 * 6 + 3]).toBe(0);
+  });
+
+  it('weights near edges darker/thicker than far edges and keeps edges above steel-blue mesh lines', () => {
+    const width = 16;
+    const height = 16;
+    const edge = new Uint8Array(width * height);
+    const grid = new Uint8Array(width * height);
+    edge[4 * width + 4] = 1; // near foreground edge
+    edge[4 * width + 12] = 1; // far background edge
+    grid[4 * width + 4] = 1; // coincident grid pixel must not overwrite edge
+    grid[10 * width + 8] = 1; // open floor grid pixel
+
+    const depth = imgOf(width, height, (x) => {
+      if (x < 8) return [230, 230, 230]; // near (<5 m)
+      return [40, 40, 40]; // far (>9 m)
+    });
+
+    const px = composeDepthMeshGuidePixels(edge, grid, depth, width, height);
+    const rgbAt = (x: number, y: number) => {
+      const p = (y * width + x) * 4;
+      return [px[p], px[p + 1], px[p + 2]];
+    };
+
+    const nearPx = rgbAt(4, 4);
+    const nearNbrPx = rgbAt(5, 4); // dilated around near edge
+    const farPx = rgbAt(12, 4);
+    const farNbrPx = rgbAt(13, 4); // far edge not 3x3 near-dilated
+    const gridPx = rgbAt(8, 10);
+
+    expect(nearPx[0]).toBeLessThan(farPx[0]);
+    expect(nearNbrPx).toEqual([10, 14, 24]);
+    expect(farNbrPx[0]).toBeGreaterThan(220);
+    expect(gridPx[2]).toBeGreaterThan(gridPx[0] + 20);
+  });
+
+  it('normalizes linear camera-space metric Z-depth monotonically (near bright > mid > far dark)', () => {
+    const pass = imgOf(4, 1, (x) => {
+      if (x === 0) return [230, 230, 230];
+      if (x === 1) return [130, 130, 130];
+      if (x === 2) return [30, 30, 30];
+      return [0, 0, 0];
+    });
+    const px = composeDepthMapPixels(pass);
+    expect(px[0]).toBeGreaterThan(px[4]);
+    expect(px[4]).toBeGreaterThan(px[8]);
+    expect(px[8]).toBeGreaterThan(px[12]);
+    expect(px[3]).toBe(255);
+    expect(px[15]).toBe(255);
+  });
+
+  it('linearizes sRGB GPU fog-depth bytes into distinct near/mid/far tiers', () => {
+    const srgb = imgOf(5, 1, (x) => {
+      if (x === 0) return [245, 245, 245]; // near foreground
+      if (x <= 2) return [186, 186, 186]; // 50%-linear midground in sRGB
+      if (x === 3) return [90, 90, 90]; // far background
+      return [5, 5, 5]; // sky/backdrop
+    });
+    const lin = linearizeSrgbDepth(srgb);
+    expect(lin.data[0]).toBeGreaterThanOrEqual(165);
+    expect(lin.data[8]).toBeGreaterThanOrEqual(85);
+    expect(lin.data[8]).toBeLessThan(165);
+    expect(lin.data[12]).toBeLessThan(85);
+    expect(lin.data[16]).toBe(5);
+    expect(lin.data[3]).toBe(255);
+
+    const edge = new Uint8Array([1, 0, 1, 1, 0]);
+    const px = composeDepthMeshGuidePixels(edge, null, lin, 5, 1);
+    expect(px[0]).toBeLessThan(px[8]);
+    expect(px[8]).toBeLessThan(px[12]);
   });
 });

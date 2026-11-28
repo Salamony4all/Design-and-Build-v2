@@ -201,8 +201,8 @@ export function RenderStudio({
   const [turns, setTurns] = useState<Turn[]>([]);
   const [status, setStatus] = useState<{ ready: boolean; providerLabel: string | null } | null>(null);
   const [settings, setSettings] = useState<SettingsKey | null>(null);
-  /** The render shown large, with the model lines on or off. */
-  const [large, setLarge] = useState<{ id: string; lines: boolean } | null>(null);
+  /** The render shown large, with either model lines or the depth+mesh overlay active. */
+  const [large, setLarge] = useState<{ id: string; overlay: 'none' | 'lines' | 'depth-mesh' } | null>(null);
   const [noScene, setNoScene] = useState(false);
   /** Furniture placed from the drawing (and BOQ Flow products on it): the render shows that, not AI furniture. */
   const [drawn, setDrawn] = useState<{ pieces: number; products: number }>({ pieces: 0, products: 0 });
@@ -618,7 +618,7 @@ export function RenderStudio({
                   onCancel={() => abortRef.current?.abort()}
                   onAgain={() => void run(t.again)}
                   onLook={(style) => t.result && void run({ reuseView: t.result.view, style, prompt: t.prompt })}
-                  onEnlarge={() => setLarge({ id: t.id, lines: false })}
+                  onEnlarge={() => setLarge({ id: t.id, overlay: 'none' })}
                   onOpenSettings={onOpenSettings}
                 />
               ))}
@@ -904,17 +904,37 @@ export function RenderStudio({
             <CompareSlider
               before={largeTurn.result.view.dataUrl}
               after={largeTurn.result.imageUrl}
-              overlay={largeTurn.result.view.edgeOverlayUrl}
-              showOverlay={large.lines}
+              overlay={
+                large.overlay === 'depth-mesh' && largeTurn.result.view.depthMeshOverlayUrl
+                  ? largeTurn.result.view.depthMeshOverlayUrl
+                  : largeTurn.result.view.edgeOverlayUrl
+              }
+              showOverlay={large.overlay !== 'none'}
               aspect={`${largeTurn.result.view.width} / ${largeTurn.result.view.height}`}
               className={styles.compareLarge}
               frameStyle={{ width: `min(100%, calc((100vh - 140px) * ${(largeTurn.result.view.width / largeTurn.result.view.height).toFixed(4)}))` }}
             />
             <div className={styles.lightboxBar}>
-              <label className={styles.inlineToggle}>
-                <input type="checkbox" checked={large.lines} onChange={(e) => setLarge((l) => (l ? { ...l, lines: e.target.checked } : l))} />
-                Show model lines
-              </label>
+              <div className={styles.row}>
+                <label className={styles.inlineToggle}>
+                  <input
+                    type="checkbox"
+                    checked={large.overlay === 'lines'}
+                    onChange={(e) => setLarge((l) => (l ? { ...l, overlay: e.target.checked ? 'lines' : 'none' } : l))}
+                  />
+                  Show model lines
+                </label>
+                {largeTurn.result.view.depthMeshOverlayUrl && (
+                  <label className={styles.inlineToggle}>
+                    <input
+                      type="checkbox"
+                      checked={large.overlay === 'depth-mesh'}
+                      onChange={(e) => setLarge((l) => (l ? { ...l, overlay: e.target.checked ? 'depth-mesh' : 'none' } : l))}
+                    />
+                    Show depth &amp; mesh
+                  </label>
+                )}
+              </div>
               <div className={styles.row}>
                 <button
                   type="button"

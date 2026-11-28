@@ -7,6 +7,7 @@
 import { useEffect } from 'react';
 import { useScene, type AnyNodeId } from '@pascal-app/core';
 import { useViewer } from '@pascal-app/viewer';
+import { notifySceneMutated, performGlobalRedo, performGlobalUndo } from './scene-history';
 
 export function KeyboardElementControls() {
   useEffect(() => {
@@ -16,6 +17,23 @@ export function KeyboardElementControls() {
       const tag = target?.tagName?.toLowerCase();
       if (tag === 'input' || tag === 'textarea' || target?.isContentEditable) {
         return;
+      }
+
+      if ((e.ctrlKey || e.metaKey) && !e.altKey) {
+        const keyLower = e.key.toLowerCase();
+        if (keyLower === 'z') {
+          e.preventDefault();
+          e.stopPropagation();
+          if (e.shiftKey) performGlobalRedo();
+          else performGlobalUndo();
+          return;
+        }
+        if (keyLower === 'y' && !e.shiftKey) {
+          e.preventDefault();
+          e.stopPropagation();
+          performGlobalRedo();
+          return;
+        }
       }
 
       const selectedIds = useViewer.getState().selection.selectedIds;
@@ -33,6 +51,7 @@ export function KeyboardElementControls() {
           }
         }
         useViewer.getState().resetSelection();
+        notifySceneMutated();
         return;
       }
 
@@ -47,6 +66,7 @@ export function KeyboardElementControls() {
       if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.metaKey) {
         e.preventDefault();
         const scene = useScene.getState();
+        let mutated = false;
         for (const id of selectedIds) {
           const node = scene.nodes[id as AnyNodeId] as any;
           if (!node) continue;
@@ -59,8 +79,10 @@ export function KeyboardElementControls() {
               rotation: [currentRot[0] ?? 0, nextY, currentRot[2] ?? 0],
             });
             scene.markDirty(id as AnyNodeId);
+            mutated = true;
           }
         }
+        if (mutated) notifySceneMutated();
         return;
       }
 
@@ -77,6 +99,7 @@ export function KeyboardElementControls() {
         if (e.key === 'ArrowDown') dz = step;
 
         const scene = useScene.getState();
+        let mutated = false;
         for (const id of selectedIds) {
           const node = scene.nodes[id as AnyNodeId] as any;
           if (!node) continue;
@@ -87,6 +110,7 @@ export function KeyboardElementControls() {
               position: [pos[0] + dx, pos[1] ?? 0, pos[2] + dz],
             });
             scene.markDirty(id as AnyNodeId);
+            mutated = true;
           } else if (node.type === 'wall') {
             const start = Array.isArray(node.start) ? [...node.start] : [0, 0];
             const end = Array.isArray(node.end) ? [...node.end] : [0, 0];
@@ -95,14 +119,17 @@ export function KeyboardElementControls() {
               end: [end[0] + dx, end[1] + dz],
             });
             scene.markDirty(id as AnyNodeId);
+            mutated = true;
           } else if (node.type === 'door' || node.type === 'window') {
             const pos = Array.isArray(node.position) ? [...node.position] : [0, 0, 0];
             scene.updateNode(id as AnyNodeId, {
               position: [pos[0] + dx, pos[1] ?? 0, pos[2] + dz],
             });
             scene.markDirty(id as AnyNodeId);
+            mutated = true;
           }
         }
+        if (mutated) notifySceneMutated();
       }
     };
 

@@ -49,7 +49,23 @@ const nextConfig = {
     'design-build-attachment-service',
     'design-build-shared-ui',
   ],
-  webpack: (config, { dev }) => {
+  webpack: (config, { dev, isServer, webpack }) => {
+    if (!isServer) {
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
+          resource.request = resource.request.replace(/^node:/, '');
+        }),
+      );
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        https: false,
+        http: false,
+        path: false,
+        stream: false,
+        zlib: false,
+      };
+    }
     if (dev) {
       config.watchOptions = {
         ...config.watchOptions,

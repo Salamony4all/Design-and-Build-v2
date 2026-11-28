@@ -72,11 +72,73 @@ export interface RenderJobResult {
 /** What the render route needs to turn the stand-ins in view into furniture and products. */
 interface RenderFurniture {
   standIns: number;
-  products: { label: string; colour: string; kinds: string[]; count: number; where: string; photo: boolean; image?: string }[];
+  products: {
+    label: string;
+    colour: string;
+    kinds: string[];
+    count: number;
+    where: string;
+    photo: boolean;
+    architecturalLock?: boolean;
+    finishes?: readonly { role: string; code?: string; name: string; hex: string }[];
+    image?: string;
+  }[];
   /** Stand-ins without a product, by kind. */
   plain: { kind: string; count: number; where: string }[];
   /** Stand-ins seen through glass. */
   behindGlass: number;
+}
+
+interface RenderArchitectural {
+  ceilings: {
+    label: string;
+    code?: string;
+    shape: string;
+    style: string;
+    where?: string;
+    widthM: number;
+    depthM: number;
+    dropM: number;
+    finishes?: readonly { role: string; code?: string; name: string; hex: string }[];
+    image?: string;
+  }[];
+  wallCladdings: {
+    label: string;
+    code?: string;
+    style: string;
+    curved: boolean;
+    where?: string;
+    colourHex: string;
+    finishes?: readonly { role: string; code?: string; name: string; hex: string }[];
+    image?: string;
+  }[];
+  glazingExecutions: {
+    label: string;
+    code?: string;
+    style: string;
+    curved: boolean;
+    where?: string;
+    frameName: string;
+    finishes?: readonly { role: string; code?: string; name: string; hex: string }[];
+    image?: string;
+  }[];
+  wallArtworks?: {
+    label: string;
+    code?: string;
+    style: string;
+    where?: string;
+    widthM: number;
+    heightM: number;
+    frameName: string;
+    finishes?: readonly { role: string; code?: string; name: string; hex: string }[];
+    image?: string;
+  }[];
+  slabFinishes?: {
+    slabId?: string;
+    label: string;
+    description: string;
+    colourHex: string;
+  }[];
 }
 
 const pictureCache = new Map<string, Promise<string | undefined>>();
@@ -93,7 +155,7 @@ function productPicture(url: string | undefined): Promise<string | undefined> {
       let objectUrl: string | null = null;
       try {
         let src = url;
-        if (/^https:\/\//i.test(url)) {
+        if (/^https?:\/\//i.test(url)) {
           const r = await fetch(url, { mode: 'cors', signal: AbortSignal.timeout(8000) });
           const blob = r.ok ? await r.blob() : null;
           if (!blob || !blob.type.startsWith('image/')) return undefined;
@@ -171,10 +233,105 @@ async function furnitureForRender(
     const image = pictures < maxPictures ? await productPicture(ref.imageUrl) : undefined;
     if (image) pictures++;
     const where = (g.spots?.length ? spotsWhere(g.spots, g.count) : whereInView(g)).slice(0, 240);
-    request.products.push({ label: ref.label, colour: ref.colour.name, kinds: g.kinds, count: g.count, where, photo: g.photo, ...(image ? { image } : {}) });
+    request.products.push({
+      label: ref.label,
+      colour: ref.colour.name,
+      kinds: g.kinds,
+      count: g.count,
+      where,
+      photo: g.photo,
+      ...(g.architecturalLock ? { architecturalLock: true } : {}),
+      ...(ref.finishes?.length ? { finishes: ref.finishes } : {}),
+      ...(image ? { image } : {}),
+    });
     shown.push({ id: ref.id, label: ref.label, colour: ref.colour.hex, count: g.count, withPicture: !!image });
   }
   return { request, shown };
+}
+
+async function architecturalForRender(view: PreparedView, remainingPictures: number): Promise<RenderArchitectural | undefined> {
+  const a = view.architectural;
+  if (!a) return undefined;
+  let rem = Math.max(0, remainingPictures);
+  const takeImg = async (url?: string) => {
+    if (rem <= 0 || !url) return undefined;
+    const img = await productPicture(url);
+    if (img) rem--;
+    return img;
+  };
+  const ceilings = [];
+  for (const c of a.ceilings.slice(0, 4)) {
+    const image = await takeImg(c.imageUrl);
+    ceilings.push({
+      label: c.label,
+      ...(c.code ? { code: c.code } : {}),
+      shape: c.shape,
+      style: c.style,
+      where: spotsWhere([{ x: c.x, y: c.y, ...(typeof c.distM === 'number' ? { distM: c.distM } : {}) }]),
+      widthM: c.widthM,
+      depthM: c.depthM,
+      dropM: c.dropM,
+      ...(c.finishes?.length ? { finishes: c.finishes } : {}),
+      ...(image ? { image } : {}),
+    });
+  }
+  const wallCladdings = [];
+  for (const w of a.wallCladdings.slice(0, 6)) {
+    const image = await takeImg(w.imageUrl);
+    wallCladdings.push({
+      label: w.label,
+      ...(w.code ? { code: w.code } : {}),
+      style: w.style,
+      curved: w.curved,
+      where: spotsWhere(w.spots, w.spots.length).slice(0, 120),
+      colourHex: w.colourHex,
+      ...(w.finishes?.length ? { finishes: w.finishes } : {}),
+      ...(image ? { image } : {}),
+    });
+  }
+  const glazingExecutions = [];
+  for (const g of a.glazingExecutions.slice(0, 4)) {
+    const image = await takeImg(g.imageUrl);
+    glazingExecutions.push({
+      label: g.label,
+      ...(g.code ? { code: g.code } : {}),
+      style: g.style,
+      curved: g.curved,
+      where: spotsWhere(g.spots, g.spots.length).slice(0, 120),
+      frameName: g.frameName,
+      ...(g.finishes?.length ? { finishes: g.finishes } : {}),
+      ...(image ? { image } : {}),
+    });
+  }
+  const wallArtworks = [];
+  for (const aw of (a.wallArtworks ?? []).slice(0, 4)) {
+    const image = await takeImg(aw.imageUrl);
+    wallArtworks.push({
+      label: aw.label,
+      ...(aw.code ? { code: aw.code } : {}),
+      style: aw.style,
+      where: spotsWhere(aw.spots, aw.spots.length).slice(0, 120),
+      widthM: aw.widthM,
+      heightM: aw.heightM,
+      frameName: aw.frameName,
+      ...(aw.finishes?.length ? { finishes: aw.finishes } : {}),
+      ...(image ? { image } : {}),
+    });
+  }
+  const slabFinishes = (a.slabFinishes ?? []).map((s) => ({
+    slabId: s.slabId,
+    label: s.label,
+    description: s.description,
+    colourHex: s.colourHex,
+  }));
+  if (!ceilings.length && !wallCladdings.length && !glazingExecutions.length && !wallArtworks.length && !slabFinishes.length) return undefined;
+  return {
+    ceilings,
+    wallCladdings,
+    glazingExecutions,
+    ...(wallArtworks.length ? { wallArtworks } : {}),
+    ...(slabFinishes.length ? { slabFinishes } : {}),
+  };
 }
 
 export class RenderRequestError extends Error {
@@ -210,9 +367,15 @@ export async function renderStatus(): Promise<{ ready: boolean; providerLabel: s
   }
 }
 
-/** Dev only: `window.__dbRenderDryRun = true` exercises the whole flow without a model call. */
+/** Dev only: `window.__dbRenderDryRun = true` or `?renderDryRun=1` exercises the whole flow without a model call. */
 function devDryRun(): boolean {
-  return process.env.NODE_ENV !== 'production' && typeof window !== 'undefined' && (window as unknown as { __dbRenderDryRun?: boolean }).__dbRenderDryRun === true;
+  if (process.env.NODE_ENV === 'production' || typeof window === 'undefined') return false;
+  if ((window as unknown as { __dbRenderDryRun?: boolean }).__dbRenderDryRun === true) return true;
+  try {
+    return new URLSearchParams(window.location.search).get('renderDryRun') === '1';
+  } catch {
+    return false;
+  }
 }
 
 /** Dev dry run: make the echoed view look "rendered" (tint, blur, grain) so the geometry check has work to do. */
@@ -246,6 +409,7 @@ async function postRender(
   strict: boolean,
   withEdges: boolean,
   furniture: RenderFurniture | undefined,
+  architectural: RenderArchitectural | undefined,
   looks: readonly string[],
 ): Promise<ApiOk> {
   const res = await fetch('/api/render', {
@@ -255,6 +419,7 @@ async function postRender(
     body: JSON.stringify({
       image: view.dataUrl,
       ...(withEdges ? { edgeGuide: view.edgeGuideUrl } : {}),
+      ...(withEdges && view.depthGuideUrl ? { depthGuide: view.depthGuideUrl } : {}),
       ...(o.furnish && o.planDataUrl ? { plan: o.planDataUrl } : {}),
       style: o.style,
       tier: o.tier,
@@ -271,9 +436,12 @@ async function postRender(
           }
         : {}),
       ...(withEdges && view.lineGuide ? { lineGuide: true } : {}),
+      ...(withEdges && view.meshFramedGuide ? { meshFramedGuide: true } : {}),
+      ...(withEdges && view.depthRangeM ? { depthRangeM: view.depthRangeM } : {}),
       ...(view.parallel ? { parallel: true } : {}),
       furnish: o.furnish,
       ...(furniture ? { furniture } : {}),
+      ...(architectural ? { architectural } : {}),
       ...(looks.length ? { looks } : {}),
       note: o.note,
       strict,
@@ -315,6 +483,8 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
   const plan = referencePlan(o.tier, lookUrls.length, productsInView);
   const looks = lookUrls.slice(0, plan.looks);
   const furniture = await furnitureForRender(view, plan.products);
+  const usedFurniturePics = furniture?.shown.filter((s) => s.withPicture).length ?? 0;
+  const architectural = await architecturalForRender(view, Math.max(0, plan.products - usedFurniturePics));
 
   const run = async (strict: boolean, withEdges: boolean, base: number, cap: number) => {
     attempts++;
@@ -322,7 +492,7 @@ export async function renderPhotoreal(view: PreparedView, o: RenderJobOptions): 
     const stop = pacer(o, base, cap, tier.etaSec, strict ? 'Re-rendering with a stricter geometry lock…' : `Rendering photoreal with ${tier.modelLabel}…`);
     let api: ApiOk;
     try {
-      api = await postRender(view, o, attempts, strict, withEdges, furniture?.request, looks);
+      api = await postRender(view, o, attempts, strict, withEdges, furniture?.request, architectural, looks);
     } finally {
       stop();
     }

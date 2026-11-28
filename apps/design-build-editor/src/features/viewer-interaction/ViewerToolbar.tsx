@@ -9,6 +9,7 @@ import React from 'react';
 import { useViewer } from '@pascal-app/viewer';
 import { useScene } from '@pascal-app/core';
 import { useEditor } from '@pascal-app/editor';
+import { performGlobalRedo, performGlobalUndo, useSceneHistoryState } from './scene-history';
 import {
   AppWindow,
   BrickWall,
@@ -52,14 +53,15 @@ interface Props {
   orientation?: 'vertical' | 'horizontal';
 }
 
-function ToolButton(p: { label: string; onClick?: () => void; on?: boolean; className?: string; children: React.ReactNode }) {
+function ToolButton(p: { label: string; onClick?: () => void; on?: boolean; disabled?: boolean; className?: string; children: React.ReactNode }) {
   return (
     <button
       type="button"
       title={p.label}
       aria-label={p.label}
       aria-pressed={p.on}
-      className={[p.on ? 'on' : '', p.className ?? ''].join(' ').trim()}
+      disabled={p.disabled}
+      className={[p.on ? 'on' : '', p.disabled ? 'is-disabled' : '', p.className ?? ''].join(' ').trim()}
       onClick={p.onClick}
     >
       {p.children}
@@ -103,9 +105,7 @@ export function ViewerToolbar({
     useEditor.getState().setTool(null);
     useEditor.getState().setMovingNode(null);
   };
-  const history = () => (useScene.getState() as unknown as { temporal?: { undo: () => void; redo: () => void } }).temporal;
-  const undo = () => { try { history()?.undo(); } catch { /* nothing to undo */ } };
-  const redo = () => { try { history()?.redo(); } catch { /* nothing to redo */ } };
+  const { canUndo, canRedo } = useSceneHistoryState();
   const isPro = mode === 'pro';
 
   return (
@@ -212,8 +212,8 @@ export function ViewerToolbar({
 
       <div className="db-tb-group db-tb-desk">
         <div className="sep" />
-        <ToolButton label="Undo" onClick={undo}><Undo2 size={17} /></ToolButton>
-        <ToolButton label="Redo" onClick={redo}><Redo2 size={17} /></ToolButton>
+        <ToolButton label="Undo (Ctrl+Z)" disabled={!canUndo} onClick={() => performGlobalUndo()}><Undo2 size={17} /></ToolButton>
+        <ToolButton label="Redo (Ctrl+Y)" disabled={!canRedo} onClick={() => performGlobalRedo()}><Redo2 size={17} /></ToolButton>
       </div>
 
       {proEnabled && (

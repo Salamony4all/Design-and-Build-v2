@@ -15,8 +15,11 @@ export interface SelectionAnchorState {
   finalClampedPosition: { x: number; y: number };
   toolbarInsideViewer: boolean;
   viewerBounds: { left: number; top: number; width: number; height: number; right: number; bottom: number };
+  studioExpanded: boolean;
 
   setAnchor: (data: Partial<SelectionAnchorState>) => void;
+  setStudioExpanded: (open: boolean) => void;
+  toggleStudioExpanded: () => void;
   hide: () => void;
 }
 
@@ -32,7 +35,10 @@ export const useSelectionActionStore = create<SelectionAnchorState>((set) => ({
   finalClampedPosition: { x: 0, y: 0 },
   toolbarInsideViewer: false,
   viewerBounds: { left: 0, top: 0, width: 0, height: 0, right: 0, bottom: 0 },
+  studioExpanded: false,
 
   setAnchor: (data) => set((s) => ({ ...s, ...data })),
+  setStudioExpanded: (open) => set({ studioExpanded: open }),
+  toggleStudioExpanded: () => set((s) => ({ studioExpanded: !s.studioExpanded })),
   hide: () => set({ visible: false }),
 }));

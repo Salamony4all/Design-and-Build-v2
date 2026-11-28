@@ -58,9 +58,18 @@ export interface EmbedProduct {
   category?: string;
   brand?: string;
   model?: string;
+  code?: string;
   imageUrl?: string;
   /** Size in metres when BOQ Flow knows it (width, depth, height). */
   dims?: { w?: number; d?: number; h?: number };
+  /** Structured furniture/joinery kind, subtype, role & shape passed from BOQ Flow. */
+  designBuildKind?: string;
+  subtype?: string;
+  architecturalRole?: string;
+  customZoneId?: string;
+  shape?: string;
+  placeable3D?: boolean;
+  finishes?: { role: string; code?: string; name: string; hex: string }[];
   /** A custom item: the drawn furniture type it stands in for (from `furniture-ready`). */
   typeId?: string;
 }
@@ -110,8 +119,28 @@ function parseProduct(v: unknown, i: number): EmbedProduct | null {
     category: str(p.category, 200),
     brand: str(p.brand, 200),
     model: str(p.model, 300),
+    code: str(p.code ?? p.skuCode, 60),
     imageUrl: productPicture(p.imageUrl),
     dims: dims ? { w: metres(dims.w), d: metres(dims.d), h: metres(dims.h) } : undefined,
+    designBuildKind: str(p.designBuildKind, 40),
+    subtype: str(p.subtype, 40),
+    architecturalRole: str(p.architecturalRole, 40),
+    customZoneId: typeof p.customZoneId === 'string' && TYPE_ID.test(p.customZoneId) ? p.customZoneId : undefined,
+    shape: str(p.shape, 40),
+    ...(p.placeable3D === false ? { placeable3D: false } : {}),
+    ...(Array.isArray(p.finishes) && p.finishes.length
+      ? {
+          finishes: p.finishes
+            .slice(0, 4)
+            .map((f) => {
+              const rec = (f && typeof f === 'object' ? f : {}) as Record<string, unknown>;
+              const name = str(rec.name, 80);
+              const hex = typeof rec.hex === 'string' && /^#[0-9a-f]{3,8}$/i.test(rec.hex.trim()) ? rec.hex.trim() : '#888888';
+              return name ? { role: str(rec.role, 40) || 'Finish', ...(str(rec.code, 40) ? { code: str(rec.code, 40) } : {}), name, hex } : null;
+            })
+            .filter((x): x is { role: string; code?: string; name: string; hex: string } => !!x),
+        }
+      : {}),
     typeId: typeof p.typeId === 'string' && TYPE_ID.test(p.typeId) ? p.typeId : undefined,
   };
 }
