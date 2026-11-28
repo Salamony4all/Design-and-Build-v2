@@ -664,7 +664,9 @@ async function makePresentationBlob(
   const pres = new PptxGenJS();
   pres.layout = 'LAYOUT_WIDE';
   pres.author = snap.company;
-  pres.company = snap.company;
+  // pptxgenjs writes the company into docProps/app.xml unescaped: an "&" there makes the
+  // file invalid (PowerPoint asks to repair it, cloud editors refuse it).
+  pres.company = snap.company.replace(/&/g, 'and').replace(/[<>]/g, '');
   pres.title = `${snap.title} - Design & Build`;
 
   // Cover

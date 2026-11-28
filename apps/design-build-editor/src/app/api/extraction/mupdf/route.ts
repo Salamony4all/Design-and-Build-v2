@@ -8,6 +8,7 @@ import type { ExtractionResult } from 'design-build-extraction-contracts';
 import type { MuPdfPureWindowResult, MuPdfPureDoorResult } from 'design-build-extraction-mupdf';
 import { completeWalls } from 'design-build-extraction-mupdf';
 import type { RawSegment, ProtectedOpening } from 'design-build-extraction-mupdf';
+import { choosePlanPage } from './plan-page';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -51,28 +52,26 @@ function extractMultiPagePlanCandidate(
   }
   scored.sort((a, b) => b.score - a.score);
   const bestIdx = scored[0]?.idx ?? 0;
-  let bestCandidate: { pageIndex: number; page: any; wallRaw: any; count: number; score: number } | null = null;
+  // Walls of the likeliest pages; choosePlanPage says which of them is the plan to read.
+  const candidates: { pageIndex: number; wallCount: number; scaled: boolean; wallRaw: any }[] = [];
   for (const cand of scored.slice(0, 6)) {
     try {
-      const page = doc.loadPage(cand.idx);
       const wallRaw = extractPureWallResult(bytes, cand.idx, undefined, undefined, true);
-      const count = wallRaw?.pureResult?.accepted?.length ?? 0;
-      if (
-        count > 0 &&
-        (!bestCandidate || count > bestCandidate.count || (count === bestCandidate.count && cand.score > bestCandidate.score))
-      ) {
-        bestCandidate?.page?.destroy?.();
-        bestCandidate = { pageIndex: cand.idx, page, wallRaw, count, score: cand.score };
-      } else {
-        page.destroy?.();
-      }
+      candidates.push({
+        pageIndex: cand.idx,
+        wallCount: wallRaw?.pureResult?.accepted?.length ?? 0,
+        scaled: wallRaw?.pureResult?.scaleSource !== 'fallback',
+        wallRaw,
+      });
     } catch {
       /* skip failing page candidate */
     }
   }
-  if (bestCandidate) {
-    const captured = collectPageVectors(bestCandidate.page, false, bestCandidate.pageIndex);
-    return { pageIndex: bestCandidate.pageIndex, page: bestCandidate.page, captured, wallRaw: bestCandidate.wallRaw };
+  const chosen = choosePlanPage(candidates);
+  if (chosen) {
+    const page = doc.loadPage(chosen.pageIndex);
+    const captured = collectPageVectors(page, false, chosen.pageIndex);
+    return { pageIndex: chosen.pageIndex, page, captured, wallRaw: chosen.wallRaw };
   }
   const page = doc.loadPage(bestIdx);
   const captured = collectPageVectors(page, false, bestIdx);

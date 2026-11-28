@@ -120,6 +120,8 @@ describe('Live window and door installation', () => {
 
     const winDrafts: any[] = [];
     const doorDrafts: any[] = [];
+    let finalizedWallCount = 0;
+    let completionWallCount = 0;
 
     const importFinishedPromise = new Promise<void>((resolve) => {
       // We will listen for events
@@ -141,6 +143,8 @@ describe('Live window and door installation', () => {
 
         if (chunk.type === 'stage-walls') {
           drafts = prepareLiveDrafts(chunk.result);
+          finalizedWallCount = chunk.finalizedWallCount ?? 0;
+          completionWallCount = (chunk.completionWalls ?? []).length;
           Object.assign(liveNodes, drafts.initialShell.nodes);
 
           runnerHandle = runStagedCode06Import({
@@ -203,7 +207,11 @@ describe('Live window and door installation', () => {
     const winNodes = Object.values(liveNodes).filter((n: any) => n.type === 'window');
     const doorNodes = Object.values(liveNodes).filter((n: any) => n.type === 'door');
 
-    expect(wallNodes.length).toBe(88);
+    // This harness builds the walls the drawing shows. The app adds the completion walls
+    // after the shell (page.tsx); the route reports them beside the drawn walls.
+    expect(wallNodes.length).toBe(70);
+    expect(completionWallCount).toBe(18);
+    expect(finalizedWallCount).toBe(88);
     expect(winNodes.length).toBe(24);
     expect(doorNodes.length).toBe(25);
 

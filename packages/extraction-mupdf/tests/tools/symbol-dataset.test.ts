@@ -45,6 +45,8 @@ const NAMED_SHARE = 0.8;
 const MAX_PAGES = 25;
 /** Pieces the layered reading must find on a further page of a document for it to count as a furnished plan. */
 const MIN_KEY_PIECES = 5;
+/** Share of the best page's walls a page needs to count as the plan: the extraction route's rule (plan-page.ts in the app). */
+const PLAN_PAGE_WALL_SHARE = 0.4;
 
 function drawings(): string[] {
   const files: string[] = [];
@@ -88,14 +90,21 @@ function planPages(bytes: Uint8Array): number[] {
   }
   doc.destroy?.();
   const ranked = [...scored].sort((a, b) => b.score - a.score);
-  let best: { idx: number; walls: number; score: number } | null = null;
+  // As the route does: of the likeliest pages, the earliest one with a real scale that holds
+  // a fair share of the best page's walls. A set opens with its plan; the enlarged part-plans
+  // and details that follow can hold more walls than the plan itself.
+  const cands: { idx: number; walls: number; scaled: boolean }[] = [];
   for (const cand of ranked.slice(0, 6)) {
     try {
-      const n = extractPureWallResult(bytes, cand.idx, undefined, undefined, true)?.pureResult?.accepted?.length ?? 0;
-      if (n > 0 && (!best || n > best.walls || (n === best.walls && cand.score > best.score))) best = { idx: cand.idx, walls: n, score: cand.score };
+      const pure = extractPureWallResult(bytes, cand.idx, undefined, undefined, true)?.pureResult as Any | undefined;
+      const walls: number = pure?.accepted?.length ?? 0;
+      if (walls > 0) cands.push({ idx: cand.idx, walls, scaled: pure?.scaleSource !== 'fallback' });
     } catch { /* not a plan page */ }
   }
-  const picked = best ? best.idx : (ranked[0]?.idx ?? 0);
+  const pool = cands.some((c) => c.scaled) ? cands.filter((c) => c.scaled) : cands;
+  const most = Math.max(0, ...pool.map((c) => c.walls));
+  const plan = pool.filter((c) => c.walls >= PLAN_PAGE_WALL_SHARE * most).sort((a, b) => a.idx - b.idx)[0];
+  const picked = plan ? plan.idx : (ranked[0]?.idx ?? 0);
   return [picked, ...scored.filter((s) => s.furniture && s.idx !== picked).map((s) => s.idx)];
 }
 

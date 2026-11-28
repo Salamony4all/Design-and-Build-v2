@@ -11,4 +11,8 @@ export const DoorNode = node('door');
 export const SlabNode = node('slab');
 export const ItemNode = node('item');
 export const GuideNode = node('guide');
+// the live import harness (build-live-import.ts) also builds the site, building and level
+export const SiteNode = node('site');
+export const BuildingNode = node('building');
+export const LevelNode = node('level');
 export type AnyNode = any;

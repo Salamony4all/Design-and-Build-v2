@@ -65,6 +65,7 @@ import { captureViewForRender, isCameraInsideBuilding, readPlanUnderlay } from '
 import { RENDER_COMPLETE_EVENT, type RenderJobResult } from '@/features/render/render-client';
 import { productRefs } from '@/features/furniture/product-refs';
 import { providerRequestHeaders } from '@/features/providers/browser-provider-store';
+import { apiErrorMessage } from '@/features/conversation/api-error-message';
 import { useEditorMode } from '@/features/pro/useEditorMode';
 import { ProEditorLazy } from '@/features/pro/ProEditorLazy';
 import { ProOverlay } from '@/features/pro/ProOverlay';
@@ -2123,7 +2124,7 @@ export default function Home() {
         isStreamingExtractionRef.current = false;
         DIAG.extractionState = 'failed';
         const err = await res.json().catch(() => ({}));
-        push({ type: 'error', message: err.error || `Extraction failed (${res.status}).` });
+        push({ type: 'error', message: apiErrorMessage(res.status, err, 'Extraction') });
         return;
       }
 
@@ -2401,7 +2402,7 @@ export default function Home() {
         if (err.code === 'AI_MODEL_NOT_CONFIGURED' || err.code === 'AI_MODEL_UNAVAILABLE' || err.code === 'AI_PROVIDER_NOT_CONFIGURED') {
           push({ type: 'error', message: /AI Studio/.test(err.error ?? '') ? String(err.error) : `${err.error} Open AI Studio to choose an extraction model.` });
         } else {
-          push({ type: 'error', message: err.error || `AI extraction failed (${res.status}).` });
+          push({ type: 'error', message: apiErrorMessage(res.status, err, 'AI extraction') });
         }
         return;
       }
@@ -2915,7 +2916,7 @@ export default function Home() {
       if (!res.ok) {
         const j = await res.json().catch(() => ({})) as { code?: string; error?: string };
         if (j.code === 'PROGRESSIVE_BUILD_DISABLED') { void startAiExtraction(source); return; }
-        push({ type: 'error', message: j.error || `Progressive extraction failed (${res.status}).` });
+        push({ type: 'error', message: apiErrorMessage(res.status, j, 'Progressive extraction') });
         setStage('furniture', { status: 'failed' });
         return;
       }
